@@ -175,7 +175,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           Following up on a question that arose in Week 3 of Andrew Ng’s Machine Learning course.
         </div>
       </div>
-                </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">math</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -233,7 +236,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>TL/DR: No I can’t reproduce his sketches. The graph I get for sum of the squared error (SE) doesn’t have the wiggles that his drawing on the left does. <em>(Perhaps he was just doodling an example of an arbitrary non-convex function, rather than the squared loss in particular?)</em> Takeways at the bottom of this, re. the difference between a convex <em>loss function (by itself)</em> vs.&nbsp;a convex loss for a <em>problem</em> – i.e.&nbsp;the individual terms are convex for either function, but the <em>sum</em> of these terms is actually not strictly convex for either function (for this problem).</strong></p>
 <p>I read a few posts about this first… * <a href="https://math.stackexchange.com/questions/1985008/show-that-logistic-regression-with-squared-loss-function-is-non-convex/2176466">Math StackExchange: Show that logistic regression with squared loss function is non-convex</a>, which includes a link to <a href="https://www.desmos.com/calculator/kxz6lzszf9">this nice demo on Desmos</a> * https://math.stackexchange.com/questions/2193478/loss-function-for-logistic-regression * https://en.wikipedia.org/wiki/Loss_functions_for_classification seems to say that squared loss is convex. ??</p>
 <p>…but then wanted to try for myself. As follows:</p>
-<div class="cell" data-execution_count="1">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preliminary set up. ipympl allows for interactive plots; replace it with inline if not working</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#%matplotlib ipympl</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
@@ -242,7 +245,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> cm</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="2">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># basic functions for data operations</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> h(x,a,b):                            <span class="co"># h = logistic function.  a is 'weight' and b is 'bias'</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>(a<span class="op">*</span>x <span class="op">+</span> b)))    <span class="co"># For code below, a &amp; b should be scalars, x can be anything</span></span>
@@ -252,7 +255,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    out[x <span class="op">&gt;</span> threshold] <span class="op">=</span> <span class="fl">1.0</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define some data</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>num_x <span class="op">=</span> <span class="dv">25</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>x_arr <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>,num_x)          <span class="co"># _arr denotes"array" </span></span>
@@ -278,7 +281,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="2017-11-22-Convexity-Loss-Classification_files/figure-html/cell-4-output-2.png" class="img-fluid"></p>
 </div>
 </div>
-<div class="cell" data-execution_count="4">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define a couple loss functions</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_se_loss(y_arr, h_arr):  <span class="co"># squared error loss</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.mean( (y_arr <span class="op">-</span> h_arr)<span class="op">**</span><span class="dv">2</span>)</span>
@@ -287,7 +290,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    eps <span class="op">=</span> <span class="fl">1.0e-16</span>   <span class="co"># added to avoid log(0) errors</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>np.mean( y_arr<span class="op">*</span>np.log(h_arr) <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>y_arr)<span class="op">*</span>np.log(<span class="dv">1</span><span class="op">-</span>h_arr<span class="op">+</span>eps) )    <span class="co"># elementwise multiplication</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="5">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1D plot </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># define parameter space over which to plot </span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>num_a <span class="op">=</span> <span class="dv">100</span> </span>
@@ -323,7 +326,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="plot-the-full-error-surface" class="level2">
 <h2 class="anchored" data-anchor-id="plot-the-full-error-surface">Plot the full error surface</h2>
-<div class="cell" data-execution_count="6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>num_a <span class="op">=</span> <span class="dv">100</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># try experimenting: play around with the max &amp; min of the a &amp; b values to see the surface</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>a_arr <span class="op">=</span> np.linspace(<span class="op">-</span>a_guess<span class="op">/</span><span class="dv">2</span>,a_guess<span class="op">*</span><span class="dv">2</span>,num_a)</span>
@@ -372,7 +375,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="aside-solve-the-logistic-regression-problem-using-scikit-learn" class="level2">
 <h2 class="anchored" data-anchor-id="aside-solve-the-logistic-regression-problem-using-scikit-learn">Aside: Solve the logistic regression problem using scikit-learn</h2>
-<div class="cell" data-execution_count="7">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> linear_model</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>clf <span class="op">=</span> linear_model.LogisticRegression(C<span class="op">=</span><span class="fl">1e5</span>, solver<span class="op">=</span><span class="st">'lbfgs'</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>clf.fit(x_arr[:, np.newaxis], y_arr)</span>

@@ -175,7 +175,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           First in a series on understanding neural network models.
         </div>
       </div>
-                </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">foundations</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -325,7 +328,7 @@ w = w - \alpha  X^T \cdot \left( [\tilde{Y}-Y]*\tilde{Y}*(1-\tilde{Y})\right)
 <section id="actual-code" class="level2">
 <h2 class="anchored" data-anchor-id="actual-code">Actual Code</h2>
 <p>The full code for all of this is then…</p>
-<div class="cell" data-outputid="0b1b770c-72e4-427c-bb99-b338e30ae5a4">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Source: Slightly modified from Andrew Trask's code posted at </span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#         https://iamtrask.github.io/2015/07/12/basic-python-network/</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -385,7 +388,7 @@ weights =
 </div>
 <p>Note that, because of our nonlinear activation, we <em>don’t</em> get the solution <span class="math inline">\(w_0=1, w_1=0, w_2=0\)</span>.</p>
 <p>Plotting the loss vs.&nbsp;iteration number, we see…</p>
-<div class="cell" data-outputid="0950ec73-b861-41c1-94e1-f3b4acfb0188">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>plt.loglog(loss_history)</span>
@@ -402,7 +405,7 @@ weights =
 <p>Another popular choice of activation function is the <em>rectified linear unit</em> or ReLU. The function ReLU(x) is zero for x &lt;= 0, and equal to x (i.e.&nbsp;a straight line at 45 degrees for) x &gt;0. It can be written as max(x,0) or x * (x&gt;0), and its derivative is 1 for positive x, and zero otherwise.</p>
 <p><a href="https://www.desmos.com/calculator/vjqfxlgmzl">Click here to see a graph of ReLU</a></p>
 <p>Modifying our earlier code to use ReLU activation instead of sigmoid looks like this:</p>
-<div class="cell" data-outputid="06ed4431-6794-4afb-bb50-891cf496c815">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> relu(x,deriv<span class="op">=</span><span class="va">False</span>):   <span class="co"># relu activation</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(deriv<span class="op">==</span><span class="va">True</span>):</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">*</span>(x<span class="op">&gt;</span><span class="dv">0</span>) </span>
@@ -446,7 +449,7 @@ weights =
  [-1.78436793e-02]]</code></pre>
 </div>
 </div>
-<div class="cell" data-outputid="59fb1561-30ed-4188-855e-71d06e993b02">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aside/Trivia (you can skip this cell): I find it interesting that apparently w2 = 1-w0</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>( w[<span class="dv">2</span>] <span class="op">-</span> (<span class="dv">1</span><span class="op">-</span>w[<span class="dv">0</span>]) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -454,7 +457,7 @@ weights =
 </div>
 </div>
 <p>Plot old results with new results:</p>
-<div class="cell" data-outputid="0d34690a-8542-4245-9524-437eb1d4558c">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>plt.loglog(loss_history,label<span class="op">=</span><span class="st">"sigmoid"</span>)</span>
@@ -563,7 +566,7 @@ One-Hot Encoding for <span class="math inline">\(Y\)</span>
 <h3 class="anchored" data-anchor-id="initialize-the-weights">Initialize the weights</h3>
 <p>Previously the dimensions of the weight matrix <span class="math inline">\(w\)</span> were 3x1 because we were mapping each row of 3 elements in <span class="math inline">\(X\)</span> to each row of 1 element of <span class="math inline">\(Y\)</span>. For this new problem, each row of <span class="math inline">\(X\)</span> has 7 elements, and we want to map those to the 10 elements in each 1-hot-encoded row of <span class="math inline">\(Y\)</span>, so what should the dimensions of the weights matrix <span class="math inline">\(w\)</span> be?</p>
 <p>Write some numpy code to randomly initialize the weights matrix:</p>
-<div class="cell" data-outputid="8274248f-5b65-4678-e646-bdb5f68d7e93">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)  <span class="co"># initial RNG so everybody gets similar results</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> np.random.random(( , ))    <span class="co"># Students, fill in the array dimensions here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

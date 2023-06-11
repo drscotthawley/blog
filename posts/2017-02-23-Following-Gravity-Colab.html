@@ -175,7 +175,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           First in a series on Machine Learning Foundations, which applies to much of science and statistics as well. .
         </div>
       </div>
-                </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">foundations</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -222,7 +225,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Let’s put the “sample problem” aside for now, and talk about the general problem of optimization. Often we may wish to minimize some function <span class="math inline">\(f(x)\)</span>. In science, doing so may enable us to fit a curve to our data, as we’ll do below. Similarly,‘machine learning’ systems often operate on the basis of minimizing a ‘cost’ function to discern patterns in complex datasets.</p>
 <p>Thus we want to find the value of <span class="math inline">\(x\)</span> for which <span class="math inline">\(f(x)\)</span> is the smallest. A graph of such a function might look like this…</p>
 <p><em>(Python code follows, to make the graph)</em></p>
-<div class="cell" data-outputid="293869b1-2a48-43fd-9705-364dcdf88a92">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>ax.update({<span class="st">'xlabel'</span>:<span class="st">'x'</span>, <span class="st">'ylabel'</span>:<span class="st">'f'</span>})</span>
@@ -243,7 +246,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ol>
 <p>A nice feature of this method is that as <span class="math inline">\(df/dx \rightarrow 0\)</span>, so too <span class="math inline">\(\Delta x\rightarrow0\)</span>. So an “adaptive stepsize” is built-in.</p>
 <p>Now let’s try this out with some Python code…</p>
-<div class="cell" data-outputid="59a1b006-158e-40fe-b4e3-f116745ea34b">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> print_function    <span class="co"># for backwards-compatibility w/ Python2</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -300,7 +303,7 @@ alpha =  0.8
 <h3 class="anchored" data-anchor-id="challenge-instability">Challenge: Instability</h3>
 <p>You may have noticed, if you made the learning rate too large, that the algorithm does <em>not</em> converge to the solution but instead ‘blows up’. This is the ‘flip side’ of the ‘adaptive step size’ feature of this algorithm: If you jump “across” the minimum to the other side and end up a greater distance from the minimum that where you started, you will encounter an even larger gradient, which will lead to an even larger <span class="math inline">\(\Delta x\)</span>, and so on.</p>
 <p>We can see this with the same code from before, let’s just use a different starting point and a step size that’s clearly too large…</p>
-<div class="cell" data-outputid="7d234a29-2f88-4a39-dde0-c6d1c0912d14">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> print_function    <span class="co"># for backwards-compatibility w/ Python2</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -351,7 +354,7 @@ alpha =  0.8
 </div>
 <p>One way to guard against this to check: is our value of <span class="math inline">\(f(x)\)</span> at the current iteration <em>larger</em> than the value it was at the previous iteration? If so, that’s a sign that our learning rate is too large, and we can use this criterion to dynamically adjust the learning rate.</p>
 <p>Let’s add some ‘control’ code to that effect, to the previous script, and also print out the values of the relevant variables so we can track the progress:</p>
-<div class="cell" data-outputid="e9bdef81-73d2-40ed-c6d1-e3b43d329bcf">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> print_function    <span class="co"># for backwards-compatibility w/ Python2</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -442,7 +445,7 @@ iter =  19 x =  7.440160904563896 f(x) = 42.47567247667326 alpha =  0.8125
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sympy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You’re good? No errors? Ok, moving on…</p>
-<div class="cell" data-outputid="effc2113-02a5-44b2-e155-ba76e2bfbca9">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> print_function    <span class="co"># for backwards-compatibility w/ Python2</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sympy <span class="im">import</span> Symbol, diff</span>
@@ -505,7 +508,7 @@ alpha =  0.03
 <p><em>(A descent into darkness…)</em></p>
 <p>Let’s define a function of two variables, that’s got at least one minimum in it. We’ll choose <span class="math display">\[f(x,y) = -\left( \cos x + 3\cos y \right) /2,\]</span> which actually has infinitely many minima, but we’ll try to ‘zoom in’ on just one.</p>
 <p>We can vizualize this function via the graph produced by the code below; in the graph, darker areas show lower values than ligher areas, and there is a minimum at the point <span class="math inline">\(x=0,y=0\)</span> where <span class="math inline">\(f(0,0)=-2\)</span>.</p>
-<div class="cell" data-outputid="8a33fcea-3be2-4e0a-df61-4472081bcff3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x,y):</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>( np.cos(x) <span class="op">+</span> <span class="dv">3</span><span class="op">*</span>np.cos(y) )<span class="op">/</span><span class="dv">2</span></span>
@@ -526,7 +529,7 @@ alpha =  0.03
 </div>
 <p>The way we find a minimum is similar to what we did before, except we use partial derivatives in the x- and y-directions:</p>
 <p><span class="math display">\[x_{new} = x_{old} + \Delta x,\ \ \ \ \ \ \Delta x = - \alpha {\partial f\over \partial x}  \]</span> <span class="math display">\[y_{new} = y_{old} + \Delta y,\ \ \ \ \ \ \Delta y = - \alpha {\partial f\over \partial y},\]</span></p>
-<div class="cell" data-outputid="36b06c50-766b-4074-f98e-6214ec5f1db9">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> print_function    <span class="co"># for backwards-compatibility w/ Python2</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -603,7 +606,7 @@ alpha =  0.03
 <p>So, following our earlier work on multidimensional optimization, we start with guesses for <span class="math inline">\(m\)</span> and <span class="math inline">\(b\)</span> and then update according to gradient descent:</p>
 <p><span class="math display">\[m_{new} = m_{old} + \Delta m,\ \ \ \ \ \ \Delta m = -\alpha{\partial (MSE)\over\partial m} = -\alpha{2\over n}\sum_{i=1}^n (mx_i+b-y_i)(x_i) \]</span> <span class="math display">\[b_{new} = b_{old} + \Delta b,\ \ \ \ \ \ \Delta b =  -\alpha{\partial (MSE)\over\partial b} = -\alpha{2\over n}\sum_{i=1}^n (mx_i+b-y_i)(1).\]</span></p>
 <p>So, to start off, let’s get some data…</p>
-<div class="cell" data-outputid="457e1eb0-d624-4660-caba-bcf0bcdc73af">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up the input data</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">20</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)               <span class="co"># for reproducability </span></span>
@@ -629,7 +632,7 @@ alpha =  0.03
 </div>
 <p><em>Note: in contrast to earlier parts of this document which include complete python programs in every code post, for brevity’s sake we will start using the notebook “as intended”, relying on the internal state and adding successive bits of code which make use of the “memory” of previously-defined variables.</em></p>
 <p>Let’s map out the MSE for this group of points, as a function of possible <span class="math inline">\(m\)</span> and <span class="math inline">\(b\)</span> values…</p>
-<div class="cell" data-outputid="772ae73a-6731-4bed-b4ad-952aea4fa8fa">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># map out the MSE for various values of m and b</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> MSE(x,y,m,b):</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Use Python array operations to compute sums</span></span>
@@ -652,7 +655,7 @@ alpha =  0.03
 </div>
 <p>We see the minimum near the “exact” values chosen in the begininng. (Note that we’ve plotted the logarithm of the MSE just to make the colors stand out better.)</p>
 <p>Next we will choose starting guesses for <span class="math inline">\(m\)</span> and <span class="math inline">\(b\)</span>, and use gradient descent to fit the line…</p>
-<div class="cell" data-outputid="acff3177-a885-49a2-a000-6de86b3b5014">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="fl">3.5</span>         <span class="co"># initial guess</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="fl">3.5</span> </span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>m_arr <span class="op">=</span> []</span>
@@ -823,7 +826,7 @@ Final result: m =  1.93108496636 , b =  1.49311028301</code></pre>
 </div>
 <p><em>Note that the optimized values <span class="math inline">\((m,b)\)</span> that we find may not exactly match the “exact” values we used to make the data, because the noise we added to the data can throw this off. In the limit where the noise amplitude goes to zero, our optimized values will exactly match the “exact” values used to generated the data.</em></p>
 <p>Let’s see the results of our line fit…</p>
-<div class="cell" data-outputid="bf92e1d1-d31a-40d3-8e93-41f5f05de721">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the points</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
@@ -858,7 +861,7 @@ Final result: m =  1.93108496636 , b =  1.49311028301</code></pre>
 <li>we initialise <span class="math inline">\(\alpha_j\)</span> such that larger powers of <span class="math inline">\(x\)</span> start with smaller coefficients</li>
 <li>we put the fitting code inside a method (with a bunch of parameters) so we can call it later</li>
 </ul>
-<div class="cell" data-outputid="0f537414-310b-42b7-ced4-d4be109c5e7a">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> print_function    <span class="co"># for backwards-compatibility w/ Python2</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -988,7 +991,7 @@ Final result: m =  1.93108496636 , b =  1.49311028301</code></pre>
 <p><strong>The Challenge</strong>: Given a set of one-dimensional data of position vs.&nbsp;time <span class="math inline">\(y(t)\)</span>, can we find the underlying equation that gives rise to it? Better put, can we fit a model to it, and how well can we fit it, and what kind of model will it be anyway?</p>
 <p>(This is the sort of thing that statisticians <em>do</em>, but it’s also something physicists do, and one could argue, this is what <em>everybody</em> does <em>all the time</em>. )</p>
 <p>Let’s get started. I’m just going to specify y(t) at a series of <span class="math inline">\(n+1\)</span> time steps <span class="math inline">\(t_i\)</span> (<span class="math inline">\(t_0\)</span>…<span class="math inline">\(t_n\)</span>) and we’ll make them evenly spaced, and we’ll leave out any noise at all – perfect data. :-)</p>
-<div class="cell" data-outputid="e5ced6c1-56fe-4767-8302-51031b2f040a">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>g_exact <span class="op">=</span> <span class="fl">9.8</span>         <span class="co"># a physical parater we'll find a fit for</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>dt      <span class="op">=</span> <span class="fl">0.01</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>tmax    <span class="op">=</span> <span class="dv">1</span>         <span class="co"># number of time steps</span></span>
@@ -1012,7 +1015,7 @@ Final result: m =  1.93108496636 , b =  1.49311028301</code></pre>
 </div>
 </div>
 <p>Can we fit this with a polynomial? Sure, let’s do that, using the code from before…</p>
-<div class="cell" data-outputid="0f6ee99e-9d15-4d6c-c0ba-406990d530ca">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> polyfit(t_data, y_data, order<span class="op">=</span><span class="dv">2</span>, alpha_start <span class="op">=</span> <span class="fl">10.0</span>, maxiter<span class="op">=</span><span class="dv">1000</span>, printevery<span class="op">=</span><span class="dv">100</span>)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Our fit:          y(t) = "</span>,c[<span class="dv">0</span>],<span class="st">" + "</span>,c[<span class="dv">1</span>],<span class="st">"*t + "</span>,c[<span class="dv">2</span>],<span class="st">"*t**2"</span>,sep<span class="op">=</span><span class="st">''</span>)</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Compare to exact: y(t) = "</span>,y0,  <span class="st">" + "</span>,v0,  <span class="st">"*t - "</span>,<span class="fl">0.5</span><span class="op">*</span>g_exact,<span class="st">"*t**2"</span>,sep<span class="op">=</span><span class="st">''</span>)</span>
@@ -1044,7 +1047,7 @@ Estimate for g =  9.79990994018</code></pre>
 </div>
 </div>
 <p>What if we try fitting higher-order terms? Are their coefficients negligible? The system <em>may</em> converge, but it will take <em>a lot</em> more iterations… (be prepared to wait!)</p>
-<div class="cell" data-outputid="61d75112-6dcc-4088-b7c5-2c24d12b9f7a">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> polyfit(t_data, y_data, order<span class="op">=</span><span class="dv">3</span>, alpha_start <span class="op">=</span> <span class="fl">1.0</span>, maxiter<span class="op">=</span><span class="dv">700000</span>, printevery<span class="op">=</span><span class="dv">10000</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Our fit:          y(t) = "</span>,c[<span class="dv">0</span>],<span class="st">" + "</span>,c[<span class="dv">1</span>],<span class="st">"*t + "</span>,c[<span class="dv">2</span>],<span class="st">"*t**2 + "</span>,c[<span class="dv">3</span>],<span class="st">"*t**3"</span>,sep<span class="op">=</span><span class="st">''</span>)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Compare to exact: y(t) = "</span>,y0,  <span class="st">" + "</span>,v0,  <span class="st">"*t - "</span>,<span class="fl">0.5</span><span class="op">*</span>g_exact,<span class="st">"*t**2"</span>,sep<span class="op">=</span><span class="st">''</span>)</span>

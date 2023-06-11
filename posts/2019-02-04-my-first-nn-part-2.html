@@ -178,7 +178,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           Bias and cross-entropy loss
         </div>
       </div>
-                </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">foundations</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -266,7 +269,7 @@ f\left(
 \]</span> <strong><em>Foreshadowing</em></strong>: <em>Note that in this problem, the rightmost column of <span class="math inline">\(X\)</span> already was a column of all 1’s, and so already has something akin to a bias. Thus, adding a new column of all 1’s will not add any information, and so for this problem we expect that adding the bias won’t improve the model performance.)</em></p>
 <p>With this change, we can still write our weighted sum as <span class="math inline">\(\sum_j X_{ij}w_j\)</span>, it’s just that <span class="math inline">\(j\)</span> now runs over 0..3 instead of 0..2. To emphasize: We can leave the rest of our code the same as before, provided we change <span class="math inline">\(X\)</span> by adding a column of 1’s.</p>
 <p>In terms of coding the change to <span class="math inline">\(X\)</span>, we can either rewrite it by hand, or pull a numpy trick:</p>
-<div class="cell" data-outputid="778b436e-d428-4223-f443-ed877697cc3b">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
@@ -291,7 +294,7 @@ f\left(
 </div>
 </div>
 <p>Let’s compare our the use of the bias term without. We’ll define functions for the gradient descent and for the plotting of the loss history, so we can call these again later in this lesson.</p>
-<div class="cell" data-outputid="cc806186-33f1-4d5f-ee90-be81b9ac1468">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> np.array([[<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>]]).T  <span class="co"># target output dataset </span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sigmoid(x,deriv<span class="op">=</span><span class="va">False</span>): </span>
@@ -378,7 +381,7 @@ With bias: Y_pred = [[0.00485703]
 </div>
 </div>
 <p>As expected, <em>for this problem</em>, the inclusion of bias didn’t make any significant difference. Let’s try the same thing for the 7-segment display problem from Part 1. And let’s try two different runs, one with sigmoid activation, and another with ReLU:</p>
-<div class="cell" data-outputid="adf51e4d-9990-4c8e-b439-aac1e035e8a7">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>X_7seg <span class="op">=</span> np.array([ [<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>],  <span class="co"># 0</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                    [<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>],  <span class="co"># 1 </span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                    [<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>],  <span class="co"># 2</span></span>
@@ -414,7 +417,7 @@ With bias: Y_pred = [[0.00485703]
 <div class="cell-output cell-output-stdout">
 <pre><code>
 
---------- activ =  &lt;function sigmoid at 0x7fa465235d08&gt;</code></pre>
+--------- activ =  &lt;function sigmoid&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <p><img src="2019-02-04-My-First-NN-Part-2_files/figure-html/cell-4-output-2.png" class="img-fluid"></p>
@@ -444,7 +447,7 @@ With bias: Y_pred =
  [0.00 0.00 0.00 0.01 0.01 0.01 0.00 0.00 0.01 0.97]]
 
 
---------- activ =  &lt;function relu at 0x7fa4651f2400&gt;</code></pre>
+--------- activ =  &lt;function relu&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <p><img src="2019-02-04-My-First-NN-Part-2_files/figure-html/cell-4-output-4.png" class="img-fluid"></p>
@@ -480,8 +483,8 @@ With bias: Y_pred =
 <h2 class="anchored" data-anchor-id="video-interlude-logistic-regression">Video Interlude: Logistic Regression</h2>
 <p>What we’ve been doing up until now has been a “classification” problem, with “yes”/“no” answers represented by 1’s and 0’s. This sort of operation is closely associated with the statistical method of Logistic Regression. It is akin to linear regression but with a sigmoid activation function. When doing Logistic Regression, one optimizes to fit by finding the maximum “likelihood” of a given model being correct.</p>
 <p>To gain some insight on Logistic Regression, watch the following StatQuest video. (You can ignore his remarks about his preceding video, “R squared” and “p-value”, etc.)</p>
-<div class="cell" data-scrolled="true" data-execution_count="4">
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell">
+<div class="cell-output cell-output-display">
 
         <iframe width="560" height="315" src="https://www.youtube.com/embed/yIYKR4sgzI8" frameborder="0" allowfullscreen=""></iframe>
         
@@ -514,7 +517,7 @@ w := w - \alpha  X^T \cdot \left( [\tilde{Y}-Y]*\tilde{Y}*(1-\tilde{Y})\right) /
 w := w - \alpha  X^T \cdot [\tilde{Y}-Y].
 \]</span> Thus despite all this seeming complication, our CE weight update is actually simpler than what it was before as MSE!</p>
 <p>Let’s try this out with code now:</p>
-<div class="cell" data-outputid="3f867001-c4b3-4a32-9ed3-495d683f0098">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we'll "overwrite" the earlier calc_loss function</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_loss(Y_pred, Y, X, w, activ, loss_type<span class="op">=</span><span class="st">'ce'</span>):</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  diff <span class="op">=</span> Y_pred <span class="op">-</span> Y</span>
@@ -559,7 +562,7 @@ CE loss: Y_pred =
 </div>
 </div>
 <p>This works a lot better! To understand why, note that the gradients for MSE loss scale like <span class="math display">\[[\tilde{Y}-Y]*\tilde{Y}*(1-\tilde{Y})\]</span> and thus <strong>these gradients go to zero</strong> as <span class="math inline">\(\tilde{Y}\rightarrow 0\)</span>, and/or <span class="math inline">\(\tilde{Y}\rightarrow 1\)</span>, which makes training <strong>very slow</strong>! In contrast, the extra denominator in the CE gradients effectively cancels out this behavior, leaving the remaining term of <span class="math display">\[[\tilde{Y}-Y]\]</span> which varies <em>linearly</em> with the difference from the target value. This makes training much more efficient.</p>
-<div class="cell" data-outputid="f0f69bf7-e65d-4357-9be2-d73055a2e5d3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aside: What happens if we try ReLU activation with CE loss?  Bad things, probably.</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Recall that ReLU maps negative numbers to 0, and isn't bounded from above.</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  Thus the "denominator" in the 'diff term' in our earlier code will tend to 'explode'.  </span></span>
