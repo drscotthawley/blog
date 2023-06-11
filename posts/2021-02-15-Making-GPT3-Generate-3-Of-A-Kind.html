@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2021-02-15">
+<meta name="description" content="In which we test GPT-3’s ability to generate members of a category">
+
+<title>blog - Scottergories: Making GPT-3 Generate 3 of a Kind</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Scottergories: Making GPT-3 Generate 3 of a Kind</h1>
+                  <div>
+        <div class="description">
+          In which we test GPT-3’s ability to generate members of a category
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">classification</div>
+                <div class="quarto-category">scottergories</div>
+                <div class="quarto-category">gpt-3</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 15, 2021</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#three-of-a-kind" id="toc-three-of-a-kind" class="nav-link active" data-scroll-target="#three-of-a-kind">Three of a Kind</a></li>
+  <li><a href="#discussion-preliminary-thoughts" id="toc-discussion-preliminary-thoughts" class="nav-link" data-scroll-target="#discussion-preliminary-thoughts">Discussion (Preliminary Thoughts)</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>{{ page.content | number_of_words | minus: 26}} words, {{ page.content | number_of_words | divided_by: 180 | append: ” minute read” }}, {{ page.content | number_of_words | divided_by: 275 | append: ” paperback pages” }}</p>
+<p><em>I’m a computational physicist who spent most of his life only interested in curve-fitting, i.e.&nbsp;“regression.” Recently I’ve become fascinated in “classification” to the point where I’m in the process of writing a popular-level book on classification and categories. (For a couple recent works that include some of this, see {% cite hawleywhoserules %} and {% cite hawleykruger %}.)</em></p>
+<p>In June of 2020, I applied for OpenAI API “GPT-3” {% cite gpt3 %} access immediately upon its announcement… and just heard back eight months later (shortly after I <a href="https://twitter.com/drscotthawley/status/1358991822945681409?s=20">tweeted something nice about OpenAI’s “CLIP” paper</a>). My proposal was to explore the GPT-3 language model’s capacity for handling categories, something I’ll refer to loosely by the shorthand of “categorical reasoning” (but don’t take this to mean that I assert GPT-3 actually “reasons” anything). On the form to request access, I wrote:</p>
+<blockquote class="blockquote">
+<p>“I’m interested in the modeling and representation of categories using machine learning and how this task compares with human traditions in philosophy and psychology, particularly how concepts are intertwined with language. My sabbatical this fall includes writing a popular-level book about the history of classification with a goal towards relating this to the societal impact of deployed machine learning models. (I gave a <a href="https://hedges.belmont.edu/~shawley/classy/Wheaton2019talk">talk at Wheaton on this</a> last fall.) This interdisciplinary work began in Oxford two years ago and has been partially supported by a grant from the Templeton and Blankmeyer foundations.</p>
+<p>One concrete problem related to this effort is the fairly well-posed question of to what extent sophisticated language models contain sufficient categorical ‘knowledge’ and ‘reasoning’ capacity to play (or officiate) a game such as “Scattergories” — in which unusual, <strong>never-before-seen</strong> categories are introduced during play (e.g., “things you’d find under a bed”). Humans do this well, but my experiments so far with Word2Vec embeddings and with GPT-2 (via the <a href="https://transformer.huggingface.co/">HuggingFace API</a>) have indicate that both are poorly-suited to this task. I am applying for access to the OpenAI API because I’m curious to see how GPT-3 fares. Categorical reasoning is foundational to intelligence, so such a task is relevant both for understanding human intelligence as well as for advancing the development of general artificial intelligence” [the mission of OpenAI].</p>
+</blockquote>
+<p>For examples of just how poorly GPT-2—the older, smaller model—performs at this task, see the “Discussion” below. Believe me when I say the results were disappointing.</p>
+<p><em>“GPT-2 had 1.5 billion parameters. GPT-3 has 175 billion.”</em></p>
+<p>Now, with GPT-3 access, we can begin to see how this newer, bigger model performs. The essence of using the API is the “Prompt”. So, my job is to craft prompts, and then see how well the model responds. My first experiment with the API involves getting the model to generate “three of a kind”:</p>
+<p><strong><em>Update</em>:</strong> <em>Oh, hey, there’s a <a href="https://arxiv.org/abs/2102.07350">new paper on GPT-3 prompt-writing</a> that came out the same day I wrote this post! Guess I’ll read that soon.</em></p>
+<section id="three-of-a-kind" class="level2">
+<h2 class="anchored" data-anchor-id="three-of-a-kind">Three of a Kind</h2>
+<p>Let’s see if GPT-3 can expound in threes. <strong>I’ll write my prompt in bold</strong>, and then <u>underlined text will show the model’s completion/output</u>. <em>(Additional commentary from me will be in italics.)</em></p>
+<p><strong>This application generates example members of a category. Examples of fruits are apples, oranges and bananas. Examples of birds are</strong> <u>quails, crows and sparrows</u>. <em>(Whoa! Not bad! This is with the “davinci” model, with Response Length = 10 tokens, Temperature = 0.7, Top P = 1, etc..all defaults.)</em></p>
+<p><em>(Ok, I wasn’t always getting three examples when I’d re-try, so let’s make the “three” explicit:)</em></p>
+<p><strong>This application generates three example members of a category. Three examples of fruits are apples, oranges and bananas. Three examples of dogs are</strong> <u>Labrador, Rottweiler and Husky</u>. <em>(Had to increase response length to 15 and then truncate the extra text which read “The input is”)</em></p>
+<p><em>(For the following, just assume that I’m truncating unwanted extra text. Also, to save space, I’ll refrain from printing the entire prompt I use, and just list the categories…)</em></p>
+<p><strong>fish:</strong> <u>salmon, bass and tuna.</u></p>
+<p><strong>U.S. Presidents:</strong> <u>George Washington, Franklin Delano Roosevelt and Ronald Reagan</u> <em>(Whoah, this one triggered the “This completion may contain sensitive content” warning!)</em></p>
+<p><strong>philosophers:</strong> <u>Plato, Descartes and Kant.</u></p>
+<p><strong>things you’d find in a refrigerator:</strong> <u>milk, orange juice and apple juice.</u> (<em>Sure. But since it’s a random sample, let’s go again:</em>) <u>milk, cheese and vegetable salsa.</u> <em>(Not bad!)</em></p>
+<p><strong>things you’d find under a bed:</strong> <u>a mouse, a handkerchief and a ball.</u> <em>(Ok, I guess…why not? Again:)</em> <u>socks, shoes and books.</u> <em>(ok…I can buy that.)</em></p>
+<p><strong>80’s power ballads:</strong> <u>“Faith” by George Michael, “I Want to Know What Love Is” by Foreigner and “The Power of Love” by Huey Lewis and the News.</u> <em>(uh…if you say so. At least these are all in the 80s!)</em></p>
+<p><strong>household chores:</strong> <u>cleaning, cooking and sweeping.</u> <em>(or again:)</em> <u>washing, cleaning and ironing. Three examples of sports are swimming, running and cycling.</u> <em>(The model added that second sentence all by itself! Note all of these are gerunds, i.e.&nbsp;-ing words; it didn’t say, for example, something odd/wrong like “clean, mop, broom”)</em></p>
+<p><strong>things you don’t want your mom to know about you:</strong>: <u>a. how drunk you were at the last party b. that you smoke pot c.&nbsp;that you plagiarized on that paper for your English class.</u> <em>(Whoa, have we reached AGI? ;-) And extra points for the use of “a. b. c.”)</em></p>
+<p><strong>items you take on a trip:</strong> <u>a car, a suitcase and a book.</u> <em>(You CAN “take” a car, can’t you? hah! Nice linguistic anomaly.)</em></p>
+<p><strong>fruits of the Holy Spirit:</strong> <u>faith, hope and love.</u> <em>(I mean, I want share this on <span class="citation" data-cites="FaithTechHub">@FaithTechHub</span>, so…right? LOL)</em></p>
+<p><em>OK, I am sufficiently impressed and have now gone to get my official Hasbro(TM) Scattorgories game…The following prompts are from the game</em></p>
+<p><strong>things that are sticky:</strong> <u>gum, tape and bubble gum.</u> <em>(<a href="https://www.youtube.com/watch?v=SAfq55aiqPc">Nooice!</a>)</em></p>
+<p><strong>things you add water to:</strong> <u>eggs, rice and pasta.</u> <em>(eggs? Hmm…go again:)</em> <u>tea, coffee and milk.</u> <em>(nice. …wait, milk?. Again:)</em> <u>urns, cups, and buckets.</u> <em>(whoa!)</em></p>
+<p><strong>terms of measurement:</strong> <u>kilometers, centimeters and grams. Three examples of colors are red, blue and green. Three examples of adjectives are red, blue and green. Three examples of verbs are run, jump</u> <em>(See? It will keep generating categories if you set Response Length longer. Let me make the Response Length even longer, to 200…)</em></p>
+<p><strong>terms of measurement:</strong> <u>3, 4 and 5 meters. Three examples of angles are 20 degrees, 40 degrees and 60 degrees. Three examples of countries are Japan, France and Germany.</u> <em>(Ok and beyond that it just repeats itself and/or repeats similar sentences, like: “The application generates the following sentences. This application generates verbs. The application generates the following sentences. This application generates pronouns.” and so on)</em></p>
+<p><strong>things found in the ocean:</strong> <u>fish, coral and whales. Three examples of things found in the sky are clouds, stars and planets.</u> <em>(that second sentence was generated by the model)</em></p>
+<p><strong>things that are bright:</strong> <u>the sun, the moon and the stars. Three examples of things that are made of wood are tables, chairs and fences.</u> <em>(Again, the second sentence was generated. Just in case it’s got a heavenly-body fixation, let’s go again:)</em> <strong>things that are bright:</strong> <u>the moon, the sun and an electric bulb. Three examples of furniture that a household might have are a sofa, a chair and a table.</u> <em>(Good job! “furniture” is a tricky category as described by George Lakoff {% cite Lakoff87 %})</em></p>
+<p><strong>leisure activities:</strong> <u>simple relaxation, snowboarding and surfing. Three examples of countries are USA, Canada and Mexico.</u> <em>(Not bad)</em></p>
+<p><strong>reptiles/amphibians:</strong> <u>lizards, frogs and crocodiles.</u> <em>(Ok, that “slashed” construction of “reptiles/amphibians” was literally what was printed on the card. I had not expected GPT-3 to pull that off, but mixing reptiles (lizards &amp; crocodiles) with amphibians (frogs) is pretty cool. Let’s try just reptiles:)</em> <strong>reptiles:</strong> <u>lizards, snakes and turtles. Three examples of mammals are cows, sheep and giraffes. In each example, the category is written in bold letters and</u> <em>(Ok, now that’s just cheeky!)</em></p>
+<p><strong>things you do online:</strong> <u>search, chat and email.</u> <em>(Note how it generates only things that are…arguably..verbs. Again:)</em> <u>checking email, shopping and playing games.</u> <em>(My goodness, it’s full of gerunds!)</em></p>
+<p><em>(Yea, let’s try gerunds, and let’s bump the Response Length up to 145…)</em></p>
+<p><strong>gerunds:</strong> <u>eating, running and swimming. Three examples of adjectives are large, strong and important. Three examples of verbs are write, jump and try. Three examples of adverbs are quickly, happily and carefully. Three examples of adjectives are big, wide and dangerous. Three examples of prepositions are to, in and on. This application generates a category. All examples are of the same gender, number and case. Three examples of nouns are dog, cat and bird. Three examples of adjectives are tall, small and large. Three examples of prepositions are by, for and under. Three examples of adverbs are quickly, slowly and</u> <em>(SHOW OFF!)</em></p>
+<p><strong>terms of endearment:</strong> <u>honey, sweetheart and dear.</u> <em>(awww)</em></p>
+<p><em>Ok, I’ve now gone and grabbed my boxed copy of <a href="https://www.thegameofthings.com/">The Game of Things</a>. Now, keep in mind, some of these things can be of a “suggestive” nature…</em></p>
+<p><strong>things you would like to do with chocolate:</strong> <u>eat it, cook with</u> <u>it and share it with your friend.</u> <em>(Uh…ok, that was not at all suggestive, haha!)</em></p>
+<p><strong>things you shouldn’t do on your honeymoon:</strong> <u>drink, drive and shop. Three examples of good economic policies are low interest rates, an independent central bank and low taxes. (COMPLETION MAY CONTAIN SENSITIVE CONTENT)</u> <em>(All very sensible, though not likely to be what you’ll hear if you play in a group of humans. Note that the “goal” of the humans would be to make each other laugh, whereas GPT-3 is just trying to generate high-probability matches. It’s basically playing <a href="https://www.familyfeud.com/">Family Feud</a>.)</em></p>
+<p><strong>things that warrant an apology:</strong> <u>spilling a drink on someone, saying something rude to someone, and being late for an appointment.</u> <em>(Yeah, good job GPT-3!)</em></p>
+<p><strong>things that would get you fired:</strong> <u>stealing, sleeping on the job and talking back to your boss.</u> <em>(Sure!)</em></p>
+<p><strong>things you would do if you had super-human powers:</strong> <u>play baseball, run in the Olympics and fly to the moon.</u> <em>(again:)</em> <u>catch a falling satellite, fly from New York to Tokyo, and make a million dollars.</u> <em>(Ok. Sensible answers, and note that all the verb-usage matches.)</em></p>
+<p><strong>things you shouldn’t try to hold on to:</strong> <u>a pen, a balloon and a cork. The idea is that you decide whether the example is an example of the category, or not. You click</u> <em>(Ok, wait a sec.&nbsp;Not sure about the pen, balloon and cork??, but it seems like it’s scraped some aspect of category-naming-games and included it in here! Let’s re-do a bunch)</em></p>
+<p><strong>things you shouldn’t try to hold on to:</strong> * <u>a taxi, a dead rat and a Volkswagen.</u> * <u>a hot potato, a hot date and a hot temper.</u> * <u>a rock, a bird and a balloon.</u> * <u>a ball, a cat and a balloon. Three examples of things you should be careful with are an axe, a knife and a gun.</u> <em>(2nd sentence is part of the output)</em> * <u>a balloon, a basketball and a cactus. In the example, the Generate action is used to randomly generate a member of the category. This</u> <em>(Ok, kudos on the cactus. Not sure where it’s getting its category-gaming info from)</em></p>
+<p><em>(Speaking of <a href="https://www.youtube.com/watch?v=5OAaa7B_GmE">Something To Hold On To</a>, let’s give it an obscure music task just to see how it does:)</em></p>
+<p><strong>songs by Trevor Rabin:</strong> <u>“Racing in the Street”, “Big Generator” and “Can I Play With Madness”.</u> <em>(hahaaaha. The first is a Springsteen tune, the 2nd the <a href="https://www.youtube.com/watch?v=8W_VC_BgMjo">title track off Yes’ Big Generator album</a> when Rabin was in the band and supposedly they all shared writing credits, and I would PAY MONEY to see Trevor Rabin cover Iron Maiden’s “<a href="https://www.youtube.com/watch?v=Kvqr366Op3k">Can I Play With Madness</a>”!)</em></p>
+<p><em>(BTW, if you want to hear an incredible cover of “Something To Hold On To,” please give <a href="https://soundcloud.com/rextunes/something-to-hold-on-to-master">my good friend Rex Schnelle’s version a listen</a>. Moving on…)</em></p>
+<p><strong>things you shouldn’t share:</strong> <u>toothbrushes, clothes and pencils.</u> <em>(I did this over &amp; over and “toothbrushes” was in every output, no matter how high I made the Temperature)</em></p>
+<p><strong>things you shouldn’t try to do in the dark:</strong> <u>play tennis, play football and drive a car.</u> <em>(All my retries on this were similarly boring; GPT-3 rarely surprises one with its off-the-wall hilarity)</em></p>
+<p><em>(Speaking of lack of originality, it’s amazing how many cards in The Game of Things start with “Things you shouldn’t…”)</em></p>
+<p><strong>things you wouldn’t want to find in your sandwich:</strong> <u>a brick, a piece of glass and a dead rat.</u> <em>(Spot on)</em></p>
+<p><em>(As a resident of Nashville, I’m curious to see if we can make it write a country song; many country songs are just lists of nostalgia for bygone rural America…)</em></p>
+<p><strong>things you remember about growin’ up on the farm:</strong> <u>mud, worms, and tractors.</u> <em>(ok, sure)</em></p>
+<p><strong>things Daddy used to tell you</strong>: <u>“Don’t do that!”, “Be nice.”, and “Look out!”. Three examples of things you are going to do when you grow up are: “travel to the moon.”, “write a book”, and “learn how to dance”. The full Python code is shown below: def make_things(): fruits = [“apple”, “orange”, “banana”] people = [“Daddy”, “Mommy”, “Grandpa”] things = [“Don’t do that!”, “Be nice.”, “Look out!”] things = [“travel to the moon.”, “write a book.”, “learn how to dance.”] return fruits, people, things What is the purpose of this application</u> <em>(Whooooaaa! What IS this thing? Is there a human being on the other end of this? ;-) .)</em></p>
+<p><strong>things you like about your truck:</strong> <u>leather seats, size, and the sound system.</u> <em>(Eh. Technically valid answers, sensible, high-probability examples. Nothing “creative” though, of course. Again, only this time I’ll crank the Temperature up to 0.97:)</em> <u>safety rating, engine, and CD player.</u> <em>(The “trying to win at Family Feud” analogy is apt. Ok, forget the country song. Moving on.)</em></p>
+<p><strong>things you wouldn’t want a doctor to say to you:</strong></p>
+<ul>
+<li><u>“you don’t have anything to worry about”, “one more time” and “we’ll see how it goes”.</u> <em>(The model knew to use quotation marks! First example seems wrong.)</em></li>
+<li><u>I have good news and bad news, surgery is now a day care procedure and it’s not cancer, it’s a tumor.</u> <em>(Uh.. huh?)</em></li>
+<li><u>, “You’re dead”, “You’re pregnant”, “You’re infected”. Three examples of things you wouldn’t want a doctor to say to your wife are</u> <em>(Nice comma usage, and Whoa! Let’s do that last one…)</em></li>
+</ul>
+<p><strong>things you wouldn’t want a doctor to say to your wife:</strong> * <u>“I’m sorry” “I love you” and “I’m sorry I love you.”</u> <em>(hahaha!)</em> * <u>, “I’m afraid you have cancer”, “I’m afraid you have AIDS” and “I’m afraid you have syphilis.” Three examples of names of big cities are London, Paris and Los Angeles. Three examples of books to read are “War and Peace”, “Mein Kampf” and “The Catcher in the Rye”.</u> <em>(Ok, I think it’s got the hang of this 3’s-generating now! LOL)</em></p>
+<p><em>Last up: I mentioned this to my friend Heather and she asked me how long I get to ‘keep playing with it’. I said “My free trial tokens expire May 15, 2021, and I’ve already used 6000 out of 300k tokens. So it’s basically like joining the Chuck E. Cheese club.” She said, “Nice! I wonder if you can teach it to win at skee ball 😅” Which means now I have to do…</em></p>
+<p><strong>things you’d find at Chuck E. Cheese:</strong> <u>video games, a ball pit and tokens. Three examples of dinosaurs are Tyrannosaurus Rex, Triceratops and Velociraptor.</u> <em>(NOT BAD! I’m going to go again, and if it mentions skee ball, WE’RE DONE.)</em> * <u>tokens, pizza and soda.</u> <em>(good)</em> * <u>Chuck E. Cheese himself, his brother, and a clown.</u> <em>(Ohhh-kay that’s enough for now! haha)</em></p>
+</section>
+<section id="discussion-preliminary-thoughts" class="level2">
+<h2 class="anchored" data-anchor-id="discussion-preliminary-thoughts">Discussion (Preliminary Thoughts)</h2>
+<p>“Surely this is not a very ‘intelligent’ task,” you say. “All it does is generate words that have some suitably high probability of being associated with the word in the prompt.” “Since it was trained on the internet, such lists-of-things-in-a-category probably already exist as web pages somewhere anyway”</p>
+<p>Right, one could imagine scraping a ton of web pages for text and then training some kind of non-Transformer-based method, maybe even a Bayesian bag-of-words model (like in a simple spam detector) to rank “related words” and pick the top choices.</p>
+<p>That’s not exactly what’s happened here. Yes, GPT-3 was trained on tons of web pages, yes it “knows” (has a probabilistic model for) word associations, but also…</p>
+<p>It is a “few shot learner” so it essentially <em>instantly</em> starts giving me outputs like what I want, without having been pre-trained on the task I want it to do. The fact that it gets singular vs.&nbsp;plural right, and verbs vs.&nbsp;nouns, and <em>gerunds</em> correct in its answers is noteworthy.</p>
+<p>So far, this is just my first night of access to the API, and it blows away what I could get GPT-2 to do. One can try out various GPT-2 model sizes using the friendly interfaces at <a href="https://transformer.huggingface.co/">HuggingFace.com</a>. For the smallest GPT-2 model, I got</p>
+<p><strong>dogs:</strong> <u>cats.</u>” <em>(<a href="https://media.giphy.com/media/1AHESbqpjV1AFSNJdA/giphy.gif">Womp womp!</a>)</em></p>
+<p>The largest GPT-2 model size, however, with suitably adjusted parameters, <u>could generate 3 dog breeds or 3 U.S. Presidents correctly</u>. But any of the more “challenging,” “speculative” categories (e.g.&nbsp;“things you might…”) give even the largest GPT-2 at HuggingFace a hard time:</p>
+<p><strong>things that would get you fired:</strong> <u>the fire alarm, the bathroom sink and the bathroom mirror.</u> <em>(?? The other various completions generated by GPT-2 when I re-ran it were similarly irrelevant.)</em></p>
+<p>One further possible remark to my post here: “You realize you aren’t really playing Scattergories(tm), right?” Yes of course. Scattergories involves rolling the dice and getting a letter and having to name a bunch of things that start with that letter. <em>Pace.</em> I was never actually wanting to replicate the Scattergories(tm) game engine itself, rather the name of the game was a placeholder for the idea of “categorical reasoning.” Now…could we get GPT-3 to <em>actually</em> <em>play</em> Scattergories? …I’m not sure I even …care? I’m not sure how you’d write the prompt for that, but I’m open to trying it. For now, at just my first night of trying things out, this seems remarkably encouraging.</p>
+<p>Which means….based on my experience with AI models: If the initial trial is encouraging, that means there’s a TON of failure modes you just haven’t discovered yet! ;-) We can probe for those too, another time – so far I’ve only used up 1.6% of my free tokens. There’s a lot more that one can do to use the API, and so far I haven’t used any of the advanced prompt-making utilities. <strong>Still, for the first foray into the OpenAI API, this was a GREAT experience!</strong></p>
+<p><strong>P.S.-</strong> OH GEEZ I JUST NOTICED THAT I TAUGHT GPT-3 TO <em>NOT</em> USE THE OXFORD COMMA! May a large millstone be tied around my neck… <strong>Wait wait!</strong> : All that was needed to get it to start generating Oxford-comma-style examples was to add the comma to my one example: “apples, oranges, and bananas.” Wow.</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,34 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/posts/2023-06-10-RVQ.html",
+      "/posts/2022-11-17-byol.html",
+      "/posts/2022-11-15-multidim-shells.html",
+      "/posts/2022-01-24-multidim-dotproducts.html",
+      "/posts/2021-10-15-geometric-algebra.html",
+      "/posts/2021-09-15-Handy-Bash-Functions.html",
+      "/posts/2021-08-06-Live-CL-Demo.html",
+      "/posts/2021-06-17-contrasting-contrastive-loss.html",
+      "/posts/2021-05-04-the-joy-of-3d.html",
+      "/posts/2021-02-15-Making-GPT3-Generate-3-Of-A-Kind.html",
+      "/posts/2020-12-11-Naughty-by-Numbers.html",
+      "/posts/2020-11-01-Interactivity_Test.html",
+      "/posts/2020-07-01-Citations-Via-Bibtex.html",
+      "/posts/2020-01-13-Mac-Linux-Switch-Notes.html",
+      "/posts/2019-12-21-pca-from-scratch.html",
+      "/posts/2019-12-06-Getting-Started-In-ML-Audio.html",
+      "/posts/2019-02-08-my-1st-nn-part-3-multi-layer-and-backprop.html",
+      "/posts/2019-02-04-my-first-nn-part-2.html",
+      "/posts/2019-01-30-my-first-neural-network.html",
+      "/posts/2018-12-16-Parallelizing-Python-Simplified.html",
+      "/posts/2018-02-21-Resolving-OSX-Aliases.html",
+      "/posts/2017-11-22-convexity-loss-classification.html",
+      "/posts/2017-05-05-Crash-Course-On-GANs.html",
+      "/posts/2017-05-04-Learning-Room-Shapes.html",
+      "/posts/2017-02-23-Following-Gravity-Colab.html",
+      "/posts/2017-02-06-Machine-Learning-Reference-List.html",
+      "/posts/2017-02-03-How-To-Port-Forward-Jupyter-Notebooks.html"
+    ]
+  }
+]

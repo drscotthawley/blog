@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Scott H. Hawley">
+<meta name="dcterms.date" content="2021-10-15">
+<meta name="description" content="Clifford algebra isn’t so scary">
+
+<title>blog - Learning Some Geometric/Clifford Algebra</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Learning Some Geometric/Clifford Algebra</h1>
+                  <div>
+        <div class="description">
+          Clifford algebra isn’t so scary
+        </div>
+      </div>
+                </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Scott H. Hawley </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 15, 2021</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#motivations" id="toc-motivations" class="nav-link active" data-scroll-target="#motivations">Motivations</a></li>
+  <li><a href="#references-im-finding-to-be-helpful" id="toc-references-im-finding-to-be-helpful" class="nav-link" data-scroll-target="#references-im-finding-to-be-helpful">References I’m finding to be helpful</a></li>
+  <li><a href="#other-resources-i-have-yet-to-read" id="toc-other-resources-i-have-yet-to-read" class="nav-link" data-scroll-target="#other-resources-i-have-yet-to-read">Other resources I have yet to read</a></li>
+  <li><a href="#summary-of-my-thoughts-so-far" id="toc-summary-of-my-thoughts-so-far" class="nav-link" data-scroll-target="#summary-of-my-thoughts-so-far">Summary of My Thoughts So Far</a></li>
+  <li><a href="#prospectus-introducing-geometric-algebra-to-undergrads-in-analytical-mechanics" id="toc-prospectus-introducing-geometric-algebra-to-undergrads-in-analytical-mechanics" class="nav-link" data-scroll-target="#prospectus-introducing-geometric-algebra-to-undergrads-in-analytical-mechanics"><strong>Prospectus: Introducing Geometric Algebra to Undergrads in Analytical Mechanics</strong></a>
+  <ul class="collapse">
+  <li><a href="#topicchapter-breakdown" id="toc-topicchapter-breakdown" class="nav-link" data-scroll-target="#topicchapter-breakdown">Topic/Chapter Breakdown</a></li>
+  <li><a href="#who-else-is-teaching-this" id="toc-who-else-is-teaching-this" class="nav-link" data-scroll-target="#who-else-is-teaching-this">Who Else Is Teaching This?</a></li>
+  <li><a href="#education-research-studies" id="toc-education-research-studies" class="nav-link" data-scroll-target="#education-research-studies">Education Research Studies?</a></li>
+  <li><a href="#how-would-success-be-measured" id="toc-how-would-success-be-measured" class="nav-link" data-scroll-target="#how-would-success-be-measured"><strong>How Would “Success” Be Measured?</strong></a></li>
+  <li><a href="#main-issues-with-doing-ed-research-for-me" id="toc-main-issues-with-doing-ed-research-for-me" class="nav-link" data-scroll-target="#main-issues-with-doing-ed-research-for-me">Main Issues with Doing Ed Research for Me:</a></li>
+  <li><a href="#to-do-extras" id="toc-to-do-extras" class="nav-link" data-scroll-target="#to-do-extras"><strong>TO-DO / Extras:</strong></a></li>
+  </ul></li>
+  <li><a href="#deleted-me-messing-with-python-clifford-package" id="toc-deleted-me-messing-with-python-clifford-package" class="nav-link" data-scroll-target="#deleted-me-messing-with-python-clifford-package">Deleted: Me Messing With Python <code>clifford</code> package</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<blockquote class="blockquote">
+<p>“…for geometry, you know, is the gate of science, and the gate is so low and small that one can only enter it as a little child.”<br> – William K. Clifford</p>
+</blockquote>
+<section id="motivations" class="level2">
+<h2 class="anchored" data-anchor-id="motivations">Motivations</h2>
+<ol type="1">
+<li>The recent paper, <a href="https://arxiv.org/abs/2110.04176">“Lightweight Convolutional Neural Networks By Hypercomplex Parameterization”</a>. i.e, the potential for interesting (multichannel audio) signal processing applications of deep learning + hypercomplex numbers.</li>
+<li>The fact that, even as theoretical physicist (of <em>classical field theory</em>), I never learned enough about particle physics / QFT because I hated Dirac spinors, Pauli matrices, quaternions, and such. Thus this is an attempt to finally overcome my ignorance and aversion to an important and useful area of mathematics/physics!</li>
+</ol>
+</section>
+<section id="references-im-finding-to-be-helpful" class="level2">
+<h2 class="anchored" data-anchor-id="references-im-finding-to-be-helpful">References I’m finding to be helpful</h2>
+<ul>
+<li>The following video by “sudgylacmoe” using the “<a href="https://www.manim.community/">manim</a>” presentation style developed by <a href="https://www.3blue1brown.com/">3blue1brown</a>. Watch this!</li>
+</ul>
+<div class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display" data-execution_count="3">
+
+        <iframe width="400" height="300" src="https://www.youtube.com/embed/60z_hpEAtD8" frameborder="0" allowfullscreen=""></iframe>
+        
+</div>
+</div>
+<ul>
+<li>Another video: historical perspective: “The Vector Algebra War” (Oh, and there’s <a href="https://ieeexplore.ieee.org/document/7431944">a paper from IEEE Access</a> to go with it):</li>
+</ul>
+<div class="cell" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="4">
+
+        <iframe width="400" height="300" src="https://www.youtube.com/embed/_AaOFCl2ihc" frameborder="0" allowfullscreen=""></iframe>
+        
+</div>
+</div>
+<ul>
+<li><a href="https://slehar.wordpress.com/2014/03/18/clifford-algebra-a-visual-introduction/comment-page-2/?unapproved=1590&amp;moderation-hash=571d6eb02d897393899feffd4dddca41#comment-1590">“Clifford Algebra: A visual introduction”</a>, blog post by “slehar”</li>
+<li><a href="https://www.amazon.com/Geometric-Algebra-Physicists-Chris-Doran/dp/0521715954">This book!</a>: <a href="https://www.amazon.com/Geometric-Algebra-Physicists-Chris-Doran/dp/0521715954"><img src="https://pbs.twimg.com/media/FDYnk7AXoAEgYn8?format=jpg&amp;name=900x900" width="200px" alt="image of book cover"></a></li>
+<li>From “the man” himself: <a href="http://geocalc.clas.asu.edu/pdf/OerstedMedalLecture.pdf">David Hestenes’s Oersted Lecture</a></li>
+<li><a href="https://www.semanticscholar.org/paper/Vectors-and-Beyond%3A-Geometric-Algebra-and-its-Simons/8cb9a2b8344604f52b556c3b10f8b0bc8fb00f73">“Vectors and Beyond: Geometric Algebra and its Philosophical Significance”</a> by Peter Simons, <em>Dialectica</em>, Vol. 63, N° 4 (2010), pp.&nbsp;381–395.</li>
+<li><a href="https://www.ime.unicamp.br/~agacse2018/GA_Lecture1.pdf">These slides</a> by Joan Lasenby (Signal Processing Group, Trinity College, Cambridge) )</li>
+<li><a href="http://www.faculty.luther.edu/~macdonal/#geometric-algebra">Alan Macdonald’s textbook(s)</a> and <a href="https://www.youtube.com/watch?v=srwoPQfWWS8&amp;list=PLLvlxwbzkr7igd6bL7959WWE7XInCCevt&amp;index=1">YouTube videos</a></li>
+<li><a href="https://www.av8n.com/physics/clifford-intro.pdf">John Denker’s write-up</a></li>
+<li><a href="http://wackerart.de/mathematik/clifford_algebra.html">This very handy list of properties</a></li>
+</ul>
+</section>
+<section id="other-resources-i-have-yet-to-read" class="level2">
+<h2 class="anchored" data-anchor-id="other-resources-i-have-yet-to-read">Other resources I have yet to read</h2>
+<ul>
+<li>Hestenes’ mechanics texbook: <a href="https://www.amazon.com/Foundations-Classical-Mechanics-Fundamental-Theories/dp/0792353021">New Foundations for Classical Mechanics</a>, 1999.</li>
+<li><a href="https://github.com/TParcollet/Quaternion-Neural-Networks">PyTorch Quaternion Neural Networks</a></li>
+<li><a href="https://arxiv.org/pdf/2006.06507.pdf">“Embed Me If You Can: A Geometric Perceptron”</a></li>
+<li>This book chapter: <a href="https://link.springer.com/chapter/10.1007/978-3-319-57027-3_6">“Outlook for Clifford Algebra Based Feature and Deep Learning AI Architectures”</a></li>
+<li>Michael Reed’s <a href="https://grassmann.crucialflow.com/">Grassmann.jl</a> Julia package looks amazing</li>
+<li>So does all the code &amp; resources at <a href="https://bivector.net/">bivector.net</a>! Including the “shop”, haha!</li>
+<li><a href="http://geometry.mrao.cam.ac.uk/1993/01/imaginary-numbers-are-not-real-the-geometric-algebra-of-spacetime/">“Imaginary Numbers are not Real — the Geometric Algebra of Spacetime”</a> by S. F. Gull, A. N. Lasenby and C. J. L. Doran, <em>Found. Phys</em>. <strong>23</strong>(9), 1175-1201 (1993).</li>
+<li><a href="https://drive.google.com/file/d/15fTvrmP-Fht-u5iMMsq-4ie-7yEcgOcA/view">Something Twitter-y…?</a></li>
+<li>….your suggestions?</li>
+</ul>
+</section>
+<section id="summary-of-my-thoughts-so-far" class="level2">
+<h2 class="anchored" data-anchor-id="summary-of-my-thoughts-so-far">Summary of My Thoughts So Far</h2>
+<ol type="1">
+<li><strong>Why didn’t anybody teach me this stuff before???</strong> It makes <em>so many</em> things in physics make more sense.</li>
+<li>Cross products are like the Easter Bunny. Quaternions are like the Bohr Atom. Should we still teach young people these concepts? If the people in other communities are still using stone tools, should students be deprived of learning to work with bronze or iron?</li>
+<li>Cross products are neither <em>necessary</em> for introductory physics instruction <em>nor easier</em> than outer/exterior/wedge products. In 3D, the two are isomorphic, so why not teach the one that’s actually more useful? When we encounter cross products in physics it is always the rotating-area aspect that’s relevant, not the pseudovector aspect (see #2 above).<br>
+</li>
+<li>There’s nothing inherently “quantum mechanical” about Pauli matrices &amp; Dirac spinors, or quaternions. Rather they are just manifestations of the geometry of 3D space! Futhermore, the fact that Pauli matrices are typically taught in such a unmotivated,/“here memorize these” kind of way is anathema — or perhaps you benefited from the “Interlude: now let’s inject a bunch of Group Theory” approach — whereas with the GA approach they arise naturally.</li>
+<li>It’s not yet clear to me how bivectors are to be represented in (computational) linear algebra: square, antisymmetric matrices, perhaps?</li>
+<li>The relation between complex numbers and GA in 2D is cool but there are parts that can be a bit tricky conceptually. I think the reason is that (apart from GA) one typically deals with <em>either</em> complex numbers <em>or</em> 2d vectors (/phasors), and the question of multiplying a 2d vector by a complex number doesn’t really come up – the tricky bit being is that in GA, the pseudoscalar <em>anti-</em>commutes with vectors, whereas one normally thinks of <span class="math inline">\(i\)</span> as being an ordinary scalar that should commute.</li>
+<li>Notation choices: I’m a bit confused when in 2D is that “<span class="math inline">\(I\)</span>” is not the identity operator, rather it is a pseudoscalar/bivector that’s akin to “<span class="math inline">\(i\)</span>” (see point #6 above). But I’m getting used to it. Other choices such as <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> (in EE) are similarly…interesting. Also noticing that the Brits seem to prefer <span class="math inline">\(\sigma_i\)</span> for basis vectors whereas I was raised on <span class="math inline">\(\hat{e}_i\)</span>. I’m working on a dynamic “choose your own notation” interactive version of the materials I’m writing up, so that notation won’t be a sticking point for anyone, they can just choose what they prefer.</li>
+<li>Terminology: I find it to be a huge stumbling block ( / language barrier) when people say “outer product” in GA, b/c that term <a href="https://en.wikipedia.org/wiki/Outer_product">already means something different to the rest of the world</a> – namely the “tensor product” aka “Kronecker product” – something that does’t (necessarily) anticommute! Now, if the point is that we’re looking for a “unified language,” let’s use a unified language and not conflate in one term two very different concepts, because this is bound to confuse students (and I confess, physics professors too). Just say “wedge product.” Even “exterior product” is potentially confusing to students, since “exterior” is just a synonym of “outer”.</li>
+<li>Re. (anti-)commutivity: many expressions one sees are written in terms of orthonormal vectors, and thus it’s not always clear when these statements apply to general vectors/bivectors/etc. When in doubt, the thing to do is (presumably) to write out each product in terms of an othonormal basis (<span class="math inline">\(\hat{e}_1, \hat{e}_2\)</span>, etc.) and multiply and/or reverse things until you can show what you want to show.<br>
+</li>
+<li>In E&amp;M, GA gives you the relativistic Faraday tensor without even any relavity! Again it’s just a manifestation of geometry.</li>
+<li>This quote from McRobie and Joan Lasenby – <em>engineers, BTW!</em>: &gt; “The principal argument for the adoption of geometric algebra is that it provides a single, simple mathematical framework which eliminates the plethora of diverse mathematical descriptions and techniques it would otherwise be necessary to learn.” (F. A. McRobie and J. Lasenby, Simo-Vu Quoc Rods using Clifford Algebra. Int. J. Numer. Meth. Eng. 45 (1999), 377-398.) As <a href="http://www.faculty.luther.edu/~macdonal/GA&amp;GC.pdf">quoted by Alan Macdonald</a></li>
+</ol>
+</section>
+<section id="prospectus-introducing-geometric-algebra-to-undergrads-in-analytical-mechanics" class="level1">
+<h1><strong>Prospectus: Introducing Geometric Algebra to Undergrads in Analytical Mechanics</strong></h1>
+<p>Writing out some ideas in anticipation of my Spring 2023 course. – by <a href="https://twitter.com/drscotthawley">Scott H.Hawley</a>. Comments welcome.</p>
+<p><em>Geometric Algebra (GA) = Clifford Algebra applied in modern contexts.</em></p>
+<p>The <a href="https://ieeexplore.ieee.org/document/7431944">historical dominance of the Gibbs/Heaviside vector algebra in physics over Clifford’s superior framework</a> is unfortunate, cumbersome, confusing, etc., but the former has an enormous amount of popularity as the de-facto standard approach (mostly, I conjecture, due to “inertia” or what <a href="https://www.semanticscholar.org/paper/Vectors-and-Beyond%3A-Geometric-Algebra-and-its-Simons/8cb9a2b8344604f52b556c3b10f8b0bc8fb00f73">Peter Simons described</a> as being based “not on effectiveness but on tradition, entrenchment, and institutions.”) Sure, <a href="https://drscotthawley.github.io/blog/2021/10/15/Geometric-Algebra.html">GA may be cool</a> in helping to provide “a unified mathematical framework for all of physics” (C. Doran), and to provide a set of consistent computational tools for students at all stages of their educational development, as well as a set of powerful and intuitive conceptual frameworks for reasoning about physics, but one might raise questions such as: Is subjecting undergrads to GA pointless, vain, and selfish, or does it set them up well for future success? Can they even handle it? Do they gain anything from it? Why not just wait until they’re grad students (or late-career physicists) to teach them GA approaches, if ever? And if they don’t learn cross products won’t they be at a disadvantage? (Quick answer to that last one: yes we’ll still show them what a cross product is.)</p>
+<p>Well, let’s find out. GA could be introduced in our classical mechanics, E&amp;M, and/or quantum mechanics courses, but classical mechanics is under my purview and the place where vector algebra is typically taught (e.g., as “Chapter 2”). The curriculum changes should not be onerous or burdensome to students or instructor, and could proceed as follows:</p>
+<section id="topicchapter-breakdown" class="level2">
+<h2 class="anchored" data-anchor-id="topicchapter-breakdown">Topic/Chapter Breakdown</h2>
+<p>Is there really <em>that much</em> that would need to change in a (‘second year”/diff-eq-based) mechanics course’? Not really. As follows…</p>
+<ul>
+<li><p>Intro/“Chapter 2”: A little extra content in the usual “vector math” chapter (typically Chapter 2):</p>
+<ul>
+<li>After teaching the dot product, teach the/Grassman’s wedge product. (Which is isomorphic in 3D to the cross product.) This means discussing bivectors, and how they add.</li>
+<li>After the wedge product, teach the/Clifford’s general vector product. Assuming orthonormal basis vectors have already been introduced by then, show that vector products of basis vectors are the same as wedge products. Then show how <em>everything</em> <em>you need</em> to compute/derive/ can be figured out by yourself, in terms of products when writing things out in terms of bases.</li>
+<li>Mention the cross product, and what it is, and that other areas of physics &amp; engineering may still use cross-products, and that in terms of components it’s the same as the wedge product.</li>
+<li>Maybe mention in passing / as a footnote: in GA the vector product has an inverse (i.e.&nbsp;you can divide vectors) whereas it’s not defined with Gibbs’ system. Applications for this appear in computer graphics (cf.&nbsp;Joan Lazenby) but not really in physics so, skipping it.</li>
+</ul></li>
+<li><p>Early coverage of rotational motion:</p>
+<ul>
+<li>Angular momentum as a wedge product, i.e.&nbsp;as an oriented surface showing the plane and direction of rotation, i.e.&nbsp;a bivector.</li>
+<li>Remind students that this is the same as a cross-product, component wise.</li>
+<li>Same with torque: it’s a bivector.</li>
+<li>Look at precessional motion of gyroscope in gravitational field, viewed via bivector vs.&nbsp;cross-product paradigms.</li>
+<li>No other changes to standard curriculum.</li>
+</ul></li>
+<li><p>Small Oscillations / Simple Harmonic Motion:</p>
+<ul>
+<li>Using complex numbers for oscillations and/or Fourier transforms is SUPER standard. Depriving students of this approach (just to shoehorn in GA) would be inadvisable. …Ok, no problem!</li>
+<li>Really it just comes to your interpretation of “<em>i</em>”:: i.e., whether it’s interpreted as an “imaginary number” or as the pseudoscalar. The mathematical calculations are the same either way.</li>
+<li>Viewing in terms of pseudoscalar would tie things in to the fact that we’re talking about rotations of phase. So this’ll be mentioned but not stressed. It’s not a big deal either way.</li>
+<li>So, this chapter could be “agnostic” about the nature of i.</li>
+<li>See link below to the paper about GA for teaching about AC circuits.</li>
+<li>Now <em>if</em> we were to also mention (as many instructors already do) that is a <em>generator of rotations</em>, then this sets us up for all kinds of subsequent interesting discussions, including when we get to Rigid Body Rotation….</li>
+</ul></li>
+<li><p>Rigid Body Rotation:</p>
+<ul>
+<li>Sadly we usually have to skip this topic/chapter anyway at Belmont University due to time &amp; pace of course – we have to “go slower” at Belmont compared to some other schools, given our lax math prereqs. It’s a major omission that I’d like to remedy someday.</li>
+<li>Actually, GA could <em>help</em> by requiring <em>less</em> <em>new</em> formalism in this chapter: Students wouldn’t need to learn Euler angles (which lead to gimbal lock) or quaternions (which have negative magnitude and are janky IMHO). Everything could just be done in terms of rotation matrices (which students would be learning either way) and/or rotors.</li>
+<li>These sorts of rotations would set them up for Quantum Mechanics and provide them <em>exactly what they need</em>, even providing a route “around” Pauli spinors, etc. since they’d now know GA anyway.</li>
+</ul></li>
+<li><p>…And that’s all we’d change in Mechanics! (When we cover Lagrangian mechanics, we never get to Noether’s Theorem. This is still only an undergrad class. That could be a grad school thing.)</p></li>
+<li><p>Looking ahead to later classes:</p>
+<ul>
+<li><strong>E&amp;M</strong>: Maxwell’s equations in GA are the best “parlor trick” I’ve seen. On a practical level, what of gradient, divergence, curl? Hestenes 2003:</li>
+</ul>
+<blockquote class="blockquote">
+<p>“GA reduces ‘grad, div, curl and all that’ to a single vector derivative that, among other things, combines the standard set of four Maxwell equations into a single equation and provides new methods to solve it.’’</p>
+</blockquote>
+<p>(For more, one could see <a href="https://www.amazon.com/Multivectors-Clifford-Algebra-Electrodynamics-Jancewicz/dp/9971502909">Jancewicz 1989, “Multivectors and Clifford Algebras in Electrodynamics</a>.)</p>
+<ul>
+<li><strong>Quantum Mechanics</strong>: I mean…what’s not to like?? We’re no longer forced to puzzle over why <span class="math inline">\(i\)</span> is an imaginary number that suddenly appears for no good reason (other than to make the algebra work out right, which GA does for you as well yet with spatially-meaningful objects instead)? (Simons 2010: “…the puzzle about the otherwise unmotivated introduction of complex numbers disappears.”) We get rotors that naturally lead to spinors? We get a geometric interpretation of spin? We still get all the algebra and symmetries that we need?? Uh… win-win, right?</li>
+</ul></li>
+</ul>
+</section>
+<section id="who-else-is-teaching-this" class="level2">
+<h2 class="anchored" data-anchor-id="who-else-is-teaching-this">Who Else Is Teaching This?</h2>
+<p>Have others tried teaching GA approaches? And if so, have they done it with undergrads or only grad students? And have these been successful or not – i.e.&nbsp;have they been tried and found lacking, or just not tried much? And how would success even be measured?</p>
+<p>Names/Works:</p>
+<ul>
+<li><a href="https://www.amazon.com/Foundations-Classical-Mechanics-Fundamental-Theories/dp/0792355148/ref=sr_1_1?crid=26UN80Z1DL79A&amp;keywords=hestenes+mechanics&amp;qid=1642367054&amp;s=books&amp;sprefix=hestenes+mechanics%2Cstripbooks%2C63&amp;sr=1-1">David Hestenes’s Mechanics textbook</a>, 1999.Hestenes has done <em>a lot</em>, and is essentially the “father of the (modern) field” / primarily responsible for disseminating GA. My question is: Who <em>besides</em> Hestenes?</li>
+<li>There’s a <a href="https://www.linkedin.com/groups/8278281/">LinkedIn group on Pre-University Geometric Algebra</a>, i.e.&nbsp;for <em>high schools!</em> Run by educator <a href="https://www.linkedin.com/in/james-smith-1b195047/">James A. Smith</a>, whose works are <a href="https://vixra.org/author/james_a_smith">published on Vixra.org</a></li>
+<li><a href="https://twitter.com/QuirinoSugonJr">Quirino Sugon, Jr</a><a href="https://twitter.com/QuirinoSugonJr">.</a> writes in <a href="https://physics.stackexchange.com/a/19914">this</a><a href="https://physics.stackexchange.com/a/19914"></a><a href="https://physics.stackexchange.com/a/19914">Physics</a><a href="https://physics.stackexchange.com/a/19914"></a><a href="https://physics.stackexchange.com/a/19914">StackExchange</a><a href="https://physics.stackexchange.com/a/19914"></a><a href="https://physics.stackexchange.com/a/19914">thread</a>, “For several years I have been teaching Clifford (geometric) algebra as part of the Vector Analysis Course for undergraduate physics majors in Ateneo de Manila University…”</li>
+<li>Not mechanics, but: “<a href="https://onlinelibrary.wiley.com/doi/full/10.1002/cta.3132">Geometric</a><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/cta.3132"></a><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/cta.3132">Algebra</a><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/cta.3132"></a><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/cta.3132">for</a><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/cta.3132"></a><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/cta.3132">Teaching</a><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/cta.3132"></a><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/cta.3132">AC</a><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/cta.3132"></a><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/cta.3132">Circuit</a><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/cta.3132"></a><a href="https://onlinelibrary.wiley.com/doi/full/10.1002/cta.3132">Theory</a>”, by Francisco G. Montoya et al, <em>Int. J. Circ. Theor. Appl.,</em> Sep.&nbsp;2021. Excerpt:</li>
+</ul>
+<p><em>“It requires the students to learn the basics of geometric algebra, but this effort is clearly compensated with the advantages derived from the possibility of using easy identifiable geometrical concepts. In fact, it is shown that the application of GA overcomes some limitations derived from the use of complex algebra and its phasor-based notation.”</em></p>
+<p>Why aren’t more instructors doing this? I believe it’s because they just haven’t been exposed to it: “Clifford Algebra” mostly shows up in high-level theoretical physics discussions and/or pure-math stuff (ring theory + whatever my math colleague Brad Schleben does ;-) ). It’s been growing in popularity since the 1990s, and Doran &amp; the Lazenbys have popularized it a bit in physics, engineering &amp; computer graphics/vision, but kinda.. beyond that it’s still largely viewed as an obscure pure-theory thing rather than “the way things should be.” We believe this will and should change, and we’re willing to be a part of it. Others will say, “I guess this is interesting but why should we change? Cross products, quaternions, spinors, four-vectors, etc. are janky as hell but we learned them and we turned out fine!”</p>
+</section>
+<section id="education-research-studies" class="level2">
+<h2 class="anchored" data-anchor-id="education-research-studies">Education Research Studies?</h2>
+<p>David Hestenes mentioned in his <a href="https://drscotthawley.github.io/blog/2021/10/15/Geometric-Algebra.html">Oersted</a><a href="https://drscotthawley.github.io/blog/2021/10/15/Geometric-Algebra.html"></a><a href="https://drscotthawley.github.io/blog/2021/10/15/Geometric-Algebra.html">Medal</a><a href="https://drscotthawley.github.io/blog/2021/10/15/Geometric-Algebra.html"></a><a href="https://drscotthawley.github.io/blog/2021/10/15/Geometric-Algebra.html">lecture</a> (ca. 2002) that the physics-ed community needs to do the education research to show how/whether teaching GA in physics courses is a good idea….and AFAIK his call has not been taken up, at all. Hestenes received <a href="https://www.aps.org/programs/honors/prizes/prizerecipient.cfm?last_nm=Jackson&amp;first_nm=Jane&amp;year=2014">AAPT</a><a href="https://www.aps.org/programs/honors/prizes/prizerecipient.cfm?last_nm=Jackson&amp;first_nm=Jane&amp;year=2014">’</a><a href="https://www.aps.org/programs/honors/prizes/prizerecipient.cfm?last_nm=Jackson&amp;first_nm=Jane&amp;year=2014">s</a><a href="https://www.aps.org/programs/honors/prizes/prizerecipient.cfm?last_nm=Jackson&amp;first_nm=Jane&amp;year=2014">2014 ”</a><a href="https://www.aps.org/programs/honors/prizes/prizerecipient.cfm?last_nm=Jackson&amp;first_nm=Jane&amp;year=2014">Excellence</a><a href="https://www.aps.org/programs/honors/prizes/prizerecipient.cfm?last_nm=Jackson&amp;first_nm=Jane&amp;year=2014"></a><a href="https://www.aps.org/programs/honors/prizes/prizerecipient.cfm?last_nm=Jackson&amp;first_nm=Jane&amp;year=2014">in</a><a href="https://www.aps.org/programs/honors/prizes/prizerecipient.cfm?last_nm=Jackson&amp;first_nm=Jane&amp;year=2014"></a><a href="https://www.aps.org/programs/honors/prizes/prizerecipient.cfm?last_nm=Jackson&amp;first_nm=Jane&amp;year=2014">Physics</a><a href="https://www.aps.org/programs/honors/prizes/prizerecipient.cfm?last_nm=Jackson&amp;first_nm=Jane&amp;year=2014"></a><a href="https://www.aps.org/programs/honors/prizes/prizerecipient.cfm?last_nm=Jackson&amp;first_nm=Jane&amp;year=2014">Education</a><a href="https://www.aps.org/programs/honors/prizes/prizerecipient.cfm?last_nm=Jackson&amp;first_nm=Jane&amp;year=2014">”</a><a href="https://www.aps.org/programs/honors/prizes/prizerecipient.cfm?last_nm=Jackson&amp;first_nm=Jane&amp;year=2014">award</a> for his work with teaching GA, but still I can’t find any learning outcome results. <a href="https://www.google.com/search?q=%22physics+education%22+%22education+research%22++%22geometric+algebra%22+learning+outcomes++%22students%22&amp;biw=1382&amp;bih=682&amp;ei=pYfkYdbkApunqtsPtNGc8A8&amp;ved=0ahUKEwiWy5i2lbf1AhWbk2oFHbQoB_4Q4dUDCA4&amp;uact=5&amp;oq=%22physics+education%22+%22education+research%22++%22geometric+algebra%22+learning+outcomes++%22students%22&amp;gs_lcp=Cgdnd3Mtd2l6EAM6BwgAEEcQsANKBAhBGABKBAhGGABQmh1Ymh1ghB9oAnACeACAAVSIAVSSAQExmAEAoAEByAEIwAEB&amp;sclient=gws-wiz">My literature searches</a> turned up zero studies about this. (<a href="https://www.researchgate.net/publication/303373032_The_role_of_mathematics_for_physics_teaching_and_understanding">Closest thing I found</a> merely mentions Hestens but no explicit GA. Found one <a href="http://kmr.csc.kth.se/wp/research/math-rehab/learning-object-repository/physical-units/">listserv</a><a href="http://kmr.csc.kth.se/wp/research/math-rehab/learning-object-repository/physical-units/"></a><a href="http://kmr.csc.kth.se/wp/research/math-rehab/learning-object-repository/physical-units/">discussion</a> but no results/outcomes.)</p>
+<p><strong>Update:</strong> One small study: James A. Smith shared with me one study by Ramón López Escudero and Philippe Eenens, which can be translated to English via Google Translate: “<a href="https://www.jovenesenlaciencia.ugto.mx/index.php/jovenesenlaciencia/article/download/212/pdf1">Enseñar el Álgebra Geométrica en el Primer Semestre de Ingenierías</a>” (“Teach Geometric Algebra in the First Semester of Engineering”). Assessment consisted of two application problems and a test at the end of the course, as well as interviewing students. “The test result also turned out to be good.”</p>
+<p>This merits revisiting an earlier question:</p>
+</section>
+<section id="how-would-success-be-measured" class="level2">
+<h2 class="anchored" data-anchor-id="how-would-success-be-measured"><strong>How Would “Success” Be Measured?</strong></h2>
+<p>Ideas:</p>
+<ol type="1">
+<li>Lack of complaints/negative results. Seriously. If we can introduce this material and nobody says boo, that can count as success. If people don’t show negative results (e.g.&nbsp;students later report “I got to grad school and wished we’d spent a whole 50 on cross-products instead of 10 minutes”), if whatever “scores” we have don’t go down.. That’s a plus.</li>
+<li>Actual positive anecdotal reports (which “count” in education circles), e.g.&nbsp;someone says “I loved the GA stuff” – a question about this could be added to the end of course eval reports that students answer: “How did you feel about the GA content?” We could perhaps somehow ask students later in Quantum if they felt the GA background helped them (it <em>should</em>!)</li>
+<li>Improved scores on our standard metrics / exams? Hard to insist on a causal relationship, but see #1, re not-going-down as justification.</li>
+</ol>
+<p>…and if we’ve only got an enrollment of at most 10 undergrads in the class, then how would we ever turn this into a legit study, e.g.&nbsp;something one might present at a Lily Conference or somesuch? I know <em>nothing</em> about proper education research (but Danielle and/or the Teaching Center probably do! ;-) ) .</p>
+<p>Sugon: “I am the only one teaching geometric algebra in my university, so I could not follow-up my students.”</p>
+</section>
+<section id="main-issues-with-doing-ed-research-for-me" class="level2">
+<h2 class="anchored" data-anchor-id="main-issues-with-doing-ed-research-for-me">Main Issues with Doing Ed Research for Me:</h2>
+<ol type="1">
+<li><strong>Tracking Downstream Effects/Cohorts:</strong> The benefits of the GA approach will be mostly “downstream,” i.e., when students take more advanced courses – it’s hard to imagine students seeing “the unity of physics” from within only their very first semi-advanced course, on one topic! There will be a few benefits within mechanics itself, but I speculate that they may not be enough to appear significant on their own. Dr.&nbsp;Danielle Garrett (sci-ed expert) suggested tracking cohorts of students (and also mentioned that tracking student data would need IRB approval). That begs the question of whether other physics faculty at my university will be “on board” with using GA in, say, quantum &amp; E&amp;M, and/or whether we’d track the 1 or 2 of our students each year who go on to graduate school. (Note also that GA is seeing huge inroads into computer graphics, so, for the few students who go on to <em>advanced</em> CG work,…?)</li>
+<li><strong>My Time &amp; Other Commitments:</strong> I don’t need or really want a publication in some physics-ed journal; I’ve got enough other projects to keep me busy already. (I’ve got a book to work on that has nothing to do with GA!). But…it seems the community could really benefit from a study of this – and again, Hestenes’ call has gone largely unanswered.<br>
+</li>
+<li>Related: <strong>Becoming an Admin for a Large Project:</strong> Maybe a <em>networking</em> approach would be needed, in which multiple faculty from multiple institutions commit to sharing data in some kind of standardized format in order to put together a study. That sounds like something a “bigger team” at a major university would/should/could do. But perhaps a consortium of “small college people” could still achieve something. Do I want to drop everything else in order to become the PI coordinating such an effort (even seek NSF funding, offer summer assistantships, etc)? …TBH, not really. But perhaps I could assist in motivating someone else to do so, and then I could “assist”. ;-)</li>
+</ol>
+</section>
+<section id="to-do-extras" class="level2">
+<h2 class="anchored" data-anchor-id="to-do-extras"><strong>TO-DO / Extras:</strong></h2>
+<ul>
+<li><a href="http://bleyer.org/dw/doku.php?id=geometric_algebra">List</a><a href="http://bleyer.org/dw/doku.php?id=geometric_algebra"></a><a href="http://bleyer.org/dw/doku.php?id=geometric_algebra">of</a><a href="http://bleyer.org/dw/doku.php?id=geometric_algebra"></a><a href="http://bleyer.org/dw/doku.php?id=geometric_algebra">lots</a><a href="http://bleyer.org/dw/doku.php?id=geometric_algebra"></a><a href="http://bleyer.org/dw/doku.php?id=geometric_algebra">of</a><a href="http://bleyer.org/dw/doku.php?id=geometric_algebra"></a><a href="http://bleyer.org/dw/doku.php?id=geometric_algebra">people</a><a href="http://bleyer.org/dw/doku.php?id=geometric_algebra">’</a><a href="http://bleyer.org/dw/doku.php?id=geometric_algebra">s</a><a href="http://bleyer.org/dw/doku.php?id=geometric_algebra"></a><a href="http://bleyer.org/dw/doku.php?id=geometric_algebra">personal</a><a href="http://bleyer.org/dw/doku.php?id=geometric_algebra"></a><a href="http://bleyer.org/dw/doku.php?id=geometric_algebra">websites</a> by instructors, to check to see if they talk about pedagogy</li>
+</ul>
+</section>
+</section>
+<section id="deleted-me-messing-with-python-clifford-package" class="level1">
+<h1>Deleted: Me Messing With Python <code>clifford</code> package</h1>
+<p>This blog post used to feature ca. 10 pages of me screwing around with the Python <a href="https://clifford.readthedocs.io/en/latest/">clifford</a> package, but deleted these as I didn’t imagine they’d be much use to anyone else.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

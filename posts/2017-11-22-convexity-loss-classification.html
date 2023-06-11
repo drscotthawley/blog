@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-11-22">
+<meta name="description" content="Following up on a question that arose in Week 3 of Andrew Ng’s Machine Learning course.">
+
+<title>blog - Notes on Convexity of Loss Functions for Classification</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Notes on Convexity of Loss Functions for Classification</h1>
+                  <div>
+        <div class="description">
+          Following up on a question that arose in Week 3 of Andrew Ng’s Machine Learning course.
+        </div>
+      </div>
+                </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 22, 2017</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#edit-7182020" id="toc-edit-7182020" class="nav-link active" data-scroll-target="#edit-7182020">Edit 7/18/2020:</a></li>
+  <li><a href="#plot-the-full-error-surface" id="toc-plot-the-full-error-surface" class="nav-link" data-scroll-target="#plot-the-full-error-surface">Plot the full error surface</a></li>
+  <li><a href="#the-verdict" id="toc-the-verdict" class="nav-link" data-scroll-target="#the-verdict">The Verdict</a></li>
+  <li><a href="#aside-solve-the-logistic-regression-problem-using-scikit-learn" id="toc-aside-solve-the-logistic-regression-problem-using-scikit-learn" class="nav-link" data-scroll-target="#aside-solve-the-logistic-regression-problem-using-scikit-learn">Aside: Solve the logistic regression problem using scikit-learn</a></li>
+  <li><a href="#afterward-but-you-still-havent-found-the-global-minimum" id="toc-afterward-but-you-still-havent-found-the-global-minimum" class="nav-link" data-scroll-target="#afterward-but-you-still-havent-found-the-global-minimum">Afterward: “But you still haven’t found the global minimum!”</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<hr>
+<section id="edit-7182020" class="level3">
+<h3 class="anchored" data-anchor-id="edit-7182020">Edit 7/18/2020:</h3>
+<p>I wrote this when I was a bit new to the nitty-gritty of ML. If I had this to do all over again, I would simplify the following by just saying to myself: “It is the <em>combination</em> of cross-entropy (or log-likelihood) loss with the sigmoid activation function that gives you the nice property: whereby the gradient becomes <em>monotonic</em> (in the case of either class) – i.e.&nbsp;the <em>system</em> is convex.” And that would be sufficient.</p>
+<hr>
+<p>This is a post where I’m investigating <a href="https://en.wikipedia.org/wiki/Convex_function">convexity</a> a bit, as it relates to neural networks.</p>
+<p>Andrew Ng, in Week 3 of his <a href="https://www.coursera.org/learn/machine-learning/home/welcome">Coursera course on Machine Learning</a>, shows the following image with respect to the “cost function” to be optimized:</p>
+<p>Andrew Ng, in Week 3 of his <a href="https://www.coursera.org/learn/machine-learning/home/welcome">Coursera course on Machine Learning</a>, shows the following image with respect to the “cost function” to be optimized (as slide 14 of Lecture 6):</p>
+<blockquote class="blockquote">
+<p>(image is giving problems, sorry)</p>
+</blockquote>
+<p>I wanted to investigate this: Could I reproduce the two graphs he sketched? The two different loss functions are the mean squared error (MSE or sometimes just SE) and cross entropy (CE):</p>
+<p><span class="math display">\[ MSE = {1\over m}\sum_{i=1}^m \left( y_i - h_i \right)^2 \]</span></p>
+<p><span class="math display">\[ CE =  - {1\over m}\sum_{i=1}^m \left[ y_i \log(h_i) + (1-y_i) \log(1-h_i) \right] \]</span></p>
+<p>where <span class="math inline">\(y_i\)</span> are the true values (0 or 1) and <span class="math inline">\(h_i = h(x_i)\)</span> are the predictions.</p>
+<p><strong>TL/DR: No I can’t reproduce his sketches. The graph I get for sum of the squared error (SE) doesn’t have the wiggles that his drawing on the left does. <em>(Perhaps he was just doodling an example of an arbitrary non-convex function, rather than the squared loss in particular?)</em> Takeways at the bottom of this, re. the difference between a convex <em>loss function (by itself)</em> vs.&nbsp;a convex loss for a <em>problem</em> – i.e.&nbsp;the individual terms are convex for either function, but the <em>sum</em> of these terms is actually not strictly convex for either function (for this problem).</strong></p>
+<p>I read a few posts about this first… * <a href="https://math.stackexchange.com/questions/1985008/show-that-logistic-regression-with-squared-loss-function-is-non-convex/2176466">Math StackExchange: Show that logistic regression with squared loss function is non-convex</a>, which includes a link to <a href="https://www.desmos.com/calculator/kxz6lzszf9">this nice demo on Desmos</a> * https://math.stackexchange.com/questions/2193478/loss-function-for-logistic-regression * https://en.wikipedia.org/wiki/Loss_functions_for_classification seems to say that squared loss is convex. ??</p>
+<p>…but then wanted to try for myself. As follows:</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># preliminary set up. ipympl allows for interactive plots; replace it with inline if not working</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#%matplotlib ipympl</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.mplot3d <span class="im">import</span> Axes3D</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> cm</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># basic functions for data operations</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> h(x,a,b):                            <span class="co"># h = logistic function.  a is 'weight' and b is 'bias'</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>(a<span class="op">*</span>x <span class="op">+</span> b)))    <span class="co"># For code below, a &amp; b should be scalars, x can be anything</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classify_x(x, threshold):   </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    out <span class="op">=</span> <span class="dv">0</span><span class="op">*</span>x</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    out[x <span class="op">&gt;</span> threshold] <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define some data</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>num_x <span class="op">=</span> <span class="dv">25</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>x_arr <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>,num_x)          <span class="co"># _arr denotes"array" </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>threshold <span class="op">=</span> <span class="fl">0.7314</span>                       <span class="co"># threshold value chosen arbitrarily</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>y_arr <span class="op">=</span> classify_x(x_arr, threshold)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># make a prediction</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>a_guess <span class="op">=</span> <span class="dv">10</span><span class="op">/</span>(x_arr[<span class="dv">1</span>]<span class="op">-</span>x_arr[<span class="dv">0</span>])</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>b_guess <span class="op">=</span> <span class="op">-</span>a_guess <span class="op">*</span> threshold</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Prediction guess: a ="</span>,a_guess,<span class="st">", b ="</span>,b_guess)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>h_arr <span class="op">=</span> np.array(h(x_arr, a_guess, b_guess))</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the data</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>plt.plot(x_arr, y_arr,<span class="st">'o'</span>,color<span class="op">=</span><span class="st">'red'</span>,label<span class="op">=</span><span class="st">"Truth y"</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>plt.plot(x_arr, h_arr,<span class="st">'x-'</span>,color<span class="op">=</span><span class="st">'green'</span>,label<span class="op">=</span><span class="st">"Prediction h"</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Prediction guess: a = 23.999999999999982 , b = -17.55359999999999</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-11-22-Convexity-Loss-Classification_files/figure-html/cell-4-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define a couple loss functions</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_se_loss(y_arr, h_arr):  <span class="co"># squared error loss</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.mean( (y_arr <span class="op">-</span> h_arr)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_ce_loss(y_arr, h_arr):  <span class="co"># cross-entropy loss, related to Kullback-Liebler divergence</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    eps <span class="op">=</span> <span class="fl">1.0e-16</span>   <span class="co"># added to avoid log(0) errors</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>np.mean( y_arr<span class="op">*</span>np.log(h_arr) <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>y_arr)<span class="op">*</span>np.log(<span class="dv">1</span><span class="op">-</span>h_arr<span class="op">+</span>eps) )    <span class="co"># elementwise multiplication</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1D plot </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># define parameter space over which to plot </span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>num_a <span class="op">=</span> <span class="dv">100</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>a_arr <span class="op">=</span> np.linspace(<span class="op">-</span>a_guess,<span class="dv">4</span><span class="op">*</span>a_guess,num_a)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>b_arr <span class="op">=</span> b_guess <span class="op">+</span> <span class="dv">0</span><span class="op">*</span>a_arr  <span class="co"># make at the b's all the same value for this first plot.</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>se_loss <span class="op">=</span> []</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>ce_loss <span class="op">=</span> []</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(a_arr.shape[<span class="dv">0</span>]): <span class="co"># cycle through all the values of a and b, getting a different loss for each</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    h_arr <span class="op">=</span> h(x_arr, a_arr[i], b_arr[i])</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    se_loss.append( calc_se_loss(y_arr, h_arr) ) </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    ce_loss.append( calc_ce_loss(y_arr, h_arr) ) </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"># plot 1-d version</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.gca()</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'a'</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">#ax.set_ylim(2.38, 2.41)   # zoom in on flat part on the right</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>plt.plot(a_arr, np.log(se_loss),<span class="st">'o-'</span>,color<span class="op">=</span><span class="st">'red'</span>,label<span class="op">=</span><span class="st">"SE Loss"</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>plt.plot(a_arr, np.log(ce_loss),<span class="st">'o-'</span>,color<span class="op">=</span><span class="st">'blue'</span>,label<span class="op">=</span><span class="st">"CE Loss"</span>)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"log of loss"</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-11-22-Convexity-Loss-Classification_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<hr>
+<p><strong>EDIT (later):</strong> A reader pointed out that the use of the <code>log</code> function distorts the shape of the function and thereby obscures the visual inspection of the convexity. Ooops. See. I was new to this!</p>
+<hr>
+<p>In the above figure, it looks like the SE loss goes ‘flat’ for a bit on the left, but never turns upward until after the global minimum. The CE loss…I can see a few places where we could connect two points with a straight line and not have all of the line lie with in the <a href="https://en.wikipedia.org/wiki/Epigraph_(mathematics)">epigraph</a>. Still the lack of flat regions for the blue line would make it preferable for gradient-based optimization.</p>
+</section>
+<section id="plot-the-full-error-surface" class="level2">
+<h2 class="anchored" data-anchor-id="plot-the-full-error-surface">Plot the full error surface</h2>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>num_a <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># try experimenting: play around with the max &amp; min of the a &amp; b values to see the surface</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>a_arr <span class="op">=</span> np.linspace(<span class="op">-</span>a_guess<span class="op">/</span><span class="dv">2</span>,a_guess<span class="op">*</span><span class="dv">2</span>,num_a)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>b_arr <span class="op">=</span> np.linspace(b_guess<span class="op">*</span><span class="dv">2</span>,<span class="op">-</span>b_guess<span class="op">/</span><span class="dv">2</span>,num_a)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>A, B <span class="op">=</span> np.meshgrid(a_arr, b_arr)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_loss_surf(A, B, x_arr, loss<span class="op">=</span><span class="st">'SE'</span>):</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    Z <span class="op">=</span> np.zeros([<span class="bu">len</span>(A), <span class="bu">len</span>(B)])</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="st">'SE'</span> <span class="op">==</span> loss):</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(A)):</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(B)):</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                h_arr <span class="op">=</span> h(x_arr, a_arr[i], b_arr[j])</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                Z[j, i] <span class="op">=</span> calc_se_loss(y_arr, h_arr)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(A)):</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(B)):</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>                h_arr <span class="op">=</span> h(x_arr, a_arr[i], b_arr[j])</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>                Z[j, i] <span class="op">=</span> calc_ce_loss(y_arr, h_arr)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> plt.figure()</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> fig.gca(projection<span class="op">=</span><span class="st">'3d'</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    surf <span class="op">=</span> ax.plot_surface(A, B, np.log(Z), cmap<span class="op">=</span>cm.coolwarm,</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>                           linewidth<span class="op">=</span><span class="dv">0</span>, antialiased<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'a'</span>)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'b'</span>)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    ax.set_zlabel(<span class="st">'log('</span><span class="op">+</span>loss<span class="op">+</span><span class="st">')'</span>)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">#ax.set_zlim(2, 2.5)</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    ax.set_title(loss<span class="op">+</span><span class="st">' loss'</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">#fig.colorbar(surf, shrink=0.5, aspect=5)       # Add a color bar which maps values to colors.</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>plot_loss_surf(A,B,x_arr,loss<span class="op">=</span><span class="st">'SE'</span>)</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>plot_loss_surf(A,B,x_arr,loss<span class="op">=</span><span class="st">'CE'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-11-22-Convexity-Loss-Classification_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-11-22-Convexity-Loss-Classification_files/figure-html/cell-7-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="the-verdict" class="level2">
+<h2 class="anchored" data-anchor-id="the-verdict">The Verdict</h2>
+<p>So, although the individual terms <span class="math inline">\((y_i - h_i)^2\)</span> and/or <span class="math inline">\([y_i\log(h_i)+(1-y_i)\log(1-h_i)]\)</span> are individually convex, the <em>sum</em> for <em>either</em> type of loss terms is actually non-convex for this problem. Although neither give rise to unwanted local minima for this problem.</p>
+<p>The SE loss, while at least not having any non-global minima, still has multiple significant flat regions that would prove tedious for gradient descent optimiazation, whereas in contrast, the CE loss is smoother and is strictly monotonic on either side of the global minimum. The the CE loss (and/or KL divergence) would be preferable for this problem – you could <em>do</em> it with SE loss assuming you had momentum or some fancy optimization algorithm, but it would take longer and why bother?</p>
+</section>
+<section id="aside-solve-the-logistic-regression-problem-using-scikit-learn" class="level2">
+<h2 class="anchored" data-anchor-id="aside-solve-the-logistic-regression-problem-using-scikit-learn">Aside: Solve the logistic regression problem using scikit-learn</h2>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> linear_model</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>clf <span class="op">=</span> linear_model.LogisticRegression(C<span class="op">=</span><span class="fl">1e5</span>, solver<span class="op">=</span><span class="st">'lbfgs'</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>clf.fit(x_arr[:, np.newaxis], y_arr)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>a_fit, b_fit <span class="op">=</span> clf.coef_[<span class="dv">0</span>][<span class="dv">0</span>], clf.intercept_[<span class="dv">0</span>]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Fit paramters: a ="</span>,a_fit,<span class="st">", b ="</span>,b_fit)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Predicted threshold: x = "</span>,<span class="op">-</span>b_fit<span class="op">/</span>a_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fit paramters: a = 32.449347939033615 , b = -20.23838504197379
+Predicted threshold: x =  0.6236915786412106</code></pre>
+</div>
+</div>
+</section>
+<section id="afterward-but-you-still-havent-found-the-global-minimum" class="level2">
+<h2 class="anchored" data-anchor-id="afterward-but-you-still-havent-found-the-global-minimum">Afterward: “But you still haven’t found the global minimum!”</h2>
+<p>In the surface plots above, we see the minimum of the surface going lower and lower – even lower than the supposedly ‘optimum’ parameters we just found via scikit-learn. The reason is that there is no optimal paramter combination: The steepness parameter <span class="math inline">\(a\)</span> of the sigmoid function <span class="math inline">\(h(x)\)</span> is only bounded from below by the data in this problem. Thus there is no upper bound. The data will constrain the center of the sigmoid <span class="math inline">\(x_0 = -b/a\)</span> to some extent (i.e.&nbsp;it needs to lie between two values of <span class="math inline">\(x_i\)</span>), but other than that…</p>
+<p>So how then does the loss function seem to get lower and lower? The steeper the sigmoid function, the more closely its values will approach 0 and 1 on either side. Thus for this problem, the optimal solution is <span class="math inline">\(a \rightarrow \infty\)</span>, with <span class="math inline">\(b = -({\rm threshold})/a\)</span>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

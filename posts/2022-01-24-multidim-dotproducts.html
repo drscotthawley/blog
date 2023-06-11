@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Scott H. Hawley">
+<meta name="dcterms.date" content="2022-01-24">
+<meta name="description" content="Depends on whether you’re using unit vectors or not.">
+
+<title>blog - Likelihood of Vector Orthogonality in High-Dimensional Spaces</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Likelihood of Vector Orthogonality in High-Dimensional Spaces</h1>
+                  <div>
+        <div class="description">
+          Depends on whether you’re using unit vectors or not.
+        </div>
+      </div>
+                </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Scott H. Hawley </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 24, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#general-setup" id="toc-general-setup" class="nav-link active" data-scroll-target="#general-setup">General Setup</a></li>
+  <li><a href="#utility-routines" id="toc-utility-routines" class="nav-link" data-scroll-target="#utility-routines">Utility Routines</a></li>
+  <li><a href="#uniform-distribution-non-unit-vectors" id="toc-uniform-distribution-non-unit-vectors" class="nav-link" data-scroll-target="#uniform-distribution-non-unit-vectors">Uniform distribution, Non-Unit Vectors</a></li>
+  <li><a href="#uniform-distribution-unit-vectors" id="toc-uniform-distribution-unit-vectors" class="nav-link" data-scroll-target="#uniform-distribution-unit-vectors">Uniform distribution, Unit vectors</a></li>
+  <li><a href="#normal-distribution-non-unit-vectors" id="toc-normal-distribution-non-unit-vectors" class="nav-link" data-scroll-target="#normal-distribution-non-unit-vectors">Normal Distribution, Non-Unit Vectors</a></li>
+  <li><a href="#normal-distribution-unit-vectors" id="toc-normal-distribution-unit-vectors" class="nav-link" data-scroll-target="#normal-distribution-unit-vectors">Normal distribution, Unit Vectors</a></li>
+  <li><a href="#softmax-vectors" id="toc-softmax-vectors" class="nav-link" data-scroll-target="#softmax-vectors">“Softmax Vectors”</a></li>
+  <li><a href="#cosine-similarity-for-softmax-vectors" id="toc-cosine-similarity-for-softmax-vectors" class="nav-link" data-scroll-target="#cosine-similarity-for-softmax-vectors">Cosine Similarity for Softmax Vectors</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>One sometimes sees claims like <a href="https://towardsdatascience.com/loss-landscapes-and-the-blessing-of-dimensionality-46685e28e6a4">“within high dimensional spaces, if you choose random vectors, they tend to be orthogonal to each other,”</a> but is this true?</p>
+<p>The answer <strong>depends on whether you’re talking about unit vectors or not</strong>.</p>
+<p>More to the point, it depends on the context in which the above nugget of wisdom is being applied, and on not so much orthogonality per se as what we might call “near orthogonality”: Are we interested in cases when the <strong>dot product</strong> is nearly zero, or when the <strong>cosine</strong> of the angle between the vectors is nearly zero? (In the case of exact orthogonality, the dot product and cosine are both exactly zero.) The latter statement is equivalent to restricting attention to unit vectors, and also is isomorphic to considering the Pearson correlation coefficient between two random signals.</p>
+<p>Let’s do some direct computations. We’ll vary the number of dimensions and compute a bunch of dot products between random vectors, and then plot histograms of these dot product values. The sharper the distribution is around the value of zero, the more likely it is for vectors to be orthogonal.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#all_slow</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="general-setup" class="level2">
+<h2 class="anchored" data-anchor-id="general-setup">General Setup</h2>
+<p>Imports and global settings</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># General Setup</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> ss</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">50000</span>  <span class="co"># number of random pairs of vectors to try</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>dims <span class="op">=</span> [<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">100</span>,<span class="dv">1000</span>]  <span class="co"># different dimensionalities to try. Same as "D" in plots below</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="utility-routines" class="level2">
+<h2 class="anchored" data-anchor-id="utility-routines">Utility Routines</h2>
+<p>Define some functions that we’re likely to use multiple times.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#show_hide </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Utility routines </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> norm_rows(arr):   </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"normalize vectors which exist as rows with components as columns"</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    arrT <span class="op">=</span> arr.T                               <span class="co"># .T is to make broadcasting work easily </span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    mags <span class="op">=</span> np.sqrt( (arrT<span class="op">*</span>arrT).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>) )  <span class="co"># vector magnitudes</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (arrT<span class="op">/</span>mags).T</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> uniform_rand(size<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">10</span>)):</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">"random number on [-1..1]"</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.random.uniform(low<span class="op">=-</span><span class="fl">1.0</span>, high<span class="op">=</span><span class="fl">1.0</span>, size<span class="op">=</span>size)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> softmax(x):</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">"good ol' softmax function, for a bunch of row vectors"</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    xT <span class="op">=</span> x.T  <span class="co"># .T's are just to make broadcasting work out.</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    vec_max <span class="op">=</span> np.<span class="bu">max</span>(xT,axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    e_x <span class="op">=</span> np.exp(xT <span class="op">-</span> vec_max)   </span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (e_x <span class="op">/</span> e_x.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>)).T</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_plot(n<span class="op">=</span>n, dims<span class="op">=</span>dims, title<span class="op">=</span><span class="st">''</span>, rand_func<span class="op">=</span>uniform_rand, normalize<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>             color<span class="op">=</span><span class="st">'#1f77b4'</span>, xlim<span class="op">=</span><span class="va">None</span>, softmax_them<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""A function we'll call again &amp; again to make plots with"""</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>,<span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">6</span>))</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    fig.suptitle(title, fontsize<span class="op">=</span><span class="st">"x-large"</span>)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    axes <span class="op">=</span> axes.ravel()</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    sds <span class="op">=</span> []                      <span class="co"># list of standard devations for different dims</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i,ax <span class="kw">in</span> <span class="bu">enumerate</span>(axes):</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        dim <span class="op">=</span> dims[i]</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        a <span class="op">=</span> rand_func(size<span class="op">=</span>(n,dim))</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        b <span class="op">=</span> rand_func(size<span class="op">=</span>(n,dim))</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> softmax_them: a, b <span class="op">=</span> softmax(a), softmax(b)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> normalize: a, b <span class="op">=</span> norm_rows(a), norm_rows(b)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>        dots <span class="op">=</span> (a<span class="op">*</span>b).<span class="bu">sum</span>(axis<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>        std <span class="op">=</span> np.std(dots,axis<span class="op">=</span><span class="dv">0</span>)   <span class="co"># measure standard dev of distribution of dot product</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>        ax.hist(dots, density<span class="op">=</span><span class="va">True</span>, bins<span class="op">=</span><span class="dv">100</span>, label<span class="op">=</span><span class="ss">f'D=</span><span class="sc">{</span>dim<span class="sc">}</span><span class="ss">, $\sigma$=</span><span class="sc">{</span>std<span class="sc">:3.2g}</span><span class="ss">'</span>, color<span class="op">=</span>color)  </span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>        sds.append(std)</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> xlim<span class="op">!=</span><span class="va">None</span>: ax.set_xlim(xlim)</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        ax.legend(loc<span class="op">=</span><span class="dv">4</span>)   <span class="co"># legend will show dimensions and std dev</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i<span class="op">%</span><span class="dv">3</span><span class="op">==</span><span class="dv">0</span>: ax.set_ylabel(<span class="st">'Probability'</span>)</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i<span class="op">&gt;</span><span class="dv">2</span>: ax.set_xlabel(<span class="st">'Dot product value'</span>)</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sds, axes, fig   <span class="co"># return some axes &amp; figure info too in case we want to replot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can get started by looking at distributions of dot products for various kinds of vectors. Starting with…</p>
+</section>
+<section id="uniform-distribution-non-unit-vectors" class="level2">
+<h2 class="anchored" data-anchor-id="uniform-distribution-non-unit-vectors">Uniform distribution, Non-Unit Vectors</h2>
+<p>These will be vectors that fill a hypercube, i.e.&nbsp;each component can take on a value on [-1…1].</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> <span class="st">"Uniform distribution, Non-Unit Vectors"</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sds, axes, fig <span class="op">=</span>  make_plot(title<span class="op">=</span>title)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>results.append({<span class="st">'label'</span>: title, <span class="st">'sds'</span>: sds})  <span class="co"># save for later</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2022-01-24-MultiDim-DotProducts_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>From the above graph, we see that as the dimensionality D increases, it’s still the case that the most common dot product is zero, but the probability distribution becomes wider &amp; flatter, i.e.&nbsp;the chances that a pair of random vectors are <em>not</em> orthogonal becomes increasingly <em>more</em> likely as D increases.</p>
+</section>
+<section id="uniform-distribution-unit-vectors" class="level2">
+<h2 class="anchored" data-anchor-id="uniform-distribution-unit-vectors">Uniform distribution, Unit vectors</h2>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> <span class="st">"Uniform distribution, Unit vectors"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sds, axes, fig <span class="op">=</span> make_plot(title<span class="op">=</span>title, normalize<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span><span class="st">'orange'</span>, xlim<span class="op">=</span>[<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>])</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>results.append({<span class="st">'label'</span>: title, <span class="st">'sds'</span>: sds})  <span class="co"># save for later</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2022-01-24-MultiDim-DotProducts_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Wait, back up! Those orange graphs remind me of a beta distribution. Can we fit that? Let’s try…</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fit_beta(axes):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">100</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i,ax <span class="kw">in</span> <span class="bu">enumerate</span>(axes):</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        dim <span class="op">=</span> dims[i]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        alpha <span class="op">=</span> (dim<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span><span class="dv">2</span>                     <span class="co"># this seems to work quite well</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> <span class="fl">0.5</span><span class="op">*</span>ss.beta.pdf(x, alpha, alpha)  <span class="co"># just messing with beta distribution</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        ax.plot(<span class="dv">2</span><span class="op">*</span>x<span class="op">-</span><span class="dv">1</span>, y, color<span class="op">=</span><span class="st">'green'</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>fit_beta(axes)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>fig</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<p><img src="2022-01-24-MultiDim-DotProducts_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>(Turns out that that beta distribution <a href="https://mathoverflow.net/questions/361612/scalar-product-of-random-unit-vectors">can be derived symbolically</a>. Lucky guess on my part. ;-) )</p>
+<p>Interesting that for D=2, the vectors are more likely to be parallel or antiparallel than orthogonal, but that changes as D increases.</p>
+<p>In the above graphs we see the opposite trend from the previous non-unit-vector case: the distribution gets narrower as D increases, meaning that a given pair of random <em>unit</em> vectors are more likely to be orthogonal as D increases.</p>
+<p>What if we draw from a normal distribution of components instead of a uniform one?</p>
+</section>
+<section id="normal-distribution-non-unit-vectors" class="level2">
+<h2 class="anchored" data-anchor-id="normal-distribution-non-unit-vectors">Normal Distribution, Non-Unit Vectors</h2>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> <span class="st">"Normal distribution, Non-Unit Vectors"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>sds, axes, fig <span class="op">=</span>  make_plot(title<span class="op">=</span>title, rand_func<span class="op">=</span>np.random.normal)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>results.append({<span class="st">'label'</span>: title, <span class="st">'sds'</span>: sds})  <span class="co"># save for later</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2022-01-24-MultiDim-DotProducts_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>OK, same trend as before: the distribution gets wider as dimensionality increases. What about for unit vectors?</p>
+</section>
+<section id="normal-distribution-unit-vectors" class="level2">
+<h2 class="anchored" data-anchor-id="normal-distribution-unit-vectors">Normal distribution, Unit Vectors</h2>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> <span class="st">"Normal distribution, Unit vectors"</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sds, axes, fig <span class="op">=</span> make_plot(title<span class="op">=</span>title, rand_func<span class="op">=</span>np.random.normal,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                           normalize<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span><span class="st">'orange'</span>, xlim<span class="op">=</span>[<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>])</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>results.append({<span class="st">'label'</span>: title, <span class="st">'sds'</span>: sds })  <span class="co"># save for later</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>fit_beta(axes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2022-01-24-MultiDim-DotProducts_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Looks like the normal distribution case is the same – wow, <em>exactly</em> the same – as the uniform distribution only more extreme: for unit vectors, the distribution gets narrower (around 0) as the dimension increases.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If the vectors have only positive components (e.g.&nbsp;what you get from softmax) then you will <em>never</em> have orthogonal vectors (because they all exist in the “positive subspace”). But lets see what happens with such “softmax vectors”:</p>
+</div>
+</div>
+</section>
+<section id="softmax-vectors" class="level2">
+<h2 class="anchored" data-anchor-id="softmax-vectors">“Softmax Vectors”</h2>
+<p>If the vectors all have positive coefficients, e.g.&nbsp;because they are the output of a softmax function, then there’s no way they can be orthogonal. We might ask, what’s the most common value for the dot product?</p>
+<p>(Note that these are not unit vectors according to the L2/“Euclidean” norm, rather they are unit vectors according to an L1/“Manhattan distance” norm).</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> <span class="st">"Softmax vectors, not unit in L2"</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sds, axes, fig <span class="op">=</span> make_plot(title<span class="op">=</span>title, normalize<span class="op">=</span><span class="va">False</span>, softmax_them<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span><span class="st">'red'</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>results.append({<span class="st">'label'</span>: title, <span class="st">'sds'</span>: sds})  <span class="co"># save for later</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i,ax <span class="kw">in</span> <span class="bu">enumerate</span>(axes):  <span class="co"># seems the mean is 1/D; let's show that:</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    dim <span class="op">=</span> dims[i]</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    ax.plot([<span class="dv">1</span><span class="op">/</span>dim,<span class="dv">1</span><span class="op">/</span>dim],[<span class="dv">0</span>,ax.get_ylim()[<span class="dv">1</span>]], label<span class="op">=</span><span class="st">'vert bar at 1/D'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2022-01-24-MultiDim-DotProducts_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Given that the dot product / cosine similarity for these vectors seems to consistently have an expectation value of <span class="math inline">\(1/D\)</span> for dimensions <span class="math inline">\(D\)</span>, then as <span class="math inline">\(D\)</span> increases this value will go to zero, and thus the vectors will be increasingly “orthogonal”.</p>
+</section>
+<section id="cosine-similarity-for-softmax-vectors" class="level2">
+<h2 class="anchored" data-anchor-id="cosine-similarity-for-softmax-vectors">Cosine Similarity for Softmax Vectors</h2>
+<p>What about the cosine between the vectors we just did? That’s equivalent to normalizing the softmax vectors according to an L2/Eucliean norm. Here we go:</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> <span class="st">"Cosine Similarity for Softmax"</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>sds, axes, fig <span class="op">=</span> make_plot(title<span class="op">=</span>title, normalize<span class="op">=</span><span class="va">True</span>, softmax_them<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span><span class="st">'purple'</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>results.append({<span class="st">'label'</span>: title, <span class="st">'sds'</span>: sds})  <span class="co"># save for later</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2022-01-24-MultiDim-DotProducts_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>…yeah I dunno ’bout that. Seems to be approaching a number a bit larger than 0.76. ?? I can’t immediately think any “special” number that matches that (e.g., it’s too low to be <span class="math inline">\(\pi\)</span>/4 and much too high to be <span class="math inline">\(1/\sqrt{2}\)</span>). Let’s keep going to higher dimensions and see what the mean converges to:</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let's keep going higher</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>new_dims <span class="op">=</span> [<span class="dv">10000</span>,<span class="dv">20000</span>,<span class="dv">50000</span>]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dim <span class="kw">in</span> new_dims:</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.random.uniform(size<span class="op">=</span>(n,dim)).astype(np.float32) <span class="op">-</span> <span class="dv">1</span> <span class="co"># gotta watch for mem overruns</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    b <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>np.random.uniform(size<span class="op">=</span>(n,dim)).astype(np.float32) <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    a, b <span class="op">=</span> softmax(a), softmax(b) </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    a, b <span class="op">=</span> norm_rows(a), norm_rows(b)  <span class="co"># normalize to get cosine</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    dots <span class="op">=</span> (a<span class="op">*</span>b).<span class="bu">sum</span>(axis<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    std <span class="op">=</span> np.std(dots,axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(dim, dots.mean(), std)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>10000 0.7616262 0.002711203
+20000 0.7616077 0.0019324023
+50000 0.76159537 0.001209799</code></pre>
+</div>
+</div>
+<p>Likely candidate special number is the hyperbolic tangent of 1:</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>np.tanh(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>0.7615941559557649</code></pre>
+</div>
+</div>
+<p>…though I’m not sure how that arises. Hmmm!</p>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>In all cases, the mode of the distribution is still at zero dot product. So we can say with confidence that vectors are most likely to be (near-)orthogonal regardless of the dimensionality. However we see that although for unit vectors the distribution of dot product values gets sharper (around zero) as the number of dimensions increases, for non-unit vectors it gets <em>flatter</em>, i.e.&nbsp;betting on orthogonality becomes increasinly less of a safe bet as you go to higher dimensions.</p>
+<p>The following graph summarizes our results, in terms of the standard deviation of the distribution of dot product values:</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(results)):</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    marker, markersize <span class="op">=</span> (<span class="st">'s-'</span>,<span class="dv">12</span>) <span class="cf">if</span> k<span class="op">==</span><span class="dv">1</span> <span class="cf">else</span> (<span class="st">'o-'</span>,<span class="dv">11</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    ax.loglog(dims, results[k][<span class="st">'sds'</span>], marker, markersize<span class="op">=</span>markersize, label<span class="op">=</span>results[k][<span class="st">'label'</span>])</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Dimensions'</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Std Dev'</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"For dot products of random vectors..."</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2022-01-24-MultiDim-DotProducts_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>(where the orange line and the red line are right on top of each other)</p>
+<p>Thus we see that the dot products of unit vectors, “softmax vectors” (positive definite with unit L1 norm), as well as the cosine similarity for the latter, are all more likely to be zero as the dimensionality increases, whereas for other vectors the dimensionality trend goes the other way.</p>
+<p><strong>Also: can I just say that</strong> I really like the scaling laws apparent in that last plot.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

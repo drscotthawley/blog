@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2017-02-23">
+<meta name="description" content="First in a series on Machine Learning Foundations, which applies to much of science and statistics as well. .">
+
+<title>blog - Following Gravity - ML Foundations Part I</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Following Gravity - ML Foundations Part I</h1>
+                  <div>
+        <div class="description">
+          First in a series on Machine Learning Foundations, which applies to much of science and statistics as well. .
+        </div>
+      </div>
+                </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 23, 2017</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://drscotthawley.github.io/images/FG-images/header_image.jpg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">header_img</figcaption><p></p>
+</figure>
+</div>
+<p style="text-align: right">
+<em>Image credit: NASA</em>
+</p>
+<section id="preface-im-writing-this-for-myself-current-students-aspire-collaborators-and-to-give-back-to-the-internet-community.-i-recently-had-insight-into-my-main-research-problem-but-started-to-hit-a-snag-so-decided-to-return-to-foundations.-going-back-to-basics-can-be-a-good-way-to-move-forward" class="level6">
+<h6 class="anchored" data-anchor-id="preface-im-writing-this-for-myself-current-students-aspire-collaborators-and-to-give-back-to-the-internet-community.-i-recently-had-insight-into-my-main-research-problem-but-started-to-hit-a-snag-so-decided-to-return-to-foundations.-going-back-to-basics-can-be-a-good-way-to-move-forward">Preface: I’m writing this for myself, current students &amp; <a href="http://aspirecoop.github.io">ASPIRE</a> collaborators, and to ‘give back’ to the internet community. I recently had insight into my ‘main’ research problem, but started to hit a snag so decided to return to foundations. Going back to basics can be a good way to move forward…</h6>
+<p>By the end of this session, we will – as an example problem – have used the 1-dimensional path of an object in the presesece of gravity, to ‘train’ a system to correctly infer (i.e.&nbsp;to ‘learn’) the constants of the motion – initial position and velocity, and the acceleration due to gravity. Hopefully we learn a few other things along the way. ;-)</p>
+<p><em>In the next installment, “Part Ib,” we’ll derive the differential equation of motion, and in then in “Part II” we’ll adapt the techniques we’ve learned here to do signal processing.</em></p>
+</section>
+<section id="optimization-basics-gradient-descent" class="level2">
+<h2 class="anchored" data-anchor-id="optimization-basics-gradient-descent">Optimization Basics: Gradient Descent</h2>
+<p>Let’s put the “sample problem” aside for now, and talk about the general problem of optimization. Often we may wish to minimize some function <span class="math inline">\(f(x)\)</span>. In science, doing so may enable us to fit a curve to our data, as we’ll do below. Similarly,‘machine learning’ systems often operate on the basis of minimizing a ‘cost’ function to discern patterns in complex datasets.</p>
+<p>Thus we want to find the value of <span class="math inline">\(x\)</span> for which <span class="math inline">\(f(x)\)</span> is the smallest. A graph of such a function might look like this…</p>
+<p><em>(Python code follows, to make the graph)</em></p>
+<div class="cell" data-outputid="293869b1-2a48-43fd-9705-364dcdf88a92">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>ax.update({<span class="st">'xlabel'</span>:<span class="st">'x'</span>, <span class="st">'ylabel'</span>:<span class="st">'f'</span>})</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">5</span>,<span class="dv">7</span>,<span class="fl">0.1</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>ax.plot(x,(x<span class="op">-</span><span class="dv">1</span>)<span class="op">**</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-02-23-Following-Gravity-Colab_files/figure-html/cell-2-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>If <span class="math inline">\(f(x)\)</span> is differentiable and the derivative (<em>i.e.</em>, slope) <span class="math inline">\(df/dx\)</span> can be evaluated easily, then we can perform a so-called “gradient descent”.</p>
+<p>We do so as follows:</p>
+<ol type="1">
+<li>Start with some initial guess for <span class="math inline">\(x\)</span></li>
+<li>“Go in the direction of <span class="math inline">\(-df/dx\)</span>”: <span class="math display">\[x_{new} = x_{old} - \alpha {df\over dx},\]</span> where <span class="math inline">\(\alpha\)</span> is some parameter often called the “learning rate”. All this equation is saying is, “If the function is increasing, then move to the left; and if the function is decreasing then move to the right.” The actual change to <span class="math inline">\(x\)</span> is given by <span class="math inline">\(\Delta x \equiv - \alpha (df/dx)\)</span>.<br>
+</li>
+<li>Repeat step 2 until some approximation criterion is met.</li>
+</ol>
+<p>A nice feature of this method is that as <span class="math inline">\(df/dx \rightarrow 0\)</span>, so too <span class="math inline">\(\Delta x\rightarrow0\)</span>. So an “adaptive stepsize” is built-in.</p>
+<p>Now let’s try this out with some Python code…</p>
+<div class="cell" data-outputid="59a1b006-158e-40fe-b4e3-f116745ea34b">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> print_function    <span class="co"># for backwards-compatibility w/ Python2</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x):</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (x<span class="op">-</span><span class="dv">1</span>)<span class="op">**</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dfdx(x):</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span><span class="op">*</span>(x<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>ax.update({<span class="st">'xlabel'</span>:<span class="st">'x'</span>, <span class="st">'ylabel'</span>:<span class="st">'f'</span>})</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">5</span>,<span class="dv">7</span>,<span class="fl">0.1</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>ax.plot(x,f(x),ls<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> alpha <span class="kw">in</span> ([<span class="fl">0.002</span>,<span class="fl">0.1</span>,<span class="fl">0.25</span>,<span class="fl">0.8</span>]):</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"alpha = "</span>,alpha)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="op">-</span><span class="dv">5</span>                           <span class="co"># starting point</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    x_arr <span class="op">=</span> [x]</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    y_arr <span class="op">=</span> [f(x)]</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    maxiter <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="bu">iter</span> <span class="kw">in</span> <span class="bu">range</span>(maxiter):      <span class="co"># do the descent</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        <span class="co"># these two lines are just for plotting later</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        x_arr.append(x)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>        y_arr.append( f(x) )</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Here's the important part: update via gradient descent</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> x <span class="op">-</span> alpha <span class="op">*</span> dfdx(x)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># report and make the plot</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"              final x = "</span>,x)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    ax.plot(x_arr,y_arr,<span class="st">'o-'</span>,label<span class="op">=</span><span class="st">"alpha = "</span><span class="op">+</span><span class="bu">str</span>(alpha))</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>handles, labels <span class="op">=</span> ax.get_legend_handles_labels()</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>ax.legend(handles, labels)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>alpha =  0.002
+              final x =  -3.910414704056598
+alpha =  0.1
+              final x =  0.9999143651384377
+alpha =  0.25
+              final x =  0.9999999999999947
+alpha =  0.8
+              final x =  0.999999999951503</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-02-23-Following-Gravity-Colab_files/figure-html/cell-3-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Notice how the larger learning rate (<span class="math inline">\(\alpha\)</span>=0.8) meant that the steps taken were so large that they “overshot” the minimum, whereas the too-small learning rate (<span class="math inline">\(\alpha=0.002\)</span>) still hadn’t come anywhere close to the minimum before the maximum iteration was reached.</p>
+<p><strong>Exercise:</strong> Experiment by editing the above code: Try different learning rates and observe the behavior.</p>
+<section id="challenge-instability" class="level3">
+<h3 class="anchored" data-anchor-id="challenge-instability">Challenge: Instability</h3>
+<p>You may have noticed, if you made the learning rate too large, that the algorithm does <em>not</em> converge to the solution but instead ‘blows up’. This is the ‘flip side’ of the ‘adaptive step size’ feature of this algorithm: If you jump “across” the minimum to the other side and end up a greater distance from the minimum that where you started, you will encounter an even larger gradient, which will lead to an even larger <span class="math inline">\(\Delta x\)</span>, and so on.</p>
+<p>We can see this with the same code from before, let’s just use a different starting point and a step size that’s clearly too large…</p>
+<div class="cell" data-outputid="7d234a29-2f88-4a39-dde0-c6d1c0912d14">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> print_function    <span class="co"># for backwards-compatibility w/ Python2</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x):</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (x<span class="op">-</span><span class="dv">1</span>)<span class="op">**</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dfdx(x):</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span><span class="op">*</span>(x<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> <span class="fl">1.1</span>                     <span class="co"># "too big" learning rate</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"alpha = "</span>,alpha)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>                           <span class="co"># starting point</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>x_arr <span class="op">=</span> []</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>y_arr <span class="op">=</span> []</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>maxiter <span class="op">=</span> <span class="dv">12</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">iter</span> <span class="kw">in</span> <span class="bu">range</span>(maxiter):      <span class="co"># do the descent</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    x_arr.append(x)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    y_arr.append( f(x) )</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> x <span class="op">-</span> alpha <span class="op">*</span> dfdx(x)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co"># report and make the plot</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"              final x = "</span>,x)</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>ax.update({<span class="st">'xlabel'</span>:<span class="st">'x'</span>, <span class="st">'ylabel'</span>:<span class="st">'f'</span>})</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>plt.plot(x_arr,y_arr,<span class="st">'r'</span>,zorder<span class="op">=</span><span class="dv">2</span>,)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>plt.scatter(x_arr,y_arr,zorder<span class="op">=</span><span class="dv">3</span>,c<span class="op">=</span><span class="bu">range</span>(<span class="bu">len</span>(x_arr)),cmap<span class="op">=</span>plt.cm.viridis)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>xlim <span class="op">=</span> ax.get_xlim()                   <span class="co"># find out axis limits</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(xlim[<span class="dv">0</span>],xlim[<span class="dv">1</span>],<span class="dv">1</span>)       <span class="co"># dashed line</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>plt.plot(x,f(x),zorder<span class="op">=</span><span class="dv">1</span>,ls<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>handles, labels <span class="op">=</span> ax.get_legend_handles_labels()</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>ax.legend(handles, labels)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>alpha =  1.1
+              final x =  -16.83220089651204</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-02-23-Following-Gravity-Colab_files/figure-html/cell-4-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>In the above plot, we colored the points by iteration number, starting with the dark purple at the initial location of x=-1, and bouncing around ever-farther from the solution as the color changes to yellow. As this happens, the error is growing exponentially; this is one example of a numerical instability. Thus, this algorithm is <a href="http://bit.ly/2kZZVP1">not entirely stable.</a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="http://hedges.belmont.edu/~shawley/PHY4410/notentirelystable-0.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">not_entirely_stable</figcaption><p></p>
+</figure>
+</div>
+<p>One way to guard against this to check: is our value of <span class="math inline">\(f(x)\)</span> at the current iteration <em>larger</em> than the value it was at the previous iteration? If so, that’s a sign that our learning rate is too large, and we can use this criterion to dynamically adjust the learning rate.</p>
+<p>Let’s add some ‘control’ code to that effect, to the previous script, and also print out the values of the relevant variables so we can track the progress:</p>
+<div class="cell" data-outputid="e9bdef81-73d2-40ed-c6d1-e3b43d329bcf">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> print_function    <span class="co"># for backwards-compatibility w/ Python2</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x):</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (x<span class="op">-</span><span class="dv">1</span>)<span class="op">**</span><span class="dv">2</span><span class="op">+</span><span class="dv">1</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dfdx(x):</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span><span class="op">*</span>(x<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> <span class="fl">13.0</span>                     <span class="co"># "too big" learning rate</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"alpha = "</span>,alpha)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>                           <span class="co"># starting point</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>x_arr <span class="op">=</span> []</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>y_arr <span class="op">=</span> []</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>maxiter <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>f_old <span class="op">=</span> <span class="fl">1e99</span>   <span class="co"># some big number</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">iter</span> <span class="kw">in</span> <span class="bu">range</span>(maxiter):      <span class="co"># do the descent</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># these two lines are just for plotting later</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    x_arr.append(x)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    f_cur <span class="op">=</span> f(x)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    y_arr.append( f_cur )</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"iter = "</span>,<span class="bu">iter</span>,<span class="st">"x = "</span>,x,<span class="st">"f(x) ="</span>,f(x),<span class="st">"alpha = "</span>,alpha)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (f_cur <span class="op">&gt;</span> f_old):         <span class="co"># check for runaway behavior</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>        alpha <span class="op">=</span> alpha <span class="op">*</span> <span class="fl">0.5</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">" decreasing alpha. new alpha = "</span>,alpha)</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    f_old <span class="op">=</span> f_cur</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># update via gradient descent</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> x <span class="op">-</span> alpha <span class="op">*</span> dfdx(x)</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="co"># report and make the plot</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"              final x = "</span>,x)</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>ax.update({<span class="st">'xlabel'</span>:<span class="st">'x'</span>, <span class="st">'ylabel'</span>:<span class="st">'f'</span>})</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>plt.plot(x_arr,y_arr,<span class="st">'r'</span>,zorder<span class="op">=</span><span class="dv">2</span>,)</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>plt.scatter(x_arr,y_arr,zorder<span class="op">=</span><span class="dv">3</span>,c<span class="op">=</span><span class="bu">range</span>(<span class="bu">len</span>(x_arr)),cmap<span class="op">=</span>plt.cm.viridis)</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>xlim <span class="op">=</span> ax.get_xlim()</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(xlim[<span class="dv">0</span>],xlim[<span class="dv">1</span>],<span class="dv">1</span>)          <span class="co"># x for dashed line</span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>plt.plot(x,f(x),zorder<span class="op">=</span><span class="dv">1</span>,ls<span class="op">=</span><span class="st">'dashed'</span>)</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>handles, labels <span class="op">=</span> ax.get_legend_handles_labels()</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>ax.legend(handles, labels)</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>alpha =  13.0
+iter =  0 x =  -1 f(x) = 5 alpha =  13.0
+iter =  1 x =  51.0 f(x) = 2501.0 alpha =  13.0
+ decreasing alpha. new alpha =  6.5
+iter =  2 x =  -599.0 f(x) = 360001.0 alpha =  6.5
+ decreasing alpha. new alpha =  3.25
+iter =  3 x =  3301.0 f(x) = 10890001.0 alpha =  3.25
+ decreasing alpha. new alpha =  1.625
+iter =  4 x =  -7424.0 f(x) = 55130626.0 alpha =  1.625
+ decreasing alpha. new alpha =  0.8125
+iter =  5 x =  4641.625 f(x) = 21535401.390625 alpha =  0.8125
+iter =  6 x =  -2899.390625 f(x) = 8412266.77758789 alpha =  0.8125
+iter =  7 x =  1813.744140625 f(x) = 3286042.31937027 alpha =  0.8125
+iter =  8 x =  -1131.965087890625 f(x) = 1283610.8903790116 alpha =  0.8125
+iter =  9 x =  709.1031799316406 f(x) = 501411.1134293014 alpha =  0.8125
+iter =  10 x =  -441.5644874572754 f(x) = 195864.32555832085 alpha =  0.8125
+iter =  11 x =  277.6028046607971 f(x) = 76510.1115462191 alpha =  0.8125
+iter =  12 x =  -171.8767529129982 f(x) = 29887.37169774183 alpha =  0.8125
+iter =  13 x =  109.04797057062387 f(x) = 11675.363944430403 alpha =  0.8125
+iter =  14 x =  -66.52998160663992 f(x) = 4561.298415793126 alpha =  0.8125
+iter =  15 x =  43.20623850414995 f(x) = 1782.36656866919 alpha =  0.8125
+iter =  16 x =  -25.37889906509372 f(x) = 696.8463158864023 alpha =  0.8125
+iter =  17 x =  17.486811915683575 f(x) = 272.8149671431259 alpha =  0.8125
+iter =  18 x =  -9.304257447302234 f(x) = 107.17772154028356 alpha =  0.8125
+iter =  19 x =  7.440160904563896 f(x) = 42.47567247667326 alpha =  0.8125
+              final x =  -3.025100565352435</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-02-23-Following-Gravity-Colab_files/figure-html/cell-5-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>So in the preceding example, we start at <span class="math inline">\(x=-1\)</span>, then the unstable behavior starts and we begin diverging from the minimum, so we decrease <span class="math inline">\(\alpha\)</span> as often as our criterion tells us to. Finally <span class="math inline">\(\alpha\)</span> becomes low enought to get the system ‘under control’ and the algorithm enters the convergent regime.</p>
+<p><strong>Exercise:</strong> In the example above, we only decrease <span class="math inline">\(\alpha\)</span> by a factor of 2 each time, but it would be more efficient to decrease by a factor of 10. Try that and observe the behavior of the system.</p>
+<p>You may say, <em>“Why do I need to worry about this instability stuff? As long as <span class="math inline">\(\alpha&lt;1\)</span> the system will converge, right?”</em> Well, for this simple system it seems obvious what needs to happen, but with multidimensional optimization problems (see below), it’s not always obvious what to do. (Sometimes different ‘dimensions’ need different learning rates.) This simple example serves as an introduction to phenomena which arise in more complex situations.</p>
+</section>
+<section id="challenge-non-global-minima" class="level3">
+<h3 class="anchored" data-anchor-id="challenge-non-global-minima">Challenge: Non-global minima</h3>
+<p>To explore more complicated functions, we’re going to take advantage of the SymPy package, to let it take derivatives for us. Try executing the import in the next cell, and if nothing happens it means you have SymPy installed. If you get an error, you may need to go into a Terminal and run “<code>pip install sympy</code>”.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sympy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You’re good? No errors? Ok, moving on…</p>
+<div class="cell" data-outputid="effc2113-02a5-44b2-e155-ba76e2bfbca9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> print_function    <span class="co"># for backwards-compatibility w/ Python2</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sympy <span class="im">import</span> Symbol, diff</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> Symbol(<span class="st">'x'</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># our function, more complicated (SymPy handles it!)</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> (x<span class="op">-</span><span class="dv">1</span>)<span class="op">**</span><span class="dv">4</span> <span class="op">-</span> <span class="dv">20</span><span class="op">*</span>(x<span class="op">-</span><span class="dv">1</span>)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">10</span><span class="op">*</span>x <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>dfdx <span class="op">=</span> diff(f,x)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co"># setup</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>ax.update({<span class="st">'xlabel'</span>:<span class="st">'x'</span>, <span class="st">'ylabel'</span>:<span class="st">'f'</span>})</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>x_arr <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">5</span>,<span class="dv">7</span>,<span class="fl">0.1</span>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>y_arr <span class="op">=</span> np.copy(x_arr)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, val <span class="kw">in</span> <span class="bu">enumerate</span>(x_arr):</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    y_arr[i] <span class="op">=</span> f.evalf(subs<span class="op">=</span>{x:val})</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>ax.plot(x_arr,y_arr,ls<span class="op">=</span><span class="st">'dashed'</span>)   <span class="co"># space of 'error function'</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co"># for a variety of learning rates...</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> alpha <span class="kw">in</span> ([<span class="fl">0.002</span>,<span class="fl">0.01</span>,<span class="fl">0.03</span>]): </span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"alpha = "</span>,alpha)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    xval <span class="op">=</span> <span class="dv">6</span>                     <span class="co"># starting point</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    x_arr <span class="op">=</span> [xval]</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    y_arr <span class="op">=</span> [f.evalf(subs<span class="op">=</span>{x:xval})]</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    maxiter <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># do the descent</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="bu">iter</span> <span class="kw">in</span> <span class="bu">range</span>(maxiter):</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>        <span class="co"># these two lines are just for plotting later</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>        x_arr.append(xval)</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>        y_arr.append( f.evalf(subs<span class="op">=</span>{x:xval}) )</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>        <span class="co"># update via gradient descent</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>        xval <span class="op">=</span> xval <span class="op">-</span> alpha <span class="op">*</span> dfdx.evalf(subs<span class="op">=</span>{x:xval})</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"              final xval = "</span>,xval)</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>    ax.plot(x_arr,y_arr,<span class="st">'o-'</span>,label<span class="op">=</span><span class="st">"alpha = "</span><span class="op">+</span><span class="bu">str</span>(alpha))</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>handles, labels <span class="op">=</span> ax.get_legend_handles_labels()</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>ax.legend(handles, labels)</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>alpha =  0.002
+              final xval =  4.02939564594151
+alpha =  0.01
+              final xval =  4.02896613891181
+alpha =  0.03
+              final xval =  -2.00328879556504</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-02-23-Following-Gravity-Colab_files/figure-html/cell-7-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>All the runs start at <span class="math inline">\(x=6\)</span>. Notice how the runs marked in organge and green go on to find a “local” minimum, but they don’t find the “global” minimum (the overall lowest point) like the run marked in red does. The problem of ending up at non-global local minima is a generic problem for all kinds of optimization tasks. It tends to get even worse when you add more parameters…</p>
+</section>
+<section id="multidimensional-gradient-descent" class="level3">
+<h3 class="anchored" data-anchor-id="multidimensional-gradient-descent">Multidimensional Gradient Descent</h3>
+<p><em>(A descent into darkness…)</em></p>
+<p>Let’s define a function of two variables, that’s got at least one minimum in it. We’ll choose <span class="math display">\[f(x,y) = -\left( \cos x + 3\cos y \right) /2,\]</span> which actually has infinitely many minima, but we’ll try to ‘zoom in’ on just one.</p>
+<p>We can vizualize this function via the graph produced by the code below; in the graph, darker areas show lower values than ligher areas, and there is a minimum at the point <span class="math inline">\(x=0,y=0\)</span> where <span class="math inline">\(f(0,0)=-2\)</span>.</p>
+<div class="cell" data-outputid="8a33fcea-3be2-4e0a-df61-4472081bcff3">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x,y):</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>( np.cos(x) <span class="op">+</span> <span class="dv">3</span><span class="op">*</span>np.cos(y) )<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> y <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">100</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.zeros([<span class="bu">len</span>(x), <span class="bu">len</span>(y)])</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(x)):</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(y)):</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        z[j, i] <span class="op">=</span> f(x[i], y[j])</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>ax.update({<span class="st">'xlabel'</span>:<span class="st">'x'</span>, <span class="st">'ylabel'</span>:<span class="st">'y'</span>})</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>cs <span class="op">=</span> ax.pcolor(x, y, z, cmap<span class="op">=</span>plt.cm.afmhot)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>plt.gca().set_aspect(<span class="st">'equal'</span>, adjustable<span class="op">=</span><span class="st">'box'</span>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>cbar <span class="op">=</span> fig.colorbar(cs, orientation<span class="op">=</span><span class="st">'vertical'</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-02-23-Following-Gravity-Colab_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>The way we find a minimum is similar to what we did before, except we use partial derivatives in the x- and y-directions:</p>
+<p><span class="math display">\[x_{new} = x_{old} + \Delta x,\ \ \ \ \ \ \Delta x = - \alpha {\partial f\over \partial x}  \]</span> <span class="math display">\[y_{new} = y_{old} + \Delta y,\ \ \ \ \ \ \Delta y = - \alpha {\partial f\over \partial y},\]</span></p>
+<div class="cell" data-outputid="36b06c50-766b-4074-f98e-6214ec5f1db9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> print_function    <span class="co"># for backwards-compatibility w/ Python2</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># our function</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x,y):</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>( np.cos(x) <span class="op">+</span> <span class="dv">3</span><span class="op">*</span>np.cos(y) )<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dfdx(x,y):</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.sin(x)<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dfdy(x,y):</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">3</span><span class="op">*</span>np.sin(y)<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co"># variables for this run</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> <span class="fl">0.5</span> </span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>xval, yval <span class="op">=</span> <span class="fl">2.5</span>, <span class="fl">1.5</span>       <span class="co"># starting guess(es)</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>x_arr <span class="op">=</span> []</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>y_arr <span class="op">=</span> []</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>maxiter <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">iter</span> <span class="kw">in</span> <span class="bu">range</span>(maxiter):  <span class="co"># gradient descent loop</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    x_arr.append(xval)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    y_arr.append(yval)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    xval <span class="op">=</span> xval <span class="op">-</span> alpha <span class="op">*</span> dfdx(xval,yval)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    yval <span class="op">=</span> yval <span class="op">-</span> alpha <span class="op">*</span> dfdy(xval,yval)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Final xval, yval = "</span>,xval,yval,<span class="st">".  Target is (0,0)"</span>)</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a><span class="co"># background image: plot the color background</span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> y <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">100</span>)</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.zeros([<span class="bu">len</span>(x), <span class="bu">len</span>(y)])</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(x)):</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(y)):</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>        z[j, i] <span class="op">=</span> f(x[i], y[j])</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>ax.update({<span class="st">'xlabel'</span>:<span class="st">'x'</span>, <span class="st">'ylabel'</span>:<span class="st">'y'</span>})</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>cs <span class="op">=</span> ax.pcolor(x, y, z, cmap<span class="op">=</span>plt.cm.afmhot)</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>plt.gca().set_aspect(<span class="st">'equal'</span>, adjustable<span class="op">=</span><span class="st">'box'</span>)</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>cbar <span class="op">=</span> fig.colorbar(cs, orientation<span class="op">=</span><span class="st">'vertical'</span>)</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the progress of our optimization</span></span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>plt.plot(x_arr,y_arr,zorder<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>plt.scatter(x_arr,y_arr,zorder<span class="op">=</span><span class="dv">2</span>,c<span class="op">=</span><span class="bu">range</span>(<span class="bu">len</span>(x_arr)),cmap<span class="op">=</span>plt.cm.viridis)</span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>handles, labels <span class="op">=</span> ax.get_legend_handles_labels()</span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Final xval, yval =  0.0272555602238 3.59400699273e-12 .  Target is (0,0)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-02-23-Following-Gravity-Colab_files/figure-html/cell-9-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>In the above figure, we’ve shown the ‘path’ the algorithm takes in <span class="math inline">\(x\)</span>-<span class="math inline">\(y\)</span> space, coloring the dots according to iteration number, so that the first points are dark purple, and later points tend to yellow.</p>
+<p>Note that due to the asymmetry in the function (between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>), the path descends rapidly in <span class="math inline">\(y\)</span>, and then travels along the “valley” in <span class="math inline">\(x\)</span> to reach the minimum. This “long narrow valley” behavior is common in multidimensional optimization problems: the system may ‘solve’ one parameter quickly, but require thousands of operations to find the other one.</p>
+<p>Many sophisticated schemes have arisen to handle this challenge, and we won’t cover them here. For now, suffice it to say that, yes, this sort of thing happens. You may have ‘found’ highly accurate values for certain parameters, but others are bogging down the process of convergence.</p>
+<p><em>Next time, we’ll cover a common application of optimization: Least Squares Regression…</em></p>
+</section>
+</section>
+<section id="least-squares-regression" class="level2">
+<h2 class="anchored" data-anchor-id="least-squares-regression">Least Squares Regression</h2>
+<p>This is such a common thing to do in science and statistics, that everyone should learn how it works. We’ll do it for linear relationships, but it generalizes to nonlinear situations as well.</p>
+<section id="how-to-fit-a-line" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-fit-a-line">How to Fit a Line</h3>
+<p>Let’s say we’re trying to fit a line to a bunch of data. We’ve been given <span class="math inline">\(n\)</span> data points with coordinates <span class="math inline">\((x_i,y_i)\)</span> where <span class="math inline">\(i=1..n\)</span>. The problem becomes, given a line <span class="math inline">\(f(x) = mx+b\)</span>, find the values of the parameters <span class="math inline">\(m\)</span> and <span class="math inline">\(b\)</span> which minimize the overall “error”.</p>
+<section id="add-some-kinda-picture-here" class="level4">
+<h4 class="anchored" data-anchor-id="add-some-kinda-picture-here">add some kinda picture here?</h4>
+<p>The error can take many forms; one is the squared error <span class="math inline">\(SE\)</span>, which is just the sum of the squares of the “distances” between each data point’s <span class="math inline">\(y\)</span>-value and the “guess” from the line fit <span class="math inline">\(f\)</span> at each value of <span class="math inline">\(x\)</span>:</p>
+<p><span class="math display">\[ SE = (f(x_1) - y_1)^2 + (f(x_2) - y_2)^2 + ... (f(x_n)-y_n)^2,\]</span></p>
+<p>We can write this concisely as <span class="math display">\[ SE = \sum_{i=1}^n (f(x_i)-y_i)^2.\]</span></p>
+<p>Another popular form is the “mean squared error” <span class="math inline">\(MSE\)</span>, which is just <span class="math inline">\(SE/n\)</span>:</p>
+<p><span class="math display">\[ MSE = {1\over n}\sum_{i=1}^n (f(x_i)-y_i)^2.\]</span></p>
+<p>The MSE has the nice feature that as you add more data points, it tends to hold a more-or-less consistent value (as opposed to the SE which gets bigger as you add more points). We’ll use the MSE in the work that follows.</p>
+<p>So expanding out <span class="math inline">\(f(x)\)</span>, we see that the MSE is a function of <span class="math inline">\(m\)</span> and <span class="math inline">\(b\)</span>, and these are the parameters we’ll vary to minimize the MSE: <span class="math display">\[ MSE(m,b) = {1\over n}\sum_{i=1}^n (mx_i+b-y_i)^2.\]</span></p>
+<p>So, following our earlier work on multidimensional optimization, we start with guesses for <span class="math inline">\(m\)</span> and <span class="math inline">\(b\)</span> and then update according to gradient descent:</p>
+<p><span class="math display">\[m_{new} = m_{old} + \Delta m,\ \ \ \ \ \ \Delta m = -\alpha{\partial (MSE)\over\partial m} = -\alpha{2\over n}\sum_{i=1}^n (mx_i+b-y_i)(x_i) \]</span> <span class="math display">\[b_{new} = b_{old} + \Delta b,\ \ \ \ \ \ \Delta b =  -\alpha{\partial (MSE)\over\partial b} = -\alpha{2\over n}\sum_{i=1}^n (mx_i+b-y_i)(1).\]</span></p>
+<p>So, to start off, let’s get some data…</p>
+<div class="cell" data-outputid="457e1eb0-d624-4660-caba-bcf0bcdc73af">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up the input data</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)               <span class="co"># for reproducability </span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>x_data <span class="op">=</span> np.random.uniform(size<span class="op">=</span>n)   <span class="co"># random points for x</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>m_exact <span class="op">=</span> <span class="fl">2.0</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>b_exact <span class="op">=</span> <span class="fl">1.5</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>y_data <span class="op">=</span> m_exact <span class="op">*</span> x_data <span class="op">+</span> b_exact</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>y_data <span class="op">+=</span> <span class="fl">0.3</span><span class="op">*</span>np.random.normal(size<span class="op">=</span>n)   <span class="co"># add noise</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the data</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_data(x_data, y_data, axis_labels<span class="op">=</span>(<span class="st">'x'</span>,<span class="st">'y'</span>), zero_y<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    ax.update({<span class="st">'xlabel'</span>:axis_labels[<span class="dv">0</span>], <span class="st">'ylabel'</span>:axis_labels[<span class="dv">1</span>]})</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    ax.plot(x_data, y_data,<span class="st">'o'</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (zero_y):</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>        ax.set_ylim([<span class="dv">0</span>,ax.get_ylim()[<span class="dv">1</span>]<span class="op">*</span><span class="fl">1.1</span>])</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>plot_data(x_data,y_data, zero_y<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-02-23-Following-Gravity-Colab_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><em>Note: in contrast to earlier parts of this document which include complete python programs in every code post, for brevity’s sake we will start using the notebook “as intended”, relying on the internal state and adding successive bits of code which make use of the “memory” of previously-defined variables.</em></p>
+<p>Let’s map out the MSE for this group of points, as a function of possible <span class="math inline">\(m\)</span> and <span class="math inline">\(b\)</span> values…</p>
+<div class="cell" data-outputid="772ae73a-6731-4bed-b4ad-952aea4fa8fa">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># map out the MSE for various values of m and b</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> MSE(x,y,m,b):</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Use Python array operations to compute sums</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ((m<span class="op">*</span>x <span class="op">+</span> b <span class="op">-</span> y)<span class="op">**</span><span class="dv">2</span>).mean()  </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>mm <span class="op">=</span> bb <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">50</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.zeros([<span class="bu">len</span>(mm), <span class="bu">len</span>(bb)])</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(mm)):</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(bb)):</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        z[j, i] <span class="op">=</span> MSE(x_data,y_data, mm[i],bb[j])</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>ax.update({<span class="st">'xlabel'</span>:<span class="st">'m'</span>, <span class="st">'ylabel'</span>:<span class="st">'b'</span>})</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>cs <span class="op">=</span> ax.pcolor(mm, bb, np.log(z), cmap<span class="op">=</span>plt.cm.afmhot)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>plt.gca().set_aspect(<span class="st">'equal'</span>, adjustable<span class="op">=</span><span class="st">'box'</span>)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-02-23-Following-Gravity-Colab_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>We see the minimum near the “exact” values chosen in the begininng. (Note that we’ve plotted the logarithm of the MSE just to make the colors stand out better.)</p>
+<p>Next we will choose starting guesses for <span class="math inline">\(m\)</span> and <span class="math inline">\(b\)</span>, and use gradient descent to fit the line…</p>
+<div class="cell" data-outputid="acff3177-a885-49a2-a000-6de86b3b5014">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="fl">3.5</span>         <span class="co"># initial guess</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="fl">3.5</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>m_arr <span class="op">=</span> []</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>b_arr <span class="op">=</span> []</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dMSEdm(x,y,m,b):</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="dv">2</span><span class="op">*</span>(m<span class="op">*</span>x <span class="op">+</span> b <span class="op">-</span> y) <span class="op">*</span>x).mean()</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dMSEdb(x,y,m,b):</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="dv">2</span><span class="op">*</span>(m<span class="op">*</span>x <span class="op">+</span> b <span class="op">-</span> y)).mean()</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>maxiter, printevery <span class="op">=</span> <span class="dv">500</span>, <span class="dv">4</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">iter</span> <span class="kw">in</span> <span class="bu">range</span>(maxiter):</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    m_arr.append(m)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    b_arr.append(b)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="dv">0</span> <span class="op">==</span> <span class="bu">iter</span> <span class="op">%</span> printevery):</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="bu">iter</span>,<span class="st">": b, m = "</span>,b,m,<span class="st">", MSE = "</span>,MSE(x_data,y_data,m,b))</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> m <span class="op">-</span> alpha <span class="op">*</span> dMSEdm(x_data,y_data,m,b)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    b <span class="op">=</span> b <span class="op">-</span> alpha <span class="op">*</span> dMSEdb(x_data,y_data,m,b)</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Final result: m = "</span>,m,<span class="st">", b = "</span>,b)</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="co"># background image: plot the color background (remembered from before)</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>ax.update({<span class="st">'xlabel'</span>:<span class="st">'m'</span>, <span class="st">'ylabel'</span>:<span class="st">'b'</span>})</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>cs <span class="op">=</span> ax.pcolor(mm, bb, np.log(z), cmap<span class="op">=</span>plt.cm.afmhot)</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>plt.gca().set_aspect(<span class="st">'equal'</span>, adjustable<span class="op">=</span><span class="st">'box'</span>)</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the progress of our descent</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>plt.plot(m_arr,b_arr,zorder<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>plt.scatter(m_arr,b_arr,zorder<span class="op">=</span><span class="dv">2</span>,c<span class="op">=</span><span class="bu">range</span>(<span class="bu">len</span>(m_arr)),cmap<span class="op">=</span>plt.cm.viridis)</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>handles, labels <span class="op">=</span> ax.get_legend_handles_labels()</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>ax.legend(handles, labels)</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0 : b, m =  3.5 3.5 , MSE =  6.86780331186
+4 : b, m =  2.07377614457 2.89890882764 , MSE =  0.98222306593
+8 : b, m =  1.55966423863 2.66310750082 , MSE =  0.194874325956
+12 : b, m =  1.37811928553 2.56128194633 , MSE =  0.0877947061277
+16 : b, m =  1.31767685375 2.50899769214 , MSE =  0.0718728682069
+20 : b, m =  1.30118421505 2.47541762467 , MSE =  0.0683627241086
+24 : b, m =  1.30049838878 2.44926336309 , MSE =  0.0666665839706
+28 : b, m =  1.30535957938 2.4263945595 , MSE =  0.0653286635918
+32 : b, m =  1.3120331485 2.40527655618 , MSE =  0.0641346050201
+36 : b, m =  1.31916510087 2.38532649645 , MSE =  0.0630441987699
+40 : b, m =  1.32626977167 2.36630978168 , MSE =  0.0620438837066
+44 : b, m =  1.33317800067 2.34811979986 , MSE =  0.0611251920416
+48 : b, m =  1.33983578596 2.33069751134 , MSE =  0.0602811821983
+52 : b, m =  1.34623082683 2.31400206963 , MSE =  0.059505695069
+56 : b, m =  1.35236573256 2.29800006645 , MSE =  0.0587931380437
+60 : b, m =  1.35824825911 2.28266157418 , MSE =  0.0581383942813
+64 : b, m =  1.36388775858 2.26795866993 , MSE =  0.0575367695918
+68 : b, m =  1.3692938954 2.2538648666 , MSE =  0.0569839532221
+72 : b, m =  1.374476189 2.2403548761 , MSE =  0.0564759850457
+76 : b, m =  1.37944385765 2.22740449497 , MSE =  0.0560092265247
+80 : b, m =  1.3842057718 2.21499053585 , MSE =  0.0555803344137
+84 : b, m =  1.38877044688 2.20309077677 , MSE =  0.0551862367311
+88 : b, m =  1.39314605011 2.19168391801 , MSE =  0.0548241107275
+92 : b, m =  1.39734041211 2.18074954278 , MSE =  0.0544913626571
+96 : b, m =  1.4013610397 2.17026808021 , MSE =  0.054185609197
+100 : b, m =  1.40521512901 2.16022077017 , MSE =  0.0539046603748
+104 : b, m =  1.40890957817 2.1505896296 , MSE =  0.0536465038826
+108 : b, m =  1.41245099963 2.14135742035 , MSE =  0.0534092906637
+112 : b, m =  1.41584573193 2.1325076183 , MSE =  0.0531913216685
+116 : b, m =  1.41909985108 2.12402438375 , MSE =  0.0529910356848
+120 : b, m =  1.42221918141 2.11589253313 , MSE =  0.0528069981559
+124 : b, m =  1.42520930601 2.10809751176 , MSE =  0.0526378909052
+128 : b, m =  1.42807557671 2.10062536785 , MSE =  0.052482502695
+132 : b, m =  1.43082312365 2.09346272749 , MSE =  0.0523397205507
+136 : b, m =  1.4334568645 2.08659677074 , MSE =  0.0522085217891
+140 : b, m =  1.43598151321 2.08001520867 , MSE =  0.0520879666937
+144 : b, m =  1.43840158849 2.07370626138 , MSE =  0.0519771917836
+148 : b, m =  1.44072142187 2.0676586369 , MSE =  0.0518754036286
+152 : b, m =  1.44294516546 2.06186151097 , MSE =  0.051781873167
+156 : b, m =  1.44507679941 2.0563045077 , MSE =  0.0516959304829
+160 : b, m =  1.44712013898 2.05097768097 , MSE =  0.0516169600082
+164 : b, m =  1.44907884142 2.04587149665 , MSE =  0.0515443961135
+168 : b, m =  1.45095641248 2.04097681551 , MSE =  0.0514777190569
+172 : b, m =  1.45275621269 2.03628487687 , MSE =  0.0514164512613
+176 : b, m =  1.45448146341 2.03178728296 , MSE =  0.0513601538933
+180 : b, m =  1.45613525255 2.0274759838 , MSE =  0.0513084237208
+184 : b, m =  1.45772054011 2.0233432629 , MSE =  0.0512608902243
+188 : b, m =  1.4592401635 2.01938172337 , MSE =  0.051217212943
+192 : b, m =  1.4606968426 2.0155842747 , MSE =  0.0511770790366
+196 : b, m =  1.46209318462 2.01194412009 , MSE =  0.0511402010444
+200 : b, m =  1.46343168877 2.00845474426 , MSE =  0.0511063148261
+204 : b, m =  1.46471475077 2.00510990182 , MSE =  0.0510751776703
+208 : b, m =  1.46594466707 2.00190360604 , MSE =  0.0510465665558
+212 : b, m =  1.46712363904 1.99883011819 , MSE =  0.0510202765543
+216 : b, m =  1.46825377682 1.99588393722 , MSE =  0.0509961193626
+220 : b, m =  1.46933710318 1.99305978998 , MSE =  0.0509739219537
+224 : b, m =  1.4703755571 1.99035262169 , MSE =  0.0509535253378
+228 : b, m =  1.47137099724 1.98775758697 , MSE =  0.0509347834233
+232 : b, m =  1.47232520527 1.98527004115 , MSE =  0.0509175619703
+236 : b, m =  1.47323988906 1.98288553192 , MSE =  0.0509017376297
+240 : b, m =  1.47411668575 1.98059979141 , MSE =  0.0508871970587
+244 : b, m =  1.47495716466 1.97840872852 , MSE =  0.0508738361101
+248 : b, m =  1.4757628301 1.97630842161 , MSE =  0.0508615590853
+252 : b, m =  1.47653512409 1.97429511148 , MSE =  0.0508502780498
+256 : b, m =  1.47727542891 1.97236519463 , MSE =  0.0508399122026
+260 : b, m =  1.47798506956 1.97051521684 , MSE =  0.050830387298
+264 : b, m =  1.47866531621 1.96874186695 , MSE =  0.0508216351133
+268 : b, m =  1.47931738637 1.96704197096 , MSE =  0.0508135929607
+272 : b, m =  1.47994244714 1.96541248634 , MSE =  0.050806203238
+276 : b, m =  1.48054161728 1.96385049656 , MSE =  0.0507994130159
+280 : b, m =  1.4811159692 1.96235320595 , MSE =  0.0507931736592
+284 : b, m =  1.4816665309 1.96091793458 , MSE =  0.0507874404782
+288 : b, m =  1.4821942878 1.95954211357 , MSE =  0.0507821724088
+292 : b, m =  1.48270018448 1.95822328041 , MSE =  0.0507773317183
+296 : b, m =  1.48318512642 1.95695907462 , MSE =  0.0507728837349
+300 : b, m =  1.4836499816 1.95574723348 , MSE =  0.0507687965998
+304 : b, m =  1.48409558201 1.954585588 , MSE =  0.0507650410387
+308 : b, m =  1.48452272522 1.95347205901 , MSE =  0.0507615901523
+312 : b, m =  1.48493217573 1.95240465348 , MSE =  0.0507584192235
+316 : b, m =  1.4853246664 1.95138146095 , MSE =  0.0507555055402
+320 : b, m =  1.48570089973 1.95040065006 , MSE =  0.0507528282332
+324 : b, m =  1.48606154909 1.94946046531 , MSE =  0.0507503681262
+328 : b, m =  1.48640726001 1.94855922395 , MSE =  0.0507481075984
+332 : b, m =  1.48673865124 1.94769531289 , MSE =  0.0507460304589
+336 : b, m =  1.48705631592 1.94686718587 , MSE =  0.0507441218299
+340 : b, m =  1.48736082261 1.9460733607 , MSE =  0.0507423680409
+344 : b, m =  1.48765271634 1.94531241654 , MSE =  0.0507407565302
+348 : b, m =  1.48793251954 1.94458299143 , MSE =  0.0507392757554
+352 : b, m =  1.48820073302 1.94388377984 , MSE =  0.0507379151103
+356 : b, m =  1.48845783683 1.94321353027 , MSE =  0.0507366648493
+360 : b, m =  1.48870429115 1.9425710431 , MSE =  0.0507355160173
+364 : b, m =  1.48894053709 1.94195516839 , MSE =  0.0507344603858
+368 : b, m =  1.48916699749 1.9413648038 , MSE =  0.0507334903937
+372 : b, m =  1.48938407768 1.94079889271 , MSE =  0.0507325990934
+376 : b, m =  1.48959216619 1.9402564222 , MSE =  0.050731780101
+380 : b, m =  1.48979163547 1.93973642136 , MSE =  0.0507310275504
+384 : b, m =  1.48998284254 1.93923795946 , MSE =  0.0507303360514
+388 : b, m =  1.49016612963 1.93876014435 , MSE =  0.0507297006512
+392 : b, m =  1.49034182478 1.93830212081 , MSE =  0.0507291167986
+396 : b, m =  1.49051024246 1.93786306905 , MSE =  0.0507285803118
+400 : b, m =  1.49067168412 1.93744220325 , MSE =  0.0507280873482
+404 : b, m =  1.49082643871 1.93703877012 , MSE =  0.0507276343768
+408 : b, m =  1.49097478321 1.9366520476 , MSE =  0.0507272181534
+412 : b, m =  1.49111698313 1.9362813435 , MSE =  0.0507268356966
+416 : b, m =  1.491253293 1.93592599432 , MSE =  0.0507264842671
+420 : b, m =  1.49138395677 1.93558536407 , MSE =  0.0507261613477
+424 : b, m =  1.49150920832 1.93525884305 , MSE =  0.0507258646256
+428 : b, m =  1.49162927183 1.93494584685 , MSE =  0.0507255919755
+432 : b, m =  1.4917443622 1.93464581526 , MSE =  0.0507253414444
+436 : b, m =  1.4918546854 1.93435821128 , MSE =  0.050725111238
+440 : b, m =  1.49196043891 1.93408252014 , MSE =  0.0507248997074
+444 : b, m =  1.49206181201 1.93381824839 , MSE =  0.0507247053375
+448 : b, m =  1.49215898613 1.93356492304 , MSE =  0.0507245267361
+452 : b, m =  1.4922521352 1.93332209068 , MSE =  0.0507243626239
+456 : b, m =  1.49234142595 1.93308931667 , MSE =  0.0507242118256
+460 : b, m =  1.49242701819 1.93286618439 , MSE =  0.0507240732609
+464 : b, m =  1.49250906511 1.93265229447 , MSE =  0.0507239459375
+468 : b, m =  1.49258771357 1.93244726408 , MSE =  0.0507238289434
+472 : b, m =  1.49266310433 1.93225072625 , MSE =  0.0507237214405
+476 : b, m =  1.49273537233 1.93206232921 , MSE =  0.050723622659
+480 : b, m =  1.49280464692 1.93188173576 , MSE =  0.0507235318913
+484 : b, m =  1.49287105209 1.93170862267 , MSE =  0.0507234484872
+488 : b, m =  1.49293470669 1.9315426801 , MSE =  0.0507233718493
+492 : b, m =  1.49299572466 1.93138361102 , MSE =  0.0507233014288
+496 : b, m =  1.4930542152 1.93123113075 , MSE =  0.0507232367213
+Final result: m =  1.93108496636 , b =  1.49311028301</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-02-23-Following-Gravity-Colab_files/figure-html/cell-12-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p><em>Note that the optimized values <span class="math inline">\((m,b)\)</span> that we find may not exactly match the “exact” values we used to make the data, because the noise we added to the data can throw this off. In the limit where the noise amplitude goes to zero, our optimized values will exactly match the “exact” values used to generated the data.</em></p>
+<p>Let’s see the results of our line fit…</p>
+<div class="cell" data-outputid="bf92e1d1-d31a-40d3-8e93-41f5f05de721">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the points</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>ax.update({<span class="st">'xlabel'</span>:<span class="st">'x'</span>, <span class="st">'ylabel'</span>:<span class="st">'y'</span>})</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>ax.plot(x_data,y_data,<span class="st">'o'</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>ax.set_ylim([<span class="dv">0</span>,ax.get_ylim()[<span class="dv">1</span>]<span class="op">*</span><span class="fl">1.1</span>])</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># and plot the line we fit</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>xlim <span class="op">=</span> ax.get_xlim()</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>x_line <span class="op">=</span> np.linspace(xlim[<span class="dv">0</span>],xlim[<span class="dv">1</span>],<span class="dv">2</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>y_line <span class="op">=</span> m<span class="op">*</span>x_line <span class="op">+</span> b</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>ax.plot(x_line,y_line)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-02-23-Following-Gravity-Colab_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Great!</p>
+</section>
+</section>
+<section id="least-squares-fitting-with-nonlinear-functions" class="level3">
+<h3 class="anchored" data-anchor-id="least-squares-fitting-with-nonlinear-functions">Least Squares Fitting with Nonlinear Functions</h3>
+<p>We can generalize the technique describe above to fit polynomials <span class="math display">\[ f(x) = c_0 + c_1 x + c_2 x^2 + ...c_k x^k,\]</span> where <span class="math inline">\(c_0...c_k\)</span> are the parameters we will tune, and <span class="math inline">\(k\)</span> is the order of the polynomial. (Typically people use the letter <span class="math inline">\(a\)</span> for polynomial coefficients, but in the math rendering of Jupter, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(a\)</span> look too much alike, so we’ll use <span class="math inline">\(c\)</span>.) Written more succinctly, <span class="math display">\[ f(x) = \sum_{j=0}^k c_j x^j.\]</span></p>
+<p>(Indeed, we could even try non-polynomial basis functions, e.g., $ f(x) = c_0 + c_1 g(x) + c_2 h(x) + …,$ but let’s stick to polynomials for now.)</p>
+<p>The key thing to note is that for each parameter <span class="math inline">\(c_j\)</span>, the update <span class="math inline">\(\Delta c_j\)</span> will be</p>
+<p><span class="math display">\[\Delta c_j = -\alpha {\partial (MSE)\over \partial c_j}
+= -\alpha {\partial (MSE)\over \partial f}{\partial f\over \partial c_j}\]</span> <span class="math display">\[= -\alpha {2\over n}\sum_{i=1}^n [f(x_i)-y_i](x_i)^{j} \]</span></p>
+<p><em>(Note that we are not taking the derivative with respect to <span class="math inline">\(x_i\)</span>, but rather with respect to <span class="math inline">\(c_j\)</span>. Thus there is no “power rule” that needs be applied to this derivative. Also there is no sum over j.)</em></p>
+<p>The following is a complete code for doing this, along with some added refinements:</p>
+<ul>
+<li><span class="math inline">\(\alpha\)</span> is now <span class="math inline">\(\alpha_j\)</span>, i.e.&nbsp;different learning rates for different directions</li>
+<li>we initialise <span class="math inline">\(\alpha_j\)</span> such that larger powers of <span class="math inline">\(x\)</span> start with smaller coefficients</li>
+<li>we put the fitting code inside a method (with a bunch of parameters) so we can call it later</li>
+</ul>
+<div class="cell" data-outputid="0f537414-310b-42b7-ced4-d4be109c5e7a">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> __future__ <span class="im">import</span> print_function    <span class="co"># for backwards-compatibility w/ Python2</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x,c):</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="dv">0</span><span class="op">*</span>x                    <span class="co"># f will work on single floats or arrays</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(c.size):</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>        y <span class="op">+=</span> c[j]<span class="op">*</span>(x<span class="op">**</span>j)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> polyfit(x_data,y_data, c_start<span class="op">=</span><span class="va">None</span>, order<span class="op">=</span><span class="va">None</span>, maxiter<span class="op">=</span><span class="dv">500</span>, printevery <span class="op">=</span> <span class="dv">25</span>,</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>            alpha_start<span class="op">=</span><span class="fl">0.9</span>, alpha_start_power<span class="op">=</span><span class="fl">0.3</span>):</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># function definitions</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> MSE(x_arr,y_arr,c):</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>        f_arr <span class="op">=</span> f(x_arr,c)</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> ((f_arr <span class="op">-</span> y_arr)<span class="op">**</span><span class="dv">2</span>).mean()</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> dMSEdcj(x_arr,y_arr,c,j):  <span class="co"># deriviative of MSE wrt cj (*not* wrt x!)</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>        f_arr <span class="op">=</span> f(x_arr,c)</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> ( <span class="dv">2</span><span class="op">*</span> ( f_arr <span class="op">-</span> y_arr) <span class="op">*</span> x_arr<span class="op">**</span>j ).mean()  </span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ((c_start <span class="kw">is</span> <span class="va">None</span>) <span class="kw">and</span> (order <span class="kw">is</span> <span class="va">None</span>)):</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Error: Either specify initial guesses for coefficients,"</span>,</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>              <span class="st">"or specify the order of the polynomial"</span>)</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span>  <span class="co"># halt</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> c_start <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>        order <span class="op">=</span> c_start.size<span class="op">-</span><span class="dv">1</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>        c <span class="op">=</span> np.copy(c_start)</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> order <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>        c <span class="op">=</span> np.random.uniform(size<span class="op">=</span>order<span class="op">+</span><span class="dv">1</span>)     <span class="co"># random guess for starting point</span></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span>(c.size <span class="op">==</span> order<span class="op">+</span><span class="dv">1</span>)             <span class="co">#  check against conflicting info</span></span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> order</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"               Initial guess:    c = "</span> ,np.array_str(c, precision<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>    alpha <span class="op">=</span> np.ones(c.size)</span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(c.size):             <span class="co"># start with smaller alphas for higher powers of x</span></span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>        alpha[j] <span class="op">=</span> alpha_start<span class="op">*</span>(alpha_start_power)<span class="op">**</span>(j)   </span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>    MSE_old <span class="op">=</span> <span class="fl">1e99</span></span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="bu">iter</span> <span class="kw">in</span> <span class="bu">range</span>(maxiter<span class="op">+</span><span class="dv">1</span>):           <span class="co"># do the descent</span></span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(c.size): </span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a>            c[j] <span class="op">=</span> c[j] <span class="op">-</span> alpha[j] <span class="op">*</span> dMSEdcj(x_data,y_data,c,j)</span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a>            MSE_cur <span class="op">=</span> MSE(x_data,y_data,c)</span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (MSE_cur <span class="op">&gt;</span> MSE_old):         <span class="co"># adjust if runaway behavior starts</span></span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a>                alpha[j] <span class="op">*=</span> <span class="fl">0.3</span></span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="st">"     Notice: decreasing alpha["</span>,j,<span class="st">"] to "</span>,alpha[j])</span>
+<span id="cb19-52"><a href="#cb19-52" aria-hidden="true" tabindex="-1"></a>            MSE_old <span class="op">=</span> MSE_cur</span>
+<span id="cb19-53"><a href="#cb19-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-54"><a href="#cb19-54" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="dv">0</span> <span class="op">==</span> <span class="bu">iter</span> <span class="op">%</span> printevery):        <span class="co"># progress log</span></span>
+<span id="cb19-55"><a href="#cb19-55" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">'</span><span class="sc">{:4d}</span><span class="st">'</span>.<span class="bu">format</span>(<span class="bu">iter</span>),<span class="st">"/"</span>,maxiter,<span class="st">": MSE ="</span>,<span class="st">'</span><span class="sc">{:9.6g}</span><span class="st">'</span>.<span class="bu">format</span>(MSE_cur),</span>
+<span id="cb19-56"><a href="#cb19-56" aria-hidden="true" tabindex="-1"></a>                 <span class="st">", c = "</span>,np.array_str(c, precision<span class="op">=</span><span class="dv">3</span>),sep<span class="op">=</span><span class="st">''</span>)</span>
+<span id="cb19-57"><a href="#cb19-57" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">""</span>)</span>
+<span id="cb19-58"><a href="#cb19-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> c</span>
+<span id="cb19-59"><a href="#cb19-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-60"><a href="#cb19-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up input data </span></span>
+<span id="cb19-61"><a href="#cb19-61" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">100</span> </span>
+<span id="cb19-62"><a href="#cb19-62" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">2</span>)                                 <span class="co"># for reproducability </span></span>
+<span id="cb19-63"><a href="#cb19-63" aria-hidden="true" tabindex="-1"></a>x_data <span class="op">=</span> np.random.uniform(<span class="op">-</span><span class="fl">2.5</span>,<span class="dv">3</span>,size<span class="op">=</span>n)       <span class="co"># some random points for x</span></span>
+<span id="cb19-64"><a href="#cb19-64" aria-hidden="true" tabindex="-1"></a>c_data <span class="op">=</span> np.array([<span class="op">-</span><span class="dv">4</span>,<span class="op">-</span><span class="dv">3</span>,<span class="dv">5</span>,<span class="fl">.5</span>,<span class="op">-</span><span class="dv">2</span>,<span class="fl">.5</span>])           <span class="co"># params to generate data (5th-degree polynomial)</span></span>
+<span id="cb19-65"><a href="#cb19-65" aria-hidden="true" tabindex="-1"></a>y_data <span class="op">=</span> f(x_data, c_data)</span>
+<span id="cb19-66"><a href="#cb19-66" aria-hidden="true" tabindex="-1"></a>y_data <span class="op">+=</span> <span class="fl">0.02</span><span class="op">*</span>np.random.normal(size<span class="op">=</span>n)<span class="op">*</span>y_data    <span class="co"># add a (tiny) bit of noise</span></span>
+<span id="cb19-67"><a href="#cb19-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-68"><a href="#cb19-68" aria-hidden="true" tabindex="-1"></a><span class="co">#---- Perform Least Squares Fit </span></span>
+<span id="cb19-69"><a href="#cb19-69" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> polyfit(x_data, y_data, c_start<span class="op">=</span>c_data<span class="op">*</span>np.random.random(), maxiter<span class="op">=</span><span class="dv">500</span>)</span>
+<span id="cb19-70"><a href="#cb19-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-71"><a href="#cb19-71" aria-hidden="true" tabindex="-1"></a><span class="co">#----- Plot the results</span></span>
+<span id="cb19-72"><a href="#cb19-72" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_data_and_curve(x_data,y_data,axis_labels<span class="op">=</span>(<span class="st">'x'</span>,<span class="st">'y'</span>), ):</span>
+<span id="cb19-73"><a href="#cb19-73" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot the points</span></span>
+<span id="cb19-74"><a href="#cb19-74" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb19-75"><a href="#cb19-75" aria-hidden="true" tabindex="-1"></a>    ax.update({<span class="st">'xlabel'</span>:axis_labels[<span class="dv">0</span>], <span class="st">'ylabel'</span>:axis_labels[<span class="dv">1</span>]})</span>
+<span id="cb19-76"><a href="#cb19-76" aria-hidden="true" tabindex="-1"></a>    ax.plot(x_data,y_data,<span class="st">'o'</span>)</span>
+<span id="cb19-77"><a href="#cb19-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-78"><a href="#cb19-78" aria-hidden="true" tabindex="-1"></a>    <span class="co"># and plot the curve we fit</span></span>
+<span id="cb19-79"><a href="#cb19-79" aria-hidden="true" tabindex="-1"></a>    xlim <span class="op">=</span> ax.get_xlim()</span>
+<span id="cb19-80"><a href="#cb19-80" aria-hidden="true" tabindex="-1"></a>    x_line <span class="op">=</span> np.linspace(xlim[<span class="dv">0</span>],xlim[<span class="dv">1</span>],<span class="dv">100</span>)</span>
+<span id="cb19-81"><a href="#cb19-81" aria-hidden="true" tabindex="-1"></a>    y_line <span class="op">=</span> f(x_line, c)</span>
+<span id="cb19-82"><a href="#cb19-82" aria-hidden="true" tabindex="-1"></a>    ax.plot(x_line,y_line)</span>
+<span id="cb19-83"><a href="#cb19-83" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb19-84"><a href="#cb19-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-85"><a href="#cb19-85" aria-hidden="true" tabindex="-1"></a>plot_data_and_curve(x_data,y_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               Initial guess:    c =  [-3.52 -2.64  4.4   0.44 -1.76  0.44]
+     Notice: decreasing alpha[ 3 ] to  0.00729
+     Notice: decreasing alpha[ 4 ] to  0.002187
+     Notice: decreasing alpha[ 5 ] to  0.0006561
+   0/500: MSE =  258.233, c = [-5.438 -1.633  4.24   0.555 -1.904  0.765]
+     Notice: decreasing alpha[ 5 ] to  0.00019683
+  25/500: MSE = 0.529541, c = [-4.265 -1.545  5.668 -0.392 -2.146  0.612]
+  50/500: MSE = 0.424417, c = [-4.304 -1.808  5.659 -0.241 -2.137  0.595]
+  75/500: MSE = 0.335586, c = [-4.256 -2.034  5.552 -0.105 -2.115  0.578]
+ 100/500: MSE = 0.275848, c = [-4.212 -2.218  5.457  0.006 -2.096  0.564]
+ 125/500: MSE = 0.236521, c = [-4.175 -2.367  5.38   0.096 -2.08   0.553]
+ 150/500: MSE =  0.21068, c = [-4.146 -2.488  5.317  0.17  -2.068  0.544]
+ 175/500: MSE = 0.193702, c = [-4.122 -2.586  5.267  0.229 -2.058  0.537]
+ 200/500: MSE = 0.182549, c = [-4.103 -2.665  5.226  0.277 -2.049  0.531]
+ 225/500: MSE = 0.175222, c = [-4.087 -2.73   5.192  0.316 -2.042  0.526]
+ 250/500: MSE = 0.170408, c = [-4.075 -2.782  5.165  0.347 -2.037  0.522]
+ 275/500: MSE = 0.167245, c = [-4.064 -2.824  5.143  0.373 -2.033  0.519]
+ 300/500: MSE = 0.165167, c = [-4.056 -2.859  5.126  0.393 -2.029  0.516]
+ 325/500: MSE = 0.163802, c = [-4.049 -2.886  5.111  0.41  -2.026  0.514]
+ 350/500: MSE = 0.162905, c = [-4.044 -2.909  5.1    0.424 -2.024  0.513]
+ 375/500: MSE = 0.162316, c = [-4.039 -2.927  5.09   0.435 -2.022  0.511]
+ 400/500: MSE = 0.161929, c = [-4.036 -2.942  5.083  0.444 -2.02   0.51 ]
+ 425/500: MSE = 0.161675, c = [-4.033 -2.954  5.076  0.451 -2.019  0.509]
+ 450/500: MSE = 0.161508, c = [-4.031 -2.964  5.071  0.457 -2.018  0.508]
+ 475/500: MSE = 0.161398, c = [-4.029 -2.972  5.067  0.462 -2.017  0.508]
+ 500/500: MSE = 0.161326, c = [-4.027 -2.978  5.064  0.465 -2.017  0.507]
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-02-23-Following-Gravity-Colab_files/figure-html/cell-14-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Now, it turns out that polynomials are often <em>terrible</em> things to try to fit arbitrary data with, because they can ‘blow up’ as <span class="math inline">\(|x|\)</span> increases, and this causes instability. But for a variety of physics problems (see below), polynomials can be just what we’re after. Plus, that made a nice demonstration, for now.</p>
+<p>(For more general functions, I actually wrote a multi-parameter SymPy gradient-descient that is completely general, but it’s <em>terrifically slow</em> so I won’t be posting it here. If you really want it, contact me.)</p>
+</section>
+</section>
+<section id="learning-gravity" class="level2">
+<h2 class="anchored" data-anchor-id="learning-gravity">Learning Gravity</h2>
+<p>Ok. Now we’re all we’re going to do next is fit a parabola to the motion of a falling ball – and that’s supposed to tell us something deep about physics. Sounds silly, right? ‘Everybody’ knows objects moving in a gravitational field follow parabolas (both in space &amp; time); the more math-savvy may complain that we’re simply going to ‘get out of this’ what we ‘put into it.’</p>
+<p>Well, from a philosophical standpoint and from the way that these methods will generalize to other situations, there are significant implications from the <em>methodology</em> we’re about to follow.</p>
+<p><strong>The Challenge</strong>: Given a set of one-dimensional data of position vs.&nbsp;time <span class="math inline">\(y(t)\)</span>, can we find the underlying equation that gives rise to it? Better put, can we fit a model to it, and how well can we fit it, and what kind of model will it be anyway?</p>
+<p>(This is the sort of thing that statisticians <em>do</em>, but it’s also something physicists do, and one could argue, this is what <em>everybody</em> does <em>all the time</em>. )</p>
+<p>Let’s get started. I’m just going to specify y(t) at a series of <span class="math inline">\(n+1\)</span> time steps <span class="math inline">\(t_i\)</span> (<span class="math inline">\(t_0\)</span>…<span class="math inline">\(t_n\)</span>) and we’ll make them evenly spaced, and we’ll leave out any noise at all – perfect data. :-)</p>
+<div class="cell" data-outputid="e5ced6c1-56fe-4767-8302-51031b2f040a">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>g_exact <span class="op">=</span> <span class="fl">9.8</span>         <span class="co"># a physical parater we'll find a fit for</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>dt      <span class="op">=</span> <span class="fl">0.01</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>tmax    <span class="op">=</span> <span class="dv">1</span>         <span class="co"># number of time steps</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>t_data  <span class="op">=</span> np.arange(<span class="dv">0</span>,tmax,step<span class="op">=</span>dt)     <span class="co"># time values</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>nt <span class="op">=</span> t_data.size</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"dt = "</span>,dt,<span class="st">", nt = "</span>,nt)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>y0      <span class="op">=</span> <span class="fl">1.234</span>         <span class="co"># initial position, choose anything</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>v0      <span class="op">=</span> <span class="fl">3.1415</span>        <span class="co"># initial velocity</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="co">#assign the data</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>y_data  <span class="op">=</span> y0 <span class="op">+</span> v0<span class="op">*</span>t_data <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> g_exact <span class="op">*</span> t_data<span class="op">**</span><span class="dv">2</span>  </span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co"># y_data *= np.random.uniform(low=.9, high=1.1, size=(y_data.size)) # for later; add noise in</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>plot_data(t_data,y_data, axis_labels<span class="op">=</span>(<span class="st">'t'</span>,<span class="st">'y'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>dt =  0.01 , nt =  100</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-02-23-Following-Gravity-Colab_files/figure-html/cell-15-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Can we fit this with a polynomial? Sure, let’s do that, using the code from before…</p>
+<div class="cell" data-outputid="0f6ee99e-9d15-4d6c-c0ba-406990d530ca">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> polyfit(t_data, y_data, order<span class="op">=</span><span class="dv">2</span>, alpha_start <span class="op">=</span> <span class="fl">10.0</span>, maxiter<span class="op">=</span><span class="dv">1000</span>, printevery<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Our fit:          y(t) = "</span>,c[<span class="dv">0</span>],<span class="st">" + "</span>,c[<span class="dv">1</span>],<span class="st">"*t + "</span>,c[<span class="dv">2</span>],<span class="st">"*t**2"</span>,sep<span class="op">=</span><span class="st">''</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Compare to exact: y(t) = "</span>,y0,  <span class="st">" + "</span>,v0,  <span class="st">"*t - "</span>,<span class="fl">0.5</span><span class="op">*</span>g_exact,<span class="st">"*t**2"</span>,sep<span class="op">=</span><span class="st">''</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Estimate for g = "</span>,<span class="op">-</span><span class="dv">2</span><span class="op">*</span>c[<span class="dv">2</span>])</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>plot_data_and_curve(t_data,y_data, axis_labels<span class="op">=</span>(<span class="st">'t'</span>,<span class="st">'y'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               Initial guess:    c =  [ 0.72  0.71  0.77]
+   0/1000: MSE =  5.41899, c = [-2.186  7.319 -1.042]
+     Notice: decreasing alpha[ 0 ] to  3.0
+     Notice: decreasing alpha[ 0 ] to  0.9
+ 100/1000: MSE =0.0314071, c = [ 1.642  0.749 -2.528]
+ 200/1000: MSE =0.00280409, c = [ 1.356  2.427 -4.191]
+ 300/1000: MSE =0.000250355, c = [ 1.27   2.928 -4.688]
+ 400/1000: MSE =2.23522e-05, c = [ 1.245  3.078 -4.837]
+ 500/1000: MSE =1.99565e-06, c = [ 1.237  3.122 -4.881]
+ 600/1000: MSE =1.78176e-07, c = [ 1.235  3.136 -4.894]
+ 700/1000: MSE =1.59079e-08, c = [ 1.234  3.14  -4.898]
+ 800/1000: MSE =1.42029e-09, c = [ 1.234  3.141 -4.899]
+ 900/1000: MSE =1.26806e-10, c = [ 1.234  3.141 -4.9  ]
+1000/1000: MSE =1.13215e-11, c = [ 1.234  3.141 -4.9  ]
+
+Our fit:          y(t) = 1.23400775143 + 3.14145457517*t + -4.89995497009*t**2
+Compare to exact: y(t) = 1.234 + 3.1415*t - 4.9*t**2
+Estimate for g =  9.79990994018</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2017-02-23-Following-Gravity-Colab_files/figure-html/cell-16-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>What if we try fitting higher-order terms? Are their coefficients negligible? The system <em>may</em> converge, but it will take <em>a lot</em> more iterations… (be prepared to wait!)</p>
+<div class="cell" data-outputid="61d75112-6dcc-4088-b7c5-2c24d12b9f7a">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> polyfit(t_data, y_data, order<span class="op">=</span><span class="dv">3</span>, alpha_start <span class="op">=</span> <span class="fl">1.0</span>, maxiter<span class="op">=</span><span class="dv">700000</span>, printevery<span class="op">=</span><span class="dv">10000</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Our fit:          y(t) = "</span>,c[<span class="dv">0</span>],<span class="st">" + "</span>,c[<span class="dv">1</span>],<span class="st">"*t + "</span>,c[<span class="dv">2</span>],<span class="st">"*t**2 + "</span>,c[<span class="dv">3</span>],<span class="st">"*t**3"</span>,sep<span class="op">=</span><span class="st">''</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Compare to exact: y(t) = "</span>,y0,  <span class="st">" + "</span>,v0,  <span class="st">"*t - "</span>,<span class="fl">0.5</span><span class="op">*</span>g_exact,<span class="st">"*t**2"</span>,sep<span class="op">=</span><span class="st">''</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Estimate for g = "</span>,<span class="op">-</span><span class="dv">2</span><span class="op">*</span>c[<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               Initial guess:    c =  [ 0.33  0.23  0.63  0.41]
+   0/700000: MSE = 0.828106, c = [ 1.189 -0.045  0.563  0.398]
+     Notice: decreasing alpha[ 0 ] to  0.3
+10000/700000: MSE =0.000464818, c = [ 1.291  2.454 -3.188 -1.138]
+20000/700000: MSE =0.000369748, c = [ 1.285  2.528 -3.373 -1.015]
+30000/700000: MSE =0.000294122, c = [ 1.279  2.594 -3.538 -0.906]
+40000/700000: MSE =0.000233965, c = [ 1.275  2.654 -3.685 -0.808]
+50000/700000: MSE =0.000186111, c = [ 1.27   2.706 -3.817 -0.72 ]
+60000/700000: MSE =0.000148045, c = [ 1.266  2.753 -3.934 -0.642]
+70000/700000: MSE =0.000117765, c = [ 1.263  2.795 -4.038 -0.573]
+80000/700000: MSE =9.36783e-05, c = [ 1.26   2.833 -4.131 -0.511]
+90000/700000: MSE =7.4518e-05, c = [ 1.257  2.866 -4.214 -0.456]
+100000/700000: MSE =5.92766e-05, c = [ 1.254  2.896 -4.289 -0.407]
+110000/700000: MSE =4.71526e-05, c = [ 1.252  2.922 -4.355 -0.363]
+120000/700000: MSE =3.75083e-05, c = [ 1.25   2.946 -4.414 -0.323]
+130000/700000: MSE =2.98366e-05, c = [ 1.248  2.967 -4.466 -0.288]
+140000/700000: MSE =2.37341e-05, c = [ 1.247  2.986 -4.513 -0.257]
+150000/700000: MSE =1.88797e-05, c = [ 1.246  3.003 -4.555 -0.229]
+160000/700000: MSE =1.50182e-05, c = [ 1.244  3.018 -4.592 -0.205]
+170000/700000: MSE =1.19465e-05, c = [ 1.243  3.031 -4.626 -0.183]
+180000/700000: MSE =9.50301e-06, c = [ 1.242  3.043 -4.655 -0.163]
+190000/700000: MSE =7.55933e-06, c = [ 1.241  3.054 -4.682 -0.145]
+200000/700000: MSE =6.0132e-06, c = [ 1.24   3.063 -4.705 -0.129]
+210000/700000: MSE =4.7833e-06, c = [ 1.24   3.072 -4.726 -0.115]
+220000/700000: MSE =3.80496e-06, c = [ 1.239  3.079 -4.745 -0.103]
+230000/700000: MSE =3.02672e-06, c = [ 1.239  3.086 -4.762 -0.092]
+240000/700000: MSE =2.40766e-06, c = [ 1.238  3.092 -4.777 -0.082]
+250000/700000: MSE =1.91521e-06, c = [ 1.238  3.097 -4.79  -0.073]
+260000/700000: MSE =1.52349e-06, c = [ 1.237  3.102 -4.802 -0.065]
+270000/700000: MSE =1.21188e-06, c = [ 1.237  3.106 -4.813 -0.058]
+280000/700000: MSE =9.64014e-07, c = [ 1.237  3.11  -4.822 -0.052]
+290000/700000: MSE =7.66841e-07, c = [ 1.236  3.114 -4.83  -0.046]
+300000/700000: MSE =6.09997e-07, c = [ 1.236  3.117 -4.838 -0.041]
+310000/700000: MSE =4.85233e-07, c = [ 1.236  3.119 -4.845 -0.037]
+320000/700000: MSE =3.85987e-07, c = [ 1.236  3.122 -4.851 -0.033]
+330000/700000: MSE =3.0704e-07, c = [ 1.235  3.124 -4.856 -0.029]
+340000/700000: MSE =2.4424e-07, c = [ 1.235  3.126 -4.861 -0.026]
+350000/700000: MSE =1.94285e-07, c = [ 1.235  3.127 -4.865 -0.023]
+360000/700000: MSE =1.54547e-07, c = [ 1.235  3.129 -4.869 -0.021]
+370000/700000: MSE =1.22937e-07, c = [ 1.235  3.13  -4.872 -0.019]
+380000/700000: MSE =9.77925e-08, c = [ 1.235  3.132 -4.875 -0.017]
+390000/700000: MSE =7.77907e-08, c = [ 1.235  3.133 -4.878 -0.015]
+400000/700000: MSE =6.188e-08, c = [ 1.235  3.134 -4.88  -0.013]
+410000/700000: MSE =4.92235e-08, c = [ 1.235  3.134 -4.882 -0.012]
+420000/700000: MSE =3.91556e-08, c = [ 1.235  3.135 -4.884 -0.01 ]
+430000/700000: MSE =3.1147e-08, c = [ 1.234  3.136 -4.886 -0.009]
+440000/700000: MSE =2.47764e-08, c = [ 1.234  3.136 -4.887 -0.008]
+450000/700000: MSE =1.97088e-08, c = [ 1.234  3.137 -4.889 -0.007]
+460000/700000: MSE =1.56777e-08, c = [ 1.234  3.138 -4.89  -0.007]
+470000/700000: MSE =1.24711e-08, c = [ 1.234  3.138 -4.891 -0.006]
+480000/700000: MSE =9.92037e-09, c = [ 1.234  3.138 -4.892 -0.005]
+490000/700000: MSE =7.89133e-09, c = [  1.234e+00   3.139e+00  -4.893e+00  -4.691e-03]
+500000/700000: MSE =6.27729e-09, c = [  1.234e+00   3.139e+00  -4.894e+00  -4.184e-03]
+510000/700000: MSE =4.99338e-09, c = [  1.234e+00   3.139e+00  -4.894e+00  -3.731e-03]
+520000/700000: MSE =3.97207e-09, c = [  1.234e+00   3.139e+00  -4.895e+00  -3.328e-03]
+530000/700000: MSE =3.15965e-09, c = [  1.234e+00   3.140e+00  -4.896e+00  -2.968e-03]
+540000/700000: MSE =2.5134e-09, c = [  1.234e+00   3.140e+00  -4.896e+00  -2.647e-03]
+550000/700000: MSE =1.99932e-09, c = [  1.234e+00   3.140e+00  -4.896e+00  -2.361e-03]
+560000/700000: MSE =1.5904e-09, c = [  1.234e+00   3.140e+00  -4.897e+00  -2.106e-03]
+570000/700000: MSE =1.26511e-09, c = [  1.234e+00   3.140e+00  -4.897e+00  -1.878e-03]
+580000/700000: MSE =1.00635e-09, c = [  1.234e+00   3.140e+00  -4.897e+00  -1.675e-03]
+590000/700000: MSE =8.0052e-10, c = [  1.234e+00   3.141e+00  -4.898e+00  -1.494e-03]
+600000/700000: MSE =6.36787e-10, c = [  1.234e+00   3.141e+00  -4.898e+00  -1.332e-03]
+610000/700000: MSE =5.06543e-10, c = [  1.234e+00   3.141e+00  -4.898e+00  -1.188e-03]
+620000/700000: MSE =4.02939e-10, c = [  1.234e+00   3.141e+00  -4.898e+00  -1.060e-03]
+630000/700000: MSE =3.20524e-10, c = [  1.234e+00   3.141e+00  -4.899e+00  -9.454e-04]
+640000/700000: MSE =2.54967e-10, c = [  1.234e+00   3.141e+00  -4.899e+00  -8.432e-04]
+650000/700000: MSE =2.02818e-10, c = [  1.234e+00   3.141e+00  -4.899e+00  -7.520e-04]
+660000/700000: MSE =1.61335e-10, c = [  1.234e+00   3.141e+00  -4.899e+00  -6.707e-04]
+670000/700000: MSE =1.28336e-10, c = [  1.234e+00   3.141e+00  -4.899e+00  -5.982e-04]
+680000/700000: MSE =1.02087e-10, c = [  1.234e+00   3.141e+00  -4.899e+00  -5.335e-04]
+690000/700000: MSE =8.12072e-11, c = [  1.234e+00   3.141e+00  -4.899e+00  -4.758e-04]
+700000/700000: MSE =6.45976e-11, c = [  1.234e+00   3.141e+00  -4.899e+00  -4.244e-04]
+
+Our fit:          y(t) = 1.23402130221 + 3.1412436463*t + -4.89936171114*t**2 + -0.000424401050714*t**3
+Compare to exact: y(t) = 1.234 + 3.1415*t - 4.9*t**2
+Estimate for g =  9.79872342227</code></pre>
+</div>
+</div>
+<p>So, in this case, we were able to <em>show</em> not only that the data fits a parabola well, but that the higher order term (for <span class="math inline">\(t^3\)</span>) is negigible!! Great science! In practice, however, for non-perfect data, this does not work out. The higher-order term introduces an extreme sensitivity to the noise, which can render the results inconclusive.</p>
+<p><strong>Exercise:</strong> Go back to where the data is generated, and uncomment the line that says “# for later; add noise in” and re-run the fitting. You will find that the coefficients for the cubic polynomial do <em>not</em> resemble the original values found at all, whereas the coefficients for a quadratic polynomial, while not being the same as before, will still be “close.”</p>
+<p>Thus, by <em>hypothesizing</em> a parabolic dependence, we’re able to correctly deduce the parameters of the motion (initial position &amp; velocity, and acceleration), and we get a very low error in doing so. :-) Trying to show that higher-order terms in a polynomial expansion don’t contribute…that worked for “perfect data” but in a practical case it didn’t work out because polynomials are “ill behaved.” Still, we got some useful physics out of it. And that works for many applications. We could stop here.</p>
+<p>…although…</p>
+<p><em>What if our data wasn’t parabolic?</em> Sure, for motion in a uniform gravitational field this is fine, but what if we want to model the sinusoidal motion of a simple harmonic oscillator? In that case, guessing a parabola would only work for very early times (thanks to <a href="https://en.wikipedia.org/wiki/Taylor's_theorem">Taylor’s theorem</a>). Sure, we could fit a model where we’ve explictly put in a sine function in the code – and I encourage you to write your own code to do this – but perhaps there’s a way to <em>deduce</em> the motion, by looking at the local behavior and thereby ‘learning’ the differential equation underlying the motion.</p>
+<p><strong>Exercise:</strong> Copy the <code>polyfit()</code> code elsewhere (e.g.&nbsp;to text file or a new cell in this Jupyter notebook or a new notebook) and rename it <code>sinefit()</code>, and modify it to fit a sine function instead of a polynomial:</p>
+<p><span class="math display">\[y(t) = A\sin(\omega t + \phi),\]</span></p>
+where the fit parameters will be the amplitude <span class="math inline">\(A\)</span>, frequency <span class="math inline">\(\omega\)</span> and phase constant <span class="math inline">\(\phi\)</span>. Try fitting to data generated for <span class="math inline">\(A=3\)</span>, <span class="math inline">\(\omega=2\)</span>, <span class="math inline">\(\phi=1.57\)</span> on <span class="math inline">\(0\le t \le 10\)</span>. As an example, you can check your answer against <a href="http://hedges.belmont.edu/~shawley/PHY4410/sinefit_a3w2p1.57.png">this</a>. <br> <br>
+<div data-align="center">
+<i>The discussion goes on, but I’m breaking it off into a “Part Ib” for a separate post. In that post, we’ll switch from fitting the data “globally” to looking “locally,” in preparation for work in “Time Series Prediction.” </i>
+</div>
+<p>-SH</p>
+<hr>
+</section>
+<section id="afterward-alternatives-to-simple-gradient-descent" class="level2">
+<h2 class="anchored" data-anchor-id="afterward-alternatives-to-simple-gradient-descent">Afterward: Alternatives to “Simple” Gradient Descent</h2>
+<p>There are <em>lots</em> of schemes that incorporate more sophisticated approaches in order to achieve convergence more reliabily and more quickly than the “simple” gradient descent we’ve been doing.</p>
+<p>Such schemes introduce concepts such as “momentum” and go by names such as Adagrad, Adadelta, Adam, RMSProp, etc… For an excellent overview of such methods, I recommend <a href="http://sebastianruder.com/optimizing-gradient-descent/">Sebastian Ruder’s blog post</a> which includes some great animations!</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
