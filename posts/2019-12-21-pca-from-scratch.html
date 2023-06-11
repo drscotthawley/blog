@@ -194,7 +194,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           There are many tutorials on PCA, but this one has interactive 3D graphs!
         </div>
       </div>
-                </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">math</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -299,7 +302,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1>Covariance</h1>
 <p>If you’ve got two data dimensions and they vary together, then they are co-variant.</p>
 <p><strong>Example:</strong> Two-dimensional data that’s somewhat co-linear:</p>
-<div class="cell" data-execution_count="1">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
@@ -354,7 +357,7 @@ if (outputEl) {{
 <p>So, for just the <span class="math inline">\(x\)</span> component of the above data, there’s some <em>mean</em> value (which in this case is zero), and there’s some <em>variance</em> about this mean: technically <strong>the variance is the average of the squared differences from the mean.</strong> If you’re familiar with the standard deviation, usually denoted by <span class="math inline">\(\sigma\)</span>, the variance is just the square of the standard deviation. If <span class="math inline">\(x\)</span> had units of meters, the variance <span class="math inline">\(\sigma^2\)</span> would have units of meters^2.</p>
 <p>Think of the variance as the “spread,” or “extent” of the data, about some particular axis (or input, or “feature”).</p>
 <p>Similarly we can look at the variance in just the <span class="math inline">\(y\)</span> component of the data. For the above data, the variances in <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are</p>
-<div class="cell" data-execution_count="2">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Variance in x ="</span>,np.var(x))</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Variance in y ="</span>,np.var(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -369,7 +372,7 @@ Variance in y = 0.39082752915445373</code></pre>
 <p><span class="math display">\[{\rm Cov}(x,y) = {1\over N-1}\sum_{j=1}^N (x_j-\mu_x)(y_j-\mu_j),\]</span> where <span class="math inline">\(\mu_x\)</span> and <span class="math inline">\(\mu_y\)</span> are the means for the x- and y- componenets of the data, respectively. Note that you can reverse <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> and get the same result, and the covariance of a variable with itself is just the regular variance – but with one caveat!</p>
 <p>The caveat is that we’re dividing by <span class="math inline">\(N-1\)</span> instead of <span class="math inline">\(N\)</span>, so unlike the regular variance we’re not quite taking the mean. Why this? Well, for large datasets this makes essentially no difference, but for small numbers of data points, using <span class="math inline">\(N\)</span> can give values that tend to be a bit too small for most people’s tastes, so the <span class="math inline">\(N-1\)</span> was introduced to “reduce small sample bias.”</p>
 <p>In Python code, the covariance calculation looks like</p>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> covariance(a,b):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ( (a <span class="op">-</span> a.mean())<span class="op">*</span>(b <span class="op">-</span> b.mean()) ).<span class="bu">sum</span>() <span class="op">/</span> (<span class="bu">len</span>(a)<span class="op">-</span><span class="dv">1</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -389,7 +392,7 @@ Covariance of y with itself = 0.3947752819741957 , variance of x = 0.39082752915
 <h2 class="anchored" data-anchor-id="covariance-matrix">Covariance matrix</h2>
 <p>So what we do is we take the covariance of every variable with every variable (including itself) and make a matrix out of it. Along the diagonal will be the variance of each variable (except for that <span class="math inline">\(N-1\)</span> in the denominator), and the rest of the matrix will be the covariances. Note that since the order of the variables doesn’t matter when computing covariance, the matrix will be <em>symmetric</em> (i.e.&nbsp;it will equal its own transpose, i.e.&nbsp;will have a reflection symmetry across the diagonal) and thus will be a <em>square</em> matrix.</p>
 <p>Numpy gives us a handy thing to call:</p>
-<div class="cell" data-execution_count="4">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> np.stack((x,y),axis<span class="op">=</span><span class="dv">1</span>)   <span class="co"># pack the x &amp; y data together in one 2D array</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"data.shape ="</span>,data.shape)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>cov <span class="op">=</span> np.cov(data.T)   <span class="co"># .T b/c numpy wants varibles along rows rather than down columns?</span></span>
@@ -406,7 +409,7 @@ covariance matrix =
 <section id="some-3d-data-to-work-with" class="level1">
 <h1>Some 3D data to work with</h1>
 <p>Now that we know what a covariance matrix is, let’s generate some 3D data that we can use for what’s coming next. Since there are 3 variables or 3 dimensions, the covariance matrix will now be 3x3.</p>
-<div class="cell" data-execution_count="5">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> <span class="op">-</span><span class="fl">.5</span><span class="op">*</span>x <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>np.random.uniform(size<span class="op">=</span>N)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> np.stack((x,y,z)).T</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"data.shape ="</span>,data.shape)</span>
@@ -489,11 +492,11 @@ if (outputEl) {{
 <section id="how-to-find-the-eigenvectors-of-a-matrix" class="level1">
 <h1>How to find the eigenvectors of a matrix</h1>
 <p>You call a library routine that does it for you, of course! ;-)</p>
-<div class="cell" data-execution_count="6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy <span class="im">import</span> linalg <span class="im">as</span> LA</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>lambdas, vs <span class="op">=</span> LA.eig(cov)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>lambdas, vs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display">
 <pre><code>(array([2.23494234, 0.25770373, 0.04356613]),
  array([[-0.77200047, -0.44874891, -0.45015518],
         [-0.39455037, -0.21693649,  0.89289896],
@@ -535,7 +538,7 @@ det( \bf{A} - \lambda I) =
 <p>which has the 3 solutions (in descending order) <span class="math display">\[ \lambda = 3, 2, 1.\]</span></p>
 <p><small><em>(Aside: to create an integer matrix with integer eigenvalues, I used <a href="https://ericthewry.github.io/integer_matrices/">this handy web tool</a>)</em>.</small></p>
 <p>Just to check that against the numpy library:</p>
-<div class="cell" data-execution_count="7">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([[<span class="op">-</span><span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>],[<span class="op">-</span><span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>],[<span class="op">-</span><span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>]])</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sorted_eig(A):  <span class="co"># For now we sort 'by convention'. For PCA the sorting is key. </span></span>
@@ -546,7 +549,7 @@ det( \bf{A} - \lambda I) =
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>lambdas, vs <span class="op">=</span> sorted_eig(A)</span>
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>lambdas <span class="co"># hold off on printing out the eigenvectors until we do the next part!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div class="cell-output cell-output-display">
 <pre><code>(3.0000000000000013, 1.999999999999999, 1.0000000000000004)</code></pre>
 </div>
 </div>
@@ -586,7 +589,7 @@ v_{1z}\\
 <p><span class="math display">\[\lambda_2 = 2: \ \ \ \hat{v}_2 = (1/\sqrt{6},1/\sqrt{6},2/\sqrt{6})^T\]</span></p>
 <p><span class="math display">\[\lambda_3 = 1: \ \ \ \hat{v}_3 = (1,1,1)^T/\sqrt{3}\]</span></p>
 <p>Checking our answers (left) with numpy’s answers (right):</p>
-<div class="cell" data-execution_count="8">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">" "</span><span class="op">*</span><span class="dv">15</span>,<span class="st">"Ours"</span>,<span class="st">" "</span><span class="op">*</span><span class="dv">28</span>,<span class="st">"Numpy"</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.array([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>])<span class="op">/</span>np.sqrt(<span class="dv">6</span>), vs[:,<span class="dv">0</span>])</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.array([<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>])<span class="op">/</span>np.sqrt(<span class="dv">6</span>), vs[:,<span class="dv">1</span>])</span>
@@ -600,7 +603,7 @@ v_{1z}\\
 </div>
 <p>The fact that the first one differs by a multiplicative factor of -1 is not an issue. Remember: eigenvectors can be multiplied by an arbitrary constant. (Kind of odd that numpy doesn’t choose the positive version though!)</p>
 <p>One more check: let’s multiply our eigenvectors times A to see what we get:</p>
-<div class="cell" data-execution_count="9">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A*v_1 / 3 = "</span>,np.matmul(A, np.array([<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>]).T)<span class="op">/</span><span class="dv">3</span> ) <span class="co"># Dividing by eigenvalue </span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A*v_2 / 2 = "</span>,np.matmul(A, np.array([<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>]).T)<span class="op">/</span><span class="dv">2</span> ) <span class="co">#    to get vector back</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A*v_3 / 1 = "</span>,np.matmul(A, np.array([<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>]).T) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -615,7 +618,7 @@ A*v_3 / 1 =  [1 1 1]</code></pre>
 <section id="eigenvectors-for-our-sample-3d-dataset" class="level1">
 <h1>Eigenvectors for our sample 3D dataset</h1>
 <p>Recall we named our 3x3 covariance matrix ‘cov’. So now we’ll compute its eigenvectors, and then re-plot our 3D data and also plot the 3 eigenvectors with it…</p>
-<div class="cell" data-execution_count="10">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now that we know we can get the same answers as the numpy library, let's use it</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>lambdas, vs <span class="op">=</span> sorted_eig(cov)  <span class="co"># Compute e'vals and e'vectors of cov matrix </span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lambdas, vs =</span><span class="ch">\n</span><span class="st">"</span>,lambdas,<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>,vs)</span>
@@ -691,22 +694,22 @@ if (outputEl) {{
 <h2 class="anchored" data-anchor-id="projecting-the-data">Projecting the data</h2>
 <p>It’s actually not that big of a deal. All we have to do is multiply by the eigenvector (matrix)!</p>
 <p><strong>OH WAIT! Hey, you want to see a cool trick!?</strong> Check this out:</p>
-<div class="cell" data-execution_count="11">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>lambdas, vs <span class="op">=</span> sorted_eig(cov)  </span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>proj_cov <span class="op">=</span> vs.T <span class="op">@</span> cov <span class="op">@</span> vs   <span class="co"># project the covariance matrix, using eigenvectors</span></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>proj_cov</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
+<div class="cell-output cell-output-display">
 <pre><code>array([[2.23494234e+00, 1.70482998e-16, 2.02405702e-16],
        [5.45916585e-17, 2.57703730e-01, 1.33554659e-16],
        [2.12481941e-16, 1.73636845e-16, 4.35661297e-02]])</code></pre>
 </div>
 </div>
 <p>What was THAT? Let me clean that up a bit for you…</p>
-<div class="cell" data-execution_count="12">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>proj_cov[np.<span class="bu">abs</span>(proj_cov) <span class="op">&lt;</span> <span class="fl">1e-15</span>] <span class="op">=</span> <span class="dv">0</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>proj_cov</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="35">
+<div class="cell-output cell-output-display">
 <pre><code>array([[2.23494234, 0.        , 0.        ],
        [0.        , 0.25770373, 0.        ],
        [0.        , 0.        , 0.04356613]])</code></pre>
@@ -717,10 +720,10 @@ if (outputEl) {{
 <p>So really all we have to do is make a <em>coordinate transformation</em> using the matrix of eigenvectors, and then in order to project we’ll literally just <em>drop</em> a whole index’s-worth of data-dimension in this new coordinate system. :-)</p>
 <p>So, instead of <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span> and <span class="math inline">\(z\)</span>, let’s have three coordinates which (following physicist-notation) we’ll call <span class="math inline">\(q_1\)</span>, <span class="math inline">\(q_2\)</span> and <span class="math inline">\(q_3\)</span>, and these will run along the directions given by the three eigenvectors.</p>
 <p>Let’s write our data as a N-by-3 matrix, where N is the number of data points we have.</p>
-<div class="cell" data-execution_count="13">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> np.stack((x,y,z),axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>data.shape   <span class="co"># we had a 100 data points, so expecting 100x3 matrix </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="36">
+<div class="cell-output cell-output-display">
 <pre><code>(100, 3)</code></pre>
 </div>
 </div>
@@ -730,7 +733,7 @@ if (outputEl) {{
 <li>Truncate the last eigenvector, which will make a 3x2 projection matrix which will project the data onto the 2D plane defined by those two eigenvectors.</li>
 </ol>
 <p>Let’s show them both:</p>
-<div class="cell" data-execution_count="14">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st"> 1. All data, rotated into new coordinate system"</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>W <span class="op">=</span> vs[:,<span class="dv">0</span>:<span class="dv">3</span>]  <span class="co"># keep the all the eigenvectors</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>new_data_all <span class="op">=</span> data <span class="op">@</span> W  <span class="co"># project all the data </span></span>
@@ -770,7 +773,7 @@ New covariance matrix in projected space =
 </div>
 <p>…Nada. The 2nd method will be faster computationally though, because it doesn’t calculate stuff you’re going to throw away.</p>
 <p>One more comparison between the two methods. Let’s take a look at the “full” dataset (in blue) vs.&nbsp;the projected dataset (in red):</p>
-<div class="cell" data-execution_count="15">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>[(go.Scatter3d(x<span class="op">=</span>new_data_all[:,<span class="dv">0</span>], y<span class="op">=</span>new_data_all[:,<span class="dv">1</span>], z<span class="op">=</span>new_data_all[:,<span class="dv">2</span>],</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>        mode<span class="op">=</span><span class="st">'markers'</span>, marker<span class="op">=</span><span class="bu">dict</span>(size<span class="op">=</span><span class="dv">4</span>,opacity<span class="op">=</span><span class="fl">0.5</span>), name<span class="op">=</span><span class="st">"full data"</span> ))])</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>fig.add_trace(go.Scatter3d(x<span class="op">=</span>new_data_proj[:,<span class="dv">0</span>], y<span class="op">=</span>new_data_proj[:,<span class="dv">1</span>], z<span class="op">=</span>new_data_proj[:,<span class="dv">0</span>]<span class="op">*</span><span class="dv">0</span>,</span>
@@ -820,7 +823,7 @@ if (outputEl) {{
 <h2 class="anchored" data-anchor-id="example-handwritten-digits">Example: Handwritten Digits</h2>
 <p>The <a href="https://scikit-learn.org/stable/auto_examples/classification/plot_digits_classification.html">scikit-learn library</a> uses this as an example and I like it. It goes as follows: 1. Take a dataset of tiny 8x8 pixel images of handwritten digits. 2. Run PCA to break it down from 8x8=64 dimensions to just two or 3 dimensions. 3. Show on a plot how the different digits cluster in different regions of the space. 4. (This part we’ll save for the Appendix: Draw boundaries between the regions and use this as a classifier.)</p>
 <p>To be clear: In what follows, <em>each pixel</em> of the image counts as a “feature,” i.e.&nbsp;as a dimension. Thus an entire image can be represented as a single point in a multidimensional space, in which distance from the origin along each dimension is given by the pixel intensity. In this example, the input space is <em>not</em> a 2D space that is 8 units wide and 8 units long, rather it consists of 8x8= 64 dimensions.</p>
-<div class="cell" data-execution_count="16">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_digits </span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>digits  <span class="op">=</span> load_digits()</span>
@@ -885,7 +888,7 @@ This is supposed to be a '0':</code></pre>
 </div>
 </div>
 <p>Now let’s do the PCA thang… First we’ll try going down to 2 dimensions. This isn’t going to work super great but we’ll try:</p>
-<div class="cell" data-execution_count="17">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>digits_cov <span class="op">=</span> np.cov(X.T)</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"digits_cov.shape = "</span>,digits_cov.shape)</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>lambdas, vs <span class="op">=</span> sorted_eig(np.array(digits_cov)) </span>
@@ -934,7 +937,7 @@ if (outputEl) {{
 </div>
 </div>
 <p>This is ‘sort of ok’: There are some regions that are mostly one kind of digit. But you may say there’s there’s too much intermingling between classes for a lot of this plot. So let’s try it again with 3 dimensions for PCA:</p>
-<div class="cell" data-execution_count="18">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>W <span class="op">=</span> vs[:,<span class="dv">0</span>:<span class="dv">3</span>]  <span class="co"># just three dimensions</span></span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>proj_digits <span class="op">=</span> X <span class="op">@</span> W</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"proj_digits.shape = "</span>, proj_digits.shape)</span>
@@ -982,7 +985,7 @@ if (outputEl) {{
 <section id="graphing-variance-vs.-components" class="level2">
 <h2 class="anchored" data-anchor-id="graphing-variance-vs.-components">Graphing Variance vs.&nbsp;Components</h2>
 <p>Earlier we asked the question of how many components one should keep. To answer this quantitatively, we note that the eigenvalues of the covariance matrix are themselves measures of the variance in the datset. So these eigenvalues encode the ‘significance’ that each feature-dimension has in the overall dataset. We can plot these eigenvalues in order and then look for a ‘kink’ or ‘elbow’ in the graph as a place to truncate our representation…</p>
-<div class="cell" data-execution_count="19">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>plt.plot( np.<span class="bu">abs</span>(lambdas)<span class="op">/</span>np.<span class="bu">sum</span>(lambdas) )</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of components'</span>)</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Significance'</span>) </span>
@@ -1016,7 +1019,7 @@ if (outputEl) {{
 <section id="appendix-a-overkill-bigger-handwritten-digits" class="level1">
 <h1>Appendix A: Overkill: Bigger Handwritten Digits</h1>
 <p>Sure, 8x8 digit images are boring. What about 28x28 images, as in the <a href="http://yann.lecun.com/exdb/mnist/">MNIST dataset</a>? Let’s roll…</p>
-<div class="cell" data-execution_count="20">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#from sklearn.datasets import fetch_mldata</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> fetch_openml</span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> random <span class="im">import</span> sample </span>
@@ -1091,7 +1094,7 @@ The default value of `parser` will change from `'liac-arff'` to `'auto'` in 1.4.
 <p><img src="2019-12-21-PCA-From-Scratch_files/figure-html/cell-21-output-17.png" width="415" height="411"></p>
 </div>
 </div>
-<div class="cell" data-execution_count="21">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Like we did before... Almost the whole PCA method is the next 3 lines! </span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>mnist_cov <span class="op">=</span> np.cov(X2.T)</span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>lambdas, vs <span class="op">=</span> sorted_eig(np.array(mnist_cov))</span>
@@ -1147,7 +1150,7 @@ if (outputEl) {{
 </blockquote>
 <p><small>Making a efficient classifier is all about finding the <em>boundaries</em> between regions (and usually subject to some user-adjustable parameter like <span class="math inline">\(k\)</span> or some numerical threshold). Finding these boundaries can be about finding the ‘edge cases’ that cause the system to ‘flip’ (discontinuously) from one result to another. However, we are <em>not</em> going to make an efficient classifier today. ;-) </small></p>
 <p>Let’s go back to the 8x8 digits example, and split it into a training set and a testing set (so we can check ourselves):</p>
-<div class="cell" data-execution_count="22">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># random shuffled ordering of the whole thing</span></span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>indices <span class="op">=</span> sample(<span class="bu">list</span>(<span class="bu">range</span>(X.shape[<span class="dv">0</span>])), X.shape[<span class="dv">0</span>])</span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>X_shuf, Y_shuf <span class="op">=</span> X[indices,:], Y[indices]</span>
@@ -1168,7 +1171,7 @@ if (outputEl) {{
 <span id="cb54-18"><a href="#cb54-18" aria-hidden="true" tabindex="-1"></a>proj_test <span class="op">=</span> X_test <span class="op">@</span> W_train   <span class="co"># yes, same W_train </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now let’s make a little k-nearest neighbors routine…</p>
-<div class="cell" data-execution_count="23">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> knn_predict(xnew, proj_train, Y_train, k<span class="op">=</span><span class="dv">3</span>):</span>
@@ -1198,7 +1201,7 @@ if (outputEl) {{
 </div>
 </div>
 <p>Now let’s try it for the ‘unseen’ data in the testing set, and see how we do…</p>
-<div class="cell" data-execution_count="24">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>mistakes, n_test <span class="op">=</span> <span class="dv">0</span>, Y_test.shape[<span class="dv">0</span>]</span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_test):</span>
 <span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> proj_test[i]</span>

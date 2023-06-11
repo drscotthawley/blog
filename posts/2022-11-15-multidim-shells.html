@@ -176,7 +176,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           Given enough dimensions, does it really matter which distance norm you use?
         </div>
       </div>
-                </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">ssl</div>
+                <div class="quarto-category">math</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -221,7 +225,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <p>Some of us are still not accustomed to thinking in terms of very high numbers of dimensions – myself included. Earlier this year, I made a post on <a href="https://drscotthawley.github.io/blog/2022/01/24/MultiDim-DotProducts.html">vector orthogonality in high-dimensional spaces</a>.</p>
 <p>This post is about the <em>volume</em> of high-dimensional spaces. Even in two dimensions, you may be aware of facts such as that <strong>a 20-inch pizza has more than twice the area of a 14-inch pizza</strong>:</p>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Areas ="</span>,[<span class="fl">3.14</span><span class="op">*</span>r<span class="op">**</span><span class="dv">2</span> <span class="cf">for</span> r <span class="kw">in</span> [<span class="dv">14</span>, <span class="dv">20</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Areas in square inches = [615.44, 1256.0]</code></pre>
@@ -233,7 +237,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Let’s consider the <a href="https://en.wikipedia.org/wiki/Volume_of_an_n-ball">volume of a multidimensional “n-ball”</a> of dimension <span class="math inline">\(n\)</span> and radius <span class="math inline">\(r\)</span>, which is given by this recurrence relation: <span class="math display">\[ {\displaystyle V_{n}(r)={\begin{cases}1&amp;{\text{if }}n=0,\\[0.5ex]2r&amp;{\text{if }}n=1,\\[0.5ex]{\dfrac {2\pi }{n}}r^{2}\times V_{n-2}(r)&amp;{\text{otherwise}}.\end{cases}}} \]</span></p>
 <p>So, for example, <span class="math inline">\(V_2(r) = \pi r^2\)</span>, <span class="math inline">\(V_3(r) = {2\pi\over 3}r^2\times 2r = {4\over 3}\pi r^3\)</span>,…and so on.</p>
 <p>Let’s consider the <em>percentage of the total</em> volume for a shell of thickness <span class="math inline">\(\Delta r\)</span>, as a function of both <span class="math inline">\(r\)</span> and <span class="math inline">\(n\)</span>. In the following we’re going to plot <span class="math inline">\(V_n(r+\Delta r) - V_n(r)\)</span> as we vary <span class="math inline">\(n\)</span>, and let’s take steps of size <span class="math inline">\(\Delta r\)</span> = r/10 and let <span class="math inline">\(n=2,3,4\)</span>…</p>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -262,7 +266,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>If we go to larger numbers of dimensions, we see that almost the entire volume is made up of a thin shell near the perimeter:</p>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>plot_fractions([<span class="dv">10</span>,<span class="dv">25</span>,<span class="dv">50</span>,<span class="dv">100</span>], dr<span class="op">=</span><span class="dv">1</span><span class="op">/</span><span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="2022-11-15-MultiDim-Shells_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
@@ -276,7 +280,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="hold-up.-an-n-ball-of-uniform-density-how-relevant-is-that">Hold up. “An n-ball of uniform density”: How relevant is that?</h2>
 <p>That depends.</p>
 <p>Previously we were imagining just the volume of the n-ball itself, then we imagined it being populated “uniformly” by data points. But is that likely to happen? In other words, if we’ve got <span class="math inline">\(n\)</span> random variables that are each uniformly distributed on <span class="math inline">\([0..1]\)</span>, then are we saying that the average radius (or distance from the origin) is going to be close to 1? Uh…. let’s check:</p>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> [<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">10</span>,<span class="dv">20</span>]:</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> np.random.rand(n)  <span class="co"># some random vector</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"n = </span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">, distance = </span><span class="sc">{</span>np<span class="sc">.</span>sqrt(np.<span class="bu">sum</span>(x<span class="op">**</span><span class="dv">2</span>))<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -291,7 +295,7 @@ n = 20, distance = 2.9421432188892176</code></pre>
 <p>…so, no. We can actually get greater distances than 1 this way. That means that such points are <strong>not within the unit n-ball</strong>.</p>
 <p>But what if these are the kinds of points we’re mostly likely to get in our Data Science and Deep Learning investigations? That depends on our data, and how it may (or may not) be normalized.</p>
 <p>If we have such random, independent variables, which may lie outside the unit n-ball, what can we say about their distances? Well, the above list of outputs were were just <em>one vector</em> for each dimension. Let’s take a look a a number (…ah we can’t use the letter <span class="math inline">\(n\)</span>, let’s say) <span class="math inline">\(m\)</span> random vectors in <span class="math inline">\(n\)</span> dimensions…</p>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ns <span class="op">=</span>  [<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">10</span>,<span class="dv">32</span>,<span class="dv">64</span>,<span class="dv">128</span>,<span class="dv">256</span>,<span class="dv">512</span>,<span class="dv">1024</span>,<span class="dv">2048</span>] <span class="co"># number of dimensions</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="dv">1000</span>  <span class="co"># number of random vectors in each dimension</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>avg_distances <span class="op">=</span> []</span>
@@ -316,7 +320,7 @@ n = 2048, avg distance from origin = 26.135526554018735</code></pre>
 </div>
 </div>
 <p>It kind of looks like a (sideways) parabola!</p>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>plt.plot(ns,avg_distances, label<span class="op">=</span><span class="st">'avg_distance'</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>plt.plot(ns, np.sqrt(np.array(ns)<span class="op">/</span><span class="dv">3</span>), <span class="st">'--'</span>, label<span class="op">=</span><span class="st">'$\sqrt</span><span class="sc">{n}</span><span class="st">/3$'</span>) <span class="co"># what if we also plot sqrt(n)* a constant? </span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
@@ -332,7 +336,7 @@ n = 2048, avg distance from origin = 26.135526554018735</code></pre>
 <p><span class="math display">\[ {\rm softmax}(x_i) = {e^{x_i} \over \sum_j e^{x_j}},\]</span></p>
 <p>which will force them to have unit magnitude according to the L1 norm or “<a href="https://en.wikipedia.org/wiki/Taxicab_geometry">Manhattan Distance</a>” which was the subject of <a href="https://drscotthawley.github.io/blog/scottergories/2021/05/04/The-Joy-Of-3D.html">earlier investigations in this blog</a>.</p>
 <p>So, what we’ll do is we’ll choose random variables on some interval – but will they be uniform, Gaussian, or some other choice? – and then softmax them, and then have a look at their distance from the origin, and <strong>then, more importantly, their distances from each other</strong>.</p>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> softmax(x):</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    xmax <span class="op">=</span> np.<span class="bu">max</span>(x) <span class="co"># this little trick can help with numerical accuracy</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.exp(x<span class="op">-</span>xmax) <span class="op">/</span> np.<span class="bu">sum</span>(np.exp(x <span class="op">-</span> xmax))</span>

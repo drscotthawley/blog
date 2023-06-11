@@ -180,7 +180,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           Now that we understand contrastive losses and what they’re good for – let’s get rid of them!
         </div>
       </div>
-                </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">ssl</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -372,7 +375,7 @@ And then SimCLR came along and introduced an additional mapping function akin to
 <p><span class="math display">\[\mathcal{L}_{\theta\xi} = 2 - 2\cdot\frac{\langle q_\theta(z_\theta),  z'_\xi \rangle }{\big\|q_\theta(z_\theta)\big\|_2\cdot \big\|z'_\xi\big\|_2  }
 \]</span></p>
 <p>If that reminds you of a cosine similarity – good, because that’s exactly what it is. See, the graph of <span class="math inline">\(2(1-\cos x)\)</span> has a nice minimum when its argument is zero, kind of like a parabola on a certain domain:</p>
-<p>::: {.cell 0=‘h’ 1=‘i’ 2=‘d’ 3=‘e’ vscode=‘{“languageId”:“python”}’}</p>
+<p>::: {.cell 0=‘h’ 1=‘i’ 2=‘d’ 3=‘e’}</p>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span>np.pi, np.pi,num<span class="op">=</span><span class="dv">100</span>)</span>
@@ -397,21 +400,21 @@ And then SimCLR came along and introduced an additional mapping function akin to
 <section id="lets-go-quick-implemenation-for-images" class="level2">
 <h2 class="anchored" data-anchor-id="lets-go-quick-implemenation-for-images">Let’s Go! Quick Implemenation for Images</h2>
 <p>In a later post we can talk about writing our own implmentation from scratch (e.g.&nbsp;for something other than images, such as audio). But to just get started with all this, what better place to start a coding implementation than <a href="https://github.com/lucidrains/byol-pytorch">lucidrains’ repository</a>? It’s super easy to install:</p>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>pip <span class="op">-</span>qq install byol<span class="op">-</span>pytorch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Note: you may need to restart the kernel to use updated packages.</code></pre>
 </div>
 </div>
 <p>…and we can just “tack it on” to whatever network/task we might have. He provides a sample use case in his README which we’ll modify slightly. First, he sets up a simple test using random images, which we’ll run a version of now:</p>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> byol_pytorch <span class="im">import</span> BYOL </span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision <span class="im">import</span> models, transforms, datasets</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> DataLoader</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tqdm.notebook <span class="im">import</span> tqdm_notebook</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>resnet <span class="op">=</span> models.resnet50(weights<span class="op">=</span><span class="va">True</span>) <span class="co"># this will download resnet50 weights. </span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">'cuda'</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">'mps'</span> <span class="cf">if</span> torch.backends.mps.is_available() <span class="cf">else</span> <span class="st">'cpu'</span>)</span>
@@ -445,7 +448,7 @@ And then SimCLR came along and introduced an additional mapping function akin to
 </div>
 <p>Great! It works!</p>
 <p>Now, rather than using random images, we’ll use Fashion-MNIST. Let’s get the data…</p>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>training_data <span class="op">=</span> datasets.FashionMNIST(</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    root<span class="op">=</span><span class="st">"data"</span>,</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    train<span class="op">=</span><span class="va">True</span>,</span>
@@ -459,7 +462,7 @@ And then SimCLR came along and introduced an additional mapping function akin to
 <p>And… we should note that we don’t <em>have</em> to use ResNet50 – in fact, we don’t have to use ResNet-Anything! We could specify some other model, which for our dataset, a very simple model could suffice.</p>
 <p>And/or, rather than a classifcation model, we could choose something like a U-Net, and then try to get the “interior” represenation of the U-Net to offer a more interesting represenation than it otherwise might.</p>
 <p>For now, just to avoid having to deviate from lucidrains’ demo much, we will stick with pretrained ResNet and just “drop down” in complexity to <code>resnet18</code>:</p>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>resnet <span class="op">=</span> models.resnet18(weights<span class="op">=</span><span class="va">True</span>) <span class="co"># reset resnet weights. </span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>learner <span class="op">=</span> BYOL(</span>
@@ -518,7 +521,7 @@ And then SimCLR came along and introduced an additional mapping function akin to
 <p>the name (or index) of the hidden layer, whose output is used as the latent representation used for self-supervised training.</p>
 </blockquote>
 <p>…So we specified the layer named “<code>avgpool</code>” as the layer of our network <code>resnet</code> whose activations will serve as our learned representations. We can print out the names of the layers to see where <code>avgpool</code> is (look way near the bottom):</p>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>resnet</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <pre><code>ResNet(
@@ -608,7 +611,7 @@ And then SimCLR came along and introduced an additional mapping function akin to
 </div>
 </div>
 <p>So pretty much all the way at the end, just before the last Linear layer. Let’s see how we can get these layer outputs / activations:</p>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get some mo' images</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>images, labels <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(train_dataloader))</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>images <span class="op">=</span> images.to(device).tile([<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">1</span>,<span class="dv">1</span>]) <span class="co"># put on GPU &amp; create RGB from greyscale</span></span>
@@ -618,7 +621,7 @@ And then SimCLR came along and introduced an additional mapping function akin to
 </div>
 </div>
 <p>One way is to use some code we can find in lucidrains’ source code…</p>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>reps <span class="op">=</span> learner.online_encoder.get_representation(images)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>reps.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -626,7 +629,7 @@ And then SimCLR came along and introduced an additional mapping function akin to
 </div>
 </div>
 <p>But the ‘classic’ way to do this in PyTorch is to <a href="https://discuss.pytorch.org/t/how-can-l-load-my-best-model-as-a-feature-extractor-evaluator/17254/6">register a “forward hook”</a>, as in:</p>
-<div class="cell" data-vscode="{&quot;languageId&quot;:&quot;python&quot;}">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>activation <span class="op">=</span> {}</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_activation(name):</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> hook(model, <span class="bu">input</span>, output):</span>

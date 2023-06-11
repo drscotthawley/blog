@@ -176,7 +176,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           Depends on whether you’re using unit vectors or not.
         </div>
       </div>
-                </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">ssl</div>
+                <div class="quarto-category">math</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -230,13 +234,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The answer <strong>depends on whether you’re talking about unit vectors or not</strong>.</p>
 <p>More to the point, it depends on the context in which the above nugget of wisdom is being applied, and on not so much orthogonality per se as what we might call “near orthogonality”: Are we interested in cases when the <strong>dot product</strong> is nearly zero, or when the <strong>cosine</strong> of the angle between the vectors is nearly zero? (In the case of exact orthogonality, the dot product and cosine are both exactly zero.) The latter statement is equivalent to restricting attention to unit vectors, and also is isomorphic to considering the Pearson correlation coefficient between two random signals.</p>
 <p>Let’s do some direct computations. We’ll vary the number of dimensions and compute a bunch of dot products between random vectors, and then plot histograms of these dot product values. The sharper the distribution is around the value of zero, the more likely it is for vectors to be orthogonal.</p>
-<div class="cell" data-execution_count="1">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#all_slow</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="general-setup" class="level2">
 <h2 class="anchored" data-anchor-id="general-setup">General Setup</h2>
 <p>Imports and global settings</p>
-<div class="cell" data-execution_count="17">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># General Setup</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -253,7 +257,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="utility-routines" class="level2">
 <h2 class="anchored" data-anchor-id="utility-routines">Utility Routines</h2>
 <p>Define some functions that we’re likely to use multiple times.</p>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#show_hide </span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Utility routines </span></span>
@@ -305,7 +309,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="uniform-distribution-non-unit-vectors" class="level2">
 <h2 class="anchored" data-anchor-id="uniform-distribution-non-unit-vectors">Uniform distribution, Non-Unit Vectors</h2>
 <p>These will be vectors that fill a hypercube, i.e.&nbsp;each component can take on a value on [-1…1].</p>
-<div class="cell" data-execution_count="4">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> <span class="st">"Uniform distribution, Non-Unit Vectors"</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sds, axes, fig <span class="op">=</span>  make_plot(title<span class="op">=</span>title)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>results.append({<span class="st">'label'</span>: title, <span class="st">'sds'</span>: sds})  <span class="co"># save for later</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -317,7 +321,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="uniform-distribution-unit-vectors" class="level2">
 <h2 class="anchored" data-anchor-id="uniform-distribution-unit-vectors">Uniform distribution, Unit vectors</h2>
-<div class="cell" data-execution_count="5">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> <span class="st">"Uniform distribution, Unit vectors"</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sds, axes, fig <span class="op">=</span> make_plot(title<span class="op">=</span>title, normalize<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span><span class="st">'orange'</span>, xlim<span class="op">=</span>[<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>])</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>results.append({<span class="st">'label'</span>: title, <span class="st">'sds'</span>: sds})  <span class="co"># save for later</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -326,7 +330,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>Wait, back up! Those orange graphs remind me of a beta distribution. Can we fit that? Let’s try…</p>
-<div class="cell" data-execution_count="6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fit_beta(axes):</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">100</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i,ax <span class="kw">in</span> <span class="bu">enumerate</span>(axes):</span>
@@ -337,7 +341,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        </span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>fit_beta(axes)</span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>fig</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div class="cell-output cell-output-display">
 <p><img src="2022-01-24-MultiDim-DotProducts_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
 </div>
 </div>
@@ -348,7 +352,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="normal-distribution-non-unit-vectors" class="level2">
 <h2 class="anchored" data-anchor-id="normal-distribution-non-unit-vectors">Normal Distribution, Non-Unit Vectors</h2>
-<div class="cell" data-execution_count="7">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> <span class="st">"Normal distribution, Non-Unit Vectors"</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>sds, axes, fig <span class="op">=</span>  make_plot(title<span class="op">=</span>title, rand_func<span class="op">=</span>np.random.normal)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>results.append({<span class="st">'label'</span>: title, <span class="st">'sds'</span>: sds})  <span class="co"># save for later</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -360,7 +364,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="normal-distribution-unit-vectors" class="level2">
 <h2 class="anchored" data-anchor-id="normal-distribution-unit-vectors">Normal distribution, Unit Vectors</h2>
-<div class="cell" data-execution_count="8">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> <span class="st">"Normal distribution, Unit vectors"</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sds, axes, fig <span class="op">=</span> make_plot(title<span class="op">=</span>title, rand_func<span class="op">=</span>np.random.normal,</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                           normalize<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span><span class="st">'orange'</span>, xlim<span class="op">=</span>[<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>])</span>
@@ -389,7 +393,7 @@ Note
 <h2 class="anchored" data-anchor-id="softmax-vectors">“Softmax Vectors”</h2>
 <p>If the vectors all have positive coefficients, e.g.&nbsp;because they are the output of a softmax function, then there’s no way they can be orthogonal. We might ask, what’s the most common value for the dot product?</p>
 <p>(Note that these are not unit vectors according to the L2/“Euclidean” norm, rather they are unit vectors according to an L1/“Manhattan distance” norm).</p>
-<div class="cell" data-execution_count="9">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> <span class="st">"Softmax vectors, not unit in L2"</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sds, axes, fig <span class="op">=</span> make_plot(title<span class="op">=</span>title, normalize<span class="op">=</span><span class="va">False</span>, softmax_them<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span><span class="st">'red'</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>results.append({<span class="st">'label'</span>: title, <span class="st">'sds'</span>: sds})  <span class="co"># save for later</span></span>
@@ -407,7 +411,7 @@ Note
 <section id="cosine-similarity-for-softmax-vectors" class="level2">
 <h2 class="anchored" data-anchor-id="cosine-similarity-for-softmax-vectors">Cosine Similarity for Softmax Vectors</h2>
 <p>What about the cosine between the vectors we just did? That’s equivalent to normalizing the softmax vectors according to an L2/Eucliean norm. Here we go:</p>
-<div class="cell" data-execution_count="10">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> <span class="st">"Cosine Similarity for Softmax"</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>sds, axes, fig <span class="op">=</span> make_plot(title<span class="op">=</span>title, normalize<span class="op">=</span><span class="va">True</span>, softmax_them<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span><span class="st">'purple'</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>results.append({<span class="st">'label'</span>: title, <span class="st">'sds'</span>: sds})  <span class="co"># save for later</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -416,7 +420,7 @@ Note
 </div>
 </div>
 <p>…yeah I dunno ’bout that. Seems to be approaching a number a bit larger than 0.76. ?? I can’t immediately think any “special” number that matches that (e.g., it’s too low to be <span class="math inline">\(\pi\)</span>/4 and much too high to be <span class="math inline">\(1/\sqrt{2}\)</span>). Let’s keep going to higher dimensions and see what the mean converges to:</p>
-<div class="cell" data-execution_count="11">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let's keep going higher</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>new_dims <span class="op">=</span> [<span class="dv">10000</span>,<span class="dv">20000</span>,<span class="dv">50000</span>]</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dim <span class="kw">in</span> new_dims:</span>
@@ -434,9 +438,9 @@ Note
 </div>
 </div>
 <p>Likely candidate special number is the hyperbolic tangent of 1:</p>
-<div class="cell" data-execution_count="12">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>np.tanh(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div class="cell-output cell-output-display">
 <pre><code>0.7615941559557649</code></pre>
 </div>
 </div>
@@ -446,7 +450,7 @@ Note
 <h2 class="anchored" data-anchor-id="summary">Summary</h2>
 <p>In all cases, the mode of the distribution is still at zero dot product. So we can say with confidence that vectors are most likely to be (near-)orthogonal regardless of the dimensionality. However we see that although for unit vectors the distribution of dot product values gets sharper (around zero) as the number of dimensions increases, for non-unit vectors it gets <em>flatter</em>, i.e.&nbsp;betting on orthogonality becomes increasinly less of a safe bet as you go to higher dimensions.</p>
 <p>The following graph summarizes our results, in terms of the standard deviation of the distribution of dot product values:</p>
-<div class="cell" data-execution_count="16">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(results)):</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    marker, markersize <span class="op">=</span> (<span class="st">'s-'</span>,<span class="dv">12</span>) <span class="cf">if</span> k<span class="op">==</span><span class="dv">1</span> <span class="cf">else</span> (<span class="st">'o-'</span>,<span class="dv">11</span>)</span>

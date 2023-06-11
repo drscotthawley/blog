@@ -181,6 +181,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       </div>
                           <div class="quarto-categories">
                 <div class="quarto-category">scottergories</div>
+                <div class="quarto-category">ssl</div>
               </div>
                   </div>
   </div>
@@ -263,7 +264,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>People who are not mathematicians, physicists, data scientists, etc. may be unaccustomed to this talk of “dimensions” when dealing with data. Let’s dive in to the specific case of <em>three-class classification</em>. Say we’re developing a computer program to guess (“predict”) whether a given image contains a cat, a dog, or a horse. Traditionally the “ground truth” or “target” values are expressed as “one hot encoded” vectors, such as…</p>
 <pre>   cat: (1,0,0)           dog: (0,1,0)         horse: (0,0,1)</pre>
 <p>Then given an image of an animal, our neural network model will produce a set of 3 probabilities for each class, say…</p>
-<div class="cell" data-outputid="8ba16454-1046-4075-f5d2-3e2b0275b111">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
@@ -460,7 +461,7 @@ Note
 <p>These numbers can be viewed as the strength of an attribute in an image, e.g.&nbsp;measures of cat-ness, dog-ness, and horse-ness (or measure of the likelihood of being a cat, dog, or horse, respectively), where a value of 1 means 100% of that property. Notice in each case, the three “class” probabilities add up to 1. This is always the case: probabilities always have to sum up to 1, i.e.&nbsp;1 is “100% certainty” that gets split among the 3 classes. (This summing to 1 is an important property that we’ll come back to in a bit.)</p>
 <p>One thing that scientists like to do is take different variables and view them as <em>coordinates of a single point in a multi-dimensional space</em>. So for 3 classes we have 3 coordinates for 3 dimensions. We could make the “cat-ness” prediction probability be the “x” coordinate, and “dog-ness” be the “y” values, and “horse-ness” could be along the “z” axis. Then instead of drawing bar graphs, we could plot points in 3D space, where the coordinates of each point tell us the predictions:</p>
 <p><em>All the 3D plots in this post can be rotated &amp; zoomed with the mouse or your finger. Try it!</em></p>
-<div class="cell" data-outputid="06b3e417-7da6-4c3c-a488-ad1d1e44e111">
+<div class="cell">
 <div class="cell-output cell-output-display">
 
 
@@ -517,7 +518,7 @@ if (outputEl) {{
 <p>(Here we also used the 3 class probabilities to set the R,G,B color values of the points. There’s no new information contained in this; it just looks cool.)</p>
 <p>What scientists tend to do is, even in cases where there are more then 3 variables (say, 10), we regard these as dimensions in some fancy abstract mathematical space where the laws may or may not conform to those of our universe – for example, the idea of “distance” may be totally up for grabs. In cases where the number of values is infinite (say, as coefficients in a infinite series, or as a function of a continuous variable) we might even work in <em>infinite</em> dimensions! Often when we talk like this, it doesn’t mean that we’re actually picturing geometrical spaces in our heads – we can’t, for anything beyond 3 dimensions – but it’s a handy way of encapsulating a particular way of viewing the data or functions involved. And sometimes we <em>do</em> try to see what kinds of geometrical insights we can glean – which is what we’re going to do here!</p>
 <p>Remember when we said that the individual class probabilities have to add up to 1? Look what happens when we plot a <em>lot</em> of such points…</p>
-<div class="cell" data-outputid="b8c3c7c0-31d2-4c21-bbb0-a8bf3072fcfa">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>prob, targ <span class="op">=</span> calc_prob(n<span class="op">=</span><span class="dv">400</span>)</span>
@@ -590,7 +591,7 @@ Note
 </div>
 </div>
 <p>We can color the points by their expected class values by choosing the triangle point (or “pole”) that they’re nearest to – i.e.&nbsp;by which “bar” is largest among the class probabilities. And we can include the boundaries between classes:</p>
-<div class="cell" data-outputid="e989827c-7ef7-444a-935b-cb3adda9e795">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>TrianglePlot3D_Plotly(prob, targ<span class="op">=</span>targ, labels<span class="op">=</span>labels, show_bounds<span class="op">=</span><span class="va">True</span>).do_plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -656,7 +657,7 @@ if (outputEl) {{
 <p><strong><em>(Optional) Math Trivia:</em></strong> <em>Typically this would involve calculating a coordinate transformation either by hand or using something like PCA to do it for us, but in this case there’s a simple “hack” transformation that will get us from <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span>, and <span class="math inline">\(z\)</span> in 3D to our 2D coordinates <span class="math inline">\(x'\)</span> and <span class="math inline">\(y'\)</span></em>: <span class="math display">\[ x' = y - x,\ \ \ \ \ \ \ y' = z \]</span></p>
 </blockquote>
 <p>In a 2D version of our triangle plot, we can even enable “image tooltips” so that when the mouse hovers over a datapoint, you can see the image it represents:</p>
-<div class="cell" data-outputid="6f117698-08ae-46ab-e01e-2a0a16c76372">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>urls <span class="op">=</span> exhibit_urls(targ, labels)</span>
@@ -1009,7 +1010,7 @@ if (outputEl) {{
 <section id="how-traditional-nn-classification-training-proceeds" class="level2">
 <h2 class="anchored" data-anchor-id="how-traditional-nn-classification-training-proceeds">How Traditional NN Classification Training Proceeds</h2>
 <p>When we start training our classifier, the data (points) get mapped all over the place; it’s a big jumble. The classifier will ultimately be scored by how many points lie on the “correct side of the line” for the class boundaries, but that’s a discontinuous (either-or) criterion that’s no good for training neural networks. So instead we use a loss function and a gradient descent on this loss function to try to <em>minimize the distance</em> from the mapped point to the “pole” of the target class point. In other words, training proceeds by trying to <em>collapse all the data points</em> onto the 3 (or 4) points corresponding to 100% certainty about each class prediction: The following a cartoon example time-lapse of ten training steps (we’ll show <em>real</em> NN training in <a href="https://drscotthawley.github.io/blog/scottergories/2021/06/17/Contrasting-Contrastive-Loss.html">Part 2</a> of this blog series):</p>
-<div class="cell" data-outputid="71e3cff4-1d0f-4eb0-a413-07ac6dd61511">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ipywidgets <span class="im">import</span> interact, interactive, fixed, interact_manual</span>
@@ -1080,7 +1081,7 @@ if (outputEl) {{
 </blockquote>
 <p>It is instructive to view two configurations of data points with <em>nearly identical loss values</em> but wildly different accuracies:</p>
 <p><strong>Nearly identical losses:</strong><br></p>
-<div class="cell" data-outputid="32da1908-e2d5-4d63-e9f8-fa427863a656">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate and save images that we'll load in the next cell </span></span>
@@ -1140,7 +1141,7 @@ if (outputEl) {{
 <section id="aside-even-4-classes" class="level3">
 <h3 class="anchored" data-anchor-id="aside-even-4-classes">Aside: Even 4 Classes?</h3>
 <p>Just as 3 class probabilities form a triangular 2D subspace (in 3D) that we can then plot in 2D, so too 4 classes form a <em>tetrahedron</em> (a pyramid made up of triangles), which is a 3D shape embedded in 4D space! So if we restrict our attention to this 3D subspace and use a 3D plotting program then we can actually represent 4 classes. Say we add another animal class, say “bird” symbolized by dark-colored points. Then our diagram could look like this:</p>
-<div class="cell" data-outputid="f43caefc-639a-4a3b-a293-e4e6c525c026" data-scrolled="true">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>prob4, targ4 <span class="op">=</span> calc_prob(n<span class="op">=</span><span class="dv">500</span>, s<span class="op">=</span><span class="fl">2.7</span>, dim<span class="op">=</span><span class="dv">4</span>)       <span class="co"># 4d probabilities</span></span>
@@ -1212,8 +1213,8 @@ if (outputEl) {{
 <section id="contrastive-loss-cartoon-demo" class="level3">
 <h3 class="anchored" data-anchor-id="contrastive-loss-cartoon-demo">Contrastive Loss Cartoon Demo</h3>
 <p>Below is a JavaScript animation of the “springs” cartoon above:</p>
-<div class="cell" data-outputid="24335cea-91b2-44fe-fa51-d3bd0dc59e00">
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell">
+<div class="cell-output cell-output-display">
 
         <iframe width="750" height="600" src="https://hedges.belmont.edu/~shawley/classy/classification_exercises/cldemo_raw.html" frameborder="0" allowfullscreen=""></iframe>
         
