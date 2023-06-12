@@ -1,0 +1,23 @@
+---
+title: "About"
+image: profile_me.jpg
+about:
+  template: jolla
+  links:
+    - icon: twitter
+      text: Twitter
+      href: https://twitter.com/drscotthawley
+    - icon: github
+      text: Github
+      href: https://github.com/drscotthawley
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/drscotthawley/
+
+---
+
+I dabble in a variety of technologies, usually with the goal of improving the physics education of audio engineering students. 
+
+[Professorly Web Page](https://hedges.belmont.edu/~shawley/)
+
+
