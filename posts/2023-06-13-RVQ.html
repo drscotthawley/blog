@@ -239,6 +239,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </ul></li>
   <li><a href="#residual-vector-quantization-rvq" id="toc-residual-vector-quantization-rvq" class="nav-link" data-scroll-target="#residual-vector-quantization-rvq">Residual Vector Quantization (RVQ)</a></li>
   <li><a href="#quantizer-algorithm" id="toc-quantizer-algorithm" class="nav-link" data-scroll-target="#quantizer-algorithm">Quantizer algorithm</a></li>
+  <li><a href="#extra-rvq-and-backpropagation" id="toc-extra-rvq-and-backpropagation" class="nav-link" data-scroll-target="#extra-rvq-and-backpropagation">Extra: RVQ and Backpropagation</a></li>
   </ul>
 </nav>
     </div>
@@ -628,7 +629,7 @@ For reasons of simplicity (/laziness) that will become clear later, for this blo
 <h3 class="anchored" data-anchor-id="optional-k-means-skippable">Optional: k-Means (Skippable)</h3>
 <p>The k-means algorithm is another method to partition space, a method that instead of static squares, will allow our regions and centroids “follow the data”. Often k-means is used to <em>initialize</em> an RVQ codebook for neural codecs (e.g.&nbsp;in SoundStream, Encodec, etc), after which the rest of the neural network’s training algorithm may refine the codebooks more.</p>
 <p>Note however, that this discussion on k-means is actually not crucial to understanding (R)VQ. At all.</p>
-<p>It’s quite skippable, to be honest. So…only read if you’re really curious.</p>
+<p>It’s quite skippable, to be honest. So…only read if you’re really curious. Otherwise skip down to the section on Residual Vector Quantization.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -939,6 +940,17 @@ if (outputEl) {{
 </figure>
 </div>
 </div>
+<p>For those who are interested, I’ll put the code for a working k-means algorithm below – it’s short!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kmeans(data, k<span class="op">=</span><span class="dv">5</span>, n_iter<span class="op">=</span><span class="dv">8</span>):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    n_dim, data_min, data_max <span class="op">=</span> data.shape[<span class="op">-</span><span class="dv">1</span>], np.<span class="bu">min</span>(data), np.<span class="bu">max</span>(data)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    centroids <span class="op">=</span> data_min <span class="op">+</span> <span class="fl">0.2</span><span class="op">+</span><span class="fl">0.6</span><span class="op">*</span>(data_max<span class="op">-</span>data_min)<span class="op">*</span>np.random.rand(k, n_dim) <span class="co"># random init</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> it <span class="kw">in</span> <span class="bu">range</span>(n_iter):</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        cluster_memb <span class="op">=</span> calc_cluster_membership(data, centroids)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        centroids <span class="op">=</span> move_centroids(centroids, data, cluster_memb)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> centroids, cluster_memb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 </section>
 <section id="residual-vector-quantization-rvq" class="level2">
@@ -948,87 +960,87 @@ if (outputEl) {{
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> collections  <span class="im">as</span> mc</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_region_membership(data:np.array, h<span class="op">=</span><span class="fl">0.2</span>, codebook<span class="op">=</span><span class="va">None</span>):</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Tells which region each point is in. </span><span class="al">TBD</span><span class="co">: this is slow but it works! ;-) "</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    memb <span class="op">=</span> np.zeros(data.shape[<span class="dv">0</span>], dtype<span class="op">=</span>np.int32)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> codebook <span class="kw">is</span> <span class="va">None</span>:  <span class="co"># just assume basic squares</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> di, p <span class="kw">in</span> <span class="bu">enumerate</span>(data):</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>            i <span class="op">=</span> (p[<span class="dv">0</span>]<span class="op">-</span>DATA_MIN) <span class="op">//</span> h</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>            j <span class="op">=</span> (p[<span class="dv">1</span>]<span class="op">-</span>DATA_MIN) <span class="op">//</span> h</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>            ind <span class="op">=</span> i <span class="op">+</span> j<span class="op">*</span>n_grid</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>            memb[di] <span class="op">=</span> ind</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: </span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        memb <span class="op">=</span> calc_cluster_membership(data, codebook)</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> memb</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_data_grid_with_resids(data, n_grid<span class="op">=</span><span class="dv">5</span>, hide_tick_labels<span class="op">=</span><span class="va">True</span>, show_indices<span class="op">=</span><span class="va">False</span>, show_centroids<span class="op">=</span><span class="va">False</span>, </span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>                   show_next_level_grid<span class="op">=</span><span class="va">False</span>, show_resids<span class="op">=</span><span class="va">True</span>, codebook<span class="op">=</span><span class="va">None</span>, show_grid<span class="op">=</span><span class="va">True</span>):</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">"big ol' workhorse plotting routine that we'll progressively make use of as the lesson proceeds"</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">3</span>,<span class="dv">3</span>))</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> <span class="fl">1.0</span> <span class="op">/</span> n_grid</span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim(DATA_MIN, DATA_MAX)</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(DATA_MIN, DATA_MAX)</span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> show_grid:</span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_grid <span class="op">+</span> <span class="dv">1</span>):  </span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>            ax.axhline(DATA_MIN <span class="op">+</span> i<span class="op">*</span>h, color<span class="op">=</span><span class="st">'black'</span>)</span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>            ax.axvline(DATA_MIN <span class="op">+</span> i<span class="op">*</span>h, color<span class="op">=</span><span class="st">'black'</span>)</span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> show_next_level_grid: <span class="co"># draws lines in the middle</span></span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>        x_start <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>h</span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>        y_start <span class="op">=</span> <span class="op">-</span>h<span class="op">/</span><span class="dv">2</span></span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_grid): <span class="co"># horizontal lines</span></span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>            y <span class="op">=</span> y_start <span class="op">+</span> i<span class="op">*</span>h<span class="op">/</span>n_grid</span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>            ax.axhline(y, xmin<span class="op">=</span>x_start, xmax<span class="op">=</span>x_start<span class="op">+</span>h, color<span class="op">=</span><span class="st">'black'</span>)</span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>        y_start, x_start <span class="op">=</span> x_start, y_start</span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_grid): <span class="co"># horizontal lines</span></span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>            x <span class="op">=</span> x_start <span class="op">+</span> j<span class="op">*</span>h<span class="op">/</span>n_grid</span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>            ax.axvline(x, ymin<span class="op">=</span>y_start, ymax<span class="op">=</span>y_start<span class="op">+</span>h, color<span class="op">=</span><span class="st">'black'</span>)</span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> show_indices:</span>
-<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>        index <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_grid):</span>
-<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_grid):</span>
-<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>                x <span class="op">=</span> DATA_MIN <span class="op">+</span> (i <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">/</span> n_grid</span>
-<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>                y <span class="op">=</span> DATA_MIN <span class="op">+</span> <span class="dv">1</span> <span class="op">-</span> (j <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">/</span> n_grid</span>
-<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>                ax.text(x, y, <span class="bu">str</span>(index), ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'center'</span>,fontsize<span class="op">=</span><span class="dv">14</span>)</span>
-<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>                index <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> show_centroids: </span>
-<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_grid):</span>
-<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_grid):</span>
-<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>                x <span class="op">=</span> DATA_MIN <span class="op">+</span> (i <span class="op">+</span> <span class="fl">0.5</span>)<span class="op">*</span>h</span>
-<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>                y <span class="op">=</span> DATA_MIN <span class="op">+</span> (j <span class="op">+</span> <span class="fl">0.5</span>)<span class="op">*</span>h</span>
-<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>                ax.plot(x, y, <span class="st">'ro'</span>, markersize<span class="op">=</span><span class="dv">6</span>)</span>
-<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> show_resids <span class="kw">and</span> codebook <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>        memb <span class="op">=</span> get_region_membership(data, codebook<span class="op">=</span>codebook)</span>
-<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>        resids <span class="op">=</span> data<span class="op">*</span><span class="dv">0</span></span>
-<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>        lines <span class="op">=</span> []</span>
-<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, p <span class="kw">in</span> <span class="bu">enumerate</span>(data):</span>
-<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>            <span class="co">#resids[i] = p - codebook[memb[i]] # don't actually need to compute resids for this</span></span>
-<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>            lines.append([p, codebook[memb[i]] ] )</span>
-<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>        lc <span class="op">=</span> mc.LineCollection(lines, colors<span class="op">=</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>), linewidths<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>        ax.add_collection(lc)</span>
-<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> hide_tick_labels:</span>
-<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a>        ax.set_xticks([])</span>
-<span id="cb13-70"><a href="#cb13-70" aria-hidden="true" tabindex="-1"></a>        ax.set_yticks([])</span>
-<span id="cb13-71"><a href="#cb13-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-72"><a href="#cb13-72" aria-hidden="true" tabindex="-1"></a>    ax.set_aspect(<span class="st">'equal'</span>)</span>
-<span id="cb13-73"><a href="#cb13-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> data <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb13-74"><a href="#cb13-74" aria-hidden="true" tabindex="-1"></a>        plt.scatter(data[:, <span class="dv">0</span>], data[:, <span class="dv">1</span>], s<span class="op">=</span><span class="dv">16</span>)</span>
-<span id="cb13-75"><a href="#cb13-75" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
-<span id="cb13-76"><a href="#cb13-76" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-77"><a href="#cb13-77" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-78"><a href="#cb13-78" aria-hidden="true" tabindex="-1"></a>n_grid<span class="op">=</span><span class="dv">5</span></span>
-<span id="cb13-79"><a href="#cb13-79" aria-hidden="true" tabindex="-1"></a>codebook <span class="op">=</span> generate_codebook(n_grid)</span>
-<span id="cb13-80"><a href="#cb13-80" aria-hidden="true" tabindex="-1"></a>plot_data_grid_with_resids(data, n_grid<span class="op">=</span>n_grid, show_next_level_grid<span class="op">=</span><span class="va">True</span>, show_centroids<span class="op">=</span><span class="va">True</span>, </span>
-<span id="cb13-81"><a href="#cb13-81" aria-hidden="true" tabindex="-1"></a>                           hide_tick_labels<span class="op">=</span><span class="va">False</span>, codebook<span class="op">=</span>codebook, show_resids<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> collections  <span class="im">as</span> mc</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_region_membership(data:np.array, h<span class="op">=</span><span class="fl">0.2</span>, codebook<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Tells which region each point is in. </span><span class="al">TBD</span><span class="co">: this is slow but it works! ;-) "</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    memb <span class="op">=</span> np.zeros(data.shape[<span class="dv">0</span>], dtype<span class="op">=</span>np.int32)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> codebook <span class="kw">is</span> <span class="va">None</span>:  <span class="co"># just assume basic squares</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> di, p <span class="kw">in</span> <span class="bu">enumerate</span>(data):</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>            i <span class="op">=</span> (p[<span class="dv">0</span>]<span class="op">-</span>DATA_MIN) <span class="op">//</span> h</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>            j <span class="op">=</span> (p[<span class="dv">1</span>]<span class="op">-</span>DATA_MIN) <span class="op">//</span> h</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>            ind <span class="op">=</span> i <span class="op">+</span> j<span class="op">*</span>n_grid</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>            memb[di] <span class="op">=</span> ind</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: </span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>        memb <span class="op">=</span> calc_cluster_membership(data, codebook)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> memb</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_data_grid_with_resids(data, n_grid<span class="op">=</span><span class="dv">5</span>, hide_tick_labels<span class="op">=</span><span class="va">True</span>, show_indices<span class="op">=</span><span class="va">False</span>, show_centroids<span class="op">=</span><span class="va">False</span>, </span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>                   show_next_level_grid<span class="op">=</span><span class="va">False</span>, show_resids<span class="op">=</span><span class="va">True</span>, codebook<span class="op">=</span><span class="va">None</span>, show_grid<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">"big ol' workhorse plotting routine that we'll progressively make use of as the lesson proceeds"</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">3</span>,<span class="dv">3</span>))</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> <span class="fl">1.0</span> <span class="op">/</span> n_grid</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    ax.set_xlim(DATA_MIN, DATA_MAX)</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(DATA_MIN, DATA_MAX)</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> show_grid:</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_grid <span class="op">+</span> <span class="dv">1</span>):  </span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>            ax.axhline(DATA_MIN <span class="op">+</span> i<span class="op">*</span>h, color<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>            ax.axvline(DATA_MIN <span class="op">+</span> i<span class="op">*</span>h, color<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> show_next_level_grid: <span class="co"># draws lines in the middle</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>        x_start <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>h</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>        y_start <span class="op">=</span> <span class="op">-</span>h<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_grid): <span class="co"># horizontal lines</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>            y <span class="op">=</span> y_start <span class="op">+</span> i<span class="op">*</span>h<span class="op">/</span>n_grid</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>            ax.axhline(y, xmin<span class="op">=</span>x_start, xmax<span class="op">=</span>x_start<span class="op">+</span>h, color<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>        y_start, x_start <span class="op">=</span> x_start, y_start</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_grid): <span class="co"># horizontal lines</span></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>            x <span class="op">=</span> x_start <span class="op">+</span> j<span class="op">*</span>h<span class="op">/</span>n_grid</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>            ax.axvline(x, ymin<span class="op">=</span>y_start, ymax<span class="op">=</span>y_start<span class="op">+</span>h, color<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> show_indices:</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>        index <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_grid):</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_grid):</span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>                x <span class="op">=</span> DATA_MIN <span class="op">+</span> (i <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">/</span> n_grid</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>                y <span class="op">=</span> DATA_MIN <span class="op">+</span> <span class="dv">1</span> <span class="op">-</span> (j <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">/</span> n_grid</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>                ax.text(x, y, <span class="bu">str</span>(index), ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'center'</span>,fontsize<span class="op">=</span><span class="dv">14</span>)</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>                index <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> show_centroids: </span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n_grid):</span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_grid):</span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>                x <span class="op">=</span> DATA_MIN <span class="op">+</span> (i <span class="op">+</span> <span class="fl">0.5</span>)<span class="op">*</span>h</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>                y <span class="op">=</span> DATA_MIN <span class="op">+</span> (j <span class="op">+</span> <span class="fl">0.5</span>)<span class="op">*</span>h</span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>                ax.plot(x, y, <span class="st">'ro'</span>, markersize<span class="op">=</span><span class="dv">6</span>)</span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> show_resids <span class="kw">and</span> codebook <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>        memb <span class="op">=</span> get_region_membership(data, codebook<span class="op">=</span>codebook)</span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a>        resids <span class="op">=</span> data<span class="op">*</span><span class="dv">0</span></span>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a>        lines <span class="op">=</span> []</span>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, p <span class="kw">in</span> <span class="bu">enumerate</span>(data):</span>
+<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a>            <span class="co">#resids[i] = p - codebook[memb[i]] # don't actually need to compute resids for this</span></span>
+<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a>            lines.append([p, codebook[memb[i]] ] )</span>
+<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a>        lc <span class="op">=</span> mc.LineCollection(lines, colors<span class="op">=</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>), linewidths<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a>        ax.add_collection(lc)</span>
+<span id="cb14-67"><a href="#cb14-67" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb14-68"><a href="#cb14-68" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> hide_tick_labels:</span>
+<span id="cb14-69"><a href="#cb14-69" aria-hidden="true" tabindex="-1"></a>        ax.set_xticks([])</span>
+<span id="cb14-70"><a href="#cb14-70" aria-hidden="true" tabindex="-1"></a>        ax.set_yticks([])</span>
+<span id="cb14-71"><a href="#cb14-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-72"><a href="#cb14-72" aria-hidden="true" tabindex="-1"></a>    ax.set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb14-73"><a href="#cb14-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> data <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb14-74"><a href="#cb14-74" aria-hidden="true" tabindex="-1"></a>        plt.scatter(data[:, <span class="dv">0</span>], data[:, <span class="dv">1</span>], s<span class="op">=</span><span class="dv">16</span>)</span>
+<span id="cb14-75"><a href="#cb14-75" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb14-76"><a href="#cb14-76" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-77"><a href="#cb14-77" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-78"><a href="#cb14-78" aria-hidden="true" tabindex="-1"></a>n_grid<span class="op">=</span><span class="dv">5</span></span>
+<span id="cb14-79"><a href="#cb14-79" aria-hidden="true" tabindex="-1"></a>codebook <span class="op">=</span> generate_codebook(n_grid)</span>
+<span id="cb14-80"><a href="#cb14-80" aria-hidden="true" tabindex="-1"></a>plot_data_grid_with_resids(data, n_grid<span class="op">=</span>n_grid, show_next_level_grid<span class="op">=</span><span class="va">True</span>, show_centroids<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb14-81"><a href="#cb14-81" aria-hidden="true" tabindex="-1"></a>                           hide_tick_labels<span class="op">=</span><span class="va">False</span>, codebook<span class="op">=</span>codebook, show_resids<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-rvq-basic" class="quarto-figure quarto-figure-center anchored">
@@ -1044,8 +1056,8 @@ if (outputEl) {{
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>plot_data_grid_with_resids(data, n_grid<span class="op">=</span>n_grid, show_next_level_grid<span class="op">=</span><span class="va">False</span>, show_centroids<span class="op">=</span><span class="va">True</span>, </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                           hide_tick_labels<span class="op">=</span><span class="va">False</span>, codebook<span class="op">=</span>codebook, show_resids<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>plot_data_grid_with_resids(data, n_grid<span class="op">=</span>n_grid, show_next_level_grid<span class="op">=</span><span class="va">False</span>, show_centroids<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                           hide_tick_labels<span class="op">=</span><span class="va">False</span>, codebook<span class="op">=</span>codebook, show_resids<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-rvq-resids" class="quarto-figure quarto-figure-center anchored">
@@ -1060,8 +1072,8 @@ if (outputEl) {{
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>plot_data_grid_with_resids(data, n_grid<span class="op">=</span>n_grid, show_next_level_grid<span class="op">=</span><span class="va">False</span>, show_centroids<span class="op">=</span><span class="va">False</span>, </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                           hide_tick_labels<span class="op">=</span><span class="va">False</span>, codebook<span class="op">=</span>np.zeros((data.shape[<span class="dv">0</span>],<span class="dv">2</span>)), show_resids<span class="op">=</span><span class="va">True</span>, show_grid<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>plot_data_grid_with_resids(data, n_grid<span class="op">=</span>n_grid, show_next_level_grid<span class="op">=</span><span class="va">False</span>, show_centroids<span class="op">=</span><span class="va">False</span>, </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                           hide_tick_labels<span class="op">=</span><span class="va">False</span>, codebook<span class="op">=</span>np.zeros((data.shape[<span class="dv">0</span>],<span class="dv">2</span>)), show_resids<span class="op">=</span><span class="va">True</span>, show_grid<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-rvq-zero" class="quarto-figure quarto-figure-center anchored">
@@ -1087,54 +1099,54 @@ if (outputEl) {{
 </div>
 <p>But I like the way I write it:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> quantizer(data, codebooks, n_grid<span class="op">=</span><span class="dv">5</span>):</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"this will spit out indices for residuals in a series of 'nested' codebooks"</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    resids <span class="op">=</span> data </span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    indices <span class="op">=</span> []</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> cb <span class="kw">in</span> codebooks:</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        indices_l <span class="op">=</span> get_region_membership(resids, codebook<span class="op">=</span>cb)</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        resids <span class="op">=</span> resids <span class="op">-</span> cb[indices_l]</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>        indices.append(indices_l)</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> indices</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the nested codebooks</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>n_codebooks <span class="op">=</span> <span class="dv">3</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>codebook <span class="op">=</span> generate_codebook(n_grid)</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>codebooks <span class="op">=</span> [codebook<span class="op">/</span>n_grid<span class="op">**</span>level <span class="cf">for</span> level <span class="kw">in</span> <span class="bu">range</span>(n_codebooks)]</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co"># call the quantizer</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>indices <span class="op">=</span> quantizer(data, codebooks)</span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>indices</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> quantizer(data, codebooks, n_grid<span class="op">=</span><span class="dv">5</span>):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"this will spit out indices for residuals in a series of 'nested' codebooks"</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    resids <span class="op">=</span> data </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    indices <span class="op">=</span> []</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> cb <span class="kw">in</span> codebooks:</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>        indices_l <span class="op">=</span> get_region_membership(resids, codebook<span class="op">=</span>cb)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        resids <span class="op">=</span> resids <span class="op">-</span> cb[indices_l]</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>        indices.append(indices_l)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array(indices)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the nested codebooks</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>n_codebooks <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>codebook <span class="op">=</span> generate_codebook(n_grid)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>codebooks <span class="op">=</span> [codebook<span class="op">/</span>n_grid<span class="op">**</span>level <span class="cf">for</span> level <span class="kw">in</span> <span class="bu">range</span>(n_codebooks)]</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co"># call the quantizer</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>indices <span class="op">=</span> quantizer(data, codebooks)</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>indices</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<pre><code>[array([10,  2,  5,  7,  5, 20,  4, 13, 19, 17, 16, 14, 24,  4, 22, 23,  4,
-        21, 19, 11, 13, 12,  4, 18,  4]),
- array([10, 17,  3,  5, 17,  9,  3, 22,  7, 13, 14,  5,  3, 24, 18,  6, 24,
-         6, 17,  8, 10,  1, 21, 12,  3]),
- array([11,  6, 12,  7, 15, 20, 23,  7, 17, 13,  8, 18,  2,  7, 15, 11, 16,
-        20, 23, 13, 11, 24, 18, 10, 20])]</code></pre>
+<pre><code>array([[10,  2,  5,  7,  5, 20,  4, 13, 19, 17, 16, 14, 24,  4, 22, 23,
+         4, 21, 19, 11, 13, 12,  4, 18,  4],
+       [10, 17,  3,  5, 17,  9,  3, 22,  7, 13, 14,  5,  3, 24, 18,  6,
+        24,  6, 17,  8, 10,  1, 21, 12,  3],
+       [11,  6, 12,  7, 15, 20, 23,  7, 17, 13,  8, 18,  2,  7, 15, 11,
+        16, 20, 23, 13, 11, 24, 18, 10, 20]])</code></pre>
 </div>
 </div>
 <p>Let’s test this by trying to reconstruct our original data using each level of codebook. In the following, the original data will be in blue, and the other colors will show the results of quantization using an increasing number of codebooks:</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> n_codebooks</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>fig, ax_all <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span>K, figsize<span class="op">=</span>(<span class="dv">10</span><span class="op">+</span>(K<span class="op">-</span><span class="dv">3</span>),<span class="dv">3</span>))</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>recon <span class="op">=</span> data<span class="op">*</span><span class="dv">0</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> axi <span class="kw">in</span> <span class="bu">range</span>(K):</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> ax_all[axi]</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    ax.scatter(data[:, <span class="dv">0</span>], data[:, <span class="dv">1</span>], s<span class="op">=</span><span class="dv">16</span>)</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    recon <span class="op">+=</span> codebooks[axi][indices[axi]]</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    ax.scatter(recon[:, <span class="dv">0</span>], recon[:, <span class="dv">1</span>], s<span class="op">=</span><span class="dv">16</span>, color<span class="op">=</span><span class="st">'orange'</span>)</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    ax.set_xticks([])</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    ax.set_yticks([])</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    hpos <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>K<span class="op">*</span><span class="fl">0.85</span> <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>K<span class="op">*</span><span class="fl">0.81</span><span class="op">*</span>axi <span class="cf">if</span> K<span class="op">==</span><span class="dv">4</span> <span class="cf">else</span> <span class="fl">.25</span> <span class="op">+</span> <span class="fl">.27</span><span class="op">*</span>axi</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    fig.text(hpos, <span class="fl">.05</span>, <span class="ss">f"level </span><span class="sc">{</span>axi<span class="sc">}</span><span class="ss">  (</span><span class="sc">{</span>axi<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss"> codebook</span><span class="sc">{</span><span class="st">'s'</span> <span class="cf">if</span> axi<span class="op">&gt;</span><span class="dv">0</span> <span class="cf">else</span> <span class="st">''</span><span class="sc">}</span><span class="ss">)"</span>, ha<span class="op">=</span><span class="st">'center'</span>)</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    error <span class="op">=</span> ((recon <span class="op">-</span> data)<span class="op">**</span><span class="dv">2</span>).mean()</span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    fig.text(hpos, <span class="fl">.0001</span>, <span class="ss">f"Error = </span><span class="sc">{</span>error<span class="sc">:.2e}</span><span class="ss">"</span>, ha<span class="op">=</span><span class="st">'center'</span>)</span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> n_codebooks</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>fig, ax_all <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span>K, figsize<span class="op">=</span>(<span class="dv">10</span><span class="op">+</span>(K<span class="op">-</span><span class="dv">3</span>),<span class="dv">3</span>))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>recon <span class="op">=</span> data<span class="op">*</span><span class="dv">0</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> axi <span class="kw">in</span> <span class="bu">range</span>(K):</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> ax_all[axi]</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    ax.scatter(data[:, <span class="dv">0</span>], data[:, <span class="dv">1</span>], s<span class="op">=</span><span class="dv">16</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    recon <span class="op">+=</span> codebooks[axi][indices[axi]]</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    ax.scatter(recon[:, <span class="dv">0</span>], recon[:, <span class="dv">1</span>], s<span class="op">=</span><span class="dv">16</span>, color<span class="op">=</span><span class="st">'orange'</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    ax.set_xticks([])</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    ax.set_yticks([])</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    hpos <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>K<span class="op">*</span><span class="fl">0.85</span> <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>K<span class="op">*</span><span class="fl">0.81</span><span class="op">*</span>axi <span class="cf">if</span> K<span class="op">==</span><span class="dv">4</span> <span class="cf">else</span> <span class="fl">.25</span> <span class="op">+</span> <span class="fl">.27</span><span class="op">*</span>axi</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    fig.text(hpos, <span class="fl">.05</span>, <span class="ss">f"level </span><span class="sc">{</span>axi<span class="sc">}</span><span class="ss">  (</span><span class="sc">{</span>axi<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss"> codebook</span><span class="sc">{</span><span class="st">'s'</span> <span class="cf">if</span> axi<span class="op">&gt;</span><span class="dv">0</span> <span class="cf">else</span> <span class="st">''</span><span class="sc">}</span><span class="ss">)"</span>, ha<span class="op">=</span><span class="st">'center'</span>)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    error <span class="op">=</span> ((recon <span class="op">-</span> data)<span class="op">**</span><span class="dv">2</span>).mean()</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    fig.text(hpos, <span class="fl">.0001</span>, <span class="ss">f"Error = </span><span class="sc">{</span>error<span class="sc">:.2e}</span><span class="ss">"</span>, ha<span class="op">=</span><span class="st">'center'</span>)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-rvq-recon" class="quarto-figure quarto-figure-center anchored">
@@ -1153,37 +1165,36 @@ if (outputEl) {{
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#### label: fig-rvq-recon-highdim2</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#### fig-cap: "Error for high-dimensional datasets using various levels of RVQ. 'cost savings factor' refers to the ratio of using regular VQ (at uniform resolution) vs RVQ"</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>d_choices <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>]  <span class="co"># we can't go higher with 5x5 uniform grids!</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>K_choices <span class="op">=</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>]     <span class="co"># variable numbers of codebooks</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>npoints_hd <span class="op">=</span> <span class="dv">1000</span>  <span class="co"># points in high-dim spaces</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Here we show the error for high-dimensional datasets using various levels of RVQ."</span>)</span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"'cost savings factor' refers to the ratio of using regular VQ (at uniform resolution) vs RVQ"</span>)</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> d <span class="kw">in</span> d_choices:</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">d = </span><span class="sc">{</span>d<span class="sc">}</span><span class="ss">:"</span>)</span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    np.random.seed(<span class="dv">1</span>)</span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    data_hd <span class="op">=</span> DATA_MIN <span class="op">+</span> (DATA_MAX<span class="op">-</span>DATA_MIN)<span class="op">*</span>np.random.rand(npoints_hd, d)</span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    codebook <span class="op">=</span> generate_codebook(n_grid, n_dim<span class="op">=</span>d)</span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print(f"codebook = \n",codebook)</span></span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> K <span class="kw">in</span> K_choices: </span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>        codebooks <span class="op">=</span> [codebook<span class="op">/</span>n_grid<span class="op">**</span>level <span class="cf">for</span> level <span class="kw">in</span> <span class="bu">range</span>(K)]</span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>        indices <span class="op">=</span> quantizer(data_hd, codebooks)</span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>        recon <span class="op">=</span> data_hd<span class="op">*</span><span class="dv">0</span></span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> lil_k <span class="kw">in</span> <span class="bu">range</span>(K):   <span class="co"># reconstruct using all codebooks</span></span>
-<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>            recon <span class="op">+=</span> codebooks[lil_k][indices[lil_k]]</span>
-<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>        error <span class="op">=</span> ((recon <span class="op">-</span> data_hd)<span class="op">**</span><span class="dv">2</span>).mean()</span>
-<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>        grid_0_points <span class="op">=</span> n_grid<span class="op">**</span>(d)</span>
-<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>        rvq_points <span class="op">=</span> grid_0_points<span class="op">*</span>K </span>
-<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>        uni_res <span class="op">=</span> grid_0_points<span class="op">**</span>K <span class="co"># comparable uniform resolution</span></span>
-<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>        savings <span class="op">=</span> uni_res<span class="op">/</span>rvq_points</span>
-<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  K = </span><span class="sc">{</span>K<span class="sc">}</span><span class="ss">, error = </span><span class="sc">{</span>error<span class="sc">:.2e}</span><span class="ss">, cost savings factor = </span><span class="sc">{</span>savings<span class="sc">:.1f}</span><span class="ss">"</span>)</span>
-<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
-<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#### label: fig-rvq-recon-highdim2</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#### fig-cap: "Error for high-dimensional datasets using various levels of RVQ. 'cost savings factor' refers to the ratio of using regular VQ (at uniform resolution) vs RVQ"</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>d_choices <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">6</span>]  <span class="co"># we can't go much higher with 5x5 uniform grids!</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>K_choices <span class="op">=</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>]     <span class="co"># variable numbers of codebooks</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>npoints_hd <span class="op">=</span> <span class="dv">1000</span>  <span class="co"># points in high-dim spaces</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Here we show the error for high-dimensional datasets using various levels of RVQ."</span>)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"'cost savings factor' refers to the ratio of using regular VQ (at uniform resolution) vs RVQ"</span>)</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> d <span class="kw">in</span> d_choices:</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">d = </span><span class="sc">{</span>d<span class="sc">}</span><span class="ss">:"</span>)</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    np.random.seed(<span class="dv">1</span>)</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    data_hd <span class="op">=</span> DATA_MIN <span class="op">+</span> (DATA_MAX<span class="op">-</span>DATA_MIN)<span class="op">*</span>np.random.rand(npoints_hd, d)</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    codebook0 <span class="op">=</span> generate_codebook(n_grid, n_dim<span class="op">=</span>d)</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>    codebooks <span class="op">=</span> [codebook0<span class="op">/</span>n_grid<span class="op">**</span>level <span class="cf">for</span> level <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">max</span>(K_choices))] <span class="co"># lets get this over with rather than in the loop</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> K <span class="kw">in</span> K_choices: </span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>        indices <span class="op">=</span> quantizer(data_hd, codebooks)</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>        recon <span class="op">=</span> data_hd<span class="op">*</span><span class="dv">0</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> lil_k <span class="kw">in</span> <span class="bu">range</span>(K):   <span class="co"># reconstruct using all codebooks</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>            recon <span class="op">+=</span> codebooks[lil_k][indices[lil_k]]</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>        error <span class="op">=</span> ((recon <span class="op">-</span> data_hd)<span class="op">**</span><span class="dv">2</span>).mean()</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>        grid_0_points <span class="op">=</span> n_grid<span class="op">**</span>(d)</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>        rvq_points <span class="op">=</span> grid_0_points<span class="op">*</span>K </span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>        uni_res <span class="op">=</span> grid_0_points<span class="op">**</span>K <span class="co"># comparable uniform resolution</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>        savings <span class="op">=</span> uni_res<span class="op">/</span>rvq_points</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  K = </span><span class="sc">{</span>K<span class="sc">}</span><span class="ss">, error = </span><span class="sc">{</span>error<span class="sc">:.2e}</span><span class="ss">, cost savings factor = </span><span class="sc">{</span>savings<span class="sc">:.1f}</span><span class="ss">"</span>)</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Here we show the error for high-dimensional datasets using various levels of RVQ.
@@ -1211,22 +1222,307 @@ d = 6:
   K = 1, error = 3.37e-03, cost savings factor = 1.0
   K = 2, error = 1.33e-04, cost savings factor = 7812.5
   K = 3, error = 5.35e-06, cost savings factor = 81380208.3
-  K = 4, error = 2.16e-07, cost savings factor = 953674316406.2
-
-d = 8:
-  K = 1, error = 3.35e-03, cost savings factor = 1.0
-  K = 2, error = 1.33e-04, cost savings factor = 195312.5
-  K = 3, error = 5.31e-06, cost savings factor = 50862630208.3
-  K = 4, error = 2.14e-07, cost savings factor = 14901161193847656.0</code></pre>
+  K = 4, error = 2.16e-07, cost savings factor = 953674316406.2</code></pre>
 </div>
 </div>
 <p>Those “cost savings factors” were artifically high though, because as we said, we’re still using squares/hypercubes for our regions, and we don’t need to shape them that way and we don’t need <em>that many</em> of them. The great thing about (R)VQ is you can specify how many centroids you want – i.e.&nbsp;how “long” you want your codebook to be – and you can keep that to some manageable number even as the number of dimensions skyrockets.</p>
-<p>So, to tackle higher dimensions, we need to stop using uniform squares so we can have a codebook “length” of less than 1000 centroids (instead of what just had, which was going into the hundreds of thousands, e.g.&nbsp;<span class="math inline">\(5^8 = 390625\)</span>), let’s try k-Means to set the centroids instead.</p>
+<p>So, to tackle higher dimensions, we need to stop using uniform squares so we can have a codebook “length” of less than 1000 centroids (instead of what just had, which was going into the hundreds of thousands, e.g.&nbsp;<span class="math inline">\(5^8 = 390625\)</span>), let’s try k-means to set the centroids instead.</p>
+<blockquote class="blockquote">
+<p>Note: Ideally we’d run k-means on the different groups of residuals at different levels of our RVQ notebook list, and we’d optimize these via some kind of learning. ….For this blog we’re not gonna do that!</p>
+</blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.empty((<span class="dv">1000</span>,<span class="dv">32</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>d_choices <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">64</span>, <span class="dv">128</span>, <span class="dv">256</span>]  <span class="co"># we can't go higher with 5x5 uniform grids!</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>cb_lengths <span class="op">=</span> [<span class="dv">25</span>, <span class="dv">64</span>, <span class="dv">128</span>, <span class="dv">256</span>, <span class="dv">1024</span>]  <span class="co"># codebook lengths</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>K_choices <span class="op">=</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>]     <span class="co"># variable numbers of codebooks</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>npoints_hd <span class="op">=</span> <span class="dv">10000</span>  <span class="co"># points in high-dim spaces</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> np.empty( ( <span class="bu">len</span>(d_choices), <span class="bu">len</span>(cb_lengths), <span class="bu">len</span>(K_choices) ))</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> q1, d <span class="kw">in</span> <span class="bu">enumerate</span>(d_choices):</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"n_dim=</span><span class="sc">{</span>d<span class="sc">}</span><span class="ss">:"</span>)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    data_hd <span class="op">=</span> DATA_MIN <span class="op">+</span> (DATA_MAX<span class="op">-</span>DATA_MIN)<span class="op">*</span>np.random.rand(npoints_hd, d)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> q2, cb_len <span class="kw">in</span> <span class="bu">enumerate</span>(cb_lengths): </span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"    </span><span class="sc">{</span><span class="st">'    '</span><span class="op">*</span>q2<span class="sc">}</span><span class="ss"> codebook_length=</span><span class="sc">{</span>cb_len<span class="sc">}</span><span class="ss">: "</span>)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># really we'd be calculating different codebooks at each level but c'mon, blog reader </span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        np.random.seed(<span class="dv">1</span>)</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>        codebook0, indices0 <span class="op">=</span> kmeans(data_hd, k<span class="op">=</span>cb_len)   <span class="co">#instead of generate_codebook(n_grid, n_dim=d)</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>        <span class="co">#codebook0 = np.random.rand(cb_len, d)  # how bout a random codebook?</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>        codebooks <span class="op">=</span> [codebook0<span class="op">/</span>n_grid<span class="op">**</span>level <span class="cf">for</span> level <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">max</span>(K_choices))] <span class="co"># really we should do new codebooks at each level instead of just rescaling</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> q3, K <span class="kw">in</span> <span class="bu">enumerate</span>(K_choices):</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>            indices <span class="op">=</span> quantizer(data_hd, codebooks)</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>            <span class="cf">assert</span> indices.shape[<span class="dv">0</span>] <span class="op">&gt;=</span> K </span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>            recon <span class="op">=</span> data_hd<span class="op">*</span><span class="dv">0</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> lil_k <span class="kw">in</span> <span class="bu">range</span>(K):   <span class="co"># reconstruct using all codebooks</span></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>                recon <span class="op">+=</span> codebooks[lil_k][indices[lil_k]]</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>            error <span class="op">=</span> ((recon <span class="op">-</span> data_hd)<span class="op">**</span><span class="dv">2</span>).mean()</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"    </span><span class="sc">{</span><span class="st">'    '</span><span class="op">*</span>q2<span class="sc">}</span><span class="ss">    </span><span class="sc">{</span><span class="st">'    '</span><span class="op">*</span>q3<span class="sc">}</span><span class="ss"> K=</span><span class="sc">{</span>K<span class="sc">}</span><span class="ss">: error = </span><span class="sc">{</span>error<span class="sc">:.3e}</span><span class="ss">"</span>)</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>            results[q1,q2,q3] <span class="op">=</span> error</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>n_dim=2:
+     codebook_length=25: 
+         K=1: error = 3.485e-03
+             K=2: error = 2.103e-04
+                 K=3: error = 3.257e-05
+                     K=4: error = 1.914e-05
+         codebook_length=64: 
+             K=1: error = 1.520e-03
+                 K=2: error = 4.413e-05
+                     K=3: error = 1.709e-06
+                         K=4: error = 1.241e-07
+             codebook_length=128: 
+                 K=1: error = 8.680e-04
+                     K=2: error = 1.734e-05
+                         K=3: error = 5.787e-07
+                             K=4: error = 2.239e-08
+                 codebook_length=256: 
+                     K=1: error = 5.748e-04
+                         K=2: error = 6.612e-06
+                             K=3: error = 2.318e-07
+                                 K=4: error = 9.172e-09
+                     codebook_length=1024: 
+                         K=1: error = 3.147e-04
+                             K=2: error = 1.491e-06
+                                 K=3: error = 5.304e-08
+                                     K=4: error = 2.133e-09
+n_dim=3:
+     codebook_length=25: 
+         K=1: error = 1.000e-02
+             K=2: error = 2.831e-03
+                 K=3: error = 1.941e-03
+                     K=4: error = 1.791e-03
+         codebook_length=64: 
+             K=1: error = 5.345e-03
+                 K=2: error = 6.777e-04
+                     K=3: error = 2.862e-04
+                         K=4: error = 2.357e-04
+             codebook_length=128: 
+                 K=1: error = 3.446e-03
+                     K=2: error = 2.449e-04
+                         K=3: error = 5.368e-05
+                             K=4: error = 3.700e-05
+                 codebook_length=256: 
+                     K=1: error = 2.230e-03
+                         K=2: error = 9.579e-05
+                             K=3: error = 8.224e-06
+                                 K=4: error = 3.734e-06
+                     codebook_length=1024: 
+                         K=1: error = 1.082e-03
+                             K=2: error = 2.277e-05
+                                 K=3: error = 6.920e-07
+                                     K=4: error = 5.398e-08
+n_dim=6:
+     codebook_length=25: 
+         K=1: error = 3.131e-02
+             K=2: error = 2.113e-02
+                 K=3: error = 1.934e-02
+                     K=4: error = 1.900e-02
+         codebook_length=64: 
+             K=1: error = 2.137e-02
+                 K=2: error = 1.159e-02
+                     K=3: error = 9.980e-03
+                         K=4: error = 9.678e-03
+             codebook_length=128: 
+                 K=1: error = 1.643e-02
+                     K=2: error = 7.511e-03
+                         K=3: error = 6.125e-03
+                             K=4: error = 5.870e-03
+                 codebook_length=256: 
+                     K=1: error = 1.256e-02
+                         K=2: error = 4.675e-03
+                             K=3: error = 3.538e-03
+                                 K=4: error = 3.336e-03
+                     codebook_length=1024: 
+                         K=1: error = 6.687e-03
+                             K=2: error = 1.465e-03
+                                 K=3: error = 8.448e-04
+                                     K=4: error = 7.466e-04
+n_dim=8:
+     codebook_length=25: 
+         K=1: error = 4.251e-02
+             K=2: error = 3.305e-02
+                 K=3: error = 3.132e-02
+                     K=4: error = 3.099e-02
+         codebook_length=64: 
+             K=1: error = 3.132e-02
+                 K=2: error = 2.121e-02
+                     K=3: error = 1.942e-02
+                         K=4: error = 1.907e-02
+             codebook_length=128: 
+                 K=1: error = 2.495e-02
+                     K=2: error = 1.500e-02
+                         K=3: error = 1.329e-02
+                             K=4: error = 1.297e-02
+                 codebook_length=256: 
+                     K=1: error = 1.979e-02
+                         K=2: error = 1.043e-02
+                             K=3: error = 8.877e-03
+                                 K=4: error = 8.587e-03
+                     codebook_length=1024: 
+                         K=1: error = 1.182e-02
+                             K=2: error = 4.495e-03
+                                 K=3: error = 3.386e-03
+                                     K=4: error = 3.187e-03
+n_dim=64:
+     codebook_length=25: 
+         K=1: error = 7.704e-02
+             K=2: error = 7.539e-02
+                 K=3: error = 7.507e-02
+                     K=4: error = 7.501e-02
+         codebook_length=64: 
+             K=1: error = 7.423e-02
+                 K=2: error = 7.183e-02
+                     K=3: error = 7.136e-02
+                         K=4: error = 7.126e-02
+             codebook_length=128: 
+                 K=1: error = 7.173e-02
+                     K=2: error = 6.872e-02
+                         K=3: error = 6.812e-02
+                             K=4: error = 6.801e-02
+                 codebook_length=256: 
+                     K=1: error = 6.852e-02
+                         K=2: error = 6.484e-02
+                             K=3: error = 6.410e-02
+                                 K=4: error = 6.395e-02
+                     codebook_length=1024: 
+                         K=1: error = 5.882e-02
+                             K=2: error = 5.352e-02
+                                 K=3: error = 5.238e-02
+                                     K=4: error = 5.216e-02
+n_dim=128:
+     codebook_length=25: 
+         K=1: error = 7.990e-02
+             K=2: error = 7.903e-02
+                 K=3: error = 7.886e-02
+                     K=4: error = 7.883e-02
+         codebook_length=64: 
+             K=1: error = 7.820e-02
+                 K=2: error = 7.690e-02
+                     K=3: error = 7.664e-02
+                         K=4: error = 7.659e-02
+             codebook_length=128: 
+                 K=1: error = 7.660e-02
+                     K=2: error = 7.492e-02
+                         K=3: error = 7.458e-02
+                             K=4: error = 7.452e-02
+                 codebook_length=256: 
+                     K=1: error = 7.459e-02
+                         K=2: error = 7.245e-02
+                             K=3: error = 7.202e-02
+                                 K=4: error = 7.193e-02
+                     codebook_length=1024: 
+                         K=1: error = 6.692e-02
+                             K=2: error = 6.339e-02
+                                 K=3: error = 6.253e-02
+                                     K=4: error = 6.237e-02
+n_dim=256:
+     codebook_length=25: 
+         K=1: error = 8.138e-02
+             K=2: error = 8.091e-02
+                 K=3: error = 8.082e-02
+                     K=4: error = 8.080e-02
+         codebook_length=64: 
+             K=1: error = 8.033e-02
+                 K=2: error = 7.961e-02
+                     K=3: error = 7.947e-02
+                         K=4: error = 7.944e-02
+             codebook_length=128: 
+                 K=1: error = 7.928e-02
+                     K=2: error = 7.832e-02
+                         K=3: error = 7.813e-02
+                             K=4: error = 7.809e-02
+                 codebook_length=256: 
+                     K=1: error = 7.796e-02
+                         K=2: error = 7.666e-02
+                             K=3: error = 7.639e-02
+                                 K=4: error = 7.634e-02
+                     codebook_length=1024: 
+                         K=1: error = 7.067e-02
+                             K=2: error = 6.841e-02
+                                 K=3: error = 6.778e-02
+                                     K=4: error = 6.766e-02</code></pre>
 </div>
+</div>
+<p>…doesn’t look like we’re doing very well for high-dimensional data! Longer codebooks and more codebooks have essentially effect.</p>
+<p>Hmmmm. Not sure what’s up.</p>
+<p>Let’s plot the error for 4 codebooks as a function of dimension and codebook length:</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.io <span class="im">as</span> pio</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>pio.renderers.default<span class="op">=</span><span class="st">'notebook'</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px </span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotly.offline <span class="im">import</span> plot, iplot, init_notebook_mode</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objs <span class="im">as</span> go</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>init_notebook_mode(connected<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>datag <span class="op">=</span> results[:,:,<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.array(d_choices)</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array(cb_lengths)</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>X, Y <span class="op">=</span> np.meshgrid(x, y)</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> go.Figure(data<span class="op">=</span>[go.Surface(x<span class="op">=</span>X, y<span class="op">=</span>Y, z<span class="op">=</span>datag)])</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>fig.update_layout(scene <span class="op">=</span> <span class="bu">dict</span>(</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>                    xaxis_title<span class="op">=</span><span class="st">'cb_len'</span>,</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>                    yaxis_title<span class="op">=</span><span class="st">'n_dim'</span>,</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>                    zaxis_title<span class="op">=</span><span class="st">'error'</span>))</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="fig-rvq-error-surfacea" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+
+<div>                            <div id="462f8a42-1702-453d-b4bf-8ffab3091ea1" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("462f8a42-1702-453d-b4bf-8ffab3091ea1")) {                    Plotly.newPlot(                        "462f8a42-1702-453d-b4bf-8ffab3091ea1",                        [{"x":[[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024]],"y":[[2,2,2,2,2],[3,3,3,3,3],[6,6,6,6,6],[8,8,8,8,8],[64,64,64,64,64],[128,128,128,128,128],[256,256,256,256,256]],"z":[[1.9139809210687727e-05,1.2409785453086544e-07,2.2387946364703738e-08,9.17218256873558e-09,2.1332742388960728e-09],[0.0017910425810944868,0.0002356578544277633,3.699544892363838e-05,3.7343969298515374e-06,5.397842528340424e-08],[0.019002712357201145,0.009678194540616131,0.005869807837283034,0.0033357201486523356,0.0007465609471347685],[0.030990438555207448,0.019073005523291997,0.012965321332250932,0.00858718741939019,0.0031873444485750364],[0.07501295628738992,0.07126321833656757,0.06800667370624906,0.06395412205901585,0.05215729769045115],[0.07882688008597283,0.07659434116580097,0.07451661182504739,0.07193107578992688,0.06236882687518413],[0.08079901940399783,0.07944114994207267,0.07808826098588972,0.07633641151656625,0.06765591802940757]],"type":"surface"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"scene":{"xaxis":{"title":{"text":"cb_len"}},"yaxis":{"title":{"text":"n_dim"}},"zaxis":{"title":{"text":"error"}}}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('462f8a42-1702-453d-b4bf-8ffab3091ea1');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+<p></p><figcaption class="figure-caption"><strong>Figure</strong>&nbsp;16<strong>.</strong> Surface plot of reconstruction error for 4 codebooks with various data dimensions and codebook lengths.</figcaption><p></p>
+</figure>
+</div>
+</div>
+<p>…Yea I don’t know what’s up. Will seek some help.</p>
+</section>
+<section id="extra-rvq-and-backpropagation" class="level1">
+<h1>Extra: RVQ and Backpropagation</h1>
+<p>You were wondering about this, weren’t you? “How do we handle backpropagation when we’re doing quantization?”</p>
+<p><em>“Something something EMA. Something something stopgrad”</em></p>
+<p>More later, maybe.</p>
 <hr>
-<p>…Stopping here for now. -SH</p>
+<p>…Stopping here for now.</p>
+<hr>
+<ol start="3" type="a">
+<li>2023 Scott H. Hawley</li>
+</ol>
 
 
 </section>
