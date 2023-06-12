@@ -284,7 +284,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<p><img src="2023-06-10-RVQ_files/figure-html/cell-2-output-1.png" class="img-fluid"></p>
+<p><img src="2023-06-13-RVQ_files/figure-html/cell-2-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>To computer scientists, the <span class="math inline">\((x,y)\)</span> coordinates of each point define a “vector”. (To mathematicians and physicists, the “vector” points from the origin to each point, but that distinction isn’t going to matter to us.)</p>
@@ -350,14 +350,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n_grid<span class="op">=</span><span class="dv">5</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>plot_data_grid(data, n_grid<span class="op">=</span>n_grid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="2023-06-10-RVQ_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+<p><img src="2023-06-13-RVQ_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>With vector quantization, we give an index value to every region (e.g.&nbsp;0 to 24 for a 5x5 square grid), and then what we <strong>replace each vector’s value with the index of the of the region</strong>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>plot_data_grid(data, n_grid<span class="op">=</span>n_grid, show_indices<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="2023-06-10-RVQ_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+<p><img src="2023-06-13-RVQ_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>For each of the “vectors” represented by the data points, we no longer use the (<span class="math inline">\(x\)</span>,<span class="math inline">\(y\)</span>) coordinate pairs, but rather the (integer) index of the region it’s in.</p>
@@ -368,7 +368,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>plot_data_grid(data, n_grid<span class="op">=</span>n_grid, show_indices<span class="op">=</span><span class="va">False</span>, show_centroids<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="2023-06-10-RVQ_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+<p><img src="2023-06-13-RVQ_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>So each blue point will effectively be replaced by the nearest red point. In this sense we have “quantized” the vectors (because we’ve quantized the space itself).</p>
@@ -381,7 +381,7 @@ For reasons of simplicity (/laziness) that will become clear later, for this blo
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>plot_data_grid(data, n_grid<span class="op">=</span>n_grid, show_indices<span class="op">=</span><span class="va">True</span>, show_centroids<span class="op">=</span><span class="va">True</span>, hide_tick_labels<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="2023-06-10-RVQ_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+<p><img src="2023-06-13-RVQ_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>For our choice of coordinates, the codebook (i.e.&nbsp;the mapping of indices to centroid locations) looks like this:</p>
@@ -564,7 +564,7 @@ For reasons of simplicity (/laziness) that will become clear later, for this blo
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2023-06-10-RVQ_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="2023-06-13-RVQ_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
 <p></p><figcaption class="figure-caption">Note that the computational cost will scale like the number of regions, which is <code>n_grid</code><span class="math inline">\(^2\)</span>.</figcaption><p></p>
 </figure>
 </div>
@@ -585,7 +585,7 @@ For reasons of simplicity (/laziness) that will become clear later, for this blo
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>n_grid<span class="op">=</span><span class="dv">5</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plot_data_grid(data, n_grid<span class="op">=</span>n_grid, show_next_level_grid<span class="op">=</span><span class="va">True</span>, show_centroids<span class="op">=</span><span class="va">True</span>, hide_tick_labels<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="2023-06-10-RVQ_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+<p><img src="2023-06-13-RVQ_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>The difference between that blue point in the middle “main” square and its corresponding red centroid will be the “residual”. We will also quantize that within the “little” 5x5 grid. This will serve as a codebook to use “after” the original codebook. And we’ll get the same resolution as if we had a 25x25 grid, except our computational cost will instead be 2*(5*5)=50 instead of 25*25=625! So our cost will be 12.5 smaller than the full-grid approach.</p>
