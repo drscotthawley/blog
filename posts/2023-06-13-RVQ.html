@@ -1226,10 +1226,12 @@ d = 6:
 </div>
 </div>
 <p>Those “cost savings factors” were artifically high though, because as we said, we’re still using squares/hypercubes for our regions, and we don’t need to shape them that way and we don’t need <em>that many</em> of them. The great thing about (R)VQ is you can specify how many centroids you want – i.e.&nbsp;how “long” you want your codebook to be – and you can keep that to some manageable number even as the number of dimensions skyrockets.</p>
-<p>So, to tackle higher dimensions, we need to stop using uniform squares so we can have a codebook “length” of less than 1000 centroids (instead of what just had, which was going into the hundreds of thousands, e.g.&nbsp;<span class="math inline">\(5^8 = 390625\)</span>), let’s try k-means to set the centroids instead.</p>
+<p>So, to tackle higher dimensions, we need to stop using uniform squares so we can have a codebook “length” of less than 1000 centroids (instead of what just had, which was going into the hundreds of thousands, e.g.&nbsp;<span class="math inline">\(5^8 = 390625\)</span>).</p>
+<p>We can try a given number of (initially) random centroids, and try to match them to the data via k-means.</p>
 <blockquote class="blockquote">
-<p>Note: Ideally we’d run k-means on the different groups of residuals at different levels of our RVQ notebook list, and we’d optimize these via some kind of learning. ….For this blog we’re not gonna do that!</p>
+<p>Note: Ideally we’d run k-means on the different groups of residuals at different levels of our RVQ codebook list, and we’d optimize these via some kind of learning. But…for this blog post we’re not gonna do that!</p>
 </blockquote>
+<p>In the following calculation, we’ll vary the number of dimensions, the length of the codebooks, and the number of codebooks, and see how these all affect the reconstruction error.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -1447,8 +1449,7 @@ n_dim=256:
                                      K=4: error = 6.766e-02</code></pre>
 </div>
 </div>
-<p>…doesn’t look like we’re doing very well for high-dimensional data! Longer codebooks and more codebooks have essentially effect.</p>
-<p>Hmmmm. Not sure what’s up.</p>
+<p>…doesn’t look like we’re doing very well for high-dimensional data! At high dimensions, longer codebooks and more codebooks have essentially <em>no effect</em>. Hmmmm. Not sure what’s up.</p>
 <p>Let’s plot the error for 4 codebooks as a function of dimension and codebook length:</p>
 <div class="cell">
 <details>
