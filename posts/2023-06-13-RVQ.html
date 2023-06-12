@@ -959,6 +959,9 @@ if (outputEl) {{
 </section>
 <section id="residual-vector-quantization-rvq" class="level2">
 <h2 class="anchored" data-anchor-id="residual-vector-quantization-rvq">Residual Vector Quantization (RVQ)</h2>
+<blockquote class="blockquote">
+<p>By the way, RVQ has been around for <a href="https://ieeexplore.ieee.org/abstract/document/480761">quite a while</a>.</p>
+</blockquote>
 <section id="basic-idea-codebooks-in-codebooks" class="level3">
 <h3 class="anchored" data-anchor-id="basic-idea-codebooks-in-codebooks">Basic Idea: “Codebooks in Codebooks”</h3>
 <p>The trick with RVQ is, rather than having a single high-resolution codebook, to instead have “codebooks inside of codebooks”, or, if you like, “stacking codebooks”. Let’s say we want to quintuple the resolution of our initial 5x5 grid. Instead of using a 25x25 grid (which would be 25x the computational cost of the original), what if we put a little 5x5 grid “inside” the region to which a vector was quantized?</p>
@@ -1251,7 +1254,7 @@ d = 6:
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> np.empty( ( <span class="bu">len</span>(d_choices), <span class="bu">len</span>(cb_lengths), <span class="bu">len</span>(K_choices) ))</span>
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Error values as a function of dimensions (n_dim), codebook length (cb_len), and</span><span class="ch">\n</span><span class="st">number of codebooks (K):</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Error values as a function of dimensions (n_dim), codebook length (cb_len),</span><span class="ch">\n</span><span class="st">and number of codebooks (K):</span><span class="ch">\n</span><span class="st">"</span>)</span>
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> q1, d <span class="kw">in</span> <span class="bu">enumerate</span>(d_choices):</span>
 <span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"n_dim=</span><span class="sc">{</span>d<span class="sc">}</span><span class="ss">:"</span>)</span>
 <span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    data_hd <span class="op">=</span> DATA_MIN <span class="op">+</span> (DATA_MAX<span class="op">-</span>DATA_MIN)<span class="op">*</span>np.random.rand(npoints_hd, d)</span>
