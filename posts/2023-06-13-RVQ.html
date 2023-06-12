@@ -237,8 +237,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#quantization-error" id="toc-quantization-error" class="nav-link" data-scroll-target="#quantization-error">(Quantization) Error</a></li>
   <li><a href="#optional-k-means-skippable" id="toc-optional-k-means-skippable" class="nav-link" data-scroll-target="#optional-k-means-skippable">Optional: k-Means (Skippable)</a></li>
   </ul></li>
-  <li><a href="#residual-vector-quantization-rvq" id="toc-residual-vector-quantization-rvq" class="nav-link" data-scroll-target="#residual-vector-quantization-rvq">Residual Vector Quantization (RVQ)</a></li>
+  <li><a href="#residual-vector-quantization-rvq" id="toc-residual-vector-quantization-rvq" class="nav-link" data-scroll-target="#residual-vector-quantization-rvq">Residual Vector Quantization (RVQ)</a>
+  <ul class="collapse">
+  <li><a href="#basic-idea-codebooks-in-codebooks" id="toc-basic-idea-codebooks-in-codebooks" class="nav-link" data-scroll-target="#basic-idea-codebooks-in-codebooks">Basic Idea: “Codebooks in Codebooks”</a></li>
   <li><a href="#quantizer-algorithm" id="toc-quantizer-algorithm" class="nav-link" data-scroll-target="#quantizer-algorithm">Quantizer algorithm</a></li>
+  <li><a href="#error-analysis-for-high-dimensional-data" id="toc-error-analysis-for-high-dimensional-data" class="nav-link" data-scroll-target="#error-analysis-for-high-dimensional-data">Error Analysis for High-Dimensional Data</a></li>
+  </ul></li>
   <li><a href="#extra-rvq-and-backpropagation" id="toc-extra-rvq-and-backpropagation" class="nav-link" data-scroll-target="#extra-rvq-and-backpropagation">Extra: RVQ and Backpropagation</a></li>
   </ul>
 </nav>
@@ -955,6 +959,8 @@ if (outputEl) {{
 </section>
 <section id="residual-vector-quantization-rvq" class="level2">
 <h2 class="anchored" data-anchor-id="residual-vector-quantization-rvq">Residual Vector Quantization (RVQ)</h2>
+<section id="basic-idea-codebooks-in-codebooks" class="level3">
+<h3 class="anchored" data-anchor-id="basic-idea-codebooks-in-codebooks">Basic Idea: “Codebooks in Codebooks”</h3>
 <p>The trick with RVQ is, rather than having a single high-resolution codebook, to instead have “codebooks inside of codebooks”, or, if you like, “stacking codebooks”. Let’s say we want to quintuple the resolution of our initial 5x5 grid. Instead of using a 25x25 grid (which would be 25x the computational cost of the original), what if we put a little 5x5 grid “inside” the region to which a vector was quantized?</p>
 <p>For example, in the “middle” region (region 12), we can do…</p>
 <div class="cell">
@@ -1086,8 +1092,8 @@ if (outputEl) {{
 </div>
 <p>Also because of our clever choice of coordinates, for the next “level” of quantization, we can take the codebook at the next level to be just the previous codebook divided by <code>n_grid</code>! This won’t always be the case; I’m just feeling clever and lazy.</p>
 </section>
-<section id="quantizer-algorithm" class="level2">
-<h2 class="anchored" data-anchor-id="quantizer-algorithm">Quantizer algorithm</h2>
+<section id="quantizer-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="quantizer-algorithm">Quantizer algorithm</h3>
 <p>Up til now, we’ve hidden the code by default. But to really get the RVQ method, I’m going to show the code.</p>
 <p>Let’s write a general quantizer multiple “levels” of nested codebooks. It will take our data points and return the various levels of codebook indices.</p>
 <p>Will be following “Algorithm 1” from page 4 of Google’s 2021 paper “<a href="https://arxiv.org/abs/2107.03312">SoundStream: An End-to-End Neural Audio Codec</a>”:</p>
@@ -1226,6 +1232,9 @@ d = 6:
 </div>
 <p>Those “cost savings factors” were artifically high though, because as we said, we’re still using squares/hypercubes for our regions, and we don’t need to shape them that way and we don’t need <em>that many</em> of them. The great thing about (R)VQ is you can specify how many centroids you want – i.e.&nbsp;how “long” you want your codebook to be – and you can keep that to some manageable number even as the number of dimensions skyrockets.</p>
 <p>So, to tackle higher dimensions, we need to stop using uniform squares so we can have a codebook “length” of less than 1000 centroids (instead of what just had, which was going into the hundreds of thousands, e.g.&nbsp;<span class="math inline">\(5^8 = 390625\)</span>).</p>
+</section>
+<section id="error-analysis-for-high-dimensional-data" class="level3">
+<h3 class="anchored" data-anchor-id="error-analysis-for-high-dimensional-data">Error Analysis for High-Dimensional Data</h3>
 <p>We can try a given number of (initially) random centroids, and try to match them to the data via k-means.</p>
 <blockquote class="blockquote">
 <p>Note: Ideally we’d run k-means on the different groups of residuals at different levels of our RVQ codebook list, and we’d optimize these via some kind of learning. But…for this blog post we’re not gonna do that!</p>
@@ -1383,6 +1392,7 @@ if (outputEl) {{
 </div>
 </div>
 <p>…Yea I don’t know what’s up. Will seek some help.</p>
+</section>
 </section>
 <section id="extra-rvq-and-backpropagation" class="level1">
 <h1>Extra: RVQ and Backpropagation</h1>
