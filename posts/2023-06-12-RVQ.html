@@ -317,7 +317,7 @@ require(['plotly'], function(Plotly) {
 </figure>
 </div>
 <p>Moving forward, I can do a bit more code-wise with the squares, so let’s start there. ;-)</p>
-<p>Let me just formalize that a bit. We’ll let the number of squares be controlled by the variable “<code>n_grid</code>”. So for our two-dimensional examples, there will be <code>n_grid</code><span class="math inline">\(^2\)</span> square regions.</p>
+<p>Let me just formalize that a bit: We’ll let the number of squares be controlled by the variable “<code>n_grid</code>”. So for our two-dimensional examples, there will be <code>n_grid</code><span class="math inline">\(^2\)</span> square regions.</p>
 <p>With vector quantization, we give an index value to every region (e.g.&nbsp;0 to 24 for a 5x5 square grid), and then we <strong><em>replace each vector’s value with the index of the region</em></strong>.</p>
 <div class="cell">
 <details>
@@ -562,7 +562,7 @@ For reasons of simplicity (/laziness) that will become clear later, for this blo
 </div>
 <section id="reconstruction-error" class="level3">
 <h3 class="anchored" data-anchor-id="reconstruction-error">Reconstruction Error</h3>
-<p>When we do this quantization (i.e.&nbsp;replacing vectors by their nearest centroid), the centroid locations will naturally be a bit “off” compared to the original data vectors themselves. The finer the grid you make, the smaller the regions, and the less error. For a 2D grid, the error will be on the order of <span class="math inline">\(h^2\)</span> where <span class="math inline">\(h\)</span> is the grid spacing (<span class="math inline">\(h = 1/5 = 0.2\)</span> in our example). Let’s check how the error varies as we change the grid spacing or equivalently, <code>n_grid</code>).</p>
+<p>When we do this quantization (i.e.&nbsp;replacing vectors by their nearest centroid), the centroid locations will naturally be a bit “off” compared to the original data vectors themselves. The finer the grid you make, the smaller the regions, and the less error. For a 2D grid, the error will be on the order of <span class="math inline">\(h^2\)</span> where <span class="math inline">\(h\)</span> is the grid spacing (<span class="math inline">\(h\)</span> = 1/5 = 0.2 in our example). Let’s check how the error varies as we change the grid spacing, i.e., by changing <code>n_grid</code>.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
