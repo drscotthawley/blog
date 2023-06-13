@@ -318,7 +318,7 @@ require(['plotly'], function(Plotly) {
 </div>
 <p>Moving forward, I can do a bit more code-wise with the squares, so let’s start there. ;-)</p>
 <p>Let me just formalize that a bit. We’ll let the number of squares be controlled by the variable “<code>n_grid</code>”. So for our two-dimensional examples, there will be <code>n_grid</code><span class="math inline">\(^2\)</span> square regions.</p>
-<p>With vector quantization, we give an index value to every region (e.g.&nbsp;0 to 24 for a 5x5 square grid), and then what we <strong>replace each vector’s value with the index of the of the region</strong>.</p>
+<p>With vector quantization, we give an index value to every region (e.g.&nbsp;0 to 24 for a 5x5 square grid), and then we <strong><em>replace each vector’s value with the index of the region</em></strong>.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
