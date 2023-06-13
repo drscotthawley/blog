@@ -281,7 +281,7 @@ require(['plotly'], function(Plotly) {
 </div>
 <p>To computer scientists, the <span class="math inline">\((x,y)\)</span> coordinates of each point define a “vector”. (To mathematicians and physicists, the “vector” points from the origin to each point, but that distinction isn’t going to matter to us.)</p>
 <blockquote class="blockquote">
-<p>For neural audio codecs, the vectors are typically vertical slices (columns) from an audio spectrogram, i.e., they are a list of amplitudes for a set of frequencies that were found over a short time interval called a “frame” - found by a Short Time Fourier Transform algorithm (or a variant, such as a Mel-spectrogram.)</p>
+<p>For neural audio codecs, the vectors could be vertical slices (columns) from an audio spectrogram, i.e., a are a list of amplitudes for a set of frequencies that were found over a short time interval called a “frame.” More often, however, the vectors are <em>themselves</em> the outputs of some other audio encoder (e.g.&nbsp;a Convolutional Neural Network), and the (R)VQ is done to shrink <em>those</em> encoded vectors down even more in order to do things like <a href="https://github.com/CompVis/latent-diffusion">Latent Diffusion</a>.</p>
 </blockquote>
 <p>Now divide up the space into a bunch of regions. How we do that can take many forms. For now, just consider the two examples of my hand drawing with colors, and a set of tiled squares. There are “fancier” algorithms to partition the space in a way that best “fits” the data (e.g., see “k-Means”, below). We can cover schemes like the third image later.</p>
 <!--- ::: {layout-ncol=2 label="fig-region-options" fig-cap="Two ways of partitioning space"} -->
