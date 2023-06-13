@@ -256,7 +256,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>“Vector Quantization.” Sounds intimidating. “Residual Vector Quantization” sounds even more intimidating, even near-meaningless to most people. Turns out, these are easy to understand given a few pictures, even to the point a child could understand them – uh… if the child <em>wanted</em> to. Certainly, there can be sophisticated ways to implement these algorithms, and we’ll cover a bit of that later on, but the basics are very simple.</p>
-<p>Residual Vector Quantization (RVQ) is found in state-of-the-art neural audio codecs such as Google’s <a href="https://ai.googleblog.com/2021/08/soundstream-end-to-end-neural-audio.html">SoundStream</a>, and Facebook/Meta AI’s <a href="https://github.com/facebookresearch/encodec">Encodec</a>, which in turn form the backbone of generative audio models such as <a href="https://google-research.github.io/seanet/audiolm/examples/">AudioLM</a> (Google) and <a href="https://ai.honu.io/papers/musicgen/">MusicGen</a> (Facebook). What is it and how does it work?</p>
+<p>Residual Vector Quantization (RVQ) is found in state-of-the-art neural audio codecs such as Google’s <a href="https://ai.googleblog.com/2021/08/soundstream-end-to-end-neural-audio.html">SoundStream</a>, and Facebook/Meta AI’s <a href="https://github.com/facebookresearch/encodec">Encodec</a>, which in turn form the backbone of generative audio models such as <a href="https://google-research.github.io/seanet/audiolm/examples/">AudioLM</a> (Google) and <a href="https://ai.honu.io/papers/musicgen/">MusicGen</a> (Facebook). It’s also the subject of Lucidrain’s library <a href="https://github.com/lucidrains/vector-quantize-pytorch"><code>vector-quantize-pytorch</code></a>, which we’ll use to check our work.</p>
+<p>What is RVQ and how does it work?</p>
 <p>First we should consider regular vector quantization (VQ). VQ has been around for decades, and it shows up in many areas of signal processing when compression is involved.</p>
 <blockquote class="blockquote">
 <p>Note: Whenever I say something that applies to both VQ and RVQ, I’ll use the abbreviation “(R)VQ.”</p>
@@ -974,7 +975,7 @@ if (outputEl) {{
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_region_membership(data:np.array, h<span class="op">=</span><span class="fl">0.2</span>, codebook<span class="op">=</span><span class="va">None</span>):</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Tells which region each point is in. </span><span class="al">TBD</span><span class="co">: this is slow but it works! ;-) "</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    memb <span class="op">=</span> np.zeros(data.shape[<span class="dv">0</span>], dtype<span class="op">=</span>np.int32)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    memb <span class="op">=</span> np.zeros(data.shape[<span class="dv">0</span>], dtype<span class="op">=</span>np.int32).to(data.device)</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> codebook <span class="kw">is</span> <span class="va">None</span>:  <span class="co"># just assume basic squares</span></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> di, p <span class="kw">in</span> <span class="bu">enumerate</span>(data):</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>            i <span class="op">=</span> (p[<span class="dv">0</span>]<span class="op">-</span>DATA_MIN) <span class="op">//</span> h</span>
@@ -1240,100 +1241,174 @@ d = 6:
 <h3 class="anchored" data-anchor-id="error-analysis-for-high-dimensional-data">Error Analysis for High-Dimensional Data</h3>
 <p>We can try a given number of (initially) random centroids, and try to match them to the data via k-means.</p>
 <blockquote class="blockquote">
-<p>Note: Ideally we’d run k-means on the different groups of residuals at different levels of our RVQ codebook list, and we’d optimize these via some kind of learning. But…for this blog post we’re not gonna do that!</p>
+<p>Note: The residuals at different levels of our RVQ calculations will likely have different data distributions. Which means that instead of “sharing (scaled) codebooks” like we did before, we’ll need to re-calculate a new codebook at each “level”. Otherwise we won’t see any advantage from RVQ (trust me I tried).</p>
 </blockquote>
 <p>In the following calculation, we’ll vary the number of dimensions, the length of the codebooks, and the number of codebooks, and see how these all affect the reconstruction error.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>d_choices <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">20</span>, <span class="dv">64</span>, <span class="dv">128</span>, <span class="dv">256</span>]  </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>cb_lengths <span class="op">=</span> [<span class="dv">25</span>, <span class="dv">64</span>, <span class="dv">128</span>, <span class="dv">256</span>, <span class="dv">1024</span>]  <span class="co"># codebook lengths</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>K_choices <span class="op">=</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>]     <span class="co"># variable numbers of codebooks</span></span>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Also, for speed, we're ditching numpy for pytorch</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>npoints_hd <span class="op">=</span> <span class="dv">10000</span>  <span class="co"># points in high-dim spaces</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> np.empty( ( <span class="bu">len</span>(d_choices), <span class="bu">len</span>(cb_lengths), <span class="bu">len</span>(K_choices) ))</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Error values as a function of dimensions (n_dim), codebook length (cb_len),</span><span class="ch">\n</span><span class="st">and number of codebooks (K):</span><span class="ch">\n</span><span class="st">"</span>)</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> q1, d <span class="kw">in</span> <span class="bu">enumerate</span>(d_choices):</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"n_dim=</span><span class="sc">{</span>d<span class="sc">}</span><span class="ss">:"</span>)</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    data_hd <span class="op">=</span> DATA_MIN <span class="op">+</span> (DATA_MAX<span class="op">-</span>DATA_MIN)<span class="op">*</span>np.random.rand(npoints_hd, d)</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> q2, cb_len <span class="kw">in</span> <span class="bu">enumerate</span>(cb_lengths):</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        indent <span class="op">=</span> <span class="ss">f"  "</span></span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>indent<span class="sc">}</span><span class="ss"> cb_len=</span><span class="sc">{</span>cb_len<span class="sc">:4}</span><span class="ss">:"</span>, end<span class="op">=</span><span class="st">""</span>)</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># really we'd be calculating different codebooks at each level but c'mon, blog reader </span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>        np.random.seed(<span class="dv">1</span>)</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>        codebook0, indices0 <span class="op">=</span> kmeans(data_hd, k<span class="op">=</span>cb_len)   <span class="co">#instead of generate_codebook(n_grid, n_dim=d)</span></span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>        <span class="co">#codebook0 = np.random.rand(cb_len, d)  # how bout a random codebook?</span></span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>        codebooks <span class="op">=</span> [codebook0<span class="op">/</span>n_grid<span class="op">**</span>level <span class="cf">for</span> level <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">max</span>(K_choices))] <span class="co"># really we should do new codebooks at each level instead of just rescaling</span></span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> q3, K <span class="kw">in</span> <span class="bu">enumerate</span>(K_choices):</span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>            indices <span class="op">=</span> quantizer(data_hd, codebooks)</span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">assert</span> indices.shape[<span class="dv">0</span>] <span class="op">&gt;=</span> K </span>
-<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>            recon <span class="op">=</span> data_hd<span class="op">*</span><span class="dv">0</span></span>
-<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> lil_k <span class="kw">in</span> <span class="bu">range</span>(K):   <span class="co"># reconstruct using all codebooks</span></span>
-<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>                recon <span class="op">+=</span> codebooks[lil_k][indices[lil_k]]</span>
-<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>            error <span class="op">=</span> ((recon <span class="op">-</span> data_hd)<span class="op">**</span><span class="dv">2</span>).mean()</span>
-<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"  K=</span><span class="sc">{</span>K<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>error<span class="sc">:.2e}{</span><span class="st">','</span> <span class="cf">if</span> K <span class="op">!=</span> K_choices[<span class="op">-</span><span class="dv">1</span>] <span class="cf">else</span> <span class="st">''</span><span class="sc">}</span><span class="ss">"</span>,end<span class="op">=</span><span class="st">""</span>)</span>
-<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>            results[q1,q2,q3] <span class="op">=</span> error</span>
-<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_device(gpu_str<span class="op">=</span><span class="st">''</span>):</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"utility to suggest which pytorch device to use. from aeoiu.core"</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    device_str <span class="op">=</span> <span class="st">'cpu'</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> torch.cuda.is_available():</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>        device_str <span class="op">=</span> <span class="st">'cuda'</span> <span class="cf">if</span> gpu_str<span class="op">==</span><span class="st">''</span> <span class="cf">else</span> <span class="ss">f'cuda:</span><span class="sc">{</span>gpu_str<span class="sc">}</span><span class="ss">'</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> <span class="bu">hasattr</span>(torch.backends, <span class="st">'mps'</span>) <span class="kw">and</span> torch.backends.mps.is_available(): <span class="co"># must check for mps attr if using older pytorch</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>        device_str <span class="op">=</span> <span class="st">'mps'</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>        os.environ[<span class="st">'PYTORCH_ENABLE_MPS_FALLBACK'</span>] <span class="op">=</span> <span class="st">'1'</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> torch.device(device_str)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> distance_pytorch(p1, p2):</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">"euclidean distance squared. we don't need the square root b/c we're only interested in ordering by distance"</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ((p1<span class="op">-</span>p2)<span class="op">**</span><span class="dv">2</span>).<span class="bu">sum</span>(<span class="dv">1</span>)</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cluster_membership_pytorch(data, centroids):</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>        npoints <span class="op">=</span> data.shape[<span class="dv">0</span>]</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>        min_ds <span class="op">=</span> <span class="dv">9999</span><span class="op">*</span>torch.ones(npoints).to(data.device)</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>        cluster_memb <span class="op">=</span> torch.zeros(npoints, dtype<span class="op">=</span><span class="bu">int</span>).to(data.device)<span class="op">-</span><span class="dv">1</span></span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, c <span class="kw">in</span> <span class="bu">enumerate</span>(centroids): <span class="co"># compute distances for all points</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>            ds <span class="op">=</span> distance_pytorch(data, c)</span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>            inds <span class="op">=</span> torch.argwhere(ds <span class="op">&lt;</span> min_ds)</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">len</span>(inds) <span class="op">&gt;</span> <span class="dv">0</span>: </span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a>                min_ds[inds] <span class="op">=</span> ds[inds]</span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a>                cluster_memb[inds] <span class="op">=</span> i</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> <span class="bu">len</span>(cluster_memb)<span class="op">==</span>npoints <span class="co"># we're not including the centroids themselves here</span></span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> cluster_memb</span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> move_centroids_pytorch(centroids, data, cluster_memb):</span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> ki <span class="kw">in</span> <span class="bu">range</span>(centroids.shape[<span class="dv">0</span>]):</span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>            inds <span class="op">=</span> torch.argwhere( cluster_memb <span class="op">==</span> ki)</span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">len</span>(inds) <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> dim <span class="kw">in</span> <span class="bu">range</span>(data.shape[<span class="op">-</span><span class="dv">1</span>]):</span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a>                    centroids[ki,dim] <span class="op">=</span> torch.mean(data[inds,dim], <span class="dv">0</span>)</span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> centroids</span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-46"><a href="#cb22-46" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kmeans_pytorch(data, k<span class="op">=</span><span class="dv">5</span>, n_iter<span class="op">=</span><span class="dv">10</span>):</span>
+<span id="cb22-47"><a href="#cb22-47" aria-hidden="true" tabindex="-1"></a>    <span class="co">"pytorch version of kmeans routine"</span></span>
+<span id="cb22-48"><a href="#cb22-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb22-49"><a href="#cb22-49" aria-hidden="true" tabindex="-1"></a>        n_dim, data_min, data_max <span class="op">=</span> data.shape[<span class="op">-</span><span class="dv">1</span>], torch.<span class="bu">min</span>(data), torch.<span class="bu">max</span>(data)</span>
+<span id="cb22-50"><a href="#cb22-50" aria-hidden="true" tabindex="-1"></a>        centroids <span class="op">=</span> data_min <span class="op">+</span> <span class="fl">0.2</span><span class="op">+</span><span class="fl">0.6</span><span class="op">*</span>(data_max<span class="op">-</span>data_min)<span class="op">*</span>torch.rand((k, n_dim)).to(data.device) <span class="co"># random init</span></span>
+<span id="cb22-51"><a href="#cb22-51" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> it <span class="kw">in</span> <span class="bu">range</span>(n_iter):</span>
+<span id="cb22-52"><a href="#cb22-52" aria-hidden="true" tabindex="-1"></a>            cluster_memb <span class="op">=</span> cluster_membership_pytorch(data, centroids)</span>
+<span id="cb22-53"><a href="#cb22-53" aria-hidden="true" tabindex="-1"></a>            centroids <span class="op">=</span> move_centroids_pytorch(centroids, data, cluster_memb)</span>
+<span id="cb22-54"><a href="#cb22-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> centroids, cluster_memb</span>
+<span id="cb22-55"><a href="#cb22-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-56"><a href="#cb22-56" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> new_cb_at_level(resids, cb_len):</span>
+<span id="cb22-57"><a href="#cb22-57" aria-hidden="true" tabindex="-1"></a>    <span class="co">"given residuals, it will calculate a new codebook for those residuals, and output indices for those codebooks"</span></span>
+<span id="cb22-58"><a href="#cb22-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb22-59"><a href="#cb22-59" aria-hidden="true" tabindex="-1"></a>        codebook, indices <span class="op">=</span> kmeans_pytorch(resids, k<span class="op">=</span>cb_len, n_iter<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb22-60"><a href="#cb22-60" aria-hidden="true" tabindex="-1"></a>        new_resids <span class="op">=</span> resids <span class="op">-</span> codebook[indices]  <span class="co"># new_resids are relative to new_codebook</span></span>
+<span id="cb22-61"><a href="#cb22-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> new_resids, codebook, indices</span>
+<span id="cb22-62"><a href="#cb22-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-63"><a href="#cb22-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-64"><a href="#cb22-64" aria-hidden="true" tabindex="-1"></a>cpu_device <span class="op">=</span> torch.device(<span class="st">'cpu'</span>) <span class="co"># turns out cpu is faster on Mac for small/isolated loads</span></span>
+<span id="cb22-65"><a href="#cb22-65" aria-hidden="true" tabindex="-1"></a>gpu_device <span class="op">=</span> get_device()</span>
+<span id="cb22-66"><a href="#cb22-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-67"><a href="#cb22-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-68"><a href="#cb22-68" aria-hidden="true" tabindex="-1"></a>d_choices <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">20</span>, <span class="dv">64</span>, <span class="dv">128</span>, <span class="dv">256</span>]  </span>
+<span id="cb22-69"><a href="#cb22-69" aria-hidden="true" tabindex="-1"></a>cb_lengths <span class="op">=</span> [<span class="dv">25</span>, <span class="dv">64</span>, <span class="dv">128</span>, <span class="dv">256</span>, <span class="dv">1024</span>]  <span class="co"># codebook lengths</span></span>
+<span id="cb22-70"><a href="#cb22-70" aria-hidden="true" tabindex="-1"></a>K_choices <span class="op">=</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>]     <span class="co"># variable numbers of codebooks</span></span>
+<span id="cb22-71"><a href="#cb22-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-72"><a href="#cb22-72" aria-hidden="true" tabindex="-1"></a>npoints_hd <span class="op">=</span> <span class="dv">10000</span>  <span class="co"># points in high-dim spaces</span></span>
+<span id="cb22-73"><a href="#cb22-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-74"><a href="#cb22-74" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> torch.empty( ( <span class="bu">len</span>(d_choices), <span class="bu">len</span>(cb_lengths), <span class="bu">len</span>(K_choices) )).cpu()</span>
+<span id="cb22-75"><a href="#cb22-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-76"><a href="#cb22-76" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Error values as a function of dimensions (n_dim), codebook length (cb_len),</span><span class="ch">\n</span><span class="st">and number of codebooks (K):"</span>)</span>
+<span id="cb22-77"><a href="#cb22-77" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> q1, d <span class="kw">in</span> <span class="bu">enumerate</span>(d_choices):</span>
+<span id="cb22-78"><a href="#cb22-78" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">n_dim =</span><span class="sc">{</span>d<span class="sc">:3}</span><span class="ss">:             K=1        K=2        K=3        K=4"</span>)</span>
+<span id="cb22-79"><a href="#cb22-79" aria-hidden="true" tabindex="-1"></a>    data_hd <span class="op">=</span> DATA_MIN <span class="op">+</span> (DATA_MAX<span class="op">-</span>DATA_MIN)<span class="op">*</span>torch.rand((npoints_hd, d))</span>
+<span id="cb22-80"><a href="#cb22-80" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> q2, cb_len <span class="kw">in</span> <span class="bu">enumerate</span>(cb_lengths):</span>
+<span id="cb22-81"><a href="#cb22-81" aria-hidden="true" tabindex="-1"></a>        device <span class="op">=</span> cpu_device <span class="cf">if</span> d<span class="op">*</span>cb_len <span class="op">&lt;</span> <span class="fl">1e6</span> <span class="cf">else</span> gpu_device  <span class="co"># MPS on M1 is often slower than CPU due to latency</span></span>
+<span id="cb22-82"><a href="#cb22-82" aria-hidden="true" tabindex="-1"></a>        data_hd <span class="op">=</span> data_hd.to(device)</span>
+<span id="cb22-83"><a href="#cb22-83" aria-hidden="true" tabindex="-1"></a>        indent <span class="op">=</span> <span class="ss">f"    "</span></span>
+<span id="cb22-84"><a href="#cb22-84" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>indent<span class="sc">}</span><span class="ss"> cb_len = </span><span class="sc">{</span>cb_len<span class="sc">:4}</span><span class="ss">:"</span>, end<span class="op">=</span><span class="st">""</span>)</span>
+<span id="cb22-85"><a href="#cb22-85" aria-hidden="true" tabindex="-1"></a>        torch.manual_seed(<span class="dv">1</span>)</span>
+<span id="cb22-86"><a href="#cb22-86" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> q3, K <span class="kw">in</span> <span class="bu">enumerate</span>(K_choices):</span>
+<span id="cb22-87"><a href="#cb22-87" aria-hidden="true" tabindex="-1"></a>            recon <span class="op">=</span> data_hd<span class="op">*</span><span class="dv">0</span></span>
+<span id="cb22-88"><a href="#cb22-88" aria-hidden="true" tabindex="-1"></a>            resids <span class="op">=</span> data_hd</span>
+<span id="cb22-89"><a href="#cb22-89" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> lil_k <span class="kw">in</span> <span class="bu">range</span>(K):   <span class="co"># loop over codebooks</span></span>
+<span id="cb22-90"><a href="#cb22-90" aria-hidden="true" tabindex="-1"></a>                resids, codebook_l, indices_l <span class="op">=</span> new_cb_at_level(resids, cb_len)</span>
+<span id="cb22-91"><a href="#cb22-91" aria-hidden="true" tabindex="-1"></a>                recon <span class="op">+=</span> codebook_l[indices_l]</span>
+<span id="cb22-92"><a href="#cb22-92" aria-hidden="true" tabindex="-1"></a>            error <span class="op">=</span> ((recon <span class="op">-</span> data_hd)<span class="op">**</span><span class="dv">2</span>).mean()</span>
+<span id="cb22-93"><a href="#cb22-93" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>error<span class="sc">:.2e}{</span><span class="st">','</span> <span class="cf">if</span> K <span class="op">!=</span> K_choices[<span class="op">-</span><span class="dv">1</span>] <span class="cf">else</span> <span class="st">''</span><span class="sc">}</span><span class="ss">"</span>,end<span class="op">=</span><span class="st">""</span>)</span>
+<span id="cb22-94"><a href="#cb22-94" aria-hidden="true" tabindex="-1"></a>            results[q1,q2,q3] <span class="op">=</span> error.cpu()</span>
+<span id="cb22-95"><a href="#cb22-95" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Error values as a function of dimensions (n_dim), codebook length (cb_len), and
-number of codebooks (K):
+<pre><code>Error values as a function of dimensions (n_dim), codebook length (cb_len),
+and number of codebooks (K):
 
-n_dim=2:
-   cb_len=  25:  K=1: 3.55e-03,  K=2: 2.20e-04,  K=3: 3.65e-05,  K=4: 2.22e-05
-   cb_len=  64:  K=1: 1.50e-03,  K=2: 4.37e-05,  K=3: 1.61e-06,  K=4: 7.72e-08
-   cb_len= 128:  K=1: 8.98e-04,  K=2: 1.72e-05,  K=3: 5.88e-07,  K=4: 2.38e-08
-   cb_len= 256:  K=1: 5.84e-04,  K=2: 6.52e-06,  K=3: 2.24e-07,  K=4: 8.90e-09
-   cb_len=1024:  K=1: 3.20e-04,  K=2: 1.50e-06,  K=3: 5.67e-08,  K=4: 2.22e-09
-n_dim=3:
-   cb_len=  25:  K=1: 1.00e-02,  K=2: 2.83e-03,  K=3: 1.94e-03,  K=4: 1.79e-03
-   cb_len=  64:  K=1: 5.35e-03,  K=2: 6.78e-04,  K=3: 2.86e-04,  K=4: 2.36e-04
-   cb_len= 128:  K=1: 3.45e-03,  K=2: 2.45e-04,  K=3: 5.37e-05,  K=4: 3.70e-05
-   cb_len= 256:  K=1: 2.23e-03,  K=2: 9.58e-05,  K=3: 8.22e-06,  K=4: 3.73e-06
-   cb_len=1024:  K=1: 1.08e-03,  K=2: 2.28e-05,  K=3: 6.92e-07,  K=4: 5.40e-08
-n_dim=6:
-   cb_len=  25:  K=1: 3.13e-02,  K=2: 2.11e-02,  K=3: 1.93e-02,  K=4: 1.90e-02
-   cb_len=  64:  K=1: 2.14e-02,  K=2: 1.16e-02,  K=3: 9.98e-03,  K=4: 9.68e-03
-   cb_len= 128:  K=1: 1.64e-02,  K=2: 7.51e-03,  K=3: 6.12e-03,  K=4: 5.87e-03
-   cb_len= 256:  K=1: 1.26e-02,  K=2: 4.68e-03,  K=3: 3.54e-03,  K=4: 3.34e-03
-   cb_len=1024:  K=1: 6.69e-03,  K=2: 1.46e-03,  K=3: 8.45e-04,  K=4: 7.47e-04
-n_dim=8:
-   cb_len=  25:  K=1: 4.25e-02,  K=2: 3.31e-02,  K=3: 3.13e-02,  K=4: 3.10e-02
-   cb_len=  64:  K=1: 3.13e-02,  K=2: 2.12e-02,  K=3: 1.94e-02,  K=4: 1.91e-02
-   cb_len= 128:  K=1: 2.50e-02,  K=2: 1.50e-02,  K=3: 1.33e-02,  K=4: 1.30e-02
-   cb_len= 256:  K=1: 1.98e-02,  K=2: 1.04e-02,  K=3: 8.88e-03,  K=4: 8.59e-03
-   cb_len=1024:  K=1: 1.18e-02,  K=2: 4.49e-03,  K=3: 3.39e-03,  K=4: 3.19e-03
-n_dim=20:
-   cb_len=  25:  K=1: 6.57e-02,  K=2: 6.09e-02,  K=3: 5.99e-02,  K=4: 5.98e-02
-   cb_len=  64:  K=1: 5.90e-02,  K=2: 5.26e-02,  K=3: 5.13e-02,  K=4: 5.11e-02
-   cb_len= 128:  K=1: 5.40e-02,  K=2: 4.66e-02,  K=3: 4.51e-02,  K=4: 4.49e-02
-   cb_len= 256:  K=1: 4.86e-02,  K=2: 4.04e-02,  K=3: 3.88e-02,  K=4: 3.85e-02
-   cb_len=1024:  K=1: 3.65e-02,  K=2: 2.75e-02,  K=3: 2.57e-02,  K=4: 2.54e-02
-n_dim=64:
-   cb_len=  25:  K=1: 7.70e-02,  K=2: 7.54e-02,  K=3: 7.51e-02,  K=4: 7.50e-02
-   cb_len=  64:  K=1: 7.42e-02,  K=2: 7.18e-02,  K=3: 7.14e-02,  K=4: 7.13e-02
-   cb_len= 128:  K=1: 7.17e-02,  K=2: 6.87e-02,  K=3: 6.81e-02,  K=4: 6.80e-02
-   cb_len= 256:  K=1: 6.88e-02,  K=2: 6.51e-02,  K=3: 6.44e-02,  K=4: 6.43e-02
-   cb_len=1024:  K=1: 5.92e-02,  K=2: 5.40e-02,  K=3: 5.28e-02,  K=4: 5.26e-02
-n_dim=128:
-   cb_len=  25:  K=1: 7.99e-02,  K=2: 7.90e-02,  K=3: 7.89e-02,  K=4: 7.88e-02
-   cb_len=  64:  K=1: 7.82e-02,  K=2: 7.69e-02,  K=3: 7.66e-02,  K=4: 7.66e-02
-   cb_len= 128:  K=1: 7.66e-02,  K=2: 7.49e-02,  K=3: 7.46e-02,  K=4: 7.45e-02
-   cb_len= 256:  K=1: 7.46e-02,  K=2: 7.25e-02,  K=3: 7.20e-02,  K=4: 7.19e-02
-   cb_len=1024:  K=1: 6.69e-02,  K=2: 6.34e-02,  K=3: 6.25e-02,  K=4: 6.24e-02
-n_dim=256:
-   cb_len=  25:  K=1: 8.14e-02,  K=2: 8.09e-02,  K=3: 8.08e-02,  K=4: 8.08e-02
-   cb_len=  64:  K=1: 8.03e-02,  K=2: 7.96e-02,  K=3: 7.95e-02,  K=4: 7.94e-02
-   cb_len= 128:  K=1: 7.93e-02,  K=2: 7.83e-02,  K=3: 7.81e-02,  K=4: 7.81e-02
-   cb_len= 256:  K=1: 7.80e-02,  K=2: 7.67e-02,  K=3: 7.64e-02,  K=4: 7.63e-02
-   cb_len=1024:  K=1: 7.07e-02,  K=2: 6.84e-02,  K=3: 6.78e-02,  K=4: 6.77e-02</code></pre>
+n_dim =  2:             K=1        K=2        K=3        K=4
+     cb_len =   25:  3.57e-03,  5.03e-04,  2.88e-04,  2.41e-04
+     cb_len =   64:  1.54e-03,  3.85e-04,  2.20e-04,  1.96e-04
+     cb_len =  128:  8.56e-04,  3.31e-04,  2.01e-04,  2.87e-04
+     cb_len =  256:  5.79e-04,  3.49e-04,  2.08e-04,  1.81e-04
+     cb_len = 1024:  2.91e-04,  2.87e-04,  2.87e-04,  1.11e-04
+
+n_dim =  3:             K=1        K=2        K=3        K=4
+     cb_len =   25:  1.02e-02,  1.59e-03,  5.65e-04,  2.73e-04
+     cb_len =   64:  5.31e-03,  5.16e-04,  3.59e-04,  1.75e-04
+     cb_len =  128:  3.36e-03,  4.06e-04,  2.65e-04,  1.73e-04
+     cb_len =  256:  2.22e-03,  3.02e-04,  2.50e-04,  2.95e-04
+     cb_len = 1024:  1.06e-03,  2.63e-04,  2.05e-04,  9.83e-05
+
+n_dim =  6:             K=1        K=2        K=3        K=4
+     cb_len =   25:  3.10e-02,  1.26e-02,  5.42e-03,  2.38e-03
+     cb_len =   64:  2.11e-02,  6.07e-03,  1.98e-03,  8.28e-04
+     cb_len =  128:  1.65e-02,  3.82e-03,  1.18e-03,  5.49e-04
+     cb_len =  256:  1.25e-02,  2.28e-03,  6.58e-04,  5.61e-04
+     cb_len = 1024:  6.78e-03,  9.36e-04,  4.71e-04,  2.66e-04
+
+n_dim =  8:             K=1        K=2        K=3        K=4
+     cb_len =   25:  4.22e-02,  2.22e-02,  1.18e-02,  6.34e-03
+     cb_len =   64:  3.12e-02,  1.29e-02,  5.50e-03,  2.46e-03
+     cb_len =  128:  2.48e-02,  8.42e-03,  2.99e-03,  1.43e-03
+     cb_len =  256:  1.99e-02,  5.48e-03,  1.77e-03,  6.87e-04
+     cb_len = 1024:  1.18e-02,  2.44e-03,  9.38e-04,  6.27e-04
+
+n_dim = 20:             K=1        K=2        K=3        K=4
+     cb_len =   25:  6.54e-02,  5.08e-02,  3.97e-02,  3.11e-02
+     cb_len =   64:  5.87e-02,  4.13e-02,  2.93e-02,  2.09e-02
+     cb_len =  128:  5.35e-02,  3.51e-02,  2.27e-02,  1.55e-02
+     cb_len =  256:  4.81e-02,  2.86e-02,  1.77e-02,  1.05e-02
+     cb_len = 1024:  3.63e-02,  1.84e-02,  9.02e-03,  4.76e-03
+
+n_dim = 64:             K=1        K=2        K=3        K=4
+     cb_len =   25:  7.69e-02,  7.10e-02,  6.55e-02,  6.02e-02
+     cb_len =   64:  7.40e-02,  6.58e-02,  5.86e-02,  5.22e-02
+     cb_len =  128:  7.15e-02,  6.15e-02,  5.31e-02,  4.65e-02
+     cb_len =  256:  6.85e-02,  5.67e-02,  4.80e-02,  4.06e-02
+     cb_len = 1024:  6.07e-02,  4.60e-02,  3.16e-02,  2.32e-02
+
+n_dim =128:             K=1        K=2        K=3        K=4
+     cb_len =   25:  7.98e-02,  7.64e-02,  7.32e-02,  7.01e-02
+     cb_len =   64:  7.81e-02,  7.32e-02,  6.87e-02,  6.44e-02
+     cb_len =  128:  7.65e-02,  7.03e-02,  6.50e-02,  6.00e-02
+     cb_len =  256:  7.44e-02,  6.71e-02,  6.07e-02,  5.51e-02
+     cb_len = 1024:  6.82e-02,  5.78e-02,  4.76e-02,  3.44e-02
+
+n_dim =256:             K=1        K=2        K=3        K=4
+     cb_len =   25:  8.13e-02,  7.94e-02,  7.75e-02,  7.56e-02
+     cb_len =   64:  8.02e-02,  7.73e-02,  7.45e-02,  7.20e-02
+     cb_len =  128:  7.92e-02,  7.54e-02,  7.20e-02,  6.87e-02
+     cb_len =  256:  7.79e-02,  7.30e-02,  6.87e-02,  6.47e-02
+     cb_len = 1024:  7.18e-02,  6.37e-02,  5.43e-02,  4.15e-02</code></pre>
 </div>
 </div>
-<p>…doesn’t look like we’re doing very well for high-dimensional data! At high dimensions, longer codebooks and more codebooks seem to have <em>very little effect</em>. Hmmmm. Not sure what’s up.</p>
-<p>Let’s plot the error for 4 codebooks as a function of dimension and codebook length:</p>
+<p>…doesn’t look like we’re doing great for high-dimensional data: for <code>n_dim</code>=256, we get no more than a factor of 2 when we use 4 long codebooks. This could be a form of the “curse of dimensionality”, because we’re keeping the total number of points constant as we expand into ever-wider spaces, which means the data gets “sparser” as we do. Perhaps we should try adding more points as we increase the number of dimensions? ….I’ll leave this as an exercise for the reader. ;-)</p>
+<blockquote class="blockquote">
+<p>TODO: check against lucidrains’ repo: <a href="https://github.com/lucidrains/vector-quantize-pytorch">lucidrains/vector-quantize-pytorch</a></p>
+</blockquote>
+<p>Anyway, let’s plot the error for 4 codebooks as a function of dimension and codebook length:</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -1365,9 +1440,9 @@ n_dim=256:
 <div id="fig-rvq-error-surfacea" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 
-<div>                            <div id="c7f0ab41-016a-4e9d-b17b-b14207029cab" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("c7f0ab41-016a-4e9d-b17b-b14207029cab")) {                    Plotly.newPlot(                        "c7f0ab41-016a-4e9d-b17b-b14207029cab",                        [{"x":[[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024]],"y":[[2,2,2,2,2],[3,3,3,3,3],[6,6,6,6,6],[8,8,8,8,8],[20,20,20,20,20],[64,64,64,64,64],[128,128,128,128,128],[256,256,256,256,256]],"z":[[2.2243962415574024e-05,7.721207953784488e-08,2.3792486130930573e-08,8.900284548441669e-09,2.2172134285515445e-09],[0.0017910425810944868,0.0002356578544277633,3.699544892363838e-05,3.7343969298515374e-06,5.397842528340424e-08],[0.019002712357201145,0.009678194540616131,0.005869807837283034,0.0033357201486523356,0.0007465609471347685],[0.030990438555207448,0.019073005523291997,0.012965321332250932,0.00858718741939019,0.0031873444485750364],[0.05975566555647372,0.051104678641263716,0.04486480180092722,0.03849287640570285,0.025379901306043055],[0.0750066337789352,0.07127557366923232,0.06800611016215356,0.06426671805493257,0.0526101880947482],[0.07882688008597283,0.07659434116580097,0.07451661182504739,0.07193107578992688,0.06236882687518413],[0.08079901940399783,0.07944114994207267,0.07808826098588972,0.07633641151656625,0.06765591802940757]],"type":"surface"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"scene":{"xaxis":{"title":{"text":"cb_len"}},"yaxis":{"title":{"text":"n_dim"}},"zaxis":{"title":{"text":"error"}}}},                        {"responsive": true}                    ).then(function(){
+<div>                            <div id="791415ce-7514-488c-a43e-dbbf925643eb" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("791415ce-7514-488c-a43e-dbbf925643eb")) {                    Plotly.newPlot(                        "791415ce-7514-488c-a43e-dbbf925643eb",                        [{"x":[[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024],[25,64,128,256,1024]],"y":[[2,2,2,2,2],[3,3,3,3,3],[6,6,6,6,6],[8,8,8,8,8],[20,20,20,20,20],[64,64,64,64,64],[128,128,128,128,128],[256,256,256,256,256]],"z":[[0.00024059410498011857,0.00019558130588848144,0.00028686545556411147,0.0001808558590710163,0.00011094598448835313],[0.0002727328974287957,0.00017518112144898623,0.0001734215475153178,0.0002950143825728446,9.825659799389541e-05],[0.0023796677123755217,0.0008284166688099504,0.0005494686774909496,0.0005607199855148792,0.0002661243488546461],[0.006337366998195648,0.002458398463204503,0.0014300625771284103,0.0006874463870190084,0.0006267070421017706],[0.03106306865811348,0.020866096019744873,0.0155415590852499,0.010500539094209671,0.004763422068208456],[0.06022775173187256,0.05221960321068764,0.04646169766783714,0.04056299105286598,0.023225955665111542],[0.07006222009658813,0.06435716152191162,0.06002255156636238,0.05509539693593979,0.03440985083580017],[0.07562826573848724,0.07197345793247223,0.0686919316649437,0.06470584124326706,0.04146292805671692]],"type":"surface"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"scene":{"xaxis":{"title":{"text":"cb_len"}},"yaxis":{"title":{"text":"n_dim"}},"zaxis":{"title":{"text":"error"}}}},                        {"responsive": true}                    ).then(function(){
                             
-var gd = document.getElementById('c7f0ab41-016a-4e9d-b17b-b14207029cab');
+var gd = document.getElementById('791415ce-7514-488c-a43e-dbbf925643eb');
 var x = new MutationObserver(function (mutations, observer) {{
         var display = window.getComputedStyle(gd).display;
         if (!display || display === 'none') {{
@@ -1394,7 +1469,7 @@ if (outputEl) {{
 </figure>
 </div>
 </div>
-<p>…Yea I don’t know what’s up. Will seek some help.</p>
+<p>…gonna pause this section for now.</p>
 </section>
 </section>
 <section id="extra-rvq-and-backpropagation" class="level1">
