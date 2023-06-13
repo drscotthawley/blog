@@ -616,8 +616,10 @@ For reasons of simplicity (/laziness) that will become clear later, for this blo
 <section id="optional-k-means-skippable" class="level3">
 <h3 class="anchored" data-anchor-id="optional-k-means-skippable">Optional: k-Means (Skippable)</h3>
 <p>The k-means algorithm is another method to partition space, a method that instead of static squares, will allow our regions and centroids to “follow the data”. Often k-means is used to <em>initialize</em> an RVQ codebook for neural codecs (e.g.&nbsp;in SoundStream, Encodec, etc), after which the rest of the neural network’s training algorithm may refine the codebooks more.</p>
-<p>Note however, that this discussion on k-means is actually not crucial to understanding (R)VQ. At all.</p>
-<p>It’s quite skippable, to be honest. So…only read if you’re really curious. Otherwise skip down to the section on Residual Vector Quantization.</p>
+<blockquote class="blockquote">
+<p>Note however, that this discussion on k-means is actually not crucial to understanding (R)VQ. At all. It’s quite skippable, to be honest. So…only read if you’re really curious. Otherwise skip down to the section on <a href="#residual-vector-quantization-rvq">Residual Vector Quantization</a>.</p>
+</blockquote>
+<p>We’ll start with a bunch of data points shown as small dark circles below, and a set of <span class="math inline">\(k\)</span> “centroids” shown by the large colored circles. (They’re not actually “centroids” yet but we’ll get there).</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
