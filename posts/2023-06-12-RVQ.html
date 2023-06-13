@@ -3007,6 +3007,9 @@ d = 6:
 </table>
 </div>
 </div>
+<blockquote class="blockquote">
+<p>Clarification: RVQ with K=1 is the same thing a regular VQ.</p>
+</blockquote>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -3178,7 +3181,7 @@ if (outputEl) {{
 </section>
 <section id="addendum-difficulty-at-very-high-dimensions" class="level1">
 <h1>Addendum: Difficulty at Very High Dimensions</h1>
-<p>However, the above results also indicate that, for very high dimensions (say, 256 and beyond), RVQ doesn’t have nearly as big of a payoff as does for lower dimensions – adding more and larger codebooks doesn’t have <em>that much</em> of an effect on the errors.</p>
+<p>However, the above results also indicate that, for very high dimensions (say, 256 and beyond), (R)VQ doesn’t offer nearly as big of a payoff as does for lower dimensions – adding more and larger codebooks doesn’t have <em>that much</em> of an effect on the errors.</p>
 <p>For this reason, the <a href="https://www.descript.com/">Descript</a> team, in their <em>brand new</em><span class="math inline">\(^*\)</span> paper “<a href="https://arxiv.org/abs/2306.06546">High-Fidelity Audio Compression with Improved RVQGAN</a>”, choose to project down to a lower-dimensional space (n_dim=8) first using <a href="https://pytorch.org/docs/stable/generated/torch.nn.Linear.html">Linear</a> layers, and <em>then</em> perform RVQ, and then project back up using another set of Linear Layers.</p>
 <p style="font-size:0.8em;">
 <span class="math inline">\(^*\)</span>“Brand new” as in “came out while I was finishing this post”!
