@@ -1190,7 +1190,8 @@ if (outputEl) {{
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Here we show the error for high-dimensional datasets using various levels of RVQ.
-'cost savings factor' refers to the ratio of using regular VQ (at uniform resolution) vs RVQ
+'cost savings factor' refers to the ratio of using regular VQ (at uniform resolution)
+vs RVQ.
 
 d = 2:
   K = 1, error = 3.41e-03, cost savings factor = 1.0
@@ -1217,8 +1218,9 @@ d = 6:
   K = 4, error = 2.16e-07, cost savings factor = 953674316406.2</code></pre>
 </div>
 </div>
-<p>Those “cost savings factors” were artifically high though, because as we said, we’re still using squares/hypercubes for our regions, and we don’t need to shape them that way and we don’t need <em>that many</em> of them. The great thing about (R)VQ is you can specify how many centroids you want – i.e.&nbsp;how “long” you want your codebook to be – and you can keep that to some manageable number even as the number of dimensions skyrockets.</p>
-<p>So, to tackle higher dimensions, we need to stop using uniform squares so we can have a codebook “length” of less than 1000 centroids (instead of what just had, which was going into the hundreds of thousands, e.g.&nbsp;<span class="math inline">\(5^8 = 390625\)</span>).</p>
+<p>Those “cost savings factors” were artifically high though, because we’re still using squares/hypercubes for our regions, and we don’t need to shape them that way and we don’t need <em>that many</em> of them. The great thing about (R)VQ is that you can specify how many centroids you want – i.e.&nbsp;how “long” you want your codebook to be – and you can keep that to some manageable number even as the number of dimensions skyrockets.</p>
+<p>So, to tackle higher dimensions, we need to stop using uniform squares so we can have a codebook “length” of less than 1000 centroids (instead of what just had, which was going into the hundreds of thousands, e.g.&nbsp;<span class="math inline">\(5^8 = 390625\)</span>). To get our non-uniform regions that follow the data, we’ll use the k-means described above.</p>
+<p>Let’s look at how the reconstruction error behaves in high dimensions.</p>
 </section>
 <section id="error-analysis-for-high-dimensional-data" class="level3">
 <h3 class="anchored" data-anchor-id="error-analysis-for-high-dimensional-data">Error Analysis for High-Dimensional Data</h3>
