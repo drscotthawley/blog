@@ -224,6 +224,8 @@ require(['plotly'], function(Plotly) {
   <li><a href="#quantizer-algorithm" id="toc-quantizer-algorithm" class="nav-link" data-scroll-target="#quantizer-algorithm">Quantizer algorithm</a></li>
   <li><a href="#error-analysis-for-high-dimensional-data" id="toc-error-analysis-for-high-dimensional-data" class="nav-link" data-scroll-target="#error-analysis-for-high-dimensional-data">Error Analysis for High-Dimensional Data</a></li>
   </ul></li>
+  <li><a href="#addendum-difficulty-at-very-high-dimensions" id="toc-addendum-difficulty-at-very-high-dimensions" class="nav-link" data-scroll-target="#addendum-difficulty-at-very-high-dimensions">Addendum: Difficulty at Very High Dimensions</a></li>
+  <li><a href="#acknowledgement" id="toc-acknowledgement" class="nav-link" data-scroll-target="#acknowledgement">Acknowledgement</a></li>
   </ul>
 </nav>
     </div>
@@ -3167,16 +3169,30 @@ if (outputEl) {{
 </figure>
 </div>
 </div>
+<p>Note that in the last figure, we see <strong>straight lines</strong> across as we vary K, and the K-axis is linear and the error axis is logarithmic. What this means is – and this is a major takeway:</p>
 <blockquote class="blockquote">
-<p>Note that in the last figure, we see <strong>straight lines</strong> across as we vary K, and the K-axis is linear and the error axis is logarithmic. What this means is – and this is a major takeway – <strong>as we add codebooks to the RVQ algorithm, the error decreases <em>exponentially</em>.</strong> This is a big ‘selling point’ for the RVQ method.</p>
+<p><strong>As we add codebooks to the RVQ algorithm, the error decreases <em>exponentially</em>!</strong></p>
 </blockquote>
+<p>This is a big “selling point” for the RVQ method.</p>
+</section>
+</section>
+<section id="addendum-difficulty-at-very-high-dimensions" class="level1">
+<h1>Addendum: Difficulty at Very High Dimensions</h1>
+<p>However, the above results also indicate that, for very high dimensions (say, 256 and beyond), RVQ doesn’t have nearly as big of a payoff as does for lower dimensions – adding more and larger codebooks doesn’t have <em>that much</em> of an effect on the errors.</p>
+<p>For this reason, the <a href="https://www.descript.com/">Descript</a> team, in their <em>brand new</em><span class="math inline">\(^*\)</span> paper “<a href="https://arxiv.org/abs/2306.06546">High-Fidelity Audio Compression with Improved RVQGAN</a>”, choose to project down to a lower-dimensional space (n_dim=8) first using <a href="https://pytorch.org/docs/stable/generated/torch.nn.Linear.html">Linear</a> layers, and <em>then</em> perform RVQ, and then project back up using another set of Linear Layers.</p>
+<p style="font-size:0.8em;">
+<span class="math inline">\(^*\)</span>“Brand new” as in “came out while I was finishing this post”!
+</p>
 <hr>
 <p>…Pausing here for now. There’s more that we could say and do – for example, “How do you do backpropagation with RVQ?” – but this seems like a good place to pause this discussion.</p>
+</section>
+<section id="acknowledgement" class="level1">
+<h1>Acknowledgement</h1>
+<p>Thanks to <a href="https://twitter.com/zqevans">Zach Evans</a> for the impetus to look into this topic, and for helpful discussions and corrections while I was writing.</p>
 <hr>
 <p>(c) 2023 Scott H. Hawley</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
