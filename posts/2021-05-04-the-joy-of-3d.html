@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.3.361">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -20,9 +20,10 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -49,43 +50,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -121,13 +92,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../styles.css">
@@ -150,27 +123,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <span class="navbar-title">blog</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../about.html">
+    <a class="nav-link" href="../about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/drscotthawley"><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/drscotthawley" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/drscotthawley"><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/drscotthawley" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
+            <div class="quarto-navbar-tools">
+</div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
@@ -337,7 +312,9 @@ if (outputEl) {{
 
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code></code></pre>
+<pre><code>
+
+</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 
@@ -391,9 +368,6 @@ if (outputEl) {{
 
 
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code></code></pre>
-</div>
 <div class="cell-output cell-output-display">
 
 
@@ -446,17 +420,14 @@ if (outputEl) {{
 
 
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code></code></pre>
-</div>
 </div>
 <p>…the goal (of training the neural network model) is to get the predicted values to match up with the target values.</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Note
 </div>
 </div>
@@ -527,8 +498,8 @@ if (outputEl) {{
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>prob, targ <span class="op">=</span> calc_prob(n<span class="op">=</span><span class="dv">400</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>TrianglePlot3D_Plotly(prob, targ<span class="op">=</span><span class="va">None</span>, labels<span class="op">=</span>labels, show_bounds<span class="op">=</span><span class="va">False</span>).do_plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>prob, targ <span class="op">=</span> calc_prob(n<span class="op">=</span><span class="dv">400</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>TrianglePlot3D_Plotly(prob, targ<span class="op">=</span><span class="va">None</span>, labels<span class="op">=</span>labels, show_bounds<span class="op">=</span><span class="va">False</span>).do_plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 
@@ -583,12 +554,12 @@ if (outputEl) {{
 
 </div>
 </div>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Note
 </div>
 </div>
@@ -600,7 +571,7 @@ Note
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>TrianglePlot3D_Plotly(prob, targ<span class="op">=</span>targ, labels<span class="op">=</span>labels, show_bounds<span class="op">=</span><span class="va">True</span>).do_plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>TrianglePlot3D_Plotly(prob, targ<span class="op">=</span>targ, labels<span class="op">=</span>labels, show_bounds<span class="op">=</span><span class="va">True</span>).do_plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 
@@ -666,8 +637,8 @@ if (outputEl) {{
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>urls <span class="op">=</span> exhibit_urls(targ, labels)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>TrianglePlot2D_Bokeh(prob, targ<span class="op">=</span>targ, labels<span class="op">=</span>labels, show_bounds<span class="op">=</span><span class="va">True</span>, urls<span class="op">=</span>urls).do_plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>urls <span class="op">=</span> exhibit_urls(targ, labels)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>TrianglePlot2D_Bokeh(prob, targ<span class="op">=</span>targ, labels<span class="op">=</span>labels, show_bounds<span class="op">=</span><span class="va">True</span>, urls<span class="op">=</span>urls).do_plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -1019,27 +990,27 @@ if (outputEl) {{
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ipywidgets <span class="im">import</span> interact, interactive, fixed, interact_manual</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ipywidgets <span class="im">as</span> widgets</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>probs, tmp <span class="op">=</span> calc_prob(n<span class="op">=</span><span class="dv">400</span>, s<span class="op">=</span><span class="fl">2.2</span>)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>targs <span class="op">=</span> np.random.randint(<span class="dv">3</span>,size<span class="op">=</span>probs.shape[<span class="dv">0</span>])</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>targs_3 <span class="op">=</span> one_hot(targs)   <span class="co"># not used for plotting but for compiting gradients</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>maxsteps <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sequence(step):</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    lr, grad <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>maxsteps, targs_3<span class="op">-</span>probs</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    TrianglePlot2D_MPL(probs<span class="op">+</span>step<span class="op">*</span>lr<span class="op">*</span>grad, targ<span class="op">=</span>targs, labels<span class="op">=</span>labels, show_bounds<span class="op">=</span><span class="va">True</span>, comment<span class="op">=</span><span class="ss">f'Step </span><span class="sc">{</span>step<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">:'</span>).do_plot()</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Could be interactive fun in Jupyter/Colab, but not easy to do in the blog:</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>do_interact <span class="op">=</span> <span class="va">False</span> </span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> do_interact:</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Move the slider below to advance the training step."</span>)</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"(Note, this is just a 'cartoon' for now; to see actual NN training steps, wait until post Part 2."</span>)</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    interact(sequence, step<span class="op">=</span>widgets.IntSlider(<span class="bu">min</span><span class="op">=</span><span class="dv">0</span>,<span class="bu">max</span><span class="op">=</span><span class="dv">19</span>,step<span class="op">=</span><span class="dv">1</span>,value<span class="op">=</span><span class="dv">0</span>))<span class="op">;</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> step <span class="kw">in</span> <span class="bu">range</span>(maxsteps):</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>        sequence(step) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ipywidgets <span class="im">import</span> interact, interactive, fixed, interact_manual</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ipywidgets <span class="im">as</span> widgets</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>probs, tmp <span class="op">=</span> calc_prob(n<span class="op">=</span><span class="dv">400</span>, s<span class="op">=</span><span class="fl">2.2</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>targs <span class="op">=</span> np.random.randint(<span class="dv">3</span>,size<span class="op">=</span>probs.shape[<span class="dv">0</span>])</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>targs_3 <span class="op">=</span> one_hot(targs)   <span class="co"># not used for plotting but for compiting gradients</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>maxsteps <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sequence(step):</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    lr, grad <span class="op">=</span> <span class="dv">1</span><span class="op">/</span>maxsteps, targs_3<span class="op">-</span>probs</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    TrianglePlot2D_MPL(probs<span class="op">+</span>step<span class="op">*</span>lr<span class="op">*</span>grad, targ<span class="op">=</span>targs, labels<span class="op">=</span>labels, show_bounds<span class="op">=</span><span class="va">True</span>, comment<span class="op">=</span><span class="ss">f'Step </span><span class="sc">{</span>step<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">:'</span>).do_plot()</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Could be interactive fun in Jupyter/Colab, but not easy to do in the blog:</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>do_interact <span class="op">=</span> <span class="va">False</span> </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> do_interact:</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Move the slider below to advance the training step."</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"(Note, this is just a 'cartoon' for now; to see actual NN training steps, wait until post Part 2."</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    interact(sequence, step<span class="op">=</span>widgets.IntSlider(<span class="bu">min</span><span class="op">=</span><span class="dv">0</span>,<span class="bu">max</span><span class="op">=</span><span class="dv">19</span>,step<span class="op">=</span><span class="dv">1</span>,value<span class="op">=</span><span class="dv">0</span>))<span class="op">;</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> step <span class="kw">in</span> <span class="bu">range</span>(maxsteps):</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        sequence(step) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <p><img src="2021-05-04-The-Joy-Of-3D_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
@@ -1090,50 +1061,50 @@ if (outputEl) {{
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate and save images that we'll load in the next cell </span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>mkdir images</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># generate data along boundaries</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gen_bound(x, y, z, n<span class="op">=</span><span class="dv">20</span>, ind0<span class="op">=</span><span class="dv">1</span>): <span class="co"># ind0=1 skips the "first point"</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.linspace(np.array([x[<span class="dv">0</span>],y[<span class="dv">0</span>],z[<span class="dv">0</span>]]), np.array([x[<span class="dv">1</span>],y[<span class="dv">1</span>],z[<span class="dv">1</span>]]), num<span class="op">=</span>n<span class="op">+</span>ind0)[ind0:]</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gen_bound_data(n_per<span class="op">=</span><span class="dv">20</span>, ind0<span class="op">=</span><span class="dv">0</span>):</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    bdata <span class="op">=</span> np.zeros((n_per<span class="op">*</span><span class="dv">3</span>,<span class="dv">3</span>))</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    bdata[:n_per] <span class="op">=</span> gen_bound(x<span class="op">=</span>[<span class="fl">0.333</span>,<span class="fl">0.5</span>], y<span class="op">=</span>[<span class="fl">0.333</span>,<span class="fl">0.5</span>], z<span class="op">=</span>[<span class="fl">0.333</span>,<span class="dv">0</span>], n<span class="op">=</span>n_per, ind0<span class="op">=</span>ind0) </span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    bdata[n_per:<span class="dv">2</span><span class="op">*</span>n_per] <span class="op">=</span> gen_bound(x<span class="op">=</span>[<span class="fl">0.333</span>,<span class="dv">0</span>], y<span class="op">=</span>[<span class="fl">0.333</span>,<span class="fl">0.5</span>], z<span class="op">=</span>[<span class="fl">0.333</span>,<span class="fl">0.5</span>], n<span class="op">=</span>n_per, ind0<span class="op">=</span>ind0)</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    bdata[<span class="op">-</span>n_per:] <span class="op">=</span> gen_bound(x<span class="op">=</span>[<span class="fl">0.333</span>,<span class="fl">0.5</span>], y<span class="op">=</span>[<span class="fl">0.333</span>,<span class="dv">0</span>], z<span class="op">=</span>[<span class="fl">0.333</span>,<span class="fl">0.5</span>], n<span class="op">=</span>n_per, ind0<span class="op">=</span>ind0)</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> bdata</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gen_near_bound_data(n_per<span class="op">=</span><span class="dv">50</span>, scale<span class="op">=</span><span class="dv">7</span>, eps<span class="op">=</span><span class="fl">0.01</span>):</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    bdata <span class="op">=</span> gen_bound_data(n_per<span class="op">=</span>n_per)</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    lower, right, left <span class="op">=</span> bdata[<span class="dv">0</span>:n_per,:], bdata[n_per:<span class="dv">2</span><span class="op">*</span>n_per,:], bdata[<span class="op">-</span>n_per:,:]</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># shift data a bit</span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    lower_catty <span class="op">=</span> softmax( scale<span class="op">*</span>(lower<span class="op">+</span>np.array([eps,<span class="dv">0</span>,<span class="dv">0</span>])) )</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    lower_doggy <span class="op">=</span> softmax( scale<span class="op">*</span>(lower<span class="op">+</span>np.array([<span class="fl">0.0</span>,eps,<span class="dv">0</span>])) )</span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    left_catty <span class="op">=</span> softmax( scale<span class="op">*</span>(left<span class="op">+</span>np.array([eps,<span class="dv">0</span>,<span class="dv">0</span>])) )</span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    left_horsey <span class="op">=</span> softmax( scale<span class="op">*</span>(left<span class="op">+</span>np.array([<span class="dv">0</span>,<span class="dv">0</span>,eps])) )</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    right_horsey <span class="op">=</span> softmax( scale<span class="op">*</span>(right<span class="op">+</span>np.array([<span class="dv">0</span>,<span class="dv">0</span>,eps])) )</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    right_doggy <span class="op">=</span> softmax( scale<span class="op">*</span>(right<span class="op">+</span>np.array([<span class="dv">0</span>,eps,<span class="dv">0</span>])) )</span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.vstack((lower_catty, lower_doggy, left_catty, left_horsey, right_horsey, right_doggy))</span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="co"># move boundary a bit toward the "correct" side</span></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>eps <span class="op">=</span> <span class="fl">0.007</span></span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>acc_data <span class="op">=</span> gen_near_bound_data(eps<span class="op">=</span>eps)</span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>btarg <span class="op">=</span> np.argmax(acc_data, axis<span class="op">=-</span><span class="dv">1</span>)</span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>TrianglePlot2D_MPL(acc_data, targ<span class="op">=</span>btarg, show_bounds<span class="op">=</span><span class="va">True</span>, labels<span class="op">=</span>labels, comment<span class="op">=</span><span class="st">'100% Accuracy:'</span>).do_plot()</span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>plt.savefig(<span class="st">"images/acc_100.png"</span>)</span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a><span class="co"># move boundary a bit toward the "wrong" side (keeping labels the same as before)</span></span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>inacc_data <span class="op">=</span> gen_near_bound_data(eps<span class="op">=-</span>eps)</span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>ibtarg <span class="op">=</span> btarg.copy()</span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>TrianglePlot2D_MPL(inacc_data, targ<span class="op">=</span>ibtarg, show_bounds<span class="op">=</span><span class="va">True</span>, labels<span class="op">=</span>labels, comment<span class="op">=</span><span class="st">'0% Accuracy:'</span>).do_plot()</span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>plt.savefig(<span class="st">"images/acc_0.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate and save images that we'll load in the next cell </span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>mkdir images</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># generate data along boundaries</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gen_bound(x, y, z, n<span class="op">=</span><span class="dv">20</span>, ind0<span class="op">=</span><span class="dv">1</span>): <span class="co"># ind0=1 skips the "first point"</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.linspace(np.array([x[<span class="dv">0</span>],y[<span class="dv">0</span>],z[<span class="dv">0</span>]]), np.array([x[<span class="dv">1</span>],y[<span class="dv">1</span>],z[<span class="dv">1</span>]]), num<span class="op">=</span>n<span class="op">+</span>ind0)[ind0:]</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gen_bound_data(n_per<span class="op">=</span><span class="dv">20</span>, ind0<span class="op">=</span><span class="dv">0</span>):</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    bdata <span class="op">=</span> np.zeros((n_per<span class="op">*</span><span class="dv">3</span>,<span class="dv">3</span>))</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    bdata[:n_per] <span class="op">=</span> gen_bound(x<span class="op">=</span>[<span class="fl">0.333</span>,<span class="fl">0.5</span>], y<span class="op">=</span>[<span class="fl">0.333</span>,<span class="fl">0.5</span>], z<span class="op">=</span>[<span class="fl">0.333</span>,<span class="dv">0</span>], n<span class="op">=</span>n_per, ind0<span class="op">=</span>ind0) </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    bdata[n_per:<span class="dv">2</span><span class="op">*</span>n_per] <span class="op">=</span> gen_bound(x<span class="op">=</span>[<span class="fl">0.333</span>,<span class="dv">0</span>], y<span class="op">=</span>[<span class="fl">0.333</span>,<span class="fl">0.5</span>], z<span class="op">=</span>[<span class="fl">0.333</span>,<span class="fl">0.5</span>], n<span class="op">=</span>n_per, ind0<span class="op">=</span>ind0)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    bdata[<span class="op">-</span>n_per:] <span class="op">=</span> gen_bound(x<span class="op">=</span>[<span class="fl">0.333</span>,<span class="fl">0.5</span>], y<span class="op">=</span>[<span class="fl">0.333</span>,<span class="dv">0</span>], z<span class="op">=</span>[<span class="fl">0.333</span>,<span class="fl">0.5</span>], n<span class="op">=</span>n_per, ind0<span class="op">=</span>ind0)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> bdata</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gen_near_bound_data(n_per<span class="op">=</span><span class="dv">50</span>, scale<span class="op">=</span><span class="dv">7</span>, eps<span class="op">=</span><span class="fl">0.01</span>):</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    bdata <span class="op">=</span> gen_bound_data(n_per<span class="op">=</span>n_per)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    lower, right, left <span class="op">=</span> bdata[<span class="dv">0</span>:n_per,:], bdata[n_per:<span class="dv">2</span><span class="op">*</span>n_per,:], bdata[<span class="op">-</span>n_per:,:]</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># shift data a bit</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    lower_catty <span class="op">=</span> softmax( scale<span class="op">*</span>(lower<span class="op">+</span>np.array([eps,<span class="dv">0</span>,<span class="dv">0</span>])) )</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    lower_doggy <span class="op">=</span> softmax( scale<span class="op">*</span>(lower<span class="op">+</span>np.array([<span class="fl">0.0</span>,eps,<span class="dv">0</span>])) )</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    left_catty <span class="op">=</span> softmax( scale<span class="op">*</span>(left<span class="op">+</span>np.array([eps,<span class="dv">0</span>,<span class="dv">0</span>])) )</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    left_horsey <span class="op">=</span> softmax( scale<span class="op">*</span>(left<span class="op">+</span>np.array([<span class="dv">0</span>,<span class="dv">0</span>,eps])) )</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    right_horsey <span class="op">=</span> softmax( scale<span class="op">*</span>(right<span class="op">+</span>np.array([<span class="dv">0</span>,<span class="dv">0</span>,eps])) )</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    right_doggy <span class="op">=</span> softmax( scale<span class="op">*</span>(right<span class="op">+</span>np.array([<span class="dv">0</span>,eps,<span class="dv">0</span>])) )</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.vstack((lower_catty, lower_doggy, left_catty, left_horsey, right_horsey, right_doggy))</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co"># move boundary a bit toward the "correct" side</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>eps <span class="op">=</span> <span class="fl">0.007</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>acc_data <span class="op">=</span> gen_near_bound_data(eps<span class="op">=</span>eps)</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>btarg <span class="op">=</span> np.argmax(acc_data, axis<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>TrianglePlot2D_MPL(acc_data, targ<span class="op">=</span>btarg, show_bounds<span class="op">=</span><span class="va">True</span>, labels<span class="op">=</span>labels, comment<span class="op">=</span><span class="st">'100% Accuracy:'</span>).do_plot()</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>plt.savefig(<span class="st">"images/acc_100.png"</span>)</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="co"># move boundary a bit toward the "wrong" side (keeping labels the same as before)</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>inacc_data <span class="op">=</span> gen_near_bound_data(eps<span class="op">=-</span>eps)</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>ibtarg <span class="op">=</span> btarg.copy()</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>TrianglePlot2D_MPL(inacc_data, targ<span class="op">=</span>ibtarg, show_bounds<span class="op">=</span><span class="va">True</span>, labels<span class="op">=</span>labels, comment<span class="op">=</span><span class="st">'0% Accuracy:'</span>).do_plot()</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>plt.savefig(<span class="st">"images/acc_0.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <p><img src="2021-05-04-The-Joy-Of-3D_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
@@ -1150,8 +1121,8 @@ if (outputEl) {{
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>prob4, targ4 <span class="op">=</span> calc_prob(n<span class="op">=</span><span class="dv">500</span>, s<span class="op">=</span><span class="fl">2.7</span>, dim<span class="op">=</span><span class="dv">4</span>)       <span class="co"># 4d probabilities</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>TrianglePlot3D_Plotly(prob4, targ<span class="op">=</span>targ4, labels<span class="op">=</span>labels<span class="op">+</span>[<span class="st">'bird'</span>], show_labels<span class="op">=</span><span class="va">True</span>, show_axes<span class="op">=</span><span class="va">False</span>, add_poles<span class="op">=</span><span class="va">True</span>).do_plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>prob4, targ4 <span class="op">=</span> calc_prob(n<span class="op">=</span><span class="dv">500</span>, s<span class="op">=</span><span class="fl">2.7</span>, dim<span class="op">=</span><span class="dv">4</span>)       <span class="co"># 4d probabilities</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>TrianglePlot3D_Plotly(prob4, targ<span class="op">=</span>targ4, labels<span class="op">=</span>labels<span class="op">+</span>[<span class="st">'bird'</span>], show_labels<span class="op">=</span><span class="va">True</span>, show_axes<span class="op">=</span><span class="va">False</span>, add_poles<span class="op">=</span><span class="va">True</span>).do_plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 
@@ -1226,12 +1197,12 @@ if (outputEl) {{
         
 </div>
 </div>
-<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Tip
 </div>
 </div>
@@ -1239,12 +1210,12 @@ Tip
 <p>You can think of the margin as the amount of “push.”</p>
 </div>
 </div>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Note
 </div>
 </div>
@@ -1348,9 +1319,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -1415,6 +1400,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
