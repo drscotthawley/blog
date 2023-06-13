@@ -943,6 +943,13 @@ if (outputEl) {{
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> centroids, cluster_memb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>The end result of k-Means, since it is a kind of “nearest neighbors” algorithm, is set of vectors grouped according to a “<a href="https://mathworld.wolfram.com/VoronoiDiagram.html">Vornonoi diagram</a>” like the one shown near the beginning of this post, which we’ll show again for good measure:</p>
+<div id="fig-regions-kmeans" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/vq_aalto_sm.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;12<strong>.</strong> Space partitioning that can result from k-means. (Credit: <a href="https://speechprocessingbook.aalto.fi/Modelling/Vector_quantization_VQ.html">Aalto University, Finland</a>)</figcaption>
+</figure>
+</div>
 </section>
 </section>
 <section id="residual-vector-quantization-rvq" class="level2">
@@ -1043,7 +1050,7 @@ if (outputEl) {{
 <div id="fig-rvq-basic" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="2023-06-12-RVQ_files/figure-html/fig-rvq-basic-output-1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;12<strong>.</strong> Illustration of ‘codebook within a codebook’, with a smaller 5x5 codebook which will be relative to the middle region’s codebook.</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;13<strong>.</strong> Illustration of ‘codebook within a codebook’, with a smaller 5x5 codebook which will be relative to the middle region’s codebook.</figcaption>
 </figure>
 </div>
 </div>
@@ -1060,7 +1067,7 @@ if (outputEl) {{
 <div id="fig-rvq-resids" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="2023-06-12-RVQ_files/figure-html/fig-rvq-resids-output-1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;13<strong>.</strong> Illustration of redisuals, shown as purple line segments connecting vectors (blue points) with their nearest centroids (red points).</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;14<strong>.</strong> Illustration of redisuals, shown as purple line segments connecting vectors (blue points) with their nearest centroids (red points).</figcaption>
 </figure>
 </div>
 </div>
@@ -1076,7 +1083,7 @@ if (outputEl) {{
 <div id="fig-rvq-zero" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="2023-06-12-RVQ_files/figure-html/fig-rvq-zero-output-1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;14<strong>.</strong> How we can treat the data points themselves as residuals relative to the origin, for a ‘level 0’ codebook</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;15<strong>.</strong> How we can treat the data points themselves as residuals relative to the origin, for a ‘level 0’ codebook</figcaption>
 </figure>
 </div>
 </div>
@@ -1091,7 +1098,7 @@ if (outputEl) {{
 <div id="fig-soundstream-alg1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/soundstream_alg1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;15<strong>.</strong> SoundStream’s RVQ Algorithm</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;16<strong>.</strong> SoundStream’s RVQ Algorithm</figcaption>
 </figure>
 </div>
 <p>But I like the way I write it:</p>
@@ -1148,7 +1155,7 @@ if (outputEl) {{
 <div id="fig-rvq-recon" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="2023-06-12-RVQ_files/figure-html/fig-rvq-recon-output-1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;16<strong>.</strong> Reconstructing data (blue points) using multiple levels of RVQ codebooks (orange dots)</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;17<strong>.</strong> Reconstructing data (blue points) using multiple levels of RVQ codebooks (orange dots)</figcaption>
 </figure>
 </div>
 </div>
@@ -1222,7 +1229,7 @@ d = 6:
 </div>
 </div>
 <p>Those “cost savings factors” were artifically high though, because we’re still using squares/hypercubes for our regions, and we don’t need to shape them that way and we don’t need <em>that many</em> of them. The great thing about (R)VQ is that you can specify how many centroids you want – i.e.&nbsp;how “long” you want your codebook to be – and you can keep that to some manageable number even as the number of dimensions skyrockets.</p>
-<p>So, to tackle higher dimensions, we need to stop using uniform squares so we can have a codebook “length” of less than 1000 centroids (instead of what just had, which was going into the hundreds of thousands, e.g.&nbsp;<span class="math inline">\(5^8 = 390625\)</span>). To get our non-uniform regions that follow the data, we’ll use the k-means described above.</p>
+<p>So, to tackle higher dimensions, we need to stop using uniform squares so we can have a codebook “length” of less than a few thousand centroids (instead of what just had, which was going into the hundreds of thousands, e.g.&nbsp;<span class="math inline">\(5^8 = 390625\)</span>). To get our non-uniform regions that follow the data, we’ll use the k-means described above.</p>
 <p>Let’s look at how the reconstruction error behaves in high dimensions.</p>
 </section>
 <section id="error-analysis-for-high-dimensional-data" class="level3">
@@ -1416,7 +1423,7 @@ if (outputEl) {{
 }}
 
                         })                };                });            </script>        </div>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;17<strong>.</strong> Surface plot of reconstruction error for 4 codebooks with various data dimensions and codebook lengths.</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;18<strong>.</strong> Surface plot of reconstruction error for 4 codebooks with various data dimensions and codebook lengths.</figcaption>
 </figure>
 </div>
 </div>
@@ -1456,7 +1463,7 @@ if (outputEl) {{
 }}
 
                         })                };                });            </script>        </div>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;18<strong>.</strong> Surface plot of reconstruction error for 4 codebooks with various data dimensions and codebook lengths. (Logarithmic z-axis)</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;19<strong>.</strong> Surface plot of reconstruction error for 4 codebooks with various data dimensions and codebook lengths. (Logarithmic z-axis)</figcaption>
 </figure>
 </div>
 </div>
@@ -1495,7 +1502,7 @@ if (outputEl) {{
 }}
 
                         })                };                });            </script>        </div>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;19<strong>.</strong> Surface plot of reconstruction error for codebook length of 2048 with various data dimensions and number of codebooks (K). (Logarithmic z-axis)</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;20<strong>.</strong> Surface plot of reconstruction error for codebook length of 2048 with various data dimensions and number of codebooks (K). (Logarithmic z-axis)</figcaption>
 </figure>
 </div>
 </div>
