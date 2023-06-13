@@ -1152,7 +1152,7 @@ if (outputEl) {{
 <p>We see that the more (levels of) codebooks we use, the better we can approximate the original data. The rightmost image has an effective resolution of <span class="math inline">\(5^3 = 125\)</span> little squares, but instead uses only <span class="math inline">\(5x5x3 = 75\)</span>. In two dimensions, this is not a huge savings, but let’s see how important this is for higher numbers of dimensions.</p>
 <p>Let <span class="math inline">\(d\)</span> be the number of dimensions and <span class="math inline">\(K\)</span> be the number of codebooks (no relation to the k from k-means, I’m afraid). We’ll populate a d-dimensional hypercube with a lot of data, and subdivide it into nested groups of little hypercubes using RVQ, and compute the error – as well as the compuational cost “savings” from if we had used regular VQ instead of RVQ.</p>
 <blockquote class="blockquote">
-<p>Note: Using uniform square/(hyper)cube regions is a <em>really dumb</em> idea for this. Because the number of regions will scale like <span class="math inline">\(`n_grid`^d\)</span>, which can actually be <em>much</em> larger than the number of data vectors we have! I’ll do it, but…after this let’s use k-means, ok?</p>
+<p>Note: Using uniform square/(hyper)cube regions is a <em>really dumb</em> idea for this. Because the number of regions will scale like <code>n_grid</code><span class="math inline">\(^d\)</span>, which can actually be <em>much</em> larger than the number of data vectors we have! We’ll try a more sophisticated partitioning scheme further below.</p>
 </blockquote>
 <div class="cell">
 <details>
@@ -1185,8 +1185,7 @@ if (outputEl) {{
 <span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>        uni_res <span class="op">=</span> grid_0_points<span class="op">**</span>K <span class="co"># comparable uniform resolution</span></span>
 <span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>        savings <span class="op">=</span> uni_res<span class="op">/</span>rvq_points</span>
 <span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"  K = </span><span class="sc">{</span>K<span class="sc">}</span><span class="ss">, error = </span><span class="sc">{</span>error<span class="sc">:.2e}</span><span class="ss">, cost savings factor = </span><span class="sc">{</span>savings<span class="sc">:.1f}</span><span class="ss">"</span>)</span>
-<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
-<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Here we show the error for high-dimensional datasets using various levels of RVQ.
