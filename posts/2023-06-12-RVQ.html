@@ -611,11 +611,11 @@ For reasons of simplicity (/laziness) that will become clear later, for this blo
 </div>
 </div>
 <p>So, the more “gridlines” you use, the lower the error, but at what cost? To get an error of 0.02 we need <span class="math inline">\(200^2 = 400\)</span> regions. And in higher dimensions than 2, the “cost” of higher resolution / lower error goes up <em>immensely</em>: to double the resolution in <span class="math inline">\(d\)</span> dimensions, the computational cost goes up by a factor of <span class="math inline">\(2^d\)</span>. (Imagine <span class="math inline">\(d\)</span>=32, 64, 128,…)</p>
-<p>But we don’t need to cover the entire space uniformly! That’s where Residual Vector Quantization comes in.</p>
+<p>But we don’t need to cover the entire space uniformly! That’s where Residual Vector Quantization comes in. Feel free to skip ahead to the section on RVQ. For the next bit we’ll take an optional aside to learn about an alternate way to partition space, known as a the “k-means” algorithm.</p>
 </section>
 <section id="optional-k-means-skippable" class="level3">
 <h3 class="anchored" data-anchor-id="optional-k-means-skippable">Optional: k-Means (Skippable)</h3>
-<p>The k-means algorithm is another method to partition space, a method that instead of static squares, will allow our regions and centroids “follow the data”. Often k-means is used to <em>initialize</em> an RVQ codebook for neural codecs (e.g.&nbsp;in SoundStream, Encodec, etc), after which the rest of the neural network’s training algorithm may refine the codebooks more.</p>
+<p>The k-means algorithm is another method to partition space, a method that instead of static squares, will allow our regions and centroids to “follow the data”. Often k-means is used to <em>initialize</em> an RVQ codebook for neural codecs (e.g.&nbsp;in SoundStream, Encodec, etc), after which the rest of the neural network’s training algorithm may refine the codebooks more.</p>
 <p>Note however, that this discussion on k-means is actually not crucial to understanding (R)VQ. At all.</p>
 <p>It’s quite skippable, to be honest. So…only read if you’re really curious. Otherwise skip down to the section on Residual Vector Quantization.</p>
 <div class="cell">
