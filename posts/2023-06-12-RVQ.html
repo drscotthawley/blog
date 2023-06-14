@@ -216,7 +216,7 @@ require(['plotly'], function(Plotly) {
   <li><a href="#vector-quantization-partitioning-space" id="toc-vector-quantization-partitioning-space" class="nav-link" data-scroll-target="#vector-quantization-partitioning-space">Vector Quantization = Partitioning Space</a>
   <ul class="collapse">
   <li><a href="#reconstruction-error" id="toc-reconstruction-error" class="nav-link" data-scroll-target="#reconstruction-error">Reconstruction Error</a></li>
-  <li><a href="#optional-k-means-skippable" id="toc-optional-k-means-skippable" class="nav-link" data-scroll-target="#optional-k-means-skippable">Optional: k-Means (Skippable)</a></li>
+  <li><a href="#k-means-partitioning-scheme" id="toc-k-means-partitioning-scheme" class="nav-link" data-scroll-target="#k-means-partitioning-scheme">k-Means (Partitioning Scheme)</a></li>
   </ul></li>
   <li><a href="#residual-vector-quantization-rvq" id="toc-residual-vector-quantization-rvq" class="nav-link" data-scroll-target="#residual-vector-quantization-rvq">Residual Vector Quantization (RVQ)</a>
   <ul class="collapse">
@@ -238,7 +238,7 @@ require(['plotly'], function(Plotly) {
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>“Vector Quantization.” Sounds intimidating. “Residual Vector Quantization” sounds even more intimidating, even near-meaningless to most people. Turns out, these are easy to understand given a few pictures, even to the point a child could understand them – uh… if the child <em>wanted</em> to. Certainly, there can be sophisticated ways to implement these algorithms, and we’ll cover a bit of that later on, but the basics are very simple.</p>
-<p>Residual Vector Quantization (RVQ) is found in state-of-the-art neural audio codecs such as Google’s <a href="https://ai.googleblog.com/2021/08/soundstream-end-to-end-neural-audio.html">SoundStream</a>, and Facebook/Meta AI’s <a href="https://github.com/facebookresearch/encodec">Encodec</a>, which in turn form the backbone of generative audio models such as <a href="https://google-research.github.io/seanet/audiolm/examples/">AudioLM</a> (Google) and <a href="https://ai.honu.io/papers/musicgen/">MusicGen</a> (Facebook). It’s also the subject of Lucidrain’s library <a href="https://github.com/lucidrains/vector-quantize-pytorch"><code>vector-quantize-pytorch</code></a>, which we’ll use to check our work.</p>
+<p>Residual Vector Quantization (RVQ) is found in state-of-the-art neural audio codecs such as Google’s <a href="https://ai.googleblog.com/2021/08/soundstream-end-to-end-neural-audio.html">SoundStream</a>, and Facebook/Meta AI’s <a href="https://github.com/facebookresearch/encodec">Encodec</a>, which in turn form the backbone of generative audio models such as <a href="https://google-research.github.io/seanet/audiolm/examples/">AudioLM</a> (Google) and <a href="https://ai.honu.io/papers/musicgen/">MusicGen</a> (Facebook). It’s also the subject of Lucidrain’s library <a href="https://github.com/lucidrains/vector-quantize-pytorch"><code>vector-quantize-pytorch</code></a>, which we’ll use toward the end because it’s <em>so fast</em> and <em>so good</em>.</p>
 <p>What is RVQ and how does it work?</p>
 <p>First we should consider regular vector quantization (VQ). VQ has been around for decades, and it shows up in many areas of signal processing when compression is involved.</p>
 <blockquote class="blockquote">
@@ -282,9 +282,19 @@ require(['plotly'], function(Plotly) {
 </div>
 </div>
 <p>To computer scientists, the <span class="math inline">\((x,y)\)</span> coordinates of each point define a “vector”. (To mathematicians and physicists, the “vector” points from the origin to each point, but that distinction isn’t going to matter to us.)</p>
-<blockquote class="blockquote">
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Clarification
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>For neural audio codecs, the vectors could be vertical slices (columns) from an audio spectrogram, i.e., a list of amplitudes for a set of frequencies that were found over a short time interval called a “frame.” More often, however, the vectors are <em>themselves</em> the outputs of some other audio encoder (e.g.&nbsp;a Convolutional Neural Network), and the (R)VQ is done to compress <em>those</em> encoded vectors even more in order to do things like <a href="https://github.com/CompVis/latent-diffusion">Latent Diffusion</a>.</p>
-</blockquote>
+</div>
+</div>
 <p>Now divide up the space into a bunch of regions. How we do that can take many forms. For now, just consider the two examples of my hand drawing with colors, and a set of tiled squares. There are “fancier” algorithms to partition the space in a way that best “fits” the data (e.g., see “k-Means”, below). We can cover schemes like the third image later.</p>
 <!--- ::: {layout-ncol=2 label="fig-region-options" fig-cap="Two ways of partitioning space"} -->
 <div id="fig-regions2" class="quarto-layout-panel">
@@ -380,9 +390,19 @@ require(['plotly'], function(Plotly) {
 </div>
 </div>
 <p>For each of the “vectors” represented by the data points, we no longer use the (<span class="math inline">\(x\)</span>,<span class="math inline">\(y\)</span>) coordinate pairs, but rather the (integer) index of the region it’s in.</p>
-<blockquote class="blockquote">
-<p>Note that we’ve gone from needing two floating point numbers per point to just one integer value. In two dimensions, the “savings” or data-compression amount that we get from that may not be readily apparent, but stick around: As we go to large numbers of dimensions later, this scheme will save us a <em>ton</em> of data.</p>
-</blockquote>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We’ve gone from needing two floating point numbers per point to just one integer value. In two dimensions, the “savings” or data-compression amount that we get from that may not be readily apparent, but stick around: As we go to large numbers of dimensions later, this scheme will save us a <em>ton</em> of data.</p>
+</div>
+</div>
 <p>If we want the coordinates that go with the indices, we’ll use the centroid of each region. In this sense, the vectors are “quantized” so that they can only take on values given by the centroids of the regions. In the following example, the centroids are shown in red:</p>
 <div class="cell">
 <details>
@@ -400,9 +420,19 @@ require(['plotly'], function(Plotly) {
 </div>
 </div>
 <p>So each blue point will effectively be replaced by the nearest red point. In this sense we have “quantized” the vectors (because we’ve quantized the space itself).</p>
-<blockquote class="blockquote">
-<p><strong>Terminology:</strong> The set of locations of centroids is called the “<strong>codebook</strong>”. When we want to use an actual vector value (in space), we convert the codebook index into a (centroid) location by looking up the codebook.</p>
-</blockquote>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Terminology
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The set of locations of centroids is called the “<strong>codebook</strong>”. When we want to use an actual vector value (in space), we convert the codebook index into a (centroid) location by looking up the codebook.</p>
+</div>
+</div>
 <!--
 For reasons of simplicity (/laziness) that will become clear later, for this blog post we'll choose coordinates where our space is centered on (0,0), and has a span of (1,1) across it. So that means the space will go from (-0.5,-0.5) to (0.5,0.5).  This choice of coordinates doesn't change the basic mechanics of (R)VQ, it just means less work to do later. -->
 <p>So a full (albeit unweidly) picture showing the data points, the region indices, and the centroids, looks like this:</p>
@@ -614,16 +644,36 @@ For reasons of simplicity (/laziness) that will become clear later, for this blo
 </div>
 <p>So, the more “gridlines” you use, the lower the error, but at what cost? To get an error of 0.02 we need <span class="math inline">\(200^2 = 400\)</span> regions. And in higher dimensions than 2, the “cost” of higher resolution / lower error goes up <em>immensely</em>: to double the resolution in <span class="math inline">\(d\)</span> dimensions, the computational cost goes up by a factor of <span class="math inline">\(2^d\)</span>. (Imagine <span class="math inline">\(d\)</span>=32, 64, 128,…)</p>
 <p>But we don’t need to cover the entire space uniformly! That’s where Residual Vector Quantization comes in. Feel free to skip ahead to the section on RVQ. For the next bit we’ll take an optional aside to learn about an alternate way to partition space, known as a the “k-Means” algorithm.</p>
-<blockquote class="blockquote">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Another key point: By replacing all the coordinate values for a vector (i.e.&nbsp;<span class="math inline">\(d\)</span> floating point numbers) with a <em>single integer</em>, VQ achieves data compression by a factor of <span class="math inline">\(d\)</span> (times however many bit floats take up compared to integers). For large numbers of dimensions – regardless of the partitioning scheme – this compression can be <em>significant</em>.</p>
-</blockquote>
+</div>
+</div>
 </section>
-<section id="optional-k-means-skippable" class="level3">
-<h3 class="anchored" data-anchor-id="optional-k-means-skippable">Optional: k-Means (Skippable)</h3>
+<section id="k-means-partitioning-scheme" class="level3">
+<h3 class="anchored" data-anchor-id="k-means-partitioning-scheme">k-Means (Partitioning Scheme)</h3>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Optional
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This discussion on k-Means is actually not crucial to understanding (R)VQ. At all. It’s quite skippable, to be honest. So…only read if you’re really curious. Otherwise skip down to the section on <a href="#residual-vector-quantization-rvq">Residual Vector Quantization</a>.</p>
+</div>
+</div>
 <p>The k-Means algorithm is another method to partition space, a method that instead of static squares, will allow our regions and centroids to “follow the data”. Often k-Means is used to <em>initialize</em> an RVQ codebook for neural codecs (e.g.&nbsp;in SoundStream, Encodec, etc), after which the rest of the neural network’s training algorithm may refine the codebooks more.</p>
-<blockquote class="blockquote">
-<p>Note however, that this discussion on k-Means is actually not crucial to understanding (R)VQ. At all. It’s quite skippable, to be honest. So…only read if you’re really curious. Otherwise skip down to the section on <a href="#residual-vector-quantization-rvq">Residual Vector Quantization</a>.</p>
-</blockquote>
 <p>We’ll start with a bunch of data points shown as small dark circles below, and a set of <span class="math inline">\(k\)</span> “centroids” shown by the large colored circles. (They’re not actually “centroids” yet but we’ll get there).</p>
 <div class="cell">
 <details>
@@ -699,9 +749,19 @@ if (outputEl) {{
 </div>
 </div>
 <p>That’s our starting points. Then what we’ll do is, we’ll color each point according to which centroid it’s closest to.</p>
-<blockquote class="blockquote">
-<p>Yes, this can be <em>very slow</em> for lots of points in many dimensions. There is a whole field of study of how to speed up “nearest neighbors” types of algorithms. We’re going to keep it simple for this demo:</p>
-</blockquote>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Yes, this can be <em>very slow</em> for lots of points in many dimensions. There is a whole field of study of how to speed up “nearest neighbors” types of algorithms. We’re going to keep it simple for this demo. Further down, the library we’ll use will actually do an “approximate k-Means” for speed.</p>
+</div>
+</div>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -959,9 +1019,9 @@ if (outputEl) {{
 </section>
 <section id="residual-vector-quantization-rvq" class="level2">
 <h2 class="anchored" data-anchor-id="residual-vector-quantization-rvq">Residual Vector Quantization (RVQ)</h2>
-<blockquote class="blockquote">
+<div class="{callout-note}">
 <p>By the way, RVQ has been around for <a href="https://ieeexplore.ieee.org/abstract/document/480761">quite a while</a>.</p>
-</blockquote>
+</div>
 <section id="basic-idea-codebooks-in-codebooks" class="level3">
 <h3 class="anchored" data-anchor-id="basic-idea-codebooks-in-codebooks">Basic Idea: “Codebooks in Codebooks”</h3>
 <p>The trick with RVQ is, rather than having a single high-resolution codebook, to instead have “codebooks inside of codebooks”, or, if you like, “stacking codebooks”. Let’s say we want to quintuple the resolution of our initial 5x5 grid. Instead of using a 25x25 grid (which would be 25x the computational cost of the original), what if we put a little 5x5 grid “inside” the region to which a vector was quantized?</p>
@@ -1167,9 +1227,19 @@ if (outputEl) {{
 </div>
 <p>We see that the more (levels of) codebooks we use, the better we can approximate the original data. The rightmost image has an effective resolution of <span class="math inline">\(5^3 = 125\)</span> little squares, but instead uses only <span class="math inline">\(5x5x3 = 75\)</span>. In two dimensions, this is not a huge savings, but let’s see how important this is for higher numbers of dimensions.</p>
 <p>Let <span class="math inline">\(d\)</span> be the number of dimensions and <span class="math inline">\(K\)</span> be the number of codebooks (no relation to the k from k-Means, I’m afraid). We’ll populate a d-dimensional hypercube with a lot of data, and subdivide it into nested groups of little hypercubes using RVQ, and compute the error – as well as the compuational cost “savings” from if we had used regular VQ instead of RVQ.</p>
-<blockquote class="blockquote">
-<p>Note: Using uniform square/(hyper)cube regions is a <em>really dumb</em> idea for this. Because the number of regions will scale like <code>n_grid</code><span class="math inline">\(^d\)</span>, which can actually be <em>much</em> larger than the number of data vectors we have! We’ll try a more sophisticated partitioning scheme further below.</p>
-</blockquote>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Using uniform square/(hyper)cube regions is a <em>really dumb</em> idea for this. Because the number of regions will scale like <code>n_grid</code><span class="math inline">\(^d\)</span>, which can actually be <em>much</em> larger than the number of data vectors we have! We’ll try a more sophisticated partitioning scheme further below.</p>
+</div>
+</div>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -1240,9 +1310,19 @@ d = 6:
 <section id="error-analysis-exponential-convergence" class="level3">
 <h3 class="anchored" data-anchor-id="error-analysis-exponential-convergence">Error Analysis: Exponential Convergence</h3>
 <p>We can try a given number of (initially) random centroids, and try to match them to the data via k-Means.</p>
-<blockquote class="blockquote">
-<p>Note: The residuals at different levels of our RVQ calculations will likely have different data distributions. Which means that instead of “sharing (scaled) codebooks” like we did before, we’ll need to re-calculate a new codebook at each “level”. Otherwise we won’t see any advantage from RVQ (trust me I tried).</p>
-</blockquote>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The residuals at different levels of our RVQ calculations will likely have different data distributions. Which means that instead of “sharing (scaled) codebooks” like we did before, we’ll need to re-calculate a new codebook at each “level”. Otherwise we won’t see any advantage from RVQ (trust me I tried).</p>
+</div>
+</div>
 <p>In the following calculation, we’ll vary the number of dimensions, the length of the codebooks, and the number of codebooks, and see how these all affect the reconstruction error.</p>
 <p>But rather than using our code, use let’s use the wonderful repository by lucidrains: <a href="https://github.com/lucidrains/vector-quantize-pytorch">lucidrains/vector-quantize-pytorch</a></p>
 <p>The following set of error values is a “wall of numbers” which may not interest you. Feel free to scroll past it and skip down to the graphical representation of (some of) the numbers.</p>
@@ -3206,20 +3286,27 @@ if (outputEl) {{
 </figure>
 </div>
 </div>
-<p>Note that in the last figure, we see <strong>straight lines</strong> across as we vary K, and the K-axis is linear and the error axis is logarithmic. What this means is – and this is a major takeway:</p>
-<blockquote class="blockquote">
+<p>Note that in the last figure, we see <strong>straight lines</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> across as we vary K, and the K-axis is linear and the error axis is logarithmic.<span class="math inline">\(^*\)</span> What this means is – and this is a major takeway:</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Big Idea
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p><strong>As we add codebooks to the RVQ algorithm, the error decreases <em>exponentially</em>!</strong></p>
-</blockquote>
+</div>
+</div>
 <p>This is a big “selling point” for the RVQ method.</p>
 </section>
 </section>
 <section id="addendum-difficulty-at-very-high-dimensions" class="level1">
 <h1>Addendum: Difficulty at Very High Dimensions</h1>
 <p>However, the above results also indicate that, for very high dimensions (say, 256 and beyond), (R)VQ doesn’t offer nearly as big of a payoff as does for lower dimensions – adding more and larger codebooks doesn’t have <em>that much</em> of an effect on the errors.</p>
-<p>For this reason, the <a href="https://www.descript.com/">Descript</a> team, in their <em>brand new</em><span class="math inline">\(^*\)</span> paper “<a href="https://arxiv.org/abs/2306.06546">High-Fidelity Audio Compression with Improved RVQGAN</a>”, choose to project down to a lower-dimensional space (n_dim=8) first using <a href="https://pytorch.org/docs/stable/generated/torch.nn.Linear.html">Linear</a> layers, and <em>then</em> perform RVQ, and then project back up using another set of Linear Layers.</p>
-<p style="font-size:0.8em;">
-<span class="math inline">\(^*\)</span>“Brand new” as in “came out while I was finishing this post”!
-</p>
+<p>For this reason, the <a href="https://www.descript.com/">Descript</a> team, in their <em>brand new</em><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> paper “<a href="https://arxiv.org/abs/2306.06546">High-Fidelity Audio Compression with Improved RVQGAN</a>”, choose to project down to a lower-dimensional space (n_dim=8) first using <a href="https://pytorch.org/docs/stable/generated/torch.nn.Linear.html">Linear</a> layers, and <em>then</em> perform RVQ, and then project back up using another set of Linear Layers.</p>
 <hr>
 <p>…Pausing here for now. There’s more that we could say and do – for example, “How do you do backpropagation with RVQ?” – but this seems like a good place to pause this discussion.</p>
 </section>
@@ -3232,7 +3319,14 @@ if (outputEl) {{
 
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Yes, the lines flatten out when we reach machine precision of <span class="math inline">\(10^{-15}\)</span>; don’t worry about that.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Brand new” as in “came out while I was finishing this post”!<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
