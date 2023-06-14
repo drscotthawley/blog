@@ -613,16 +613,16 @@ For reasons of simplicity (/laziness) that will become clear later, for this blo
 </div>
 </div>
 <p>So, the more “gridlines” you use, the lower the error, but at what cost? To get an error of 0.02 we need <span class="math inline">\(200^2 = 400\)</span> regions. And in higher dimensions than 2, the “cost” of higher resolution / lower error goes up <em>immensely</em>: to double the resolution in <span class="math inline">\(d\)</span> dimensions, the computational cost goes up by a factor of <span class="math inline">\(2^d\)</span>. (Imagine <span class="math inline">\(d\)</span>=32, 64, 128,…)</p>
-<p>But we don’t need to cover the entire space uniformly! That’s where Residual Vector Quantization comes in. Feel free to skip ahead to the section on RVQ. For the next bit we’ll take an optional aside to learn about an alternate way to partition space, known as a the “k-means” algorithm.</p>
+<p>But we don’t need to cover the entire space uniformly! That’s where Residual Vector Quantization comes in. Feel free to skip ahead to the section on RVQ. For the next bit we’ll take an optional aside to learn about an alternate way to partition space, known as a the “k-Means” algorithm.</p>
 <blockquote class="blockquote">
 <p>Another key point: By replacing all the coordinate values for a vector (i.e.&nbsp;<span class="math inline">\(d\)</span> floating point numbers) with a <em>single integer</em>, VQ achieves data compression by a factor of <span class="math inline">\(d\)</span> (times however many bit floats take up compared to integers). For large numbers of dimensions – regardless of the partitioning scheme – this compression can be <em>significant</em>.</p>
 </blockquote>
 </section>
 <section id="optional-k-means-skippable" class="level3">
 <h3 class="anchored" data-anchor-id="optional-k-means-skippable">Optional: k-Means (Skippable)</h3>
-<p>The k-means algorithm is another method to partition space, a method that instead of static squares, will allow our regions and centroids to “follow the data”. Often k-means is used to <em>initialize</em> an RVQ codebook for neural codecs (e.g.&nbsp;in SoundStream, Encodec, etc), after which the rest of the neural network’s training algorithm may refine the codebooks more.</p>
+<p>The k-Means algorithm is another method to partition space, a method that instead of static squares, will allow our regions and centroids to “follow the data”. Often k-Means is used to <em>initialize</em> an RVQ codebook for neural codecs (e.g.&nbsp;in SoundStream, Encodec, etc), after which the rest of the neural network’s training algorithm may refine the codebooks more.</p>
 <blockquote class="blockquote">
-<p>Note however, that this discussion on k-means is actually not crucial to understanding (R)VQ. At all. It’s quite skippable, to be honest. So…only read if you’re really curious. Otherwise skip down to the section on <a href="#residual-vector-quantization-rvq">Residual Vector Quantization</a>.</p>
+<p>Note however, that this discussion on k-Means is actually not crucial to understanding (R)VQ. At all. It’s quite skippable, to be honest. So…only read if you’re really curious. Otherwise skip down to the section on <a href="#residual-vector-quantization-rvq">Residual Vector Quantization</a>.</p>
 </blockquote>
 <p>We’ll start with a bunch of data points shown as small dark circles below, and a set of <span class="math inline">\(k\)</span> “centroids” shown by the large colored circles. (They’re not actually “centroids” yet but we’ll get there).</p>
 <div class="cell">
@@ -642,7 +642,7 @@ For reasons of simplicity (/laziness) that will become clear later, for this blo
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>datak <span class="op">=</span> DATA_MIN <span class="op">+</span> (DATA_MAX<span class="op">-</span>DATA_MIN)<span class="op">*</span>np.random.rand(npoints, ndim)   <span class="co"># make up some random data points</span></span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">5</span>        <span class="co"># k-means parameter: number of clusters</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>k <span class="op">=</span> <span class="dv">5</span>        <span class="co"># k-Means parameter: number of clusters</span></span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># start with random centroids</span></span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>centroids <span class="op">=</span> DATA_MIN <span class="op">+</span> <span class="fl">0.2</span><span class="op">+</span><span class="fl">0.6</span><span class="op">*</span>(DATA_MAX<span class="op">-</span>DATA_MIN)<span class="op">*</span>np.random.rand(k, ndim) <span class="co"># don't let the starting centroids be on the far edges of the plot</span></span>
@@ -694,7 +694,7 @@ if (outputEl) {{
 }}
 
                         })                };                });            </script>        </div>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;7<strong>.</strong> Initial state of k-means, showing data without any ‘membership’ (dark dots) and random centroid locations (large colored dots)</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;7<strong>.</strong> Initial state of k-Means, showing data without any ‘membership’ (dark dots) and random centroid locations (large colored dots)</figcaption>
 </figure>
 </div>
 </div>
@@ -753,7 +753,7 @@ if (outputEl) {{
 }}
 
                         })                };                });            </script>        </div>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;8<strong>.</strong> First step in k-means: Assign ‘membership’ of datapoints to different clusters based on which centroids (large dots) are nearest. Note that the ‘centroids’ in this graph aren’t true centroids yet. We’ll fix them in the next step after this.</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;8<strong>.</strong> First step in k-Means: Assign ‘membership’ of datapoints to different clusters based on which centroids (large dots) are nearest. Note that the ‘centroids’ in this graph aren’t true centroids yet. We’ll fix them in the next step after this.</figcaption>
 </figure>
 </div>
 </div>
@@ -801,7 +801,7 @@ if (outputEl) {{
 }}
 
                         })                };                });            </script>        </div>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;9<strong>.</strong> Next step in k-means: move centroids so they are in the middle of each cluster</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;9<strong>.</strong> Next step in k-Means: move centroids so they are in the middle of each cluster</figcaption>
 </figure>
 </div>
 </div>
@@ -840,7 +840,7 @@ if (outputEl) {{
 }}
 
                         })                };                });            </script>        </div>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;10<strong>.</strong> Next step in k-means: re-assign cluster membership of point based on new cluster locations</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;10<strong>.</strong> Next step in k-Means: re-assign cluster membership of point based on new cluster locations</figcaption>
 </figure>
 </div>
 </div>
@@ -937,7 +937,7 @@ if (outputEl) {{
 </figure>
 </div>
 </div>
-<p>For those who are interested, I’ll put the code for a working k-means algorithm below – it’s short!</p>
+<p>For those who are interested, I’ll put the code for a working k-Means algorithm below – it’s short!</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kmeans(data, k<span class="op">=</span><span class="dv">5</span>, n_iter<span class="op">=</span><span class="dv">8</span>):</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    n_dim, data_min, data_max <span class="op">=</span> data.shape[<span class="op">-</span><span class="dv">1</span>], np.<span class="bu">min</span>(data), np.<span class="bu">max</span>(data)</span>
@@ -952,7 +952,7 @@ if (outputEl) {{
 <div id="fig-regions-kmeans" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/vq_aalto_sm.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;12<strong>.</strong> Space partitioning that can result from k-means. (Credit: <a href="https://speechprocessingbook.aalto.fi/Modelling/Vector_quantization_VQ.html">Aalto University, Finland</a>)</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;12<strong>.</strong> Space partitioning that can result from k-Means. (Credit: <a href="https://speechprocessingbook.aalto.fi/Modelling/Vector_quantization_VQ.html">Aalto University, Finland</a>)</figcaption>
 </figure>
 </div>
 </section>
@@ -1166,7 +1166,7 @@ if (outputEl) {{
 </div>
 </div>
 <p>We see that the more (levels of) codebooks we use, the better we can approximate the original data. The rightmost image has an effective resolution of <span class="math inline">\(5^3 = 125\)</span> little squares, but instead uses only <span class="math inline">\(5x5x3 = 75\)</span>. In two dimensions, this is not a huge savings, but let’s see how important this is for higher numbers of dimensions.</p>
-<p>Let <span class="math inline">\(d\)</span> be the number of dimensions and <span class="math inline">\(K\)</span> be the number of codebooks (no relation to the k from k-means, I’m afraid). We’ll populate a d-dimensional hypercube with a lot of data, and subdivide it into nested groups of little hypercubes using RVQ, and compute the error – as well as the compuational cost “savings” from if we had used regular VQ instead of RVQ.</p>
+<p>Let <span class="math inline">\(d\)</span> be the number of dimensions and <span class="math inline">\(K\)</span> be the number of codebooks (no relation to the k from k-Means, I’m afraid). We’ll populate a d-dimensional hypercube with a lot of data, and subdivide it into nested groups of little hypercubes using RVQ, and compute the error – as well as the compuational cost “savings” from if we had used regular VQ instead of RVQ.</p>
 <blockquote class="blockquote">
 <p>Note: Using uniform square/(hyper)cube regions is a <em>really dumb</em> idea for this. Because the number of regions will scale like <code>n_grid</code><span class="math inline">\(^d\)</span>, which can actually be <em>much</em> larger than the number of data vectors we have! We’ll try a more sophisticated partitioning scheme further below.</p>
 </blockquote>
@@ -1234,12 +1234,12 @@ d = 6:
 </div>
 </div>
 <p>Those “cost savings factors” were artifically high though, because we’re still using squares/hypercubes for our regions, and we don’t need to shape them that way and we don’t need <em>that many</em> of them. The great thing about (R)VQ is that you can specify how many centroids you want – i.e.&nbsp;how “long” you want your codebook to be – and you can keep that to some manageable number even as the number of dimensions skyrockets.</p>
-<p>So, to tackle higher dimensions, we need to stop using uniform squares so we can have a codebook “length” of less than a few thousand centroids (instead of what just had, which was going into the hundreds of thousands, e.g.&nbsp;<span class="math inline">\(5^8 = 390625\)</span>). To get our non-uniform regions that follow the data, we’ll use the k-means described above.</p>
+<p>So, to tackle higher dimensions, we need to stop using uniform squares so we can have a codebook “length” of less than a few thousand centroids (instead of what just had, which was going into the hundreds of thousands, e.g.&nbsp;<span class="math inline">\(5^8 = 390625\)</span>). To get our non-uniform regions that follow the data, we’ll use the k-Means method described above.</p>
 <p>Let’s look at how the reconstruction error behaves in high dimensions.</p>
 </section>
 <section id="error-analysis-exponential-convergence" class="level3">
 <h3 class="anchored" data-anchor-id="error-analysis-exponential-convergence">Error Analysis: Exponential Convergence</h3>
-<p>We can try a given number of (initially) random centroids, and try to match them to the data via k-means.</p>
+<p>We can try a given number of (initially) random centroids, and try to match them to the data via k-Means.</p>
 <blockquote class="blockquote">
 <p>Note: The residuals at different levels of our RVQ calculations will likely have different data distributions. Which means that instead of “sharing (scaled) codebooks” like we did before, we’ll need to re-calculate a new codebook at each “level”. Otherwise we won’t see any advantage from RVQ (trust me I tried).</p>
 </blockquote>
