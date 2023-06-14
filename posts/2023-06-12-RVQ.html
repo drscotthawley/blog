@@ -3317,8 +3317,8 @@ Big Idea
 </section>
 <section id="addendum-difficulty-at-very-high-dimensions" class="level1">
 <h1>Addendum: Difficulty at Very High Dimensions</h1>
-<p>However, the above results also indicate that, for very high dimensions (say, <span class="math inline">\(d \geq 128\)</span>), (R)VQ doesn’t offer nearly as big of a payoff as does for lower dimensions – adding more and larger codebooks doesn’t have <em>that much</em> of an effect on the errors.</p>
-<p>For this reason, the <a href="https://www.descript.com/">Descript</a> team, in their <em>brand new</em><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> paper “<a href="https://arxiv.org/abs/2306.06546">High-Fidelity Audio Compression with Improved RVQGAN</a>”, choose to project down to a lower-dimensional space (n_dim=8) first using <a href="https://pytorch.org/docs/stable/generated/torch.nn.Linear.html">Linear</a> layers, and <em>then</em> perform RVQ, and then project back up using another set of Linear Layers.</p>
+<p>However, the above results also indicate that, for very high dimensions (say, <span class="math inline">\(d \geq 128\)</span>), (R)VQ doesn’t offer nearly as big of a payoff as is does for lower dimensions – adding more and larger codebooks doesn’t have <em>that much</em> of an effect on the errors.</p>
+<p>For this reason, in their <em>brand new</em><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> paper “<a href="https://arxiv.org/abs/2306.06546">High-Fidelity Audio Compression with Improved RVQGAN</a>”, the <a href="https://www.descript.com/">Descript</a> team choose to project down to a lower-dimensional space (<span class="math inline">\(d=8\)</span>) first, using <a href="https://pytorch.org/docs/stable/generated/torch.nn.Linear.html">Linear</a> layers, and <em>then</em> perform RVQ, and then project back up using another set of Linear Layers.</p>
 <hr>
 <p>…Pausing here for now. There’s more that we could say and do – for example, “How do you do backpropagation with RVQ?” – but this seems like a good place to pause this discussion.</p>
 </section>
