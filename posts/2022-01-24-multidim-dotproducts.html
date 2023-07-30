@@ -227,63 +227,65 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats <span class="im">as</span> ss</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">50000</span>  <span class="co"># number of random pairs of vectors to try</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>dims <span class="op">=</span> [<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">100</span>,<span class="dv">1000</span>]  <span class="co"># different dimensionalities to try. Same as "D" in plots below</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">50000</span>  <span class="co"># number of random pairs of vectors to try</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>dims <span class="op">=</span> [<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">100</span>,<span class="dv">1000</span>]  <span class="co"># different dimensionalities to try. Same as "D" in plots below</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="utility-routines" class="level2">
 <h2 class="anchored" data-anchor-id="utility-routines">Utility Routines</h2>
 <p>Define some functions that we’re likely to use multiple times.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#show_hide </span></span>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Utility routines </span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Utility routines </span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> norm_rows(arr):   </span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"normalize vectors which exist as rows with components as columns"</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    arrT <span class="op">=</span> arr.T                               <span class="co"># .T is to make broadcasting work easily </span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    mags <span class="op">=</span> np.sqrt( (arrT<span class="op">*</span>arrT).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>) )  <span class="co"># vector magnitudes</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (arrT<span class="op">/</span>mags).T</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> uniform_rand(size<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">10</span>)):</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">"random number on [-1..1]"</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.random.uniform(low<span class="op">=-</span><span class="fl">1.0</span>, high<span class="op">=</span><span class="fl">1.0</span>, size<span class="op">=</span>size)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> softmax(x):</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">"good ol' softmax function, for a bunch of row vectors"</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    xT <span class="op">=</span> x.T  <span class="co"># .T's are just to make broadcasting work out.</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    vec_max <span class="op">=</span> np.<span class="bu">max</span>(xT,axis<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    e_x <span class="op">=</span> np.exp(xT <span class="op">-</span> vec_max)   </span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (e_x <span class="op">/</span> e_x.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>)).T</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_plot(n<span class="op">=</span>n, dims<span class="op">=</span>dims, title<span class="op">=</span><span class="st">''</span>, rand_func<span class="op">=</span>uniform_rand, normalize<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>             color<span class="op">=</span><span class="st">'#1f77b4'</span>, xlim<span class="op">=</span><span class="va">None</span>, softmax_them<span class="op">=</span><span class="va">False</span>, scale_x_by_sqrtd<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""A function we'll call again &amp; again to make plots with"""</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>,<span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">6</span>))</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    fig.suptitle(title, fontsize<span class="op">=</span><span class="st">"x-large"</span>)</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    axes <span class="op">=</span> axes.ravel()</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    sds <span class="op">=</span> []                      <span class="co"># list of standard devations for different dims</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i,ax <span class="kw">in</span> <span class="bu">enumerate</span>(axes):</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        dim <span class="op">=</span> dims[i]</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        a <span class="op">=</span> rand_func(size<span class="op">=</span>(n,dim))</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        b <span class="op">=</span> rand_func(size<span class="op">=</span>(n,dim))</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> softmax_them: a, b <span class="op">=</span> softmax(a), softmax(b)</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> normalize: a, b <span class="op">=</span> norm_rows(a), norm_rows(b)</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>        dots <span class="op">=</span> (a<span class="op">*</span>b).<span class="bu">sum</span>(axis<span class="op">=-</span><span class="dv">1</span>)</span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> scale_x_by_sqrtd: dots <span class="op">/=</span> np.sqrt(dim)</span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>        std <span class="op">=</span> np.std(dots,axis<span class="op">=</span><span class="dv">0</span>)   <span class="co"># measure standard dev of distribution of dot product</span></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>        ax.hist(dots, density<span class="op">=</span><span class="va">True</span>, bins<span class="op">=</span><span class="dv">100</span>, label<span class="op">=</span><span class="ss">f'D=</span><span class="sc">{</span>dim<span class="sc">}</span><span class="ss">, $\sigma$=</span><span class="sc">{</span>std<span class="sc">:3.2g}</span><span class="ss">'</span>, color<span class="op">=</span>color)  </span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>        sds.append(std)</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> xlim<span class="op">!=</span><span class="va">None</span>: ax.set_xlim(xlim)</span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        ax.legend(loc<span class="op">=</span><span class="dv">4</span>)   <span class="co"># legend will show dimensions and std dev</span></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i<span class="op">%</span><span class="dv">3</span><span class="op">==</span><span class="dv">0</span>: ax.set_ylabel(<span class="st">'Probability'</span>)</span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i<span class="op">&gt;</span><span class="dv">2</span>: ax.set_xlabel(<span class="st">'Dot product value'</span>)</span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sds, axes, fig   <span class="co"># return some axes &amp; figure info too in case we want to replot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> norm_rows(arr):   </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"normalize vectors which exist as rows with components as columns"</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    arrT <span class="op">=</span> arr.T                               <span class="co"># .T is to make broadcasting work easily </span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    mags <span class="op">=</span> np.sqrt( (arrT<span class="op">*</span>arrT).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>) )  <span class="co"># vector magnitudes</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (arrT<span class="op">/</span>mags).T</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> uniform_rand(size<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">10</span>)):</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">"random number on [-1..1]"</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.random.uniform(low<span class="op">=-</span><span class="fl">1.0</span>, high<span class="op">=</span><span class="fl">1.0</span>, size<span class="op">=</span>size)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> softmax(x):</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">"good ol' softmax function, for a bunch of row vectors"</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    xT <span class="op">=</span> x.T  <span class="co"># .T's are just to make broadcasting work out.</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    vec_max <span class="op">=</span> np.<span class="bu">max</span>(xT,axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    e_x <span class="op">=</span> np.exp(xT <span class="op">-</span> vec_max)   </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (e_x <span class="op">/</span> e_x.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>)).T</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_plot(n<span class="op">=</span>n, dims<span class="op">=</span>dims, title<span class="op">=</span><span class="st">''</span>, rand_func<span class="op">=</span>uniform_rand, normalize<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>             color<span class="op">=</span><span class="st">'#1f77b4'</span>, xlim<span class="op">=</span><span class="va">None</span>, softmax_them<span class="op">=</span><span class="va">False</span>, scale_x_by_sqrtd<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""A function we'll call again &amp; again to make plots with"""</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>,<span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">6</span>))</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    fig.suptitle(title, fontsize<span class="op">=</span><span class="st">"x-large"</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    axes <span class="op">=</span> axes.ravel()</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    sds <span class="op">=</span> []                      <span class="co"># list of standard devations for different dims</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i,ax <span class="kw">in</span> <span class="bu">enumerate</span>(axes):</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>        dim <span class="op">=</span> dims[i]</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>        a <span class="op">=</span> rand_func(size<span class="op">=</span>(n,dim))</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        b <span class="op">=</span> rand_func(size<span class="op">=</span>(n,dim))</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> softmax_them: a, b <span class="op">=</span> softmax(a), softmax(b)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> normalize: a, b <span class="op">=</span> norm_rows(a), norm_rows(b)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>        dots <span class="op">=</span> (a<span class="op">*</span>b).<span class="bu">sum</span>(axis<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> scale_x_by_sqrtd: dots <span class="op">/=</span> np.sqrt(dim)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>        std <span class="op">=</span> np.std(dots,axis<span class="op">=</span><span class="dv">0</span>)   <span class="co"># measure standard dev of distribution of dot product</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>        ax.hist(dots, density<span class="op">=</span><span class="va">True</span>, bins<span class="op">=</span><span class="dv">100</span>, label<span class="op">=</span><span class="ss">f'D=</span><span class="sc">{</span>dim<span class="sc">}</span><span class="ss">, $\sigma$=</span><span class="sc">{</span>std<span class="sc">:3.2g}</span><span class="ss">'</span>, color<span class="op">=</span>color)  </span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>        sds.append(std)</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> xlim<span class="op">!=</span><span class="va">None</span>: ax.set_xlim(xlim)</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>        ax.legend(loc<span class="op">=</span><span class="dv">4</span>)   <span class="co"># legend will show dimensions and std dev</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i<span class="op">%</span><span class="dv">3</span><span class="op">==</span><span class="dv">0</span>: ax.set_ylabel(<span class="st">'Probability'</span>)</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i<span class="op">&gt;</span><span class="dv">2</span>: ax.set_xlabel(<span class="st">'Dot product value'</span>)</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sds, axes, fig   <span class="co"># return some axes &amp; figure info too in case we want to replot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <p>Now we can get started by looking at distributions of dot products for various kinds of vectors. Starting with…</p>
 </section>
@@ -299,7 +301,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>From the above graph, we see that as the dimensionality D increases, it’s still the case that the most common dot product is zero, but the probability distribution becomes wider &amp; flatter, i.e.&nbsp;the chances that a pair of random vectors are <em>not</em> orthogonal becomes increasingly <em>more</em> likely as D increases.</p>
-<p>::: {.callout-note} Ooo, ooo! Some of you may have seen how in the “<a href="https://paperswithcode.com/method/scaled">scaled dot product attention</a>” used in <a href="https://arxiv.org/abs/1706.03762">Transformer</a> models, they normalize by the square root of the number of dimensions? Let’s try that on the above graphs and see if the variance (i.e.&nbsp;the scale on the horizontal axis) stays roughly the same:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note: Normalizing by sqrt(D)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ooo, ooo! Some of you may have seen how in the “<a href="https://paperswithcode.com/method/scaled">scaled dot product attention</a>” used in <a href="https://arxiv.org/abs/1706.03762">Transformer</a> models, they normalize by the square root of the number of dimensions? Let’s try that on the above graphs and see if the variance (i.e.&nbsp;the scale on the horizontal axis) stays roughly the same:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> <span class="st">"Uniform distribution, Non-Unit Vectors, Scaled by 1/sqrt(D)"</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sds, axes, fig <span class="op">=</span>  make_plot(title<span class="op">=</span>title, scale_x_by_sqrtd<span class="op">=</span><span class="va">True</span>)</span>
@@ -308,7 +320,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="2022-01-24-MultiDim-DotProducts_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
 </div>
 </div>
-<p>…cool, right? ;-)</p>
+<p>See how the variance stays constant as D increases? Cool, right? ;-)</p>
+</div>
+</div>
 </section>
 <section id="uniform-distribution-unit-vectors" class="level2">
 <h2 class="anchored" data-anchor-id="uniform-distribution-unit-vectors">Uniform distribution, Unit vectors</h2>
