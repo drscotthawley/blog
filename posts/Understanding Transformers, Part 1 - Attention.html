@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Scott H. Hawley">
-<meta name="dcterms.date" content="2023-08-11">
+<meta name="dcterms.date" content="2023-08-14">
 <meta name="description" content="If you can get this one thing, the rest will make sense.">
 
 <title>blog - Understanding Transfomers, Part 1: Attention</title>
@@ -197,7 +197,7 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">August 11, 2023</p>
+        <p class="date">August 14, 2023</p>
       </div>
     </div>
     
@@ -223,9 +223,10 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#similarity" id="toc-similarity" class="nav-link" data-scroll-target="#similarity"><span class="header-section-number">4.1</span> Similarity</a></li>
   </ul></li>
-  <li><a href="#trying-it-out" id="toc-trying-it-out" class="nav-link" data-scroll-target="#trying-it-out"><span class="header-section-number">5</span> Trying it Out</a></li>
+  <li><a href="#what-are-q-k-and-v" id="toc-what-are-q-k-and-v" class="nav-link" data-scroll-target="#what-are-q-k-and-v"><span class="header-section-number">5</span> What are Q, K, and V?</a></li>
   <li><a href="#afterward-i-wrote-a-song" id="toc-afterward-i-wrote-a-song" class="nav-link" data-scroll-target="#afterward-i-wrote-a-song"><span class="header-section-number">6</span> Afterward: I Wrote A Song</a></li>
   <li><a href="#sec-references" id="toc-sec-references" class="nav-link" data-scroll-target="#sec-references"><span class="header-section-number">7</span> References</a></li>
+  <li><a href="#appendix-fun-with-softmax" id="toc-appendix-fun-with-softmax" class="nav-link" data-scroll-target="#appendix-fun-with-softmax"><span class="header-section-number">8</span> Appendix: Fun with Softmax</a></li>
   </ul>
 </nav>
     </div>
@@ -517,10 +518,15 @@ Note
 <section id="similarity" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="similarity"><span class="header-section-number">4.1</span> Similarity</h2>
 <p>TODO: fill in more later…</p>
+<p>euclidean distance</p>
+<p>cosine similarity</p>
+<p>“scaled dot product attention”</p>
+<p>softmax is best but you could use something else</p>
+<p>note connection to thermodynamics</p>
 </section>
 </section>
-<section id="trying-it-out" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Trying it Out</h1>
+<section id="what-are-q-k-and-v" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> What are Q, K, and V?</h1>
 <p>TODO: fill in more later…</p>
 </section>
 <section id="afterward-i-wrote-a-song" class="level1" data-number="6">
@@ -580,6 +586,9 @@ Note
 <div class="csl-left-margin">[11] </div><div class="csl-right-inline">S. Raschka, <span>“Understanding and <span>Coding</span> the <span>Self</span>-<span>Attention</span> <span>Mechanism</span> of <span>Large</span> <span>Language</span> <span>Models</span> <span>From</span> <span>Scratch</span>,”</span> <em>Sebastian Raschka, PhD</em>. Accessed: Aug. 10, 2023. [Online]. Available: <a href="https://sebastianraschka.com/blog/2023/self-attention-from-scratch.html">https://sebastianraschka.com/blog/2023/self-attention-from-scratch.html</a></div>
 </div>
 </div>
+</section>
+<section id="appendix-fun-with-softmax" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Appendix: Fun with Softmax</h1>
 <hr>
 <p>(c) 2023 Scott H. Hawley</p>
 
