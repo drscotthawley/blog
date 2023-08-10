@@ -256,10 +256,7 @@ Note
 <p>Attention is just a way to give certain parts of an input more weight than others.</p>
 </div>
 </div>
-<blockquote class="blockquote">
-<p>[TODO: cut this?] On computers, the way we often emphasize certain parts of an array more than others is to multiply them by another array that has the “weights” to be assigned. (We already do this with neural networks, i.e.&nbsp;the weights of the neurons. With attention, we’re going to do something similar except instead of having the static weights like with the neurons, we’re going to allow the weights to change based on the input and based on what we’re trying to do with that input.)</p>
-</blockquote>
-<p>Often when we have an auxiliary array of weights we refer to that as a “mask”. For example, a “hard mask” of zeros and 1’s multiplied by an input array will turn certain parts of the input off and leave others on. A “soft mask” can also non-integer values, to give certain parts more importance than others. For attention, we’ll be doing the latter.</p>
+<p>On computers, the way we often emphasize certain parts of an array more than others is to multiply them by another array that has the “weights” to be assigned. In some other contexts, the “weights” array may be also called a “mask”, such as a “hard mask” of 1’s and 0’s to turn on or off parts of the array, or a “soft mask” with floating-point values to emphasize certain elements.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -273,7 +270,7 @@ Note
 <p>Attention is just a soft mask.</p>
 </div>
 </div>
-<p>Let’s do just a bit of code to demonstrate this. We’ll use the sample sentence above, and <em>make up</em> some mask weights to stress the relative importants of different words. We’ll display the weights a colorbar to visualize their magnitude:</p>
+<p>Let’s use the sample sentence above, and <em>make up</em> some mask weights to stress the relative importants of different words. We’ll display the weights a colorbar to visualize their magnitude:</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -496,6 +493,7 @@ Note
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
+<p>I recommend any of these. Seriously, I studied all of these and they’re great. Things just didn’t “click” for me until late in life I guess. LOL. [TODO: come back &amp; fill these in] * the original paper * Jay Alamar’s * Brendan blank’s * Jeremy Jordan’s * other guy’s video * Karpathy’s video * thing matt recommended</p>
 <hr>
 <p>(c) 2023 Scott H. Hawley</p>
 
