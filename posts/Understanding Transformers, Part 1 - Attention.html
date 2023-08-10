@@ -57,7 +57,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -226,7 +245,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="preface" class="level1">
 <h1>Preface</h1>
 <p>Transformer neural network models finally “clicked” for me this summer! For 4 years, I’d felt confused about them despite having done a <em>lot</em> of study (see #References). They seem to have so many “moving parts,” so the complexity of the model was daunting for me (and apparently many others).</p>
-<p>What finally helped was watching <a href="https://youtu.be/kCc8FmEb1nY?t=3283">Andrej Karpathy’s excellent tutorial</a> for the <em>second time</em>, when I noticed he homed in on the Attention part of the model and explained it as being a <em>weighted average of words.</em> I believe that if you grasp that part, then everything else about the Transformer is just “bells and whistles” that make it work better.</p>
+<p>What finally helped was watching for the <em>second time</em> Andrej Karpathy’s excellent YouTube video <span class="citation" data-cites="andrej_karpathy_lets_2023"><a href="#ref-andrej_karpathy_lets_2023" role="doc-biblioref">[1]</a></span> on writing GPT from scratch, when I noticed he homed in on the Attention part of the model and explained it as being a <em>weighted average of words.</em> I believe that if you grasp that part, then everything else about the Transformer is just “bells and whistles” that make it work better.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -508,7 +527,32 @@ Note
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
-<p>I recommend any of these. Seriously, I studied all of these and they’re great. Things just didn’t “click” for me until late in life I guess. LOL. [TODO: come back &amp; fill these in] * the original paper * Jay Alamar’s * Brendan blank’s * Jeremy Jordan’s * other guy’s video * Karpathy’s video * thing matt recommended</p>
+<p>I recommend any of these the following. Seriously, I studied all of these and they’re great. Things just didn’t “click” for me until late in life I guess. LOL.</p>
+<p>My trajectory was first the original paper<span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[2]</a></span>, then Jay Alammar’s “The Illustrated Transformer” <span class="citation" data-cites="alammar_illustrated"><a href="#ref-alammar_illustrated" role="doc-biblioref">[3]</a></span>, then the Coursera course <span class="citation" data-cites="coursera"><a href="#ref-coursera" role="doc-biblioref">[4]</a></span> co-taught by one of the original Transformer paper authors, then Brendan Rohrer’s great post <span class="citation" data-cites="rohrer"><a href="#ref-rohrer" role="doc-biblioref">[5]</a></span>, then Jeremy Jordan’s tutorial <span class="citation" data-cites="jeremy"><a href="#ref-jeremy" role="doc-biblioref"><strong>jeremy?</strong></a></span>. Then a couple years later Karpathy’s video <span class="citation" data-cites="andrej_karpathy_lets_2023"><a href="#ref-andrej_karpathy_lets_2023" role="doc-biblioref">[1]</a></span>, with a follow-up of CodeEmporiums’s video <span class="citation" data-cites="codeemporium"><a href="#ref-codeemporium" role="doc-biblioref">[6]</a></span>.</p>
+<p>I also recommend Daniel Dugas’ “GPT on a Napkin” <span class="citation" data-cites="dugas_gpt_napkin"><a href="#ref-dugas_gpt_napkin" role="doc-biblioref">[7]</a></span>, but didn’t learn of it until later.</p>
+<div id="refs" class="references csl-bib-body" role="list">
+<div id="ref-andrej_karpathy_lets_2023" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">Andrej Karpathy, <span>“Let’s build <span>GPT</span>: From scratch, in code, spelled out.”</span> Jan. 2023. Accessed: Aug. 10, 2023. [Online]. Available: <a href="https://www.youtube.com/watch?v=kCc8FmEb1nY">https://www.youtube.com/watch?v=kCc8FmEb1nY</a></div>
+</div>
+<div id="ref-aiayn" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">A. Vaswani <em>et al.</em>, <span>“Attention is <span>All</span> you <span>Need</span>,”</span> in <em>Advances in <span>Neural</span> <span>Information</span> <span>Processing</span> <span>Systems</span></em>, I. Guyon, U. V. Luxburg, S. Bengio, H. Wallach, R. Fergus, S. Vishwanathan, and R. Garnett, Eds., Curran Associates, Inc., 2017. Available: <a href="https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf">https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf</a></div>
+</div>
+<div id="ref-alammar_illustrated" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">J. Alammar, <span>“The <span>Illustrated</span> <span>Transformer</span>.”</span> Accessed: Aug. 10, 2023. [Online]. Available: <a href="https://jalammar.github.io/illustrated-transformer/">https://jalammar.github.io/illustrated-transformer/</a></div>
+</div>
+<div id="ref-coursera" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">Y. B. Mourri and Ł. Kaiser, <span>“Natural <span>Language</span> <span>Processing</span> with <span>Attention</span> <span>Models</span>,”</span> <em>Coursera</em>. Accessed: Aug. 10, 2023. [Online]. Available: <a href="https://www.coursera.org/learn/attention-models-in-nlp">https://www.coursera.org/learn/attention-models-in-nlp</a></div>
+</div>
+<div id="ref-rohrer" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">B. Rohrer, <span>“Transformers from <span>Scratch</span>.”</span> Accessed: Aug. 10, 2023. [Online]. Available: <a href="https://e2eml.school/transformers.html">https://e2eml.school/transformers.html</a></div>
+</div>
+<div id="ref-codeemporium" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[6] </div><div class="csl-right-inline">CodeEmporium, <span>“Transformer <span>Decoder</span> coded from scratch.”</span> Mar. 2023. Accessed: Aug. 10, 2023. [Online]. Available: <a href="https://www.youtube.com/watch?v=MqDehUoMk-E">https://www.youtube.com/watch?v=MqDehUoMk-E</a></div>
+</div>
+<div id="ref-dugas_gpt_napkin" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[7] </div><div class="csl-right-inline">D. Dugas, <span>“The <span>GPT</span>-3 <span>Architecture</span>, on a <span>Napkin</span>.”</span> Accessed: Aug. 10, 2023. [Online]. Available: <a href="https://dugas.ch/artificial_curiosity/GPT_architecture.html">https://dugas.ch/artificial_curiosity/GPT_architecture.html</a></div>
+</div>
+</div>
 <hr>
 <p>(c) 2023 Scott H. Hawley</p>
 
