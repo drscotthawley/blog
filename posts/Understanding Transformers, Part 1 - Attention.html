@@ -214,7 +214,10 @@ div.csl-indent {
    
   <ul>
   <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface"><span class="header-section-number">1</span> Preface</a></li>
-  <li><a href="#intuition-weighted-averages" id="toc-intuition-weighted-averages" class="nav-link" data-scroll-target="#intuition-weighted-averages"><span class="header-section-number">2</span> Intuition: Weighted Averages</a></li>
+  <li><a href="#intuition" id="toc-intuition" class="nav-link" data-scroll-target="#intuition"><span class="header-section-number">2</span> Intuition</a>
+  <ul class="collapse">
+  <li><a href="#weighted-averages" id="toc-weighted-averages" class="nav-link" data-scroll-target="#weighted-averages"><span class="header-section-number">2.1</span> Weighted Averages</a></li>
+  </ul></li>
   <li><a href="#historical-context" id="toc-historical-context" class="nav-link" data-scroll-target="#historical-context"><span class="header-section-number">3</span> Historical “Context”</a></li>
   <li><a href="#making-it-mathematical" id="toc-making-it-mathematical" class="nav-link" data-scroll-target="#making-it-mathematical"><span class="header-section-number">4</span> Making it Mathematical</a>
   <ul class="collapse">
@@ -241,8 +244,8 @@ div.csl-indent {
 <p>— work in progress. not ready yet —</p>
 <section id="preface" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Preface</h1>
-<p>Transformer neural network models <span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span> essentially “took over” as the preferred architecture for many machine learning tasks, ever since their introduction in 2019. But I I found their complexity daunting, and this hindered my numerous, ardent attempts at study – see the References in <a href="#sec-references">Section&nbsp;7</a> for a list of all the papers, tutorials, and videos I consumed.</p>
-<p>But things finally “clicked” for me this summer – 4 years later! What finally helped was watching Andrej Karpathy’s excellent YouTube tutorial <span class="citation" data-cites="andrej_karpathy_lets_2023"><a href="#ref-andrej_karpathy_lets_2023" role="doc-biblioref">[2]</a></span> for the <em>second time</em>, when I noticed he homed in on the Attention part of the model and explained it as being a <em>weighted average of words.</em> I believe that if you grasp that part, then everything else about the Transformer is just “bells and whistles” that make it work better.</p>
+<p>Transformer neural network models <span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span> burst on the scene in 2017 and eventually “took over” as the preferred architecture for many machine learning tasks. [TODO: mention gpt and such]. Yet I found their complexity daunting, and this hindered my numerous, ardent attempts at study – see the References in <a href="#sec-references">Section&nbsp;7</a> for a list of all the papers, tutorials, and videos I consumed.</p>
+<p>Things finally “clicked” for me this summer – years later! What finally helped was watching Andrej Karpathy’s excellent YouTube tutorial <span class="citation" data-cites="andrej_karpathy_lets_2023"><a href="#ref-andrej_karpathy_lets_2023" role="doc-biblioref">[2]</a></span> for the <em>second time</em>, when I noticed he homed in on the Attention part of the model and explained it as being a <em>weighted average of words.</em> I believe that if you grasp that part, then everything else about the Transformer is just “bells and whistles” that make it work better.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -257,8 +260,8 @@ Note
 </div>
 </div>
 </section>
-<section id="intuition-weighted-averages" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Intuition: Weighted Averages</h1>
+<section id="intuition" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Intuition</h1>
 <p>Certain parts of an input matter more than others. For example, when you look at an image, you probably focus on objects in the foreground more than the background. For example, in this picture, most people (and AI systems!) will focus attention on the dog:</p>
 <div id="fig-doggie" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -285,6 +288,8 @@ Note
 <p>Attention is just a way to give certain parts of an input more weight than others.</p>
 </div>
 </div>
+<section id="weighted-averages" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="weighted-averages"><span class="header-section-number">2.1</span> Weighted Averages</h2>
 <p>On computers, the way we often emphasize certain parts of an array more than others is to multiply them by another array that has the “weights” to be assigned. In some other contexts, the “weights” array may be also called a “mask”, such as a “hard mask” of 1’s and 0’s to turn on or off parts of the array, or a “soft mask” with floating-point values to emphasize certain elements.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -485,10 +490,11 @@ Note
 </div>
 </div>
 </section>
+</section>
 <section id="historical-context" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Historical “Context”</h1>
 <p>There are a few different attention-like schemes that have arisen over the years. The cleanest starting point for our lesson is the work of Bahdanau et al <span class="citation" data-cites="bahdanau_attn"><a href="#ref-bahdanau_attn" role="doc-biblioref">[4]</a></span> who were making improvements to automated language translation mdoels that at the time were using a model architecture called a Recurrent Neural Network (RNN, which you don’t need to understand for this lesson, or the fact that specific flavor of RNN was called an LSTM which stood for Long Short-Term Memory).</p>
-<p>At issue was traditional models’ use of a “context vector” of numbers that would store the “meaning” of the text that was being processed.</p>
+<p>At issue was traditional models’ management of the “context vector” of numbers that would store the “meaning” of the text as it was being processed. You can think of the context vector as being like the “state” of the machine as it works through the text.</p>
 <p>…TODO: more later…</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
