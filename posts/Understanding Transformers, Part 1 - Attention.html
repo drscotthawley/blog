@@ -283,7 +283,7 @@ Note
 <p>Attention is just a soft mask.</p>
 </div>
 </div>
-<p>Let’s use the sample sentence above, and <em>make up</em> some mask weights to stress the relative importants of different words. We’ll display the weights a colorbar to visualize their magnitude:</p>
+<p>Let’s use the sample sentence above, and <em>make up</em> some mask weights to stress the relative importants of different words. We’ll display the weights a colorbar to visualize their magnitude (darker= more weight):</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -295,65 +295,66 @@ Note
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> <span class="bu">input</span>.split()</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> [<span class="fl">0.5</span>,<span class="fl">.9</span>,<span class="fl">0.1</span>,<span class="fl">0.0</span>,<span class="fl">.8</span>,<span class="fl">0.1</span>,<span class="fl">.93</span>,<span class="fl">0.1</span>,<span class="fl">.98</span>] </span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">"word"</span>:words,<span class="st">"weight"</span>:weights})</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>display(df.set_index(<span class="st">'word'</span>).T.style.bar(vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>).<span class="bu">format</span>(precision<span class="op">=</span><span class="dv">3</span>).hide())</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>display(df.set_index(<span class="st">'word'</span>).T.style.background_gradient(vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>).<span class="bu">format</span>(precision<span class="op">=</span><span class="dv">3</span>).hide())</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Sum of mask weights = </span><span class="sc">{</span>mask<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:.3g}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div id="word-weights-0" class="cell-output cell-output-display">
 <style type="text/css">
-#T_2d3a2_row0_col0 {
-  width: 10em;
-  background: linear-gradient(90deg, #d65f5f 50.0%, transparent 50.0%);
+#T_8620d_row0_col0 {
+  background-color: #73a9cf;
+  color: #f1f1f1;
 }
-#T_2d3a2_row0_col1 {
-  width: 10em;
-  background: linear-gradient(90deg, #d65f5f 90.0%, transparent 90.0%);
+#T_8620d_row0_col1 {
+  background-color: #045382;
+  color: #f1f1f1;
 }
-#T_2d3a2_row0_col2, #T_2d3a2_row0_col5, #T_2d3a2_row0_col7 {
-  width: 10em;
-  background: linear-gradient(90deg, #d65f5f 10.0%, transparent 10.0%);
+#T_8620d_row0_col2, #T_8620d_row0_col5, #T_8620d_row0_col7 {
+  background-color: #f0eaf4;
+  color: #000000;
 }
-#T_2d3a2_row0_col3 {
-  width: 10em;
+#T_8620d_row0_col3 {
+  background-color: #fff7fb;
+  color: #000000;
 }
-#T_2d3a2_row0_col4 {
-  width: 10em;
-  background: linear-gradient(90deg, #d65f5f 80.0%, transparent 80.0%);
+#T_8620d_row0_col4 {
+  background-color: #0567a2;
+  color: #f1f1f1;
 }
-#T_2d3a2_row0_col6 {
-  width: 10em;
-  background: linear-gradient(90deg, #d65f5f 93.0%, transparent 93.0%);
+#T_8620d_row0_col6 {
+  background-color: #034a74;
+  color: #f1f1f1;
 }
-#T_2d3a2_row0_col8 {
-  width: 10em;
-  background: linear-gradient(90deg, #d65f5f 98.0%, transparent 98.0%);
+#T_8620d_row0_col8 {
+  background-color: #023d60;
+  color: #f1f1f1;
 }
 </style>
 
-<table id="T_2d3a2" data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table id="T_8620d" data-quarto-postprocess="true" class="table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th id="T_2d3a2_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
-<th id="T_2d3a2_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">go</th>
-<th id="T_2d3a2_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">to</th>
-<th id="T_2d3a2_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">the</th>
-<th id="T_2d3a2_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">store</th>
-<th id="T_2d3a2_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">and</th>
-<th id="T_2d3a2_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">get</th>
-<th id="T_2d3a2_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">some</th>
-<th id="T_2d3a2_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">milk</th>
+<th id="T_8620d_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
+<th id="T_8620d_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">go</th>
+<th id="T_8620d_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">to</th>
+<th id="T_8620d_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">the</th>
+<th id="T_8620d_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">store</th>
+<th id="T_8620d_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">and</th>
+<th id="T_8620d_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">get</th>
+<th id="T_8620d_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">some</th>
+<th id="T_8620d_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">milk</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_2d3a2_row0_col0" class="data row0 col0">0.500</td>
-<td id="T_2d3a2_row0_col1" class="data row0 col1">0.900</td>
-<td id="T_2d3a2_row0_col2" class="data row0 col2">0.100</td>
-<td id="T_2d3a2_row0_col3" class="data row0 col3">0.000</td>
-<td id="T_2d3a2_row0_col4" class="data row0 col4">0.800</td>
-<td id="T_2d3a2_row0_col5" class="data row0 col5">0.100</td>
-<td id="T_2d3a2_row0_col6" class="data row0 col6">0.930</td>
-<td id="T_2d3a2_row0_col7" class="data row0 col7">0.100</td>
-<td id="T_2d3a2_row0_col8" class="data row0 col8">0.980</td>
+<td id="T_8620d_row0_col0" class="data row0 col0">0.500</td>
+<td id="T_8620d_row0_col1" class="data row0 col1">0.900</td>
+<td id="T_8620d_row0_col2" class="data row0 col2">0.100</td>
+<td id="T_8620d_row0_col3" class="data row0 col3">0.000</td>
+<td id="T_8620d_row0_col4" class="data row0 col4">0.800</td>
+<td id="T_8620d_row0_col5" class="data row0 col5">0.100</td>
+<td id="T_8620d_row0_col6" class="data row0 col6">0.930</td>
+<td id="T_8620d_row0_col7" class="data row0 col7">0.100</td>
+<td id="T_8620d_row0_col8" class="data row0 col8">0.980</td>
 </tr>
 </tbody>
 </table>
@@ -383,69 +384,70 @@ Tip
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>attention <span class="op">=</span> mask<span class="op">/</span>mask.<span class="bu">sum</span>()</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">"word"</span>:words,<span class="st">"weight"</span>:attention})</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>display(df.set_index(<span class="st">'word'</span>).T.style.bar(vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>).<span class="bu">format</span>(precision<span class="op">=</span><span class="dv">3</span>).hide())</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>display(df.set_index(<span class="st">'word'</span>).T.style.background_gradient(vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="fl">.22</span>).<span class="bu">format</span>(precision<span class="op">=</span><span class="dv">3</span>).hide())</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Sum of attention weights = </span><span class="sc">{</span>attention<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:.3g}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div id="word-weights-1" class="cell-output cell-output-display">
 <style type="text/css">
-#T_db153_row0_col0 {
-  width: 10em;
-  background: linear-gradient(90deg, #d65f5f 9.1%, transparent 9.1%);
+#T_c8d6a_row0_col0 {
+  background-color: #97b7d7;
+  color: #000000;
 }
-#T_db153_row0_col1 {
-  width: 10em;
-  background: linear-gradient(90deg, #d65f5f 20.4%, transparent 20.4%);
+#T_c8d6a_row0_col1 {
+  background-color: #034b76;
+  color: #f1f1f1;
 }
-#T_db153_row0_col2 {
-  width: 10em;
-  background: linear-gradient(90deg, #d65f5f 4.5%, transparent 4.5%);
+#T_c8d6a_row0_col2 {
+  background-color: #dad9ea;
+  color: #000000;
 }
-#T_db153_row0_col3 {
-  width: 10em;
+#T_c8d6a_row0_col3 {
+  background-color: #fff7fb;
+  color: #000000;
 }
-#T_db153_row0_col4 {
-  width: 10em;
-  background: linear-gradient(90deg, #d65f5f 18.1%, transparent 18.1%);
+#T_c8d6a_row0_col4 {
+  background-color: #04629a;
+  color: #f1f1f1;
 }
-#T_db153_row0_col5, #T_db153_row0_col7 {
-  width: 10em;
-  background: linear-gradient(90deg, #d65f5f 2.3%, transparent 2.3%);
+#T_c8d6a_row0_col5, #T_c8d6a_row0_col7 {
+  background-color: #f0eaf4;
+  color: #000000;
 }
-#T_db153_row0_col6 {
-  width: 10em;
-  background: linear-gradient(90deg, #d65f5f 21.1%, transparent 21.1%);
+#T_c8d6a_row0_col6 {
+  background-color: #034369;
+  color: #f1f1f1;
 }
-#T_db153_row0_col8 {
-  width: 10em;
-  background: linear-gradient(90deg, #d65f5f 22.2%, transparent 22.2%);
+#T_c8d6a_row0_col8 {
+  background-color: #023858;
+  color: #f1f1f1;
 }
 </style>
 
-<table id="T_db153" data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table id="T_c8d6a" data-quarto-postprocess="true" class="table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th id="T_db153_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
-<th id="T_db153_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">go</th>
-<th id="T_db153_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">to</th>
-<th id="T_db153_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">the</th>
-<th id="T_db153_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">store</th>
-<th id="T_db153_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">and</th>
-<th id="T_db153_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">get</th>
-<th id="T_db153_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">some</th>
-<th id="T_db153_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">milk</th>
+<th id="T_c8d6a_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
+<th id="T_c8d6a_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">go</th>
+<th id="T_c8d6a_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">to</th>
+<th id="T_c8d6a_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">the</th>
+<th id="T_c8d6a_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">store</th>
+<th id="T_c8d6a_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">and</th>
+<th id="T_c8d6a_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">get</th>
+<th id="T_c8d6a_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">some</th>
+<th id="T_c8d6a_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">milk</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_db153_row0_col0" class="data row0 col0">0.091</td>
-<td id="T_db153_row0_col1" class="data row0 col1">0.204</td>
-<td id="T_db153_row0_col2" class="data row0 col2">0.045</td>
-<td id="T_db153_row0_col3" class="data row0 col3">0.000</td>
-<td id="T_db153_row0_col4" class="data row0 col4">0.181</td>
-<td id="T_db153_row0_col5" class="data row0 col5">0.023</td>
-<td id="T_db153_row0_col6" class="data row0 col6">0.211</td>
-<td id="T_db153_row0_col7" class="data row0 col7">0.023</td>
-<td id="T_db153_row0_col8" class="data row0 col8">0.222</td>
+<td id="T_c8d6a_row0_col0" class="data row0 col0">0.091</td>
+<td id="T_c8d6a_row0_col1" class="data row0 col1">0.204</td>
+<td id="T_c8d6a_row0_col2" class="data row0 col2">0.045</td>
+<td id="T_c8d6a_row0_col3" class="data row0 col3">0.000</td>
+<td id="T_c8d6a_row0_col4" class="data row0 col4">0.181</td>
+<td id="T_c8d6a_row0_col5" class="data row0 col5">0.023</td>
+<td id="T_c8d6a_row0_col6" class="data row0 col6">0.211</td>
+<td id="T_c8d6a_row0_col7" class="data row0 col7">0.023</td>
+<td id="T_c8d6a_row0_col8" class="data row0 col8">0.222</td>
 </tr>
 </tbody>
 </table>
