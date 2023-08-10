@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/TransformersPart1v2.html",
       "/posts/Understanding Transformers, Part 1 - Attention.html",
       "/posts/2023-06-12-RVQ.html",
       "/posts/2022-11-17-byol.html",
