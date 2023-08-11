@@ -347,7 +347,7 @@
     "href": "posts/Transformers1-Attention.html#similarity",
     "title": "Understanding Transfomers, Part 1: Attention",
     "section": "4.1 Similarity",
-    "text": "4.1 Similarity\nTODO: fill in more later…\neuclidean distance\ncosine similarity\n“scaled dot product attention talk about dimensionality scaling\nWhat does the \\(\\sqrt{d}\\) do?\n\n\n\n\n\nno sqrt d scaling\n\n\nFigure 2. \n\n\nnote connection to thermodynamics"
+    "text": "4.1 Similarity\nTODO: fill in more later…\neuclidean distance\ncosine similarity\n“scaled dot product attention talk about dimensionality scaling\nWhat does the \\(\\sqrt{d}\\) do?\n\n\n\n\n\n\n\n\na) No \\(1/\\sqrt{d}\\)\n\n\n\n\n\n\n\nb) With \\(1/\\sqrt{d}\\)\n\n\n\n\nFigure 2. Without (a) and with (b) the \\(1/\\sqrt{d}\\) factor.\n\n\nnote connection to thermodynamics"
   },
   {
     "objectID": "posts/Transformers1-Attention.html#what-are-q-k-and-v",

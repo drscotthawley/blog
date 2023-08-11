@@ -529,15 +529,39 @@ Key Idea
 <p>cosine similarity</p>
 <p>“scaled dot product attention talk about dimensionality scaling</p>
 <p>What does the <span class="math inline">\(\sqrt{d}\)</span> do?</p>
-<div id="fig-sqrtd" class="quarto-figure quarto-figure-center anchored">
+<style>
+.img {
+    transition:transform 0.4s ease;
+    position: relative;
+    z-index:0;
+}
+.img:hover {
+    -webkit-transform:scale(2);
+    transform:scale(2);
+    z-index:1;
+}
+</style>
+<div id="fig-sqrtd" class="quarto-layout-panel">
 <figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://drscotthawley.github.io/blog/posts/2022-01-24-MultiDim-DotProducts_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">no sqrt d scaling</figcaption>
+<p><img src="https://drscotthawley.github.io/blog/posts/2022-01-24-MultiDim-DotProducts_files/figure-html/cell-5-output-1.png" class="img img-fluid figure-img"></p>
+<figcaption class="figure-caption">a) No <span class="math inline">\(1/\sqrt{d}\)</span></figcaption>
 </figure>
 </div>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;2<strong>.</strong> <img src="https://drscotthawley.github.io/blog/posts/2022-01-24-MultiDim-DotProducts_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img" alt="with sqrt d scaling"></figcaption>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://drscotthawley.github.io/blog/posts/2022-01-24-MultiDim-DotProducts_files/figure-html/cell-6-output-1.png" class="img img-fluid figure-img"></p>
+<figcaption class="figure-caption">b) With <span class="math inline">\(1/\sqrt{d}\)</span></figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p></p><figcaption class="figure-caption"><strong>Figure</strong>&nbsp;2<strong>.</strong> Without (a) and with (b) the <span class="math inline">\(1/\sqrt{d}\)</span> factor.</figcaption><p></p>
 </figure>
 </div>
 <p>note connection to thermodynamics</p>
