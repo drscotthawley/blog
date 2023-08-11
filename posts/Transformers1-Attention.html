@@ -512,14 +512,21 @@ Note
 </section>
 <section id="making-it-mathematical" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Making it Mathematical</h1>
-<p>TODO: fill in more later…</p>
+<p>We’ll start by showing full formula for the Attention mechanism in Transformer models, and then we’ll unpack that to explain what its parts are and <em>why</em> they are there.</p>
+<p>The matrix of attention weights <span class="math inline">\(A\)</span> – the ones used in the weighted average – are given by</p>
+<p><span class="math display">\[ A = {\rm softmax}\left( Q K^T \over \sqrt{d_k} \right).\]</span></p>
+<p>We then multiply these by input values <span class="math inline">\(V\)</span> to get the context <span class="math inline">\(C = A V\)</span>. That’s it!</p>
+<p>So then, what is softmax, what are Q and K, and what’s that square root in the denominator there for? We’re going to emphasize the intuitive understanding of what’s going on. (If you’re simply satisfied to know the “is” without the “why”, this tutorial is probably not for you.)</p>
+<p>softmax is</p>
+<p><span class="math display">\[ {\rm softmax}(\vec{x})_i = {e^{x_i}  \over \sum_i e^{x_i}} \]</span></p>
+<p>note softmax is best but you could use something else</p>
+<p>TODO: say more</p>
 <section id="similarity" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="similarity"><span class="header-section-number">4.1</span> Similarity</h2>
 <p>TODO: fill in more later…</p>
 <p>euclidean distance</p>
 <p>cosine similarity</p>
-<p>“scaled dot product attention”</p>
-<p>softmax is best but you could use something else</p>
+<p>“scaled dot product attention talk about dimensionality scaling</p>
 <p>note connection to thermodynamics</p>
 </section>
 </section>

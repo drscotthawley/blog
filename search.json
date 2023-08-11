@@ -347,7 +347,7 @@
     "href": "posts/Transformers1-Attention.html#similarity",
     "title": "Understanding Transfomers, Part 1: Attention",
     "section": "4.1 Similarity",
-    "text": "4.1 Similarity\nTODO: fill in more later…\neuclidean distance\ncosine similarity\n“scaled dot product attention”\nsoftmax is best but you could use something else\nnote connection to thermodynamics"
+    "text": "4.1 Similarity\nTODO: fill in more later…\neuclidean distance\ncosine similarity\n“scaled dot product attention talk about dimensionality scaling\nnote connection to thermodynamics"
   },
   {
     "objectID": "posts/2022-01-24-multidim-dotproducts.html",
