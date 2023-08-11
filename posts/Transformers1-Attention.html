@@ -224,11 +224,11 @@ div.csl-indent {
   <li><a href="#making-it-mathematical" id="toc-making-it-mathematical" class="nav-link" data-scroll-target="#making-it-mathematical"><span class="header-section-number">4</span> Making it Mathematical</a>
   <ul class="collapse">
   <li><a href="#similarity" id="toc-similarity" class="nav-link" data-scroll-target="#similarity"><span class="header-section-number">4.1</span> Similarity</a></li>
+  <li><a href="#what-are-q-k-and-v" id="toc-what-are-q-k-and-v" class="nav-link" data-scroll-target="#what-are-q-k-and-v"><span class="header-section-number">4.2</span> What are Q, K, and V?</a></li>
   </ul></li>
-  <li><a href="#what-are-q-k-and-v" id="toc-what-are-q-k-and-v" class="nav-link" data-scroll-target="#what-are-q-k-and-v"><span class="header-section-number">5</span> What are Q, K, and V?</a></li>
-  <li><a href="#afterward-i-wrote-a-song" id="toc-afterward-i-wrote-a-song" class="nav-link" data-scroll-target="#afterward-i-wrote-a-song"><span class="header-section-number">6</span> Afterward: I Wrote A Song</a></li>
-  <li><a href="#sec-references" id="toc-sec-references" class="nav-link" data-scroll-target="#sec-references"><span class="header-section-number">7</span> References</a></li>
-  <li><a href="#appendix-fun-with-softmax" id="toc-appendix-fun-with-softmax" class="nav-link" data-scroll-target="#appendix-fun-with-softmax"><span class="header-section-number">8</span> Appendix: Fun with Softmax</a></li>
+  <li><a href="#afterward-i-wrote-a-song" id="toc-afterward-i-wrote-a-song" class="nav-link" data-scroll-target="#afterward-i-wrote-a-song"><span class="header-section-number">5</span> Afterward: I Wrote A Song</a></li>
+  <li><a href="#sec-references" id="toc-sec-references" class="nav-link" data-scroll-target="#sec-references"><span class="header-section-number">6</span> References</a></li>
+  <li><a href="#appendix-fun-with-softmax" id="toc-appendix-fun-with-softmax" class="nav-link" data-scroll-target="#appendix-fun-with-softmax"><span class="header-section-number">7</span> Appendix: Fun with Softmax</a></li>
   </ul>
 </nav>
     </div>
@@ -247,7 +247,7 @@ div.csl-indent {
 <p>— work in progress. not ready yet —</p>
 <section id="preface" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Preface</h1>
-<p>Transformer neural network models <span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span> burst on the scene in 2017 and eventually “took over” as the preferred architecture for many machine learning tasks. [TODO: mention gpt and such]. Yet I found their complexity daunting, and this hindered my numerous, ardent attempts at study – see the References in <a href="#sec-references">Section&nbsp;7</a> for a list of all the papers, tutorials, and videos I consumed.</p>
+<p>Transformer neural network models <span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span> burst on the scene in 2017 and eventually “took over” as the preferred architecture for many machine learning tasks. [TODO: mention gpt and such]. Yet I found their complexity daunting, and this hindered my numerous, ardent attempts at study – see the References in <a href="#sec-references">Section&nbsp;6</a> for a list of all the papers, tutorials, and videos I consumed.</p>
 <p>Things finally “clicked” for me this summer – years later! What finally helped was watching Andrej Karpathy’s excellent YouTube tutorial <span class="citation" data-cites="andrej_karpathy_lets_2023"><a href="#ref-andrej_karpathy_lets_2023" role="doc-biblioref">[2]</a></span> for the <em>second time</em>, when I noticed he homed in on the Attention part of the model and explained it as being a <em>weighted average of words.</em> I believe that if you grasp that part, then everything else about the Transformer is just “bells and whistles” that make it work better.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -259,7 +259,8 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Throughout this tutorial I will use the phrase “Attention is just…” to share different perspectives that have helped me understand.</p>
+<p>Throughout this tutorial I will highlight key ideas with the phrase “Attention is just…” to share different perspectives that have helped me understand.</p>
+<p>In some places below, the code is hidden by default (behind “&gt; Show the code” expanders) because I don’t want you getting distracted by how I made certain figures; the point is the figure, not the code. In other places, the code is <em>exposed</em> by default because that code <em>matters</em> and is “part of the lesson.”</p>
 </div>
 </div>
 </section>
@@ -278,13 +279,13 @@ Note
 </blockquote>
 <p>If you’re trying understand the command being given, the words “go”, “store”, “get”, and “milk” probably matter the most to you. If what you’re interested in is the <em>tone</em> (e.g.&nbsp;“is the speaker being polite?”) then probably the “Please” would matter most.</p>
 <p>Since the topic of Attention often comes up in the context of Natural Language Processing (NLP), we’ll stick to text for this lesson, but know that “<a href="https://paperswithcode.com/method/vision-transformer">Vision Transformers</a>” for image processing are definitely a thing <span class="citation" data-cites="vit_paper"><a href="#ref-vit_paper" role="doc-biblioref">[3]</a></span>.</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Note
+Key Idea
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -294,13 +295,13 @@ Note
 <section id="weighted-averages" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="weighted-averages"><span class="header-section-number">2.1</span> Weighted Averages</h2>
 <p>On computers, the way we often emphasize certain parts of an array more than others is to multiply them by another array that has the “weights” to be assigned. In some other contexts, the “weights” array may be also called a “mask”, such as a “hard mask” of 1’s and 0’s to turn on or off parts of the array, or a “soft mask” with floating-point values to emphasize certain elements.</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Note
+Key Idea
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -475,13 +476,13 @@ Tip
 </div>
 </div>
 <p>When we convert the word strings to numbers (later), we will weight them appropriately. These weights are <em>literally</em> the attention. To put it differently:</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Note
+Key Idea
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -496,13 +497,13 @@ Note
 <p>There are a few different attention-like schemes that have arisen over the years. The cleanest starting point for our lesson is the work of Bahdanau et al <span class="citation" data-cites="bahdanau_attn"><a href="#ref-bahdanau_attn" role="doc-biblioref">[4]</a></span> who were making improvements to automated language translation mdoels that at the time were using a model architecture called a Recurrent Neural Network (RNN, which you don’t need to understand for this lesson, or the fact that specific flavor of RNN was called an LSTM which stood for Long Short-Term Memory).</p>
 <p>At issue was traditional models’ management of the “context vector” of numbers that would store the “meaning” of the text as it was being processed. You can think of the context vector as being like the “state” of the machine as it works through the text.</p>
 <p>TODO: fill in more later…</p>
-<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Note
+Key Idea
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -527,15 +528,27 @@ Note
 <p>euclidean distance</p>
 <p>cosine similarity</p>
 <p>“scaled dot product attention talk about dimensionality scaling</p>
+<p>What does the <span class="math inline">\(\sqrt{d}\)</span> do?</p>
+<div id="fig-sqrtd" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://drscotthawley.github.io/blog/posts/2022-01-24-MultiDim-DotProducts_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">no sqrt d scaling</figcaption>
+</figure>
+</div>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;2<strong>.</strong> <img src="https://drscotthawley.github.io/blog/posts/2022-01-24-MultiDim-DotProducts_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img" alt="with sqrt d scaling"></figcaption>
+</figure>
+</div>
 <p>note connection to thermodynamics</p>
 </section>
-</section>
-<section id="what-are-q-k-and-v" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> What are Q, K, and V?</h1>
+<section id="what-are-q-k-and-v" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="what-are-q-k-and-v"><span class="header-section-number">4.2</span> What are Q, K, and V?</h2>
 <p>TODO: fill in more later…</p>
 </section>
-<section id="afterward-i-wrote-a-song" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Afterward: I Wrote A Song</h1>
+</section>
+<section id="afterward-i-wrote-a-song" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Afterward: I Wrote A Song</h1>
 <p>While I was away on a solo writer’s retreat to a shack in the woods, I started fiddling with a little song idea inspired by this tweet:</p>
 <div class="cell">
 <div class="cell-output cell-output-display">
@@ -551,8 +564,8 @@ Note
 </div>
 </div>
 </section>
-<section id="sec-references" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> References</h1>
+<section id="sec-references" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> References</h1>
 <p>I recommend any of these the following. Seriously, I studied all of these and they’re great. Things just didn’t “click” for me until later in life I guess. LOL.</p>
 <p>My trajectory was first the original paper<span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span>, then Jay Alammar’s “The Illustrated Transformer” <span class="citation" data-cites="alammar_illustrated"><a href="#ref-alammar_illustrated" role="doc-biblioref">[5]</a></span>, then the Coursera course <span class="citation" data-cites="coursera"><a href="#ref-coursera" role="doc-biblioref">[6]</a></span> co-taught by one of the original Transformer paper authors, then Brendan Rohrer’s great post <span class="citation" data-cites="rohrer"><a href="#ref-rohrer" role="doc-biblioref">[7]</a></span>, then Jeremy Jordan’s tutorial <span class="citation" data-cites="jeremyj_transformers"><a href="#ref-jeremyj_transformers" role="doc-biblioref">[8]</a></span>. Then a couple years later Karpathy’s video <span class="citation" data-cites="andrej_karpathy_lets_2023"><a href="#ref-andrej_karpathy_lets_2023" role="doc-biblioref">[2]</a></span>, with a follow-up of CodeEmporiums’s video <span class="citation" data-cites="codeemporium"><a href="#ref-codeemporium" role="doc-biblioref">[9]</a></span>. But hopefully after reading my post(s) you won’t need to do all that!</p>
 <p>I also recommend Daniel Dugas’ “GPT on a Napkin” <span class="citation" data-cites="dugas_gpt_napkin"><a href="#ref-dugas_gpt_napkin" role="doc-biblioref">[10]</a></span> and Sebastian Rashka’s post on Attention <span class="citation" data-cites="raschka_understanding_attn"><a href="#ref-raschka_understanding_attn" role="doc-biblioref">[11]</a></span>, but didn’t learn of these until after I started writing this post.</p>
@@ -592,9 +605,21 @@ Note
 </div>
 </div>
 </section>
-<section id="appendix-fun-with-softmax" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> Appendix: Fun with Softmax</h1>
-<p>This is optional.</p>
+<section id="appendix-fun-with-softmax" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Appendix: Fun with Softmax</h1>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This section is optional.</p>
+</div>
+</div>
 <p>If we multiply the inputs to the softmax function (i.e., the “logits”) by some scale factor, we can change the “sharpness” of the result. (For those in the know, this is analagous to varying the temperature of a thermodynamic system.) For a “sharpness” parameter of 1/2, we get normal softmax. For sharpness=0, <em>we turn softmax into an ordinary (non-weighted) averaging operator</em>. And for sharpness=1, we get only the largest input and all other values are zero. So softmax can be also used as regular average or as max-value function, or something in between.<span class="math inline">\(^*\)</span></p>
 <p>Try playing with the slider below for the 9 sample weights from our introductory sentence:</p>
 <div class="cell">
@@ -627,7 +652,7 @@ Note
 <span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>xlocs <span class="op">=</span> [<span class="dv">0</span><span class="op">,</span><span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span><span class="op">,</span><span class="dv">4</span><span class="op">,</span><span class="dv">5</span><span class="op">,</span><span class="dv">6</span><span class="op">,</span><span class="dv">7</span><span class="op">,</span><span class="dv">8</span>]<span class="op">;</span></span>
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>basic_plot <span class="op">=</span> {</span>
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> p <span class="op">=</span> <span class="fu">plotter</span>( {<span class="dt">height</span><span class="op">:</span><span class="dv">350</span><span class="op">,</span> <span class="dt">width</span><span class="op">:</span><span class="dv">600</span><span class="op">,</span> <span class="dt">xDomain</span><span class="op">:</span> [xlocs[<span class="dv">0</span>]<span class="op">-</span><span class="fl">0.1</span><span class="op">,</span> xlocs[n<span class="op">-</span><span class="dv">1</span>]<span class="op">+</span><span class="dv">1</span>]<span class="op">,</span> <span class="dt">yDomain</span><span class="op">:</span> [<span class="dv">1</span><span class="op">,</span> <span class="op">-.</span><span class="dv">1</span>]<span class="op">,</span> <span class="dt">xLabel</span><span class="op">:</span><span class="st">'x'</span><span class="op">,</span> <span class="dt">yLabel</span><span class="op">:</span><span class="st">'softmax(sx)'</span> } )<span class="op">;</span></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  p<span class="op">.</span><span class="fu">text</span>(<span class="st">'softmax(xs/(1-s))'</span><span class="op">,</span> <span class="op">-</span><span class="fl">0.3</span><span class="op">,</span> <span class="fl">1.02</span><span class="op">,</span> { <span class="dt">stroke</span><span class="op">:</span> <span class="st">'white'</span><span class="op">,</span> <span class="dt">weight</span><span class="op">:</span> <span class="dv">6</span><span class="op">,</span> <span class="dt">anchor</span><span class="op">:</span> <span class="st">'start'</span> })<span class="op">;</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  p<span class="op">.</span><span class="fu">text</span>(<span class="st">'softmax(xs/(1-s))'</span><span class="op">,</span> <span class="op">-</span><span class="fl">0.4</span><span class="op">,</span> <span class="fl">1.02</span><span class="op">,</span> { <span class="dt">stroke</span><span class="op">:</span> <span class="st">'white'</span><span class="op">,</span> <span class="dt">weight</span><span class="op">:</span> <span class="dv">6</span><span class="op">,</span> <span class="dt">anchor</span><span class="op">:</span> <span class="st">'start'</span> })<span class="op">;</span></span>
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  p<span class="op">.</span><span class="fu">text</span>(<span class="st">'x'</span><span class="op">,</span> xlocs[n<span class="op">-</span><span class="dv">1</span>]<span class="op">+</span><span class="fl">1.15</span><span class="op">,</span> <span class="op">-.</span><span class="bn">02</span><span class="op">,</span> { <span class="dt">stroke</span><span class="op">:</span> <span class="st">'white'</span><span class="op">,</span> <span class="dt">weight</span><span class="op">:</span> <span class="dv">6</span> })<span class="op">;</span></span>
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  p<span class="op">.</span><span class="fu">rectangle</span>(<span class="op">-</span><span class="dv">10</span><span class="op">,</span><span class="dv">10</span><span class="op">,</span><span class="dv">10</span><span class="op">,-</span><span class="dv">10</span><span class="op">,</span> {<span class="dt">fill</span><span class="op">:</span><span class="st">'white'</span><span class="op">,</span> <span class="dt">opacity</span><span class="op">:</span><span class="fl">0.0</span>})<span class="op">;</span>  <span class="co">// background</span></span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
@@ -717,7 +742,7 @@ Note
 </div>
 </div>
 </div>
-<p><span class="math inline">\(^*\)</span> Oooo and if you really want to dive deep, look up “Gumbel-Softmax Trick.” But that’s for another day.</p>
+<p><span class="math inline">\(^*\)</span>Oooo and if you really want to dive deep, look up “Gumbel-Softmax Trick.” But that’s for another day.</p>
 <hr>
 <p>(c) 2023 Scott H. Hawley</p>
 
@@ -726,7 +751,7 @@ Note
 
 </main> <!-- /main -->
 <script type="ojs-module-contents">
-{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"\nimport {plotter} from \"@kjerandp/plotter\"\n// This is written in Observable JS, cf. https://quarto.org/docs/interactive/ojs/\n\nfunction apply_s(logits, s) {\n    return logits.map(function(x) { return x * (s/(1-s+1.0e-8)); });  \n}\n\nfunction softmax(logits) {\n    const maxLogit = Math.max(...logits);\n    const scores = logits.map(l => Math.exp(l - maxLogit));\n    const denom = scores.reduce((a, b) => a + b);\n    return scores.map(s => s / denom);\n}\n\n\nwords = ['Please','go','to','the','store','and','get','some','milk'];\nn = words.length\nattn_weights = [0.119, 0.190,\t0.024,\t0.002,\t0.167,\t0.024,\t0.214,\t0.024,\t0.236]\nlogits = attn_weights.map(x => Math.log(x+1.0e-8));\n\nviewof s = Inputs.range([0, 1], {label: \"Sharpness s:\", step: .01, value:0.5, width:460});\nnumbers = softmax(apply_s(logits,s));\n\n// make a bar plot manually by plotting a bunch of rectangles. \nxlocs = [0,1,2,3,4,5,6,7,8];\nbasic_plot = {\n  let p = plotter( {height:350, width:600, xDomain: [xlocs[0]-0.1, xlocs[n-1]+1], yDomain: [1, -.1], xLabel:'x', yLabel:'softmax(sx)' } );\n  p.text('softmax(xs/(1-s))', -0.3, 1.02, { stroke: 'white', weight: 6, anchor: 'start' });\n  p.text('x', xlocs[n-1]+1.15, -.02, { stroke: 'white', weight: 6 });\n  p.rectangle(-10,10,10,-10, {fill:'white', opacity:0.0});  // background\n\n  for (let i = 0; i < n; i++) {\n      p.rectangle(xlocs[i], numbers[i], xlocs[i]+1, 0, { fill: 'cyan', opacity:0.65, stroke:'gray' });\n      p.text(words[i], xlocs[i]+0.5, -.1, { stroke: 'yellow', weight: 6 } )\n      p.text(numbers[i].toFixed(2), xlocs[i]+0.5, numbers[i]+.01, { stroke: 'grey', weight: 6 } )\n  }\n  return p.node;\n}\n"},{"methodName":"interpretQuiet","source":"shinyInput('s')"}]}
+{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"\nimport {plotter} from \"@kjerandp/plotter\"\n// This is written in Observable JS, cf. https://quarto.org/docs/interactive/ojs/\n\nfunction apply_s(logits, s) {\n    return logits.map(function(x) { return x * (s/(1-s+1.0e-8)); });  \n}\n\nfunction softmax(logits) {\n    const maxLogit = Math.max(...logits);\n    const scores = logits.map(l => Math.exp(l - maxLogit));\n    const denom = scores.reduce((a, b) => a + b);\n    return scores.map(s => s / denom);\n}\n\n\nwords = ['Please','go','to','the','store','and','get','some','milk'];\nn = words.length\nattn_weights = [0.119, 0.190,\t0.024,\t0.002,\t0.167,\t0.024,\t0.214,\t0.024,\t0.236]\nlogits = attn_weights.map(x => Math.log(x+1.0e-8));\n\nviewof s = Inputs.range([0, 1], {label: \"Sharpness s:\", step: .01, value:0.5, width:460});\nnumbers = softmax(apply_s(logits,s));\n\n// make a bar plot manually by plotting a bunch of rectangles. \nxlocs = [0,1,2,3,4,5,6,7,8];\nbasic_plot = {\n  let p = plotter( {height:350, width:600, xDomain: [xlocs[0]-0.1, xlocs[n-1]+1], yDomain: [1, -.1], xLabel:'x', yLabel:'softmax(sx)' } );\n  p.text('softmax(xs/(1-s))', -0.4, 1.02, { stroke: 'white', weight: 6, anchor: 'start' });\n  p.text('x', xlocs[n-1]+1.15, -.02, { stroke: 'white', weight: 6 });\n  p.rectangle(-10,10,10,-10, {fill:'white', opacity:0.0});  // background\n\n  for (let i = 0; i < n; i++) {\n      p.rectangle(xlocs[i], numbers[i], xlocs[i]+1, 0, { fill: 'cyan', opacity:0.65, stroke:'gray' });\n      p.text(words[i], xlocs[i]+0.5, -.1, { stroke: 'yellow', weight: 6 } )\n      p.text(numbers[i].toFixed(2), xlocs[i]+0.5, numbers[i]+.01, { stroke: 'grey', weight: 6 } )\n  }\n  return p.node;\n}\n"},{"methodName":"interpretQuiet","source":"shinyInput('s')"}]}
 </script>
 <script type="module">
 if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
