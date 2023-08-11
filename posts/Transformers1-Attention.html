@@ -546,8 +546,8 @@ Key Idea
     z-index: 0;
 }
 .img2:hover {
-    -webkit-transform:scale(2.06);
-    transform:scale(2.06);
+    -webkit-transform:scale(2.07);
+    transform:scale(2.07);
     z-index:1;
 }
 </style>
@@ -654,8 +654,7 @@ Note
 <p>This section is optional.</p>
 </div>
 </div>
-<p>If we multiply the inputs to the softmax function (i.e., the “logits”) by some scale factor, we can change the “sharpness” of the result. (For those in the know, this is analagous to varying the temperature of a thermodynamic system.) For a “sharpness” parameter of 1/2, we get normal softmax. For sharpness=0, <em>we turn softmax into an ordinary (non-weighted) averaging operator</em>. And for sharpness=1, we get only the largest input and all other values are zero. So softmax can be also used as regular average or as max-value function, or something in between.<span class="math inline">\(^*\)</span></p>
-<p>Try playing with the slider below for the 9 sample weights from our introductory sentence:</p>
+<p>By rescaling the inputs to the softmax function (i.e., the “logits”), we can change the “sharpness” of the result. Try playing with the slider below for the 9 sample weights from our introductory sentence!</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -776,7 +775,8 @@ Note
 </div>
 </div>
 </div>
-<p><span class="math inline">\(^*\)</span>Oooo and if you really want to dive deep, look up “Gumbel-Softmax Trick.” But that’s for another day.</p>
+<p>For a “sharpness” parameter of 0.5, we have normal softmax, whereas for sharpness=0, <em>we turn softmax into an ordinary (non-weighted) averaging operator</em>. And for sharpness=1, we get only the largest input and all other values are zero. (For those in the know, this is related to varying the temperature of a thermodynamic system.) So softmax is a pretty versatile tool!<span class="math inline">\(^*\)</span></p>
+<p><span class="math inline">\(^*\)</span><small>Oooo and if you really want to dive deep, look up “Gumbel-Softmax Trick.” But that’s for another day.</small></p>
 <hr>
 <p>(c) 2023 Scott H. Hawley</p>
 
