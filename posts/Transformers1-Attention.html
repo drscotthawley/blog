@@ -530,14 +530,24 @@ Key Idea
 <p>“scaled dot product attention talk about dimensionality scaling</p>
 <p>What does the <span class="math inline">\(\sqrt{d}\)</span> do?</p>
 <style>
-.img {
-    transition:transform 0.4s ease;
+.img1 {
+    transition:max-width 0.4s ease;
     position: relative;
     z-index:0;
 }
-.img:hover {
-    -webkit-transform:scale(2);
-    transform:scale(2);
+.img1:hover {
+    max-width: 210%;
+    z-index:1;
+}
+.img2 {
+    transform-origin: top right;
+    transition:transform 0.4s ease;
+    position: relative;
+    z-index: 0;
+}
+.img2:hover {
+    -webkit-transform:scale(2.06);
+    transform:scale(2.06);
     z-index:1;
 }
 </style>
@@ -547,7 +557,7 @@ Key Idea
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://drscotthawley.github.io/blog/posts/2022-01-24-MultiDim-DotProducts_files/figure-html/cell-5-output-1.png" class="img img-fluid figure-img"></p>
+<p><img src="https://drscotthawley.github.io/blog/posts/2022-01-24-MultiDim-DotProducts_files/figure-html/cell-5-output-1.png" class="img1 img-fluid figure-img"></p>
 <figcaption class="figure-caption">a) No <span class="math inline">\(1/\sqrt{d}\)</span></figcaption>
 </figure>
 </div>
@@ -555,7 +565,7 @@ Key Idea
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://drscotthawley.github.io/blog/posts/2022-01-24-MultiDim-DotProducts_files/figure-html/cell-6-output-1.png" class="img img-fluid figure-img"></p>
+<p><img src="https://drscotthawley.github.io/blog/posts/2022-01-24-MultiDim-DotProducts_files/figure-html/cell-6-output-1.png" class="img2 img-fluid figure-img"></p>
 <figcaption class="figure-caption">b) With <span class="math inline">\(1/\sqrt{d}\)</span></figcaption>
 </figure>
 </div>
