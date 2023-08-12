@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2023-08-14">
 <meta name="description" content="If you can get this one thing, the rest will make sense.">
 
-<title>blog - Understanding Transfomers, Part 1: Attention</title>
+<title>blog - To Understand Transfomers, Focus on Attention</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -125,7 +125,7 @@ div.csl-indent {
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../styles.css">
-<meta name="twitter:title" content="blog - Understanding Transfomers, Part 1: Attention">
+<meta name="twitter:title" content="blog - To Understand Transfomers, Focus on Attention">
 <meta name="twitter:description" content="If you can get this one thing, the rest will make sense.">
 <meta name="twitter:image" content="https://drscotthawley.github.io/blog/posts/images/TransformerOvalInOut.gif">
 <meta name="twitter:card" content="summary_large_image">
@@ -173,7 +173,7 @@ div.csl-indent {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Understanding Transfomers, Part 1: Attention</h1>
+      <h1 class="title">To Understand Transfomers, Focus on Attention</h1>
                   <div>
         <div class="description">
           If you can get this one thing, the rest will make sense.
@@ -216,15 +216,16 @@ div.csl-indent {
    
   <ul>
   <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface"><span class="header-section-number">1</span> Preface</a></li>
-  <li><a href="#intuition" id="toc-intuition" class="nav-link" data-scroll-target="#intuition"><span class="header-section-number">2</span> Intuition</a>
+  <li><a href="#building-intuition" id="toc-building-intuition" class="nav-link" data-scroll-target="#building-intuition"><span class="header-section-number">2</span> Building Intuition</a>
   <ul class="collapse">
   <li><a href="#weighted-averages" id="toc-weighted-averages" class="nav-link" data-scroll-target="#weighted-averages"><span class="header-section-number">2.1</span> Weighted Averages</a></li>
   </ul></li>
   <li><a href="#historical-context" id="toc-historical-context" class="nav-link" data-scroll-target="#historical-context"><span class="header-section-number">3</span> Historical “Context”</a></li>
   <li><a href="#making-it-mathematical" id="toc-making-it-mathematical" class="nav-link" data-scroll-target="#making-it-mathematical"><span class="header-section-number">4</span> Making it Mathematical</a>
   <ul class="collapse">
-  <li><a href="#similarity" id="toc-similarity" class="nav-link" data-scroll-target="#similarity"><span class="header-section-number">4.1</span> Similarity</a></li>
-  <li><a href="#what-are-q-k-and-v" id="toc-what-are-q-k-and-v" class="nav-link" data-scroll-target="#what-are-q-k-and-v"><span class="header-section-number">4.2</span> What are Q, K, and V?</a></li>
+  <li><a href="#what-are-q-k-v" id="toc-what-are-q-k-v" class="nav-link" data-scroll-target="#what-are-q-k-v"><span class="header-section-number">4.1</span> What are Q, K, &amp; V?</a></li>
+  <li><a href="#similarity-measures" id="toc-similarity-measures" class="nav-link" data-scroll-target="#similarity-measures"><span class="header-section-number">4.2</span> Similarity Measures</a></li>
+  <li><a href="#why-the-1sqrtd" id="toc-why-the-1sqrtd" class="nav-link" data-scroll-target="#why-the-1sqrtd"><span class="header-section-number">4.3</span> Why the <span class="math inline">\(1/\sqrt{d}\,\)</span> ?</a></li>
   </ul></li>
   <li><a href="#afterward-i-wrote-a-song" id="toc-afterward-i-wrote-a-song" class="nav-link" data-scroll-target="#afterward-i-wrote-a-song"><span class="header-section-number">5</span> Afterward: I Wrote A Song</a></li>
   <li><a href="#sec-references" id="toc-sec-references" class="nav-link" data-scroll-target="#sec-references"><span class="header-section-number">6</span> References</a></li>
@@ -264,8 +265,8 @@ Note
 </div>
 </div>
 </section>
-<section id="intuition" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Intuition</h1>
+<section id="building-intuition" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Building Intuition</h1>
 <p>Certain parts of an input matter more than others. For example, when you look at an image, you probably focus on objects in the foreground more than the background. For example, in this picture, most people (and AI systems!) will focus attention on the dog:</p>
 <div id="fig-doggie" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
@@ -325,61 +326,61 @@ Key Idea
 </details>
 <div id="word-weights-0" class="cell-output cell-output-display">
 <style type="text/css">
-#T_2ca6b_row0_col0 {
+#T_7ac4b_row0_col0 {
   background-color: #73a9cf;
   color: #f1f1f1;
 }
-#T_2ca6b_row0_col1 {
+#T_7ac4b_row0_col1 {
   background-color: #045382;
   color: #f1f1f1;
 }
-#T_2ca6b_row0_col2, #T_2ca6b_row0_col5, #T_2ca6b_row0_col7 {
+#T_7ac4b_row0_col2, #T_7ac4b_row0_col5, #T_7ac4b_row0_col7 {
   background-color: #f0eaf4;
   color: #000000;
 }
-#T_2ca6b_row0_col3 {
+#T_7ac4b_row0_col3 {
   background-color: #fff7fb;
   color: #000000;
 }
-#T_2ca6b_row0_col4 {
+#T_7ac4b_row0_col4 {
   background-color: #0567a2;
   color: #f1f1f1;
 }
-#T_2ca6b_row0_col6 {
+#T_7ac4b_row0_col6 {
   background-color: #034a74;
   color: #f1f1f1;
 }
-#T_2ca6b_row0_col8 {
+#T_7ac4b_row0_col8 {
   background-color: #023d60;
   color: #f1f1f1;
 }
 </style>
 
-<table id="T_2ca6b" data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table id="T_7ac4b" data-quarto-postprocess="true" class="table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th id="T_2ca6b_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
-<th id="T_2ca6b_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">go</th>
-<th id="T_2ca6b_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">to</th>
-<th id="T_2ca6b_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">the</th>
-<th id="T_2ca6b_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">store</th>
-<th id="T_2ca6b_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">and</th>
-<th id="T_2ca6b_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">get</th>
-<th id="T_2ca6b_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">some</th>
-<th id="T_2ca6b_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">milk</th>
+<th id="T_7ac4b_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
+<th id="T_7ac4b_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">go</th>
+<th id="T_7ac4b_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">to</th>
+<th id="T_7ac4b_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">the</th>
+<th id="T_7ac4b_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">store</th>
+<th id="T_7ac4b_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">and</th>
+<th id="T_7ac4b_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">get</th>
+<th id="T_7ac4b_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">some</th>
+<th id="T_7ac4b_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">milk</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_2ca6b_row0_col0" class="data row0 col0">0.500</td>
-<td id="T_2ca6b_row0_col1" class="data row0 col1">0.900</td>
-<td id="T_2ca6b_row0_col2" class="data row0 col2">0.100</td>
-<td id="T_2ca6b_row0_col3" class="data row0 col3">0.000</td>
-<td id="T_2ca6b_row0_col4" class="data row0 col4">0.800</td>
-<td id="T_2ca6b_row0_col5" class="data row0 col5">0.100</td>
-<td id="T_2ca6b_row0_col6" class="data row0 col6">0.930</td>
-<td id="T_2ca6b_row0_col7" class="data row0 col7">0.100</td>
-<td id="T_2ca6b_row0_col8" class="data row0 col8">0.980</td>
+<td id="T_7ac4b_row0_col0" class="data row0 col0">0.500</td>
+<td id="T_7ac4b_row0_col1" class="data row0 col1">0.900</td>
+<td id="T_7ac4b_row0_col2" class="data row0 col2">0.100</td>
+<td id="T_7ac4b_row0_col3" class="data row0 col3">0.000</td>
+<td id="T_7ac4b_row0_col4" class="data row0 col4">0.800</td>
+<td id="T_7ac4b_row0_col5" class="data row0 col5">0.100</td>
+<td id="T_7ac4b_row0_col6" class="data row0 col6">0.930</td>
+<td id="T_7ac4b_row0_col7" class="data row0 col7">0.100</td>
+<td id="T_7ac4b_row0_col8" class="data row0 col8">0.980</td>
 </tr>
 </tbody>
 </table>
@@ -412,61 +413,61 @@ Tip
 </details>
 <div id="word-weights-1" class="cell-output cell-output-display">
 <style type="text/css">
-#T_8d408_row0_col0 {
+#T_88bfa_row0_col0 {
   background-color: #60a1ca;
   color: #f1f1f1;
 }
-#T_8d408_row0_col1 {
+#T_88bfa_row0_col1 {
   background-color: #045b8f;
   color: #f1f1f1;
 }
-#T_8d408_row0_col2, #T_8d408_row0_col5, #T_8d408_row0_col7 {
+#T_88bfa_row0_col2, #T_88bfa_row0_col5, #T_88bfa_row0_col7 {
   background-color: #efe9f3;
   color: #000000;
 }
-#T_8d408_row0_col3 {
+#T_88bfa_row0_col3 {
   background-color: #fef6fa;
   color: #000000;
 }
-#T_8d408_row0_col4 {
+#T_88bfa_row0_col4 {
   background-color: #056fae;
   color: #f1f1f1;
 }
-#T_8d408_row0_col6 {
+#T_88bfa_row0_col6 {
   background-color: #023e62;
   color: #f1f1f1;
 }
-#T_8d408_row0_col8 {
+#T_88bfa_row0_col8 {
   background-color: #023858;
   color: #f1f1f1;
 }
 </style>
 
-<table id="T_8d408" data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table id="T_88bfa" data-quarto-postprocess="true" class="table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th id="T_8d408_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
-<th id="T_8d408_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">go</th>
-<th id="T_8d408_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">to</th>
-<th id="T_8d408_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">the</th>
-<th id="T_8d408_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">store</th>
-<th id="T_8d408_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">and</th>
-<th id="T_8d408_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">get</th>
-<th id="T_8d408_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">some</th>
-<th id="T_8d408_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">milk</th>
+<th id="T_88bfa_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
+<th id="T_88bfa_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">go</th>
+<th id="T_88bfa_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">to</th>
+<th id="T_88bfa_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">the</th>
+<th id="T_88bfa_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">store</th>
+<th id="T_88bfa_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">and</th>
+<th id="T_88bfa_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">get</th>
+<th id="T_88bfa_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">some</th>
+<th id="T_88bfa_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">milk</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_8d408_row0_col0" class="data row0 col0">0.119</td>
-<td id="T_8d408_row0_col1" class="data row0 col1">0.190</td>
-<td id="T_8d408_row0_col2" class="data row0 col2">0.024</td>
-<td id="T_8d408_row0_col3" class="data row0 col3">0.002</td>
-<td id="T_8d408_row0_col4" class="data row0 col4">0.167</td>
-<td id="T_8d408_row0_col5" class="data row0 col5">0.024</td>
-<td id="T_8d408_row0_col6" class="data row0 col6">0.214</td>
-<td id="T_8d408_row0_col7" class="data row0 col7">0.024</td>
-<td id="T_8d408_row0_col8" class="data row0 col8">0.236</td>
+<td id="T_88bfa_row0_col0" class="data row0 col0">0.119</td>
+<td id="T_88bfa_row0_col1" class="data row0 col1">0.190</td>
+<td id="T_88bfa_row0_col2" class="data row0 col2">0.024</td>
+<td id="T_88bfa_row0_col3" class="data row0 col3">0.002</td>
+<td id="T_88bfa_row0_col4" class="data row0 col4">0.167</td>
+<td id="T_88bfa_row0_col5" class="data row0 col5">0.024</td>
+<td id="T_88bfa_row0_col6" class="data row0 col6">0.214</td>
+<td id="T_88bfa_row0_col7" class="data row0 col7">0.024</td>
+<td id="T_88bfa_row0_col8" class="data row0 col8">0.236</td>
 </tr>
 </tbody>
 </table>
@@ -522,13 +523,19 @@ Key Idea
 <p><span class="math display">\[ {\rm softmax}(\vec{x})_i = {e^{x_i}  \over \sum_i e^{x_i}} \]</span></p>
 <p>note softmax is best but you could use something else</p>
 <p>TODO: say more</p>
-<section id="similarity" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="similarity"><span class="header-section-number">4.1</span> Similarity</h2>
+<section id="what-are-q-k-v" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="what-are-q-k-v"><span class="header-section-number">4.1</span> What are Q, K, &amp; V?</h2>
+<p>TODO: fill in more later…</p>
+</section>
+<section id="similarity-measures" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="similarity-measures"><span class="header-section-number">4.2</span> Similarity Measures</h2>
 <p>TODO: fill in more later…</p>
 <p>euclidean distance</p>
 <p>cosine similarity</p>
 <p>“scaled dot product attention talk about dimensionality scaling</p>
-<p>What does the <span class="math inline">\(\sqrt{d}\)</span> do?</p>
+</section>
+<section id="why-the-1sqrtd" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="why-the-1sqrtd"><span class="header-section-number">4.3</span> Why the <span class="math inline">\(1/\sqrt{d}\,\)</span> ?</h2>
 <style>
 .img1 {
     transition:max-width 0.4s ease;
@@ -575,10 +582,6 @@ Key Idea
 </figure>
 </div>
 <p>note connection to thermodynamics</p>
-</section>
-<section id="what-are-q-k-and-v" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="what-are-q-k-and-v"><span class="header-section-number">4.2</span> What are Q, K, and V?</h2>
-<p>TODO: fill in more later…</p>
 </section>
 </section>
 <section id="afterward-i-wrote-a-song" class="level1" data-number="5">
