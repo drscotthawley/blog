@@ -319,74 +319,74 @@ Key Idea
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="bu">input</span> <span class="op">=</span> <span class="st">"Please go to the store and get some milk"</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> <span class="bu">input</span>.split()</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> np.array([<span class="fl">0.5</span>,<span class="fl">.8</span>,<span class="fl">0.1</span>, <span class="fl">0.01</span>, <span class="fl">.7</span>,<span class="fl">0.1</span>,<span class="fl">.9</span>,<span class="fl">0.1</span>,<span class="fl">.99</span>])</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">"word"</span>:words,<span class="st">"weight"</span>:weights})</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> np.array([<span class="fl">0.5</span>,<span class="fl">.9</span>,<span class="fl">0.1</span>, <span class="fl">0.01</span>, <span class="fl">.7</span>, <span class="fl">0.1</span>,<span class="fl">.98</span>,<span class="fl">0.1</span>,<span class="fl">.99</span>])</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">"word"</span>:words,<span class="st">"weight"</span>:mask})</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>display(df.set_index(<span class="st">'word'</span>).T.style.background_gradient(vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>).<span class="bu">format</span>(precision<span class="op">=</span><span class="dv">3</span>).hide())</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Sum of mask weights = </span><span class="sc">{</span>mask<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:.3g}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div id="word-weights-0" class="cell-output cell-output-display">
 <style type="text/css">
-#T_7ac4b_row0_col0 {
+#T_e5ca5_row0_col0 {
   background-color: #73a9cf;
   color: #f1f1f1;
 }
-#T_7ac4b_row0_col1 {
+#T_e5ca5_row0_col1 {
   background-color: #045382;
   color: #f1f1f1;
 }
-#T_7ac4b_row0_col2, #T_7ac4b_row0_col5, #T_7ac4b_row0_col7 {
+#T_e5ca5_row0_col2, #T_e5ca5_row0_col5, #T_e5ca5_row0_col7 {
   background-color: #f0eaf4;
   color: #000000;
 }
-#T_7ac4b_row0_col3 {
-  background-color: #fff7fb;
+#T_e5ca5_row0_col3 {
+  background-color: #fef6fa;
   color: #000000;
 }
-#T_7ac4b_row0_col4 {
-  background-color: #0567a2;
+#T_e5ca5_row0_col4 {
+  background-color: #187cb6;
   color: #f1f1f1;
 }
-#T_7ac4b_row0_col6 {
-  background-color: #034a74;
-  color: #f1f1f1;
-}
-#T_7ac4b_row0_col8 {
+#T_e5ca5_row0_col6 {
   background-color: #023d60;
+  color: #f1f1f1;
+}
+#T_e5ca5_row0_col8 {
+  background-color: #023a5b;
   color: #f1f1f1;
 }
 </style>
 
-<table id="T_7ac4b" data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table id="T_e5ca5" data-quarto-postprocess="true" class="table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th id="T_7ac4b_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
-<th id="T_7ac4b_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">go</th>
-<th id="T_7ac4b_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">to</th>
-<th id="T_7ac4b_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">the</th>
-<th id="T_7ac4b_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">store</th>
-<th id="T_7ac4b_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">and</th>
-<th id="T_7ac4b_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">get</th>
-<th id="T_7ac4b_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">some</th>
-<th id="T_7ac4b_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">milk</th>
+<th id="T_e5ca5_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
+<th id="T_e5ca5_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">go</th>
+<th id="T_e5ca5_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">to</th>
+<th id="T_e5ca5_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">the</th>
+<th id="T_e5ca5_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">store</th>
+<th id="T_e5ca5_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">and</th>
+<th id="T_e5ca5_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">get</th>
+<th id="T_e5ca5_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">some</th>
+<th id="T_e5ca5_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">milk</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_7ac4b_row0_col0" class="data row0 col0">0.500</td>
-<td id="T_7ac4b_row0_col1" class="data row0 col1">0.900</td>
-<td id="T_7ac4b_row0_col2" class="data row0 col2">0.100</td>
-<td id="T_7ac4b_row0_col3" class="data row0 col3">0.000</td>
-<td id="T_7ac4b_row0_col4" class="data row0 col4">0.800</td>
-<td id="T_7ac4b_row0_col5" class="data row0 col5">0.100</td>
-<td id="T_7ac4b_row0_col6" class="data row0 col6">0.930</td>
-<td id="T_7ac4b_row0_col7" class="data row0 col7">0.100</td>
-<td id="T_7ac4b_row0_col8" class="data row0 col8">0.980</td>
+<td id="T_e5ca5_row0_col0" class="data row0 col0">0.500</td>
+<td id="T_e5ca5_row0_col1" class="data row0 col1">0.900</td>
+<td id="T_e5ca5_row0_col2" class="data row0 col2">0.100</td>
+<td id="T_e5ca5_row0_col3" class="data row0 col3">0.010</td>
+<td id="T_e5ca5_row0_col4" class="data row0 col4">0.700</td>
+<td id="T_e5ca5_row0_col5" class="data row0 col5">0.100</td>
+<td id="T_e5ca5_row0_col6" class="data row0 col6">0.980</td>
+<td id="T_e5ca5_row0_col7" class="data row0 col7">0.100</td>
+<td id="T_e5ca5_row0_col8" class="data row0 col8">0.990</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Sum of mask weights = 4.2</code></pre>
+<pre><code>Sum of mask weights = 4.38</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -413,61 +413,57 @@ Tip
 </details>
 <div id="word-weights-1" class="cell-output cell-output-display">
 <style type="text/css">
-#T_88bfa_row0_col0 {
-  background-color: #60a1ca;
+#T_9ed2e_row0_col0 {
+  background-color: #6ba5cd;
   color: #f1f1f1;
 }
-#T_88bfa_row0_col1 {
-  background-color: #045b8f;
+#T_9ed2e_row0_col1 {
+  background-color: #034973;
   color: #f1f1f1;
 }
-#T_88bfa_row0_col2, #T_88bfa_row0_col5, #T_88bfa_row0_col7 {
-  background-color: #efe9f3;
+#T_9ed2e_row0_col2, #T_9ed2e_row0_col5, #T_9ed2e_row0_col7 {
+  background-color: #f0eaf4;
   color: #000000;
 }
-#T_88bfa_row0_col3 {
+#T_9ed2e_row0_col3 {
   background-color: #fef6fa;
   color: #000000;
 }
-#T_88bfa_row0_col4 {
-  background-color: #056fae;
+#T_9ed2e_row0_col4 {
+  background-color: #0f76b3;
   color: #f1f1f1;
 }
-#T_88bfa_row0_col6 {
-  background-color: #023e62;
-  color: #f1f1f1;
-}
-#T_88bfa_row0_col8 {
+#T_9ed2e_row0_col6, #T_9ed2e_row0_col8 {
   background-color: #023858;
   color: #f1f1f1;
 }
 </style>
 
-<table id="T_88bfa" data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table id="T_9ed2e" data-quarto-postprocess="true" class="table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th id="T_88bfa_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
-<th id="T_88bfa_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">go</th>
-<th id="T_88bfa_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">to</th>
-<th id="T_88bfa_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">the</th>
-<th id="T_88bfa_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">store</th>
-<th id="T_88bfa_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">and</th>
-<th id="T_88bfa_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">get</th>
-<th id="T_88bfa_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">some</th>
-<th id="T_88bfa_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">milk</th>
+<th id="T_9ed2e_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
+<th id="T_9ed2e_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">go</th>
+<th id="T_9ed2e_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">to</th>
+<th id="T_9ed2e_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">the</th>
+<th id="T_9ed2e_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">store</th>
+<th id="T_9ed2e_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">and</th>
+<th id="T_9ed2e_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">get</th>
+<th id="T_9ed2e_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">some</th>
+<th id="T_9ed2e_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">milk</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_88bfa_row0_col0" class="data row0 col0">0.119</td>
-<td id="T_88bfa_row0_col1" class="data row0 col1">0.190</td>
-<td id="T_88bfa_row0_col2" class="data row0 col2">0.024</td>
-<td id="T_88bfa_row0_col3" class="data row0 col3">0.002</td>
-<td id="T_88bfa_row0_col4" class="data row0 col4">0.167</td>
-<td id="T_88bfa_row0_col5" class="data row0 col5">0.024</td>
-<td id="T_88bfa_row0_col6" class="data row0 col6">0.214</td>
-<td id="T_88bfa_row0_col7" class="data row0 col7">0.024</td>
-<td id="T_88bfa_row0_col8" class="data row0 col8">0.236</td>
+<td id="T_9ed2e_row0_col0" class="data row0 col0">0.114</td>
+<td id="T_9ed2e_row0_col1" class="data row0 col1">0.205</td>
+<td id="T_9ed2e_row0_col2" class="data row0 col2">0.023</td>
+<td id="T_9ed2e_row0_col3" class="data row0 col3">0.002</td>
+<td id="T_9ed2e_row0_col4" class="data row0 col4">0.160</td>
+<td id="T_9ed2e_row0_col5" class="data row0 col5">0.023</td>
+<td id="T_9ed2e_row0_col6" class="data row0 col6">0.224</td>
+<td id="T_9ed2e_row0_col7" class="data row0 col7">0.023</td>
+<td id="T_9ed2e_row0_col8" class="data row0 col8">0.226</td>
 </tr>
 </tbody>
 </table>
@@ -516,7 +512,7 @@ Key Idea
 <h1 data-number="4"><span class="header-section-number">4</span> Making it Mathematical</h1>
 <p>We’ll start by showing full formula for the Attention mechanism in Transformer models, and then we’ll unpack that to explain what its parts are and <em>why</em> they are there.</p>
 <p>The matrix of attention weights <span class="math inline">\(A\)</span> – the ones used in the weighted average – are given by</p>
-<p><span class="math display">\[ A = {\rm softmax}\left( Q K^T \over \sqrt{d_k} \right).\]</span></p>
+<p><span class="math display">\[ A = {\rm softmax}\left( Q K^T \over \sqrt{d} \right).\]</span></p>
 <p>We then multiply these by input values <span class="math inline">\(V\)</span> to get the context <span class="math inline">\(C = A V\)</span>. That’s it!</p>
 <p>So then, what is softmax, what are Q and K, and what’s that square root in the denominator there for? We’re going to emphasize the intuitive understanding of what’s going on. (If you’re simply satisfied to know the “is” without the “why”, this tutorial is probably not for you.)</p>
 <p>softmax is</p>
@@ -678,7 +674,7 @@ Note
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>words <span class="op">=</span> [<span class="st">'Please'</span><span class="op">,</span><span class="st">'go'</span><span class="op">,</span><span class="st">'to'</span><span class="op">,</span><span class="st">'the'</span><span class="op">,</span><span class="st">'store'</span><span class="op">,</span><span class="st">'and'</span><span class="op">,</span><span class="st">'get'</span><span class="op">,</span><span class="st">'some'</span><span class="op">,</span><span class="st">'milk'</span>]<span class="op">;</span></span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> words<span class="op">.</span><span class="at">length</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>attn_weights <span class="op">=</span> [<span class="fl">0.119</span><span class="op">,</span> <span class="fl">0.190</span><span class="op">,</span>   <span class="fl">0.024</span><span class="op">,</span>  <span class="fl">0.002</span><span class="op">,</span>  <span class="fl">0.167</span><span class="op">,</span>  <span class="fl">0.024</span><span class="op">,</span>  <span class="fl">0.214</span><span class="op">,</span>  <span class="fl">0.024</span><span class="op">,</span>  <span class="fl">0.236</span>]</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>attn_weights <span class="op">=</span> [<span class="fl">0.114</span><span class="op">,</span> <span class="fl">0.205</span><span class="op">,</span> <span class="fl">0.023</span><span class="op">,</span> <span class="fl">0.002</span><span class="op">,</span> <span class="fl">0.160</span><span class="op">,</span> <span class="fl">0.023</span><span class="op">,</span> <span class="fl">0.224</span><span class="op">,</span> <span class="fl">0.023</span><span class="op">,</span> <span class="fl">0.226</span>]</span>
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>logits <span class="op">=</span> attn_weights<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">log</span>(x<span class="op">+</span><span class="fl">1.0e-8</span>))<span class="op">;</span></span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>viewof s <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Sharpness s:"</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="op">.</span><span class="bn">01</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span><span class="fl">0.5</span><span class="op">,</span> <span class="dt">width</span><span class="op">:</span><span class="dv">460</span>})<span class="op">;</span></span>
@@ -788,7 +784,7 @@ Note
 
 </main> <!-- /main -->
 <script type="ojs-module-contents">
-{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"\nimport {plotter} from \"@kjerandp/plotter\"\n// This is written in Observable JS, cf. https://quarto.org/docs/interactive/ojs/\n\nfunction apply_s(logits, s) {\n    return logits.map(function(x) { return x * (s/(1-s+1.0e-8)); });  \n}\n\nfunction softmax(logits) {\n    const maxLogit = Math.max(...logits);\n    const scores = logits.map(l => Math.exp(l - maxLogit));\n    const denom = scores.reduce((a, b) => a + b);\n    return scores.map(s => s / denom);\n}\n\n\nwords = ['Please','go','to','the','store','and','get','some','milk'];\nn = words.length\nattn_weights = [0.119, 0.190,\t0.024,\t0.002,\t0.167,\t0.024,\t0.214,\t0.024,\t0.236]\nlogits = attn_weights.map(x => Math.log(x+1.0e-8));\n\nviewof s = Inputs.range([0, 1], {label: \"Sharpness s:\", step: .01, value:0.5, width:460});\nnumbers = softmax(apply_s(logits,s));\n\n// make a bar plot manually by plotting a bunch of rectangles. \nxlocs = [0,1,2,3,4,5,6,7,8];\nbasic_plot = {\n  let p = plotter( {height:350, width:600, xDomain: [xlocs[0]-0.1, xlocs[n-1]+1], yDomain: [1, -.1], xLabel:'x', yLabel:'softmax(sx)' } );\n  p.text('softmax(xs/(1-s))', -0.4, 1.02, { stroke: 'white', weight: 6, anchor: 'start' });\n  p.text('x', xlocs[n-1]+1.15, -.02, { stroke: 'white', weight: 6 });\n  p.rectangle(-10,10,10,-10, {fill:'white', opacity:0.0});  // background\n\n  for (let i = 0; i < n; i++) {\n      p.rectangle(xlocs[i], numbers[i], xlocs[i]+1, 0, { fill: 'cyan', opacity:0.65, stroke:'gray' });\n      p.text(words[i], xlocs[i]+0.5, -.1, { stroke: 'yellow', weight: 6 } )\n      p.text(numbers[i].toFixed(2), xlocs[i]+0.5, numbers[i]+.01, { stroke: 'grey', weight: 6 } )\n  }\n  return p.node;\n}\n"},{"methodName":"interpretQuiet","source":"shinyInput('s')"}]}
+{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"\nimport {plotter} from \"@kjerandp/plotter\"\n// This is written in Observable JS, cf. https://quarto.org/docs/interactive/ojs/\n\nfunction apply_s(logits, s) {\n    return logits.map(function(x) { return x * (s/(1-s+1.0e-8)); });  \n}\n\nfunction softmax(logits) {\n    const maxLogit = Math.max(...logits);\n    const scores = logits.map(l => Math.exp(l - maxLogit));\n    const denom = scores.reduce((a, b) => a + b);\n    return scores.map(s => s / denom);\n}\n\n\nwords = ['Please','go','to','the','store','and','get','some','milk'];\nn = words.length\nattn_weights = [0.114, 0.205, 0.023, 0.002, 0.160, 0.023, 0.224, 0.023, 0.226]\nlogits = attn_weights.map(x => Math.log(x+1.0e-8));\n\nviewof s = Inputs.range([0, 1], {label: \"Sharpness s:\", step: .01, value:0.5, width:460});\nnumbers = softmax(apply_s(logits,s));\n\n// make a bar plot manually by plotting a bunch of rectangles. \nxlocs = [0,1,2,3,4,5,6,7,8];\nbasic_plot = {\n  let p = plotter( {height:350, width:600, xDomain: [xlocs[0]-0.1, xlocs[n-1]+1], yDomain: [1, -.1], xLabel:'x', yLabel:'softmax(sx)' } );\n  p.text('softmax(xs/(1-s))', -0.4, 1.02, { stroke: 'white', weight: 6, anchor: 'start' });\n  p.text('x', xlocs[n-1]+1.15, -.02, { stroke: 'white', weight: 6 });\n  p.rectangle(-10,10,10,-10, {fill:'white', opacity:0.0});  // background\n\n  for (let i = 0; i < n; i++) {\n      p.rectangle(xlocs[i], numbers[i], xlocs[i]+1, 0, { fill: 'cyan', opacity:0.65, stroke:'gray' });\n      p.text(words[i], xlocs[i]+0.5, -.1, { stroke: 'yellow', weight: 6 } )\n      p.text(numbers[i].toFixed(2), xlocs[i]+0.5, numbers[i]+.01, { stroke: 'grey', weight: 6 } )\n  }\n  return p.node;\n}\n"},{"methodName":"interpretQuiet","source":"shinyInput('s')"}]}
 </script>
 <script type="module">
 if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
