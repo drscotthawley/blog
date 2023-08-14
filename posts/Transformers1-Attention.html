@@ -774,7 +774,7 @@ Note
 </div>
 </div>
 </div>
-<p>For a “sharpness” parameter <span class="math inline">\(s=0.5\)</span>, we have normal softmax. Whereas for <span class="math inline">\(s=0\)</span>, <em>we turn softmax into an ordinary (non-weighted) averaging operator</em>, and for <span class="math inline">\(s=1\)</span>, we get only the largest input and all other values are zero. (For those in the know, this is like varying the temperature of a thermodynamic system, where temperature <span class="math inline">\(T=0\)</span> corrseponds to our sharpness value of <span class="math inline">\(s=1\)</span>, and our <span class="math inline">\(s=0\)</span> corresponds to an infinite temperature, i.e., <span class="math inline">\(T = (1-s)/s\)</span>.) So softmax is a pretty versatile tool!<span class="math inline">\(^*\)</span></p>
+<p>For a “sharpness” parameter <span class="math inline">\(s=0.5\)</span>, we have normal softmax. Whereas for <span class="math inline">\(s=0\)</span> we turn softmax into an <em>ordinary average</em>, and for <span class="math inline">\(s=1\)</span> we return <em>only the maximum</em> input. (For those in the know, this is like varying the temperature of a thermodynamic system, where temperature <span class="math inline">\(T=0\)</span> corrseponds to our sharpness value of <span class="math inline">\(s=1\)</span>, and our <span class="math inline">\(s=0\)</span> corresponds to an infinite temperature, i.e., <span class="math inline">\(T = (1-s)/s\)</span>.) So softmax is a pretty versatile tool!<span class="math inline">\(^*\)</span></p>
 <p><span class="math inline">\(^*\)</span><small>Oooo and if you really want to dive deep, look up “Gumbel-Softmax Trick.” But that’s for another day.</small></p>
 <hr>
 <p>(c) 2023 Scott H. Hawley</p>
