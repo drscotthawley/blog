@@ -223,13 +223,15 @@ div.csl-indent {
   <li><a href="#historical-context" id="toc-historical-context" class="nav-link" data-scroll-target="#historical-context"><span class="header-section-number">3</span> Historical “Context”</a></li>
   <li><a href="#making-it-mathematical" id="toc-making-it-mathematical" class="nav-link" data-scroll-target="#making-it-mathematical"><span class="header-section-number">4</span> Making it Mathematical</a>
   <ul class="collapse">
+  <li><a href="#what-is-softmax" id="toc-what-is-softmax" class="nav-link" data-scroll-target="#what-is-softmax"><span class="header-section-number">4.0.1</span> What is Softmax?</a></li>
   <li><a href="#what-are-q-k-v" id="toc-what-are-q-k-v" class="nav-link" data-scroll-target="#what-are-q-k-v"><span class="header-section-number">4.1</span> What are Q, K, &amp; V?</a></li>
-  <li><a href="#similarity-measures" id="toc-similarity-measures" class="nav-link" data-scroll-target="#similarity-measures"><span class="header-section-number">4.2</span> Similarity Measures</a></li>
-  <li><a href="#why-the-1sqrtd" id="toc-why-the-1sqrtd" class="nav-link" data-scroll-target="#why-the-1sqrtd"><span class="header-section-number">4.3</span> Why the <span class="math inline">\(1/\sqrt{d}\,\)</span> ?</a></li>
+  <li><a href="#similarity-and-its-measures" id="toc-similarity-and-its-measures" class="nav-link" data-scroll-target="#similarity-and-its-measures"><span class="header-section-number">4.2</span> Similarity and its Measures</a></li>
+  <li><a href="#why-the-1sqrtd_k" id="toc-why-the-1sqrtd_k" class="nav-link" data-scroll-target="#why-the-1sqrtd_k"><span class="header-section-number">4.3</span> Why the <span class="math inline">\(1/\sqrt{d_k}\,\)</span> ?</a></li>
   </ul></li>
-  <li><a href="#afterward-i-wrote-a-song" id="toc-afterward-i-wrote-a-song" class="nav-link" data-scroll-target="#afterward-i-wrote-a-song"><span class="header-section-number">5</span> Afterward: I Wrote A Song</a></li>
-  <li><a href="#sec-references" id="toc-sec-references" class="nav-link" data-scroll-target="#sec-references"><span class="header-section-number">6</span> References</a></li>
-  <li><a href="#appendix-fun-with-softmax" id="toc-appendix-fun-with-softmax" class="nav-link" data-scroll-target="#appendix-fun-with-softmax"><span class="header-section-number">7</span> Appendix: Fun with Softmax</a></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next"><span class="header-section-number">5</span> What’s Next?</a></li>
+  <li><a href="#afterward-i-wrote-a-song" id="toc-afterward-i-wrote-a-song" class="nav-link" data-scroll-target="#afterward-i-wrote-a-song"><span class="header-section-number">6</span> Afterward: I Wrote A Song</a></li>
+  <li><a href="#sec-references" id="toc-sec-references" class="nav-link" data-scroll-target="#sec-references"><span class="header-section-number">7</span> References</a></li>
+  <li><a href="#appendix-fun-with-softmax" id="toc-appendix-fun-with-softmax" class="nav-link" data-scroll-target="#appendix-fun-with-softmax"><span class="header-section-number">8</span> Appendix: Fun with Softmax</a></li>
   </ul>
 </nav>
     </div>
@@ -248,7 +250,7 @@ div.csl-indent {
 <p>— work in progress. not ready yet —</p>
 <section id="preface" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Preface</h1>
-<p>Transformer neural network models <span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span> burst on the scene in 2017 and eventually “took over” as the preferred architecture for many machine learning tasks. [TODO: mention gpt and such]. Yet I found their complexity daunting, and this hindered my numerous, ardent attempts at study – see the References in <a href="#sec-references">Section&nbsp;6</a> for a list of all the papers, tutorials, and videos I consumed.</p>
+<p>Transformer neural network models <span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span> burst on the scene in 2017 and eventually “took over” as the preferred architecture for many machine learning tasks. [TODO: mention gpt and such]. Yet I found their complexity daunting, and this hindered my numerous, ardent attempts at study – see the References in <a href="#sec-references">Section&nbsp;7</a> for a list of all the papers, tutorials, and videos I consumed.</p>
 <p>Things finally “clicked” for me this summer – years later! What finally helped was watching Andrej Karpathy’s excellent YouTube tutorial <span class="citation" data-cites="andrej_karpathy_lets_2023"><a href="#ref-andrej_karpathy_lets_2023" role="doc-biblioref">[2]</a></span> for the <em>second time</em>, when I noticed he homed in on the Attention part of the model and explained it as being a <em>weighted average of words.</em> I believe that if you grasp that part, then everything else about the Transformer is just “bells and whistles” that make it work better.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -493,7 +495,7 @@ Key Idea
 <h1 data-number="3"><span class="header-section-number">3</span> Historical “Context”</h1>
 <p>There are a few different attention-like schemes that have arisen over the years. The cleanest starting point for our lesson is the work of Bahdanau et al <span class="citation" data-cites="bahdanau_attn"><a href="#ref-bahdanau_attn" role="doc-biblioref">[4]</a></span> who were making improvements to automated language translation mdoels that at the time were using a model architecture called a Recurrent Neural Network (RNN, which you don’t need to understand for this lesson, or the fact that specific flavor of RNN was called an LSTM which stood for Long Short-Term Memory).</p>
 <p>At issue was traditional models’ management of the “context vector” of numbers that would store the “meaning” of the text as it was being processed. You can think of the context vector as being like the “state” of the machine as it works through the text.</p>
-<p>TODO: fill in more later…</p>
+<p>TODO: fill in more later… mention Bag of Words</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -512,26 +514,33 @@ Key Idea
 <h1 data-number="4"><span class="header-section-number">4</span> Making it Mathematical</h1>
 <p>We’ll start by showing full formula for the Attention mechanism in Transformer models, and then we’ll unpack that to explain what its parts are and <em>why</em> they are there.</p>
 <p>The matrix of attention weights <span class="math inline">\(A\)</span> – the ones used in the weighted average – are given by</p>
-<p><span class="math display">\[ A = {\rm softmax}\left( Q K^T \over \sqrt{d} \right).\]</span></p>
-<p>We then multiply these by input values <span class="math inline">\(V\)</span> to get the context <span class="math inline">\(C = A V\)</span>. That’s it!</p>
+<p><span id="eq-atnn-mine"><span class="math display">\[ A = {\rm softmax}\left( Q K^T \over \sqrt{d_k} \right), \tag{1}\]</span></span> which are then multiply these by the input values <span class="math inline">\(V\)</span> to get the context <span class="math inline">\(C = A V\)</span>. Or, putting these together in the words of the original AIAYN paper,</p>
+<p><span id="eq-atnn-full"><span class="math display">\[ {\rm Attention}(Q,K,V) = {\rm softmax}\left( Q K^T \over \sqrt{d_k} \right)V \tag{2}\]</span></span></p>
+<p>Here’s the diagram from that paper illustrating this process: <img alt="Q,K,V illustration from Transformers paper" src="images/qkv.png" height="250px" style="vertical-align: top;"></p>
 <p>So then, what is softmax, what are Q and K, and what’s that square root in the denominator there for? We’re going to emphasize the intuitive understanding of what’s going on. (If you’re simply satisfied to know the “is” without the “why”, this tutorial is probably not for you.)</p>
-<p>softmax is</p>
-<p><span class="math display">\[ {\rm softmax}(\vec{x})_i = {e^{x_i}  \over \sum_i e^{x_i}} \]</span></p>
-<p>note softmax is best but you could use something else</p>
-<p>TODO: say more</p>
+<section id="what-is-softmax" class="level3" data-number="4.0.1">
+<h3 data-number="4.0.1" class="anchored" data-anchor-id="what-is-softmax"><span class="header-section-number">4.0.1</span> What is Softmax?</h3>
+<p>Softmax is a normalized exponential function, which operates a vector (or array) of data <span class="math inline">\(\vec{x}\)</span> by the following equation:</p>
+<p><span class="math display">\[ {\rm softmax}(\vec{x})_i = {e^{x_i}  \over \sum_i e^{x_i}} \]</span> where <span class="math inline">\(x_i\)</span> are the individual elements of <span class="math inline">\(\vec{x}\)</span>.</p>
+<p>Usually one sees softmax used as the final output of a classifier or recommendation system, and indeed the final stage of the Transfomer <em>Decoder</em> is a softmax function.</p>
+<p><em>Why</em> is softmax appearing in the Attention calculation? Well, we <em>could</em> use something else but softmax a great choice. ;-) What we need for our attention weights is a set of positive numbers that add up to 1 (what I call “parts of a whole” and what mathematicians call a “[probability] disribution”). Usually the <span class="math inline">\(x_i\)</span> values can be positive or negative, so we need <em>some</em> function to map from sets of such numbers to our weights that are “parts of a whole.” (Mathematicians call such functions “distribution- generating functions.”) We could choose some other function instead of softmax to do the job we need – say, something monotonic and positive like a sigmoid function – but softmax probably the best choice for a distribution generator because other functions may be slower computationally, and people are accustomed to using softmax already, it’s got some nice properties in terms of probability theory, and it’s hella versatie – see the Appendix “Fun With Softmax.”</p>
+</section>
 <section id="what-are-q-k-v" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="what-are-q-k-v"><span class="header-section-number">4.1</span> What are Q, K, &amp; V?</h2>
-<p>TODO: fill in more later…</p>
+<p>Literally, these stand for “Query,” “Key,” and “Value,” respectively. We already mentioned the value <span class="math inline">\(V\)</span> as the “inputs” that are being attended. Note: these “inputs” could be actual data points, or just the outputs from a previous layer in the (stacked) Transformer architecture.</p>
+<p>“Query” and “Key” are typically described in terms of search algorithms, with <span class="math inline">\(Q\)</span> being “what am I looking for?” and “K” being, say the keywords or metadata associated with the “true” value <span class="math inline">\(V\)</span>. For example, if you’re searching on YouTube for videos, you’re not searching the <em>videos themselves</em>, you’re searching over metadata/“keys” <em>about</em> those videos, and then the <em>values</em> of the actual, corresponding videos is served up.</p>
+<p><em>Buuuuut</em>…in the context of Transformer models, I tend find the “search” analogy to be lacking…or at least it can be an impediment to my understanding. So I’ll say it this way: <span class="math inline">\(Q\)</span> is usually the “current state of the machine,” such as the context vector describing the preceding words so that we can predict the <em>next</em> word.</p>
+<p>In the simplest implementations <span class="math inline">\(K\)</span> is exactly the same as <span class="math inline">\(V\)</span>. Like, literally <span class="math inline">\(K\)</span>=<span class="math inline">\(V\)</span> can work in many cases. We’re not going to do that, but just to say, it can be done. Instead we’ll say that <span class="math inline">\(K\)</span> is the “reduced-dimensional embedding of the embedding of <span class="math inline">\(V\)</span>”. ;-) Haha yea. What does that mean?</p>
 </section>
-<section id="similarity-measures" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="similarity-measures"><span class="header-section-number">4.2</span> Similarity Measures</h2>
-<p>TODO: fill in more later…</p>
+<section id="similarity-and-its-measures" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="similarity-and-its-measures"><span class="header-section-number">4.2</span> Similarity and its Measures</h2>
+<p>The thing that’s going to go inside the softmax function is something that measures the similarity between the query <span class="math inline">\(Q\)</span> and the key <span class="math inline">\(K\)</span>.</p>
 <p>euclidean distance</p>
 <p>cosine similarity</p>
 <p>“scaled dot product attention talk about dimensionality scaling</p>
 </section>
-<section id="why-the-1sqrtd" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="why-the-1sqrtd"><span class="header-section-number">4.3</span> Why the <span class="math inline">\(1/\sqrt{d}\,\)</span> ?</h2>
+<section id="why-the-1sqrtd_k" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="why-the-1sqrtd_k"><span class="header-section-number">4.3</span> Why the <span class="math inline">\(1/\sqrt{d_k}\,\)</span> ?</h2>
 <style>
 .img1 {
     transition:max-width 0.4s ease;
@@ -580,8 +589,12 @@ Key Idea
 <p>note connection to thermodynamics</p>
 </section>
 </section>
-<section id="afterward-i-wrote-a-song" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Afterward: I Wrote A Song</h1>
+<section id="whats-next" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> What’s Next?</h1>
+<p>TODO: mention positional encoding, etc etc.</p>
+</section>
+<section id="afterward-i-wrote-a-song" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Afterward: I Wrote A Song</h1>
 <p>While I was away on a solo writer’s retreat to a shack in the woods, I started fiddling with a little song idea inspired by this tweet:</p>
 <div class="cell">
 <div class="cell-output cell-output-display">
@@ -597,8 +610,8 @@ Key Idea
 </div>
 </div>
 </section>
-<section id="sec-references" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> References</h1>
+<section id="sec-references" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> References</h1>
 <p>I recommend any of these the following. Seriously, I studied all of these and they’re great. Things just didn’t “click” for me until later in life I guess. LOL.</p>
 <p>My trajectory was first the original paper<span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span>, then Jay Alammar’s “The Illustrated Transformer” <span class="citation" data-cites="alammar_illustrated"><a href="#ref-alammar_illustrated" role="doc-biblioref">[5]</a></span>, then the Coursera course <span class="citation" data-cites="coursera"><a href="#ref-coursera" role="doc-biblioref">[6]</a></span> co-taught by one of the original Transformer paper authors, then Brendan Rohrer’s great post <span class="citation" data-cites="rohrer"><a href="#ref-rohrer" role="doc-biblioref">[7]</a></span>, then Jeremy Jordan’s tutorial <span class="citation" data-cites="jeremyj_transformers"><a href="#ref-jeremyj_transformers" role="doc-biblioref">[8]</a></span>. Then a couple years later Karpathy’s video <span class="citation" data-cites="andrej_karpathy_lets_2023"><a href="#ref-andrej_karpathy_lets_2023" role="doc-biblioref">[2]</a></span>, with a follow-up of CodeEmporiums’s video <span class="citation" data-cites="codeemporium"><a href="#ref-codeemporium" role="doc-biblioref">[9]</a></span>. But hopefully after reading my post(s) you won’t need to do all that!</p>
 <p>I also recommend Daniel Dugas’ “GPT on a Napkin” <span class="citation" data-cites="dugas_gpt_napkin"><a href="#ref-dugas_gpt_napkin" role="doc-biblioref">[10]</a></span> and Sebastian Rashka’s post on Attention <span class="citation" data-cites="raschka_understanding_attn"><a href="#ref-raschka_understanding_attn" role="doc-biblioref">[11]</a></span>, but didn’t learn of these until after I started writing this post.</p>
@@ -638,8 +651,8 @@ Key Idea
 </div>
 </div>
 </section>
-<section id="appendix-fun-with-softmax" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> Appendix: Fun with Softmax</h1>
+<section id="appendix-fun-with-softmax" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Appendix: Fun with Softmax</h1>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">

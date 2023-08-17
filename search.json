@@ -347,21 +347,21 @@
     "href": "posts/Transformers1-Attention.html#what-are-q-k-v",
     "title": "To Understand Transfomers, Focus on Attention",
     "section": "4.1 What are Q, K, & V?",
-    "text": "4.1 What are Q, K, & V?\nTODO: fill in more later…"
+    "text": "4.1 What are Q, K, & V?\nLiterally, these stand for “Query,” “Key,” and “Value,” respectively. We already mentioned the value \\(V\\) as the “inputs” that are being attended. Note: these “inputs” could be actual data points, or just the outputs from a previous layer in the (stacked) Transformer architecture.\n“Query” and “Key” are typically described in terms of search algorithms, with \\(Q\\) being “what am I looking for?” and “K” being, say the keywords or metadata associated with the “true” value \\(V\\). For example, if you’re searching on YouTube for videos, you’re not searching the videos themselves, you’re searching over metadata/“keys” about those videos, and then the values of the actual, corresponding videos is served up.\nBuuuuut…in the context of Transformer models, I tend find the “search” analogy to be lacking…or at least it can be an impediment to my understanding. So I’ll say it this way: \\(Q\\) is usually the “current state of the machine,” such as the context vector describing the preceding words so that we can predict the next word.\nIn the simplest implementations \\(K\\) is exactly the same as \\(V\\). Like, literally \\(K\\)=\\(V\\) can work in many cases. We’re not going to do that, but just to say, it can be done. Instead we’ll say that \\(K\\) is the “reduced-dimensional embedding of the embedding of \\(V\\)”. ;-) Haha yea. What does that mean?"
   },
   {
-    "objectID": "posts/Transformers1-Attention.html#similarity-measures",
-    "href": "posts/Transformers1-Attention.html#similarity-measures",
+    "objectID": "posts/Transformers1-Attention.html#similarity-and-its-measures",
+    "href": "posts/Transformers1-Attention.html#similarity-and-its-measures",
     "title": "To Understand Transfomers, Focus on Attention",
-    "section": "4.2 Similarity Measures",
-    "text": "4.2 Similarity Measures\nTODO: fill in more later…\neuclidean distance\ncosine similarity\n“scaled dot product attention talk about dimensionality scaling"
+    "section": "4.2 Similarity and its Measures",
+    "text": "4.2 Similarity and its Measures\nThe thing that’s going to go inside the softmax function is something that measures the similarity between the query \\(Q\\) and the key \\(K\\).\neuclidean distance\ncosine similarity\n“scaled dot product attention talk about dimensionality scaling"
   },
   {
-    "objectID": "posts/Transformers1-Attention.html#why-the-1sqrtd",
-    "href": "posts/Transformers1-Attention.html#why-the-1sqrtd",
+    "objectID": "posts/Transformers1-Attention.html#why-the-1sqrtd_k",
+    "href": "posts/Transformers1-Attention.html#why-the-1sqrtd_k",
     "title": "To Understand Transfomers, Focus on Attention",
-    "section": "4.3 Why the \\(1/\\sqrt{d}\\,\\) ?",
-    "text": "4.3 Why the \\(1/\\sqrt{d}\\,\\) ?\n\n\n\n\n\n\n\n\na) No \\(1/\\sqrt{d}\\)\n\n\n\n\n\n\n\nb) With \\(1/\\sqrt{d}\\)\n\n\n\n\nFigure 2. Without (a) and with (b) the \\(1/\\sqrt{d}\\) factor.\n\n\nnote connection to thermodynamics"
+    "section": "4.3 Why the \\(1/\\sqrt{d_k}\\,\\) ?",
+    "text": "4.3 Why the \\(1/\\sqrt{d_k}\\,\\) ?\n\n\n\n\n\n\n\n\na) No \\(1/\\sqrt{d}\\)\n\n\n\n\n\n\n\nb) With \\(1/\\sqrt{d}\\)\n\n\n\n\nFigure 2. Without (a) and with (b) the \\(1/\\sqrt{d}\\) factor.\n\n\nnote connection to thermodynamics"
   },
   {
     "objectID": "posts/2022-01-24-multidim-dotproducts.html",
