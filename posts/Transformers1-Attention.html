@@ -228,7 +228,7 @@ div.csl-indent {
   <li><a href="#similarity-and-its-measures" id="toc-similarity-and-its-measures" class="nav-link" data-scroll-target="#similarity-and-its-measures"><span class="header-section-number">4.2</span> Similarity and its Measures</a></li>
   <li><a href="#why-the-1sqrtd_k" id="toc-why-the-1sqrtd_k" class="nav-link" data-scroll-target="#why-the-1sqrtd_k"><span class="header-section-number">4.3</span> Why the <span class="math inline">\(1/\sqrt{d_k}\,\)</span> ?</a></li>
   </ul></li>
-  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next"><span class="header-section-number">5</span> What’s Next?</a></li>
+  <li><a href="#summary-and-whats-next" id="toc-summary-and-whats-next" class="nav-link" data-scroll-target="#summary-and-whats-next"><span class="header-section-number">5</span> Summary and What’s Next</a></li>
   <li><a href="#afterward-i-wrote-a-song" id="toc-afterward-i-wrote-a-song" class="nav-link" data-scroll-target="#afterward-i-wrote-a-song"><span class="header-section-number">6</span> Afterward: I Wrote A Song</a></li>
   <li><a href="#sec-references" id="toc-sec-references" class="nav-link" data-scroll-target="#sec-references"><span class="header-section-number">7</span> References</a></li>
   <li><a href="#appendix-fun-with-softmax" id="toc-appendix-fun-with-softmax" class="nav-link" data-scroll-target="#appendix-fun-with-softmax"><span class="header-section-number">8</span> Appendix: Fun with Softmax</a></li>
@@ -534,10 +534,19 @@ Key Idea
 </section>
 <section id="similarity-and-its-measures" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="similarity-and-its-measures"><span class="header-section-number">4.2</span> Similarity and its Measures</h2>
-<p>The thing that’s going to go inside the softmax function is something that measures the similarity between the query <span class="math inline">\(Q\)</span> and the key <span class="math inline">\(K\)</span>.</p>
-<p>euclidean distance</p>
-<p>cosine similarity</p>
-<p>“scaled dot product attention talk about dimensionality scaling</p>
+<p>The thing that’s going to go inside the softmax function is something that measures the similarity between the query <span class="math inline">\(Q\)</span> and the key <span class="math inline">\(K\)</span>. Treating these at vectors, we have a few choices which I’ll show on a diagram:</p>
+<div id="fig-sim-qkt" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/similarity_qkt_vectors.png" class="img-fluid figure-img" width="350"></p>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;2<strong>.</strong> Diagram illustrating similarity measures for vectors</figcaption>
+</figure>
+</div>
+<ul>
+<li><p><span style="color:red;"><strong>Euclidean distance:</strong></span></p></li>
+<li><p><span style="color:yellow;"><strong>Cosine similarity</strong></span></p></li>
+<li><p><span style="color:#54B98F;"><strong>“Scaled dot product attention”</strong></span></p></li>
+</ul>
+<p>talk about dimensionality scaling next</p>
 </section>
 <section id="why-the-1sqrtd_k" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="why-the-1sqrtd_k"><span class="header-section-number">4.3</span> Why the <span class="math inline">\(1/\sqrt{d_k}\,\)</span> ?</h2>
@@ -583,14 +592,14 @@ Key Idea
 </div>
 </div>
 </div>
-<p></p><figcaption class="figure-caption"><strong>Figure</strong>&nbsp;2<strong>.</strong> Without (a) and with (b) the <span class="math inline">\(1/\sqrt{d}\)</span> factor.</figcaption><p></p>
+<p></p><figcaption class="figure-caption"><strong>Figure</strong>&nbsp;3<strong>.</strong> Without (a) and with (b) the <span class="math inline">\(1/\sqrt{d}\)</span> factor.</figcaption><p></p>
 </figure>
 </div>
 <p>note connection to thermodynamics</p>
 </section>
 </section>
-<section id="whats-next" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> What’s Next?</h1>
+<section id="summary-and-whats-next" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Summary and What’s Next</h1>
 <p>TODO: mention positional encoding, etc etc.</p>
 </section>
 <section id="afterward-i-wrote-a-song" class="level1" data-number="6">

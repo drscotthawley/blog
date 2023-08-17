@@ -354,14 +354,14 @@
     "href": "posts/Transformers1-Attention.html#similarity-and-its-measures",
     "title": "To Understand Transfomers, Focus on Attention",
     "section": "4.2 Similarity and its Measures",
-    "text": "4.2 Similarity and its Measures\nThe thing that’s going to go inside the softmax function is something that measures the similarity between the query \\(Q\\) and the key \\(K\\).\neuclidean distance\ncosine similarity\n“scaled dot product attention talk about dimensionality scaling"
+    "text": "4.2 Similarity and its Measures\nThe thing that’s going to go inside the softmax function is something that measures the similarity between the query \\(Q\\) and the key \\(K\\). Treating these at vectors, we have a few choices which I’ll show on a diagram:\n\n\n\nFigure 2. Diagram illustrating similarity measures for vectors\n\n\n\nEuclidean distance:\nCosine similarity\n“Scaled dot product attention”\n\ntalk about dimensionality scaling next"
   },
   {
     "objectID": "posts/Transformers1-Attention.html#why-the-1sqrtd_k",
     "href": "posts/Transformers1-Attention.html#why-the-1sqrtd_k",
     "title": "To Understand Transfomers, Focus on Attention",
     "section": "4.3 Why the \\(1/\\sqrt{d_k}\\,\\) ?",
-    "text": "4.3 Why the \\(1/\\sqrt{d_k}\\,\\) ?\n\n\n\n\n\n\n\n\na) No \\(1/\\sqrt{d}\\)\n\n\n\n\n\n\n\nb) With \\(1/\\sqrt{d}\\)\n\n\n\n\nFigure 2. Without (a) and with (b) the \\(1/\\sqrt{d}\\) factor.\n\n\nnote connection to thermodynamics"
+    "text": "4.3 Why the \\(1/\\sqrt{d_k}\\,\\) ?\n\n\n\n\n\n\n\n\na) No \\(1/\\sqrt{d}\\)\n\n\n\n\n\n\n\nb) With \\(1/\\sqrt{d}\\)\n\n\n\n\nFigure 3. Without (a) and with (b) the \\(1/\\sqrt{d}\\) factor.\n\n\nnote connection to thermodynamics"
   },
   {
     "objectID": "posts/2022-01-24-multidim-dotproducts.html",
