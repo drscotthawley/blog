@@ -595,6 +595,7 @@ Key Idea
 <p>The quantity <span class="math inline">\(Q K^T\)</span> is a “dot product” that yields a distance corresponding to the length of <span class="math inline">\(Q\)</span> projected along <span class="math inline">\(K\)</span> (or vice versa), as shown in <a href="#fig-sim-qkt">Figure&nbsp;3</a> above. This works like the cosine similarity but incldues the magnitude, and allows us to consider the releative length of the two vectors. It also can map to any real number instead of just the interval <span class="math inline">\([-1, 1]\)</span> like the cosine. But if we just use <span class="math inline">\(Q K^T\)</span>, we run into a problem in high dimensions similar to what we see for the Euclidean distance. We’ll look at the fix for that in the next sub-section, which is where the <span class="math inline">\(1\sqrt{d_k}\)</span> comes in…</p>
 <section id="why-the-1sqrtd_k" class="level4" data-number="4.2.3.1">
 <h4 data-number="4.2.3.1" class="anchored" data-anchor-id="why-the-1sqrtd_k"><span class="header-section-number">4.2.3.1</span> Why the <span class="math inline">\(1/\sqrt{d_k}\,\)</span> ?</h4>
+<p>Simply put, it keeps the variance of our resulting data from exploding as the number of dimensions increases. Take a look at <a href="#fig-sqrtd">Figure&nbsp;4</a> (a) and (b).</p>
 <style>
 .img1 {
     transition:max-width 0.4s ease;
@@ -640,7 +641,7 @@ Key Idea
 <p></p><figcaption class="figure-caption"><strong>Figure</strong>&nbsp;4<strong>.</strong> (Mouse-over or press to expand.) Variance of dot-products between random vectors in increasingly high-dimensional spaces, both without (a) and with (b) the <span class="math inline">\(1/\sqrt{d_k}\,\)</span> factor. Note how, in (a), the horizonal scale and standard deviation <span class="math inline">\(\sigma\)</span> both grow with number of dimensions (written as <span class="math inline">\(D\)</span> instead of <span class="math inline">\(d_k\)</span>), whereas in (b) these remain constant. Source: Another blog post of mine <span class="citation" data-cites="blog-vec-orthog"><a href="#ref-blog-vec-orthog" role="doc-biblioref">[5]</a></span>.</figcaption><p></p>
 </figure>
 </div>
-<p>note connection to thermodynamics</p>
+<p>The first figure (a) shows a histogram of <span class="math inline">\(QK^T\)</span> for a bunch of random vectors as we increase the number of dimensions: what happens is that the “spread” of these values grows arbitrarily big. And generally in machine learning this can be a bad thing – we like to keep our values “normalized” within a certain range. It turns out that if you just divide by the <em>square root</em> of the number of dimensions…well, check out what happens in (b)! The data stays nicely distributed in the same range regardless of how many dimensions you want to use. 👍</p>
 </section>
 </section>
 </section>
