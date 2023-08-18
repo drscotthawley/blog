@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Scott H. Hawley">
-<meta name="dcterms.date" content="2023-08-14">
+<meta name="dcterms.date" content="2023-08-21">
 <meta name="description" content="If you can get this one thing, the rest will make sense.">
 
 <title>blog - To Understand Transfomers, Focus on Attention</title>
@@ -199,7 +199,7 @@ div.csl-indent {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">August 14, 2023</p>
+        <p class="date">August 21, 2023</p>
       </div>
     </div>
     
@@ -225,8 +225,12 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#what-is-softmax" id="toc-what-is-softmax" class="nav-link" data-scroll-target="#what-is-softmax"><span class="header-section-number">4.0.1</span> What is Softmax?</a></li>
   <li><a href="#what-are-q-k-v" id="toc-what-are-q-k-v" class="nav-link" data-scroll-target="#what-are-q-k-v"><span class="header-section-number">4.1</span> What are Q, K, &amp; V?</a></li>
-  <li><a href="#similarity-and-its-measures" id="toc-similarity-and-its-measures" class="nav-link" data-scroll-target="#similarity-and-its-measures"><span class="header-section-number">4.2</span> Similarity and its Measures</a></li>
-  <li><a href="#why-the-1sqrtd_k" id="toc-why-the-1sqrtd_k" class="nav-link" data-scroll-target="#why-the-1sqrtd_k"><span class="header-section-number">4.3</span> Why the <span class="math inline">\(1/\sqrt{d_k}\,\)</span> ?</a></li>
+  <li><a href="#similarity-and-its-measures" id="toc-similarity-and-its-measures" class="nav-link" data-scroll-target="#similarity-and-its-measures"><span class="header-section-number">4.2</span> Similarity and its Measures</a>
+  <ul class="collapse">
+  <li><a href="#euclidean-distance-delta" id="toc-euclidean-distance-delta" class="nav-link" data-scroll-target="#euclidean-distance-delta"><span class="header-section-number">4.2.1</span> <span style="color:red;"><strong>Euclidean Distance: <span class="math inline">\(\Delta\)</span></strong></span></a></li>
+  <li><a href="#cosine-similarity-costheta" id="toc-cosine-similarity-costheta" class="nav-link" data-scroll-target="#cosine-similarity-costheta"><span class="header-section-number">4.2.2</span> <span style="color:yellow;">Cosine Similarity: <span class="math inline">\(\cos\theta\)</span></span></a></li>
+  <li><a href="#scaled-dot-product-attention-qkt-d_k" id="toc-scaled-dot-product-attention-qkt-d_k" class="nav-link" data-scroll-target="#scaled-dot-product-attention-qkt-d_k"><span class="header-section-number">4.2.3</span> <span style="color:#54B98F;"> 🌟 Scaled Dot Product Attention: <span class="math inline">\(QK^T / d_k\)</span></span></a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#summary-and-whats-next" id="toc-summary-and-whats-next" class="nav-link" data-scroll-target="#summary-and-whats-next"><span class="header-section-number">5</span> Summary and What’s Next</a></li>
   <li><a href="#afterward-i-wrote-a-song" id="toc-afterward-i-wrote-a-song" class="nav-link" data-scroll-target="#afterward-i-wrote-a-song"><span class="header-section-number">6</span> Afterward: I Wrote A Song</a></li>
@@ -250,7 +254,21 @@ div.csl-indent {
 <p>— work in progress. not ready yet —</p>
 <section id="preface" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Preface</h1>
-<p>Transformer neural network models <span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span> burst on the scene in 2017 and eventually “took over” as the preferred architecture for many machine learning tasks. [TODO: mention gpt and such]. Yet I found their complexity daunting, and this hindered my numerous, ardent attempts at study – see the References in <a href="#sec-references">Section&nbsp;7</a> for a list of all the papers, tutorials, and videos I consumed.</p>
+<p>“Attention is All You Need” (hereafter AIAYN) is the name of the paper <span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span> that introduced Transformer models to the world in 2017, a neural network architecture which eventually “took over” as the preferred architecture for many machine learning tasks. [TODO: mention gpt and such]. Yet I found their complexity daunting, and this hindered my numerous, ardent attempts at study – see the References in <a href="#sec-references">Section&nbsp;7</a> for a list of all the papers, tutorials, and videos I consumed. Many of these treatments do little to reduce the complexity, and thus the simplicity of the original paper’s title is often – or dare I say – usually lost.</p>
+<p>Partly because Attention <em>isn’t</em> “all you need,” and it’s a bit of a joke to pair the title with such a complex model diagram like the one shown in the GIF image above. However, I’ve come to see the Attention mechanism as the <em>key piece</em>, the <em>central mechanism</em>, for which everything else is (pretty much) just an add-on.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+An Analogy
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>I liken this to rocketry: whether you’re talking about model rockets or Saturn Vs, the essential part is the engine which uses a chemical reaction to produce thrust, yet you still need to add on stabilizers, and be concerned about aerodynamics, etc. And if you <em>really</em> want to lift heavy payloads then there are all kinds of auxiliary systems to regulate fuel flow and control systems for stability. But if you want to understand a Saturn V (I don’t, but I’d imagine…) you wouldn’t start by listing all the different systems and go over them one by one, rather you’d start from the basic idea and then go into why these other pieces were added on. Such is how I’m recommending that we approach Transformer models.</p>
+</div>
+</div>
 <p>Things finally “clicked” for me this summer – years later! What finally helped was watching Andrej Karpathy’s excellent YouTube tutorial <span class="citation" data-cites="andrej_karpathy_lets_2023"><a href="#ref-andrej_karpathy_lets_2023" role="doc-biblioref">[2]</a></span> for the <em>second time</em>, when I noticed he homed in on the Attention part of the model and explained it as being a <em>weighted average of words.</em> I believe that if you grasp that part, then everything else about the Transformer is just “bells and whistles” that make it work better.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -541,15 +559,19 @@ Key Idea
 <figcaption class="figure-caption"><strong>Figure</strong>&nbsp;2<strong>.</strong> Diagram illustrating similarity measures for vectors</figcaption>
 </figure>
 </div>
-<ul>
-<li><p><span style="color:red;"><strong>Euclidean distance:</strong></span></p></li>
-<li><p><span style="color:yellow;"><strong>Cosine similarity</strong></span></p></li>
-<li><p><span style="color:#54B98F;"><strong>“Scaled dot product attention”</strong></span></p></li>
-</ul>
-<p>talk about dimensionality scaling next</p>
+<p>Our options for measuring similarity include the following 3, the last of which is what the Transformer’s Attention uses:</p>
+<section id="euclidean-distance-delta" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="euclidean-distance-delta"><span class="header-section-number">4.2.1</span> <span style="color:red;"><strong>Euclidean Distance: <span class="math inline">\(\Delta\)</span></strong></span></h3>
+<p>This is just what you think: we take the difference <span class="math inline">\(\Delta = Q-K\)</span>, square all the elements and add them up. (The true Euclidean distance would be the square root of that sum, but usually we’d skip that.) Another way of saying is that we take the “dot product” of <span class="math inline">\(\Delta\)</span> with itself, <span class="math inline">\(\vec{\Delta} \cdot \vec{\Delta}\)</span> which in matrix form would be <span class="math inline">\(\Delta\)</span> times its transpose, ie. <span class="math inline">\(\Delta\,\Delta^T\)</span>. This is “okay,” and there’s nothing inherently wrong with this measure but for very high-dimensional spaces it turns out to not work great since most points end up super-far away from each other.</p>
 </section>
-<section id="why-the-1sqrtd_k" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="why-the-1sqrtd_k"><span class="header-section-number">4.3</span> Why the <span class="math inline">\(1/\sqrt{d_k}\,\)</span> ?</h2>
+<section id="cosine-similarity-costheta" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="cosine-similarity-costheta"><span class="header-section-number">4.2.2</span> <span style="color:yellow;">Cosine Similarity: <span class="math inline">\(\cos\theta\)</span></span></h3>
+</section>
+<section id="scaled-dot-product-attention-qkt-d_k" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="scaled-dot-product-attention-qkt-d_k"><span class="header-section-number">4.2.3</span> <span style="color:#54B98F;"> 🌟 Scaled Dot Product Attention: <span class="math inline">\(QK^T / d_k\)</span></span></h3>
+<p>talk about dimensionality scaling next</p>
+<section id="why-the-1sqrtd_k" class="level4" data-number="4.2.3.1">
+<h4 data-number="4.2.3.1" class="anchored" data-anchor-id="why-the-1sqrtd_k"><span class="header-section-number">4.2.3.1</span> Why the <span class="math inline">\(1/\sqrt{d_k}\,\)</span> ?</h4>
 <style>
 .img1 {
     transition:max-width 0.4s ease;
@@ -596,6 +618,8 @@ Key Idea
 </figure>
 </div>
 <p>note connection to thermodynamics</p>
+</section>
+</section>
 </section>
 </section>
 <section id="summary-and-whats-next" class="level1" data-number="5">
