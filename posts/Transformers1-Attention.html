@@ -221,15 +221,15 @@ div.csl-indent {
   <li><a href="#weighted-averages" id="toc-weighted-averages" class="nav-link" data-scroll-target="#weighted-averages"><span class="header-section-number">2.1</span> Weighted Averages</a></li>
   </ul></li>
   <li><a href="#historical-context" id="toc-historical-context" class="nav-link" data-scroll-target="#historical-context"><span class="header-section-number">3</span> Historical “Context”</a></li>
-  <li><a href="#making-it-mathematical" id="toc-making-it-mathematical" class="nav-link" data-scroll-target="#making-it-mathematical"><span class="header-section-number">4</span> Making it Mathematical</a>
+  <li><a href="#making-attention-mathematical" id="toc-making-attention-mathematical" class="nav-link" data-scroll-target="#making-attention-mathematical"><span class="header-section-number">4</span> Making Attention Mathematical</a>
   <ul class="collapse">
   <li><a href="#what-is-softmax" id="toc-what-is-softmax" class="nav-link" data-scroll-target="#what-is-softmax"><span class="header-section-number">4.0.1</span> What is Softmax?</a></li>
   <li><a href="#what-are-q-k-v" id="toc-what-are-q-k-v" class="nav-link" data-scroll-target="#what-are-q-k-v"><span class="header-section-number">4.1</span> What are Q, K, &amp; V?</a></li>
   <li><a href="#similarity-and-its-measures" id="toc-similarity-and-its-measures" class="nav-link" data-scroll-target="#similarity-and-its-measures"><span class="header-section-number">4.2</span> Similarity and its Measures</a>
   <ul class="collapse">
-  <li><a href="#euclidean-distance-delta" id="toc-euclidean-distance-delta" class="nav-link" data-scroll-target="#euclidean-distance-delta"><span class="header-section-number">4.2.1</span> <span style="color:red;"><strong>Euclidean Distance: <span class="math inline">\(\Delta\)</span></strong></span></a></li>
+  <li><a href="#euclidean-distance-delta" id="toc-euclidean-distance-delta" class="nav-link" data-scroll-target="#euclidean-distance-delta"><span class="header-section-number">4.2.1</span> <span style="color:red;">Euclidean Distance: <span class="math inline">\(\Delta\)</span></span></a></li>
   <li><a href="#cosine-similarity-costheta" id="toc-cosine-similarity-costheta" class="nav-link" data-scroll-target="#cosine-similarity-costheta"><span class="header-section-number">4.2.2</span> <span style="color:yellow;">Cosine Similarity: <span class="math inline">\(\cos\theta\)</span></span></a></li>
-  <li><a href="#scaled-dot-product-attention-qkt-d_k" id="toc-scaled-dot-product-attention-qkt-d_k" class="nav-link" data-scroll-target="#scaled-dot-product-attention-qkt-d_k"><span class="header-section-number">4.2.3</span> <span style="color:#54B98F;"> 🌟 Scaled Dot Product Attention: <span class="math inline">\(QK^T / d_k\)</span></span></a></li>
+  <li><a href="#scaled-dot-product-qkt-sqrtd_k" id="toc-scaled-dot-product-qkt-sqrtd_k" class="nav-link" data-scroll-target="#scaled-dot-product-qkt-sqrtd_k"><span class="header-section-number">4.2.3</span> <span style="color:#54B98F;"> 🌟 Scaled Dot Product: <span class="math inline">\(QK^T / \sqrt{d_k}\)</span></span></a></li>
   </ul></li>
   </ul></li>
   <li><a href="#summary-and-whats-next" id="toc-summary-and-whats-next" class="nav-link" data-scroll-target="#summary-and-whats-next"><span class="header-section-number">5</span> Summary and What’s Next</a></li>
@@ -513,7 +513,7 @@ Key Idea
 <h1 data-number="3"><span class="header-section-number">3</span> Historical “Context”</h1>
 <p>There are a few different attention-like schemes that have arisen over the years. The cleanest starting point for our lesson is the work of Bahdanau et al <span class="citation" data-cites="bahdanau_attn"><a href="#ref-bahdanau_attn" role="doc-biblioref">[4]</a></span> who were making improvements to automated language translation mdoels that at the time were using a model architecture called a Recurrent Neural Network (RNN, which you don’t need to understand for this lesson, or the fact that specific flavor of RNN was called an LSTM which stood for Long Short-Term Memory).</p>
 <p>At issue was traditional models’ management of the “context vector” of numbers that would store the “meaning” of the text as it was being processed. You can think of the context vector as being like the “state” of the machine as it works through the text.</p>
-<p>TODO: fill in more later… mention Bag of Words</p>
+<p><span style="color:red;"><strong>TODO</strong></span>: Need to fill in more later… mention Bag of Words</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -528,17 +528,37 @@ Key Idea
 </div>
 </div>
 </section>
-<section id="making-it-mathematical" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Making it Mathematical</h1>
+<section id="making-attention-mathematical" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Making Attention Mathematical</h1>
 <p>We’ll start by showing full formula for the Attention mechanism in Transformer models, and then we’ll unpack that to explain what its parts are and <em>why</em> they are there.</p>
 <p>The matrix of attention weights <span class="math inline">\(A\)</span> – the ones used in the weighted average – are given by</p>
 <p><span id="eq-atnn-mine"><span class="math display">\[ A = {\rm softmax}\left( Q K^T \over \sqrt{d_k} \right), \tag{1}\]</span></span> which are then multiply these by the input values <span class="math inline">\(V\)</span> to get the context <span class="math inline">\(C = A V\)</span>. Or, putting these together in the words of the original AIAYN paper,</p>
 <p><span id="eq-atnn-full"><span class="math display">\[ {\rm Attention}(Q,K,V) = {\rm softmax}\left( Q K^T \over \sqrt{d_k} \right)V \tag{2}\]</span></span></p>
-<p>Here’s the diagram from that paper illustrating this process: <img alt="Q,K,V illustration from Transformers paper" src="images/qkv.png" height="250px" style="vertical-align: top;"></p>
+<style>
+.img3 {
+    /*transform-origin: top left;*/
+    width:140px;
+    transition:transform 0.4s ease;
+    position: relative;
+    z-index: 0;
+}
+.img3:hover {
+    -webkit-transform:scale(2.07);
+    transform:scale(2.07);
+    z-index:1;
+}
+</style>
+<p>Here’s the diagram from the AIAYN paper illustrating this process :</p>
+<div id="fig-qkv" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/qkv.png" class="img3 img-fluid figure-img"></p>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;2<strong>.</strong> Q,K,V illustration from Transformers paper. (Mouse-over or press to expand.)</figcaption>
+</figure>
+</div>
 <p>So then, what is softmax, what are Q and K, and what’s that square root in the denominator there for? We’re going to emphasize the intuitive understanding of what’s going on. (If you’re simply satisfied to know the “is” without the “why”, this tutorial is probably not for you.)</p>
 <section id="what-is-softmax" class="level3" data-number="4.0.1">
 <h3 data-number="4.0.1" class="anchored" data-anchor-id="what-is-softmax"><span class="header-section-number">4.0.1</span> What is Softmax?</h3>
-<p>Softmax is a normalized exponential function, which operates on a vector (i.e.&nbsp;an array) of data <span class="math inline">\(\vec{x}\)</span> by the following equation:</p>
+<p><a href="https://www.youtube.com/watch?v=ytbYRIN0N4g">Softmax</a> is a normalized element-wise exponential function that operates on a vector (i.e.&nbsp;an array) of data <span class="math inline">\(\vec{x}\)</span> by the following equation:</p>
 <p><span class="math display">\[ {\rm softmax}(\vec{x})_i = {e^{x_i}  \over \sum_i e^{x_i}} \]</span> where <span class="math inline">\(x_i\)</span> are the individual elements of <span class="math inline">\(\vec{x}\)</span>. Usually one sees softmax used as the final output of a classifier or recommendation system, and indeed the final stage of the Transfomer <em>Decoder</em> is a softmax function.</p>
 <p><em>Why</em> is softmax appearing in the Attention calculation? Well, we <em>could</em> use something else but softmax a great choice. ;-) What we need for our attention weights is a set of positive numbers that add up to 1 (what I call “parts of a whole” and what mathematicians call a “[probability] disribution”). Usually the <span class="math inline">\(x_i\)</span> values can be positive or negative, so we need <em>some</em> function to map from sets of such numbers to our weights that are “parts of a whole.” (Mathematicians call such functions “distribution- generating functions.”) We could choose some other function instead of softmax to do the job we need – say, something monotonic and positive like a sigmoid function – but softmax probably the best choice for a distribution generator because other functions may be slower computationally, and people are accustomed to using softmax already, it’s got some nice properties in terms of probability theory, and it’s hella versatie – see the Appendix “Fun With Softmax.”</p>
 </section>
@@ -556,20 +576,23 @@ Key Idea
 <div id="fig-sim-qkt" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/similarity_qkt_vectors.png" class="img-fluid figure-img" width="350"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;2<strong>.</strong> Diagram illustrating similarity measures for vectors</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;3<strong>.</strong> Diagram illustrating a few similarity measures for vectors <span class="math inline">\(Q\)</span> and <span class="math inline">\(K\)</span>.</figcaption>
 </figure>
 </div>
 <p>Our options for measuring similarity include the following 3, the last of which is what the Transformer’s Attention uses:</p>
 <section id="euclidean-distance-delta" class="level3" data-number="4.2.1">
-<h3 data-number="4.2.1" class="anchored" data-anchor-id="euclidean-distance-delta"><span class="header-section-number">4.2.1</span> <span style="color:red;"><strong>Euclidean Distance: <span class="math inline">\(\Delta\)</span></strong></span></h3>
-<p>This is just what you think: we take the difference <span class="math inline">\(\Delta = Q-K\)</span>, square all the elements and add them up. (The true Euclidean distance would be the square root of that sum, but usually we’d skip that.) Another way of saying is that we take the “dot product” of <span class="math inline">\(\Delta\)</span> with itself, <span class="math inline">\(\vec{\Delta} \cdot \vec{\Delta}\)</span> which in matrix form would be <span class="math inline">\(\Delta\)</span> times its transpose, ie. <span class="math inline">\(\Delta\,\Delta^T\)</span>. This is “okay,” and there’s nothing inherently wrong with this measure but for very high-dimensional spaces it turns out to not work great since most points end up super-far away from each other.</p>
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="euclidean-distance-delta"><span class="header-section-number">4.2.1</span> <span style="color:red;">Euclidean Distance: <span class="math inline">\(\Delta\)</span></span></h3>
+<p>This is just what you think: it’s just the magnitude of the difference <span class="math inline">\(\Delta = Q-K\)</span>, i.e.&nbsp;square all the elements and add them up. (The true Euclidean distance would be the square root of that sum, but usually we’d skip that.) Another way of saying is that we take the “dot product” of <span class="math inline">\(\Delta\)</span> with itself, <span class="math inline">\(\vec{\Delta} \cdot \vec{\Delta}\)</span> which in matrix form would be <span class="math inline">\(\Delta\)</span> times its transpose, ie. <span class="math inline">\(\Delta\,\Delta^T\)</span>. This is “okay,” and there’s nothing inherently wrong with this measure but for very high-dimensional spaces it can be tricky to make work well (e.g.&nbsp;require extra tweaking to get the scaling right) since most points end up super-far away from each other.</p>
 </section>
 <section id="cosine-similarity-costheta" class="level3" data-number="4.2.2">
 <h3 data-number="4.2.2" class="anchored" data-anchor-id="cosine-similarity-costheta"><span class="header-section-number">4.2.2</span> <span style="color:yellow;">Cosine Similarity: <span class="math inline">\(\cos\theta\)</span></span></h3>
+<p>This measure is <em>extremely</em> common in the field of NLP: We just look at the angle between <span class="math inline">\(Q\)</span> and <span class="math inline">\(K\)</span>, and this maps really nicely if you use the cosine of the angle. So, similar vectors will point in nearly the same direction and have a cosine close to 1, whereas vecctors that are pointing in opposite directions will have a cosine of -1. Notice that this only considers the <em>directions</em> of <span class="math inline">\(Q\)</span> and <span class="math inline">\(K\)</span> and ignores their magnitudes <span class="math inline">\(|Q|\)</span> and <span class="math inline">\(|K|\)</span>. It’s as if we’re treating <span class="math inline">\(Q\)</span> and <span class="math inline">\(K\)</span> like they were <em>unit</em> vectors (which is often fine or at least “good enough”) In fact the cosine is just the dot product bewteen the unit-vector versions of <span class="math inline">\(Q\)</span> and <span class="math inline">\(K\)</span>:</p>
+<p><span class="math display">\[\cos\theta = {Q\over |Q|}\cdot{K \over |K|} = {Q K^T \over |Q||K|}\]</span></p>
+<p>As we said, this is really handy, and works fine in many situations. But…what if we <em>didn’t</em> throw away the magnitude information? Might that work even better? Also, consider the fact it takes extra effort to compute the denominator <span class="math inline">\(|Q||K|\)</span> every time. What if we just comptued <span class="math inline">\(Q K^T\)</span> and used that?</p>
 </section>
-<section id="scaled-dot-product-attention-qkt-d_k" class="level3" data-number="4.2.3">
-<h3 data-number="4.2.3" class="anchored" data-anchor-id="scaled-dot-product-attention-qkt-d_k"><span class="header-section-number">4.2.3</span> <span style="color:#54B98F;"> 🌟 Scaled Dot Product Attention: <span class="math inline">\(QK^T / d_k\)</span></span></h3>
-<p>talk about dimensionality scaling next</p>
+<section id="scaled-dot-product-qkt-sqrtd_k" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="scaled-dot-product-qkt-sqrtd_k"><span class="header-section-number">4.2.3</span> <span style="color:#54B98F;"> 🌟 Scaled Dot Product: <span class="math inline">\(QK^T / \sqrt{d_k}\)</span></span></h3>
+<p>The quantity <span class="math inline">\(Q K^T\)</span> is a “dot product” that yields a distance corresponding to the length of <span class="math inline">\(Q\)</span> projected along <span class="math inline">\(K\)</span> (or vice versa), as shown in <a href="#fig-sim-qkt">Figure&nbsp;3</a> above. This works like the cosine similarity but incldues the magnitude, and allows us to consider the releative length of the two vectors. It also can map to any real number instead of just the interval <span class="math inline">\([-1, 1]\)</span> like the cosine. But if we just use <span class="math inline">\(Q K^T\)</span>, we run into a problem in high dimensions similar to what we see for the Euclidean distance. We’ll look at the fix for that in the next sub-section, which is where the <span class="math inline">\(1\sqrt{d_k}\)</span> comes in…</p>
 <section id="why-the-1sqrtd_k" class="level4" data-number="4.2.3.1">
 <h4 data-number="4.2.3.1" class="anchored" data-anchor-id="why-the-1sqrtd_k"><span class="header-section-number">4.2.3.1</span> Why the <span class="math inline">\(1/\sqrt{d_k}\,\)</span> ?</h4>
 <style>
@@ -614,7 +637,7 @@ Key Idea
 </div>
 </div>
 </div>
-<p></p><figcaption class="figure-caption"><strong>Figure</strong>&nbsp;3<strong>.</strong> Without (a) and with (b) the <span class="math inline">\(1/\sqrt{d}\)</span> factor.</figcaption><p></p>
+<p></p><figcaption class="figure-caption"><strong>Figure</strong>&nbsp;4<strong>.</strong> Without (a) and with (b) the <span class="math inline">\(1/\sqrt{d}\)</span> factor. (Mouse-over or press to expand.)</figcaption><p></p>
 </figure>
 </div>
 <p>note connection to thermodynamics</p>
