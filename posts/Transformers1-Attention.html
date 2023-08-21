@@ -232,7 +232,7 @@ div.csl-indent {
   <li><a href="#scaled-dot-product-qkt-sqrtd_k" id="toc-scaled-dot-product-qkt-sqrtd_k" class="nav-link" data-scroll-target="#scaled-dot-product-qkt-sqrtd_k"><span class="header-section-number">4.2.3</span> <span style="color:#54B98F;"> 🌟 Scaled Dot Product: <span class="math inline">\(QK^T / \sqrt{d_k}\)</span></span></a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#multi-headedness-masking" id="toc-multi-headedness-masking" class="nav-link" data-scroll-target="#multi-headedness-masking"><span class="header-section-number">5</span> Multi-Headedness &amp; Masking</a>
+  <li><a href="#extensions-multi-headedness-masking" id="toc-extensions-multi-headedness-masking" class="nav-link" data-scroll-target="#extensions-multi-headedness-masking"><span class="header-section-number">5</span> Extensions: Multi-Headedness &amp; Masking</a>
   <ul class="collapse">
   <li><a href="#multi-headed-attention" id="toc-multi-headed-attention" class="nav-link" data-scroll-target="#multi-headed-attention"><span class="header-section-number">5.1</span> Multi-Headed Attention</a></li>
   <li><a href="#masked-attention" id="toc-masked-attention" class="nav-link" data-scroll-target="#masked-attention"><span class="header-section-number">5.2</span> Masked Attention</a></li>
@@ -658,9 +658,10 @@ Key Idea
 </section>
 </section>
 </section>
-<section id="multi-headedness-masking" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Multi-Headedness &amp; Masking</h1>
-<p>Two “extensions” of Attention that show up in the Transformers model are worth mentioning.</p>
+<section id="extensions-multi-headedness-masking" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Extensions: Multi-Headedness &amp; Masking</h1>
+Two “extensions” of Attention that show up in the Transformers model are worth included. These are included as expandable “details” for those who want greater detail:
+<details>
 <section id="multi-headed-attention" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="multi-headed-attention"><span class="header-section-number">5.1</span> Multi-Headed Attention</h2>
 <p>If we extend the dimensionality of our attention appararatus, we can look at different “senses” of the sentence. These extra dimensions are referred to as “heads”. One head might focus on the sheer “facts” or instructions, such as “go get milk”. Another head might sense the tone of the text, such as the use of “Please” making it polite. By allowing for different “attention heads”, this can be handled automatically, using the broadcasting capability of Python.</p>
@@ -1112,8 +1113,9 @@ attention weights:  ( = softmax(logits) )</code></pre>
 </table>
 </div>
 </div>
+</section></details>
 </section>
-</section>
+
 <section id="sec-nextup" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> Summary and Further Topics</h1>
 <p>I’m going stop here for now. To fully explain the Transformer model, we’ll want to take a look at Positional Encoding, and the residual connections, and more.</p>
