@@ -691,7 +691,7 @@ Note
 <p>Transformers do not handle variable-length sequences; all sequences have the same length in Transformer models – this is what makes them parallelizable and therefore fast. So to vary the length of a sequence, we just set all the unused parts to some token values such as zeros.</p>
 </div>
 </div>
-<p>To get a value of 0 in the output of a softmax function, we supply <code>-inf</code> (i.e.&nbsp;<span class="math inline">\(-\infty\)</span>) to the logits (i.e.&nbsp;the arguments of softmax), since <span class="math inline">\(\lim_{x\rightarrow-\infty}e^x = 0\)</span>. So to mask out future words in Masked Attention, we supply the value <span class="math inline">\(-inf\)</span> for those words.</p>
+<p>To get a value of 0 in the output of a softmax function, we supply <code>-inf</code> (i.e.&nbsp;<span class="math inline">\(-\infty\)</span>) to the logits (i.e.&nbsp;the arguments of softmax), since <span class="math inline">\(\lim_{x\rightarrow-\infty}e^x = 0\)</span>. So to mask out future words in Masked Attention, we supply the value <code>-inf</code> for those words.</p>
 <p>The net result of this will be a sequence of logits with progressively fewer <code>-inf</code>’s in them, or accordingly a set of attention wights with progressively fewer 0’s. As shown below (white=very little weight, dark=most weight):</p>
 <div class="cell">
 <details>
