@@ -567,7 +567,7 @@ Key Idea
 <figcaption class="figure-caption"><strong>Figure</strong>&nbsp;2<strong>.</strong> (Mouse-over or press to expand.) Attention computation diagram from AIAYN paper <span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span>. (“MatMul” = “matrix multiplication,” i.e.&nbsp;what we’ll also call a “dot product.”)</figcaption>
 </figure>
 </div>
-<p>So then, what is softmax, what are Q and K, and what’s that square root in the denominator there for? We’re going to emphasize the intuitive understanding of what’s going on. (If you’re simply satisfied to know the “is” without the “why”, this tutorial is probably not for you.)</p>
+<p>So then, what is softmax, what are Q and K, and what’s that square root doing in the denominator? In what follows, we’re going to emphasize the intuitive understanding of what’s going on and why. (If you’re simply satisfied to know the “is” without the “why”, this tutorial is probably not for you.)</p>
 <section id="what-is-softmax" class="level3" data-number="4.0.1">
 <h3 data-number="4.0.1" class="anchored" data-anchor-id="what-is-softmax"><span class="header-section-number">4.0.1</span> What is Softmax?</h3>
 <p><a href="https://www.youtube.com/watch?v=ytbYRIN0N4g">Softmax</a> is a normalized element-wise exponential function that operates on a vector (i.e.&nbsp;an array) of data <span class="math inline">\(\vec{x}\)</span> by the following equation:</p>
