@@ -1134,7 +1134,20 @@ attention weights:  ( = softmax(logits), row-wise )</code></pre>
 </table>
 </div>
 </div>
-If you want to see this in action, I recommend Karpathy’s video <span class="citation" data-cites="andrej_karpathy_lets_2023"><a href="#ref-andrej_karpathy_lets_2023" role="doc-biblioref">[2]</a></span> at around <a href="https://youtu.be/kCc8FmEb1nY?t=3368">56 minutes in</a>.
+<p>If you want to see this in action, I recommend Karpathy’s video <span class="citation" data-cites="andrej_karpathy_lets_2023"><a href="#ref-andrej_karpathy_lets_2023" role="doc-biblioref">[2]</a></span> at around <a href="https://youtu.be/kCc8FmEb1nY?t=3368">56 minutes in</a>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The Transformer can operate on the the above array <em>all at once</em>, in parallel — BLAM! So, even though we say the model is “autoregressive” that doesn’t mean it has to “wait” until it’s generated one word first before it generates the next word. This model can actually generate entire sentences or even entire paragraphs (or more) <em>all in one go</em>. This (parallelism-based) speed is another key reason why large companies like these models. ;-)</p>
+</div>
+</div>
 </section></details>
 </section>
 
