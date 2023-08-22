@@ -565,7 +565,7 @@ Key Idea
 <div id="fig-qkv" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/qkv.png" class="img3 img-fluid figure-img"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;2<strong>.</strong> (Mouse-over or press to expand.) Attention computation diagram from AIAYN paper <span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span>. “MatMul” = “matrix multiplication” or what we’ll also call a “dot product”, which includes summation so it is a “weighted sum” (which given our softmax-normalized weights means we get a weighted average).</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;2<strong>.</strong> (Mouse-over or press to expand.) Attention computation diagram from AIAYN paper <span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span>. “MatMul” = “matrix multiplication” or what we’ll also call a “dot product”, which includes summation (which given our normalized weights means we get a weighted average).</figcaption>
 </figure>
 </div>
 <p>So then, what is softmax, what are Q and K, and what’s that square root doing in the denominator? In what follows, we’re going to emphasize the intuitive understanding of what’s going on and why. (If you’re satisfied to know the “is” without the “why,” then this tutorial is probably not for you.)</p>
