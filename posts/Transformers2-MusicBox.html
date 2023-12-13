@@ -218,7 +218,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#the-music-midi-dataset" id="toc-the-music-midi-dataset" class="nav-link" data-scroll-target="#the-music-midi-dataset"><span class="header-section-number">3</span> The Music (MIDI) Dataset</a>
   <ul class="collapse">
   <li><a href="#learning-about-midi-data" id="toc-learning-about-midi-data" class="nav-link" data-scroll-target="#learning-about-midi-data"><span class="header-section-number">3.1</span> Learning About MIDI Data</a></li>
-  <li><a href="#install-things" id="toc-install-things" class="nav-link" data-scroll-target="#install-things"><span class="header-section-number">3.2</span> Install Things</a></li>
+  <li><a href="#install-and-import" id="toc-install-and-import" class="nav-link" data-scroll-target="#install-and-import"><span class="header-section-number">3.2</span> Install and Import</a></li>
   <li><a href="#download-and-inspect-the-data" id="toc-download-and-inspect-the-data" class="nav-link" data-scroll-target="#download-and-inspect-the-data"><span class="header-section-number">3.3</span> Download and Inspect the Data</a></li>
   <li><a href="#making-a-tokenizer" id="toc-making-a-tokenizer" class="nav-link" data-scroll-target="#making-a-tokenizer"><span class="header-section-number">3.4</span> Making a Tokenizer</a>
   <ul class="collapse">
@@ -311,8 +311,20 @@ It's way harder to train a simple MIDI transformer to sound OK than a next-chara
 </blockquote>
 <script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <p>…and we’re going to keep the tokenizer simple.</p>
-<p>In the following, I’ve often put sections and subsections in expandable “Details” blocks, to make it easier to naviate. Enjoy.</p>
 <p>– <a href="https://hedges.belmont.edu">Scott H. Hawley</a>, December 2023</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In what follows, I’ve often put sections and subsections in expandable “Details” blocks, to enable readers to pick and choose the level of depth they want to see. Enjoy!</p>
+</div>
+</div>
 <hr>
 </section>
 </section>
@@ -566,8 +578,8 @@ Details
 <p>…so…. after surveying other things, I went with <a href="https://github.com/czhuang/JSB-Chorales-dataset">Bach Chorales</a>, which actually <em>are</em> presented in piano-roll format quantized to 16th note time intervals. Then I had to convert those from JSON to true MIDI, because by then the rest of my code expected MIDI.</p>
 <p>I’ll spare you the details of that process, but note that the data link below is not the official dataset link, it’s <a href="https://drive.google.com/file/d/1MdJiNEgtkvCx9tnyQWcnEE5GPMY6ADUb/view?usp=sharing">my private stash</a> where I converted the JSON to .mid.</p>
 </details></section>
-<section id="install-things" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="install-things"><span class="header-section-number">3.2</span> Install Things</h2>
+<section id="install-and-import" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="install-and-import"><span class="header-section-number">3.2</span> Install and Import</h2>
 <div class="cell" data-execution_count="5">
 <details>
 <summary>Show the code for system-wide installs</summary>
@@ -579,7 +591,7 @@ Details
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> platform.system() <span class="op">==</span> <span class="st">'Darwin'</span>:</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        os.system(<span class="ss">f'brew install </span><span class="sc">{</span>package_name<span class="sc">}</span><span class="ss">'</span>)</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> platform.system() <span class="op">==</span> <span class="st">'Linux'</span>:</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="im">import</span> getpass</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="im">import</span> getpass  <span class="co"># </span><span class="al">TODO</span><span class="co">: colab doesn't need a password for sudo</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        password <span class="op">=</span> getpass.getpass()</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        command <span class="op">=</span> <span class="ss">f"sudo -S apt-get install </span><span class="sc">{</span>package_name<span class="sc">}</span><span class="ss">"</span> </span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        os.popen(command, <span class="st">'w'</span>).write(password<span class="op">+</span><span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)</span>
@@ -1203,12 +1215,12 @@ p {
 <div class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tensor lists</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>train_filenames <span class="op">=</span> [x <span class="cf">for</span> x <span class="kw">in</span> filenames <span class="cf">if</span> <span class="st">'/train'</span> <span class="kw">in</span> x]</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>val_filenames <span class="op">=</span> [x <span class="cf">for</span> x <span class="kw">in</span> filenames <span class="cf">if</span> <span class="st">'/val'</span> <span class="kw">in</span> x]</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>test_filenames <span class="op">=</span> [x <span class="cf">for</span> x <span class="kw">in</span> filenames <span class="cf">if</span> <span class="st">'/test'</span> <span class="kw">in</span> x]</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>val_filenames   <span class="op">=</span> [x <span class="cf">for</span> x <span class="kw">in</span> filenames <span class="cf">if</span> <span class="st">'/val'</span>   <span class="kw">in</span> x]</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>test_filenames  <span class="op">=</span> [x <span class="cf">for</span> x <span class="kw">in</span> filenames <span class="cf">if</span> <span class="st">'/test'</span>  <span class="kw">in</span> x]</span>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>train_notes_tl <span class="op">=</span> files_to_tensor_list(train_filenames)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>val_notes_tl <span class="op">=</span> files_to_tensor_list(val_filenames)</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>test_notes_tl <span class="op">=</span> files_to_tensor_list(test_filenames)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>val_notes_tl   <span class="op">=</span> files_to_tensor_list(val_filenames)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>test_notes_tl  <span class="op">=</span> files_to_tensor_list(test_filenames)</span>
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, tl <span class="kw">in</span> <span class="bu">zip</span>([<span class="st">'train'</span>,<span class="st">'val'</span>,<span class="st">'test'</span>],[train_notes_tl, val_notes_tl, test_notes_tl]):</span>
 <span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    stack <span class="op">=</span> torch.vstack(tl)</span>
@@ -1253,7 +1265,7 @@ p {
 <span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="co"># testing code: </span></span>
-<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">3</span>) <span class="co"># fixing this just  to make sure something happens ;-) </span></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">3</span>) <span class="co"># setting this just  to make sure something happens ;-) </span></span>
 <span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> torch.tensor([[<span class="dv">54</span>,<span class="dv">12</span>,<span class="dv">6</span>],[<span class="dv">61</span>,<span class="dv">0</span>,<span class="dv">40</span>],[<span class="dv">127</span>,<span class="dv">14</span>,<span class="dv">4</span>],[<span class="dv">86</span>,<span class="dv">0</span>,<span class="dv">12</span>],[<span class="dv">126</span>,<span class="dv">7</span>,<span class="dv">12</span>]])</span>
 <span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"data.shape = "</span>,data.shape)</span>
 <span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"original data = </span><span class="ch">\n</span><span class="st">"</span>,data)</span>
