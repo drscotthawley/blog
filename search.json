@@ -819,6 +819,20 @@
     "text": "6.4 (Re-)Init Everything & Let’s Roll\nLet’s go! Re-setup the datasets & loaders for good measure, instantiate a model and optimizer.\n\nset_seeds(0)\n\ndataset_choice = 2\nif dataset_choice != 2:\n    train_ds = NotesDataset(train_notes_tl, config.seq_length, len_mult=config.batch_size)\n    val_ds = NotesDataset(val_notes_tl, seq_length, aug_callback=None, len_mult=1000000) # no aug, neverending\nelse:\n    train_ds = NotesDataset2(train_filenames, config.seq_length)\n    val_ds = NotesDataset2(val_filenames, config.seq_length, aug_callback=None, len_mult=1000000) # no aug, neverending\n\n\ntrain_dl = DataLoader(train_ds, batch_size=config.batch_size, shuffle=True)\nval_dl   = DataLoader(val_ds,   batch_size=config.batch_size, shuffle=False)\n\nmodel = Transformer(config)\nm = model.to(device)\nprint(sum(p.numel() for p in m.parameters())/1e6, 'M parameters in the model') \n\noptimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay)\n\n3.274951 M parameters in the model"
   },
   {
+    "objectID": "posts/Transformers2-MusicBox.html#sample-generations",
+    "href": "posts/Transformers2-MusicBox.html#sample-generations",
+    "title": "Understanding Transformers, Part 2: Wee Music Box",
+    "section": "8.1 Sample Generations",
+    "text": "8.1 Sample Generations\nFirst we’ll set a “prompt” from the test set to see how the model continues it.\n\n\nShow the code\nfile_ind = 0\noriginal = test_notes_tl[file_ind]\nnum_tokens = len(original)\ndisplay(midiplayer(original, title=f\"Full Evaluation Target, {num_tokens} notes long\"))\n\nprompt_len = 21\nprompt = original[:prompt_len] \ndisplay(midiplayer(prompt, title=f\"Evaluation Prompt, {prompt_len} notes long\"))\nprompt_tokens = encode(prompt).unsqueeze(0).to(device)\n\n\n'\n            \n\n\n'\n            \n\n\nIn what follows, we’ll vary the “temperature” parameter of the model (see the bottom of the previous lesson), to see its effect on what comes out.\n\nnew_tokens = num_tokens - prompt_len\n\nfor temperature in [ 0.7, 0.85, 0.92, 1.0, 1.2, 1.5]:\n    set_seeds(1337) # same temp for same seed will yield same output\n    notes = decode( model.generate(prompt_tokens, max_new_tokens=new_tokens, temperature=temperature)[0].cpu() )\n    display(midiplayer(notes, title=f\"Temperature = {temperature}\"))\n\n'\n            \n\n\n'\n            \n\n\n'\n            \n\n\n'\n            \n\n\n'\n            \n\n\n'"
+  },
+  {
+    "objectID": "posts/Transformers2-MusicBox.html#perplexity-score",
+    "href": "posts/Transformers2-MusicBox.html#perplexity-score",
+    "title": "Understanding Transformers, Part 2: Wee Music Box",
+    "section": "8.2 Perplexity Score",
+    "text": "8.2 Perplexity Score\nTODO"
+  },
+  {
     "objectID": "posts/Transformers2-MusicBox.html#improving-outputs-with-beam-search",
     "href": "posts/Transformers2-MusicBox.html#improving-outputs-with-beam-search",
     "title": "Understanding Transformers, Part 2: Wee Music Box",

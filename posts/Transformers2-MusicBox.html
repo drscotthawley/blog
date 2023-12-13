@@ -240,7 +240,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#re-init-everything-lets-roll" id="toc-re-init-everything-lets-roll" class="nav-link" data-scroll-target="#re-init-everything-lets-roll"><span class="header-section-number">6.4</span> (Re-)Init Everything &amp; Let’s Roll</a></li>
   </ul></li>
   <li><a href="#train-the-model" id="toc-train-the-model" class="nav-link" data-scroll-target="#train-the-model"><span class="header-section-number">7</span> Train the Model</a></li>
-  <li><a href="#evaluate-the-model" id="toc-evaluate-the-model" class="nav-link" data-scroll-target="#evaluate-the-model"><span class="header-section-number">8</span> Evaluate the Model</a></li>
+  <li><a href="#evaluate-the-model" id="toc-evaluate-the-model" class="nav-link" data-scroll-target="#evaluate-the-model"><span class="header-section-number">8</span> Evaluate the Model</a>
+  <ul class="collapse">
+  <li><a href="#sample-generations" id="toc-sample-generations" class="nav-link" data-scroll-target="#sample-generations"><span class="header-section-number">8.1</span> Sample Generations</a></li>
+  <li><a href="#perplexity-score" id="toc-perplexity-score" class="nav-link" data-scroll-target="#perplexity-score"><span class="header-section-number">8.2</span> Perplexity Score</a></li>
+  </ul></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">9</span> Summary</a></li>
   <li><a href="#sec-further" id="toc-sec-further" class="nav-link" data-scroll-target="#sec-further"><span class="header-section-number">10</span> Ideas for Further Exploration</a>
   <ul class="collapse">
@@ -2216,7 +2220,10 @@ Find logs at: <code>./wandb/run-20231212_223438-iebjb60g/logs</code>
 </section>
 <section id="evaluate-the-model" class="level1" data-number="8">
 <h1 data-number="8"><span class="header-section-number">8</span> Evaluate the Model</h1>
-<p>Now we’ll grab some data from the hitherto-unseen <code>test</code> dataset, and use it to prompt the model. We’ll see how it “scores” – in more ways than one! First we’ll set a “prompt” from the <code>test</code> set to see how the model continues it.</p>
+<p>Now we’ll grab some data from the hitherto-unseen <code>test</code> dataset, and use it to prompt the model. We’ll see how it “scores” – in more ways than one!</p>
+<section id="sample-generations" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="sample-generations"><span class="header-section-number">8.1</span> Sample Generations</h2>
+<p>First we’ll set a “prompt” from the <code>test</code> set to see how the model continues it.</p>
 <div class="cell" data-execution_count="30">
 <details>
 <summary>Show the code</summary>
@@ -2896,6 +2903,11 @@ p {
             </iframe>
 </div>
 </div>
+</section>
+<section id="perplexity-score" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="perplexity-score"><span class="header-section-number">8.2</span> Perplexity Score</h2>
+<p>TODO</p>
+</section>
 </section>
 <section id="summary" class="level1" data-number="9">
 <h1 data-number="9"><span class="header-section-number">9</span> Summary</h1>
