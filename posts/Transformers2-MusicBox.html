@@ -248,11 +248,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">9</span> Summary</a></li>
   <li><a href="#sec-further" id="toc-sec-further" class="nav-link" data-scroll-target="#sec-further"><span class="header-section-number">10</span> Ideas for Further Exploration</a>
   <ul class="collapse">
-  <li><a href="#improving-outputs-with-beam-search" id="toc-improving-outputs-with-beam-search" class="nav-link" data-scroll-target="#improving-outputs-with-beam-search"><span class="header-section-number">10.1</span> Improving Outputs with Beam Search</a></li>
-  <li><a href="#using-hugginfaces-transformers-instead" id="toc-using-hugginfaces-transformers-instead" class="nav-link" data-scroll-target="#using-hugginfaces-transformers-instead"><span class="header-section-number">10.2</span> Using Hugginface’s <code>Transformers</code> instead</a></li>
-  <li><a href="#raw-audio" id="toc-raw-audio" class="nav-link" data-scroll-target="#raw-audio"><span class="header-section-number">10.3</span> Raw Audio</a></li>
+  <li><a href="#change-the-hyperparamters" id="toc-change-the-hyperparamters" class="nav-link" data-scroll-target="#change-the-hyperparamters"><span class="header-section-number">10.1</span> Change the Hyperparamters</a></li>
+  <li><a href="#improving-outputs-with-beam-search" id="toc-improving-outputs-with-beam-search" class="nav-link" data-scroll-target="#improving-outputs-with-beam-search"><span class="header-section-number">10.2</span> Improving Outputs with Beam Search</a></li>
+  <li><a href="#using-huggingfaces-transformers-instead" id="toc-using-huggingfaces-transformers-instead" class="nav-link" data-scroll-target="#using-huggingfaces-transformers-instead"><span class="header-section-number">10.3</span> Using Huggingface’s <code>transformers</code> instead</a></li>
+  <li><a href="#pitch-only-estimation" id="toc-pitch-only-estimation" class="nav-link" data-scroll-target="#pitch-only-estimation"><span class="header-section-number">10.4</span> Pitch-Only Estimation</a></li>
+  <li><a href="#raw-audio" id="toc-raw-audio" class="nav-link" data-scroll-target="#raw-audio"><span class="header-section-number">10.5</span> Raw Audio</a></li>
   </ul></li>
   <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements"><span class="header-section-number">11</span> Acknowledgements</a></li>
+  <li><a href="#appendix-feeing-it-christmas-carols" id="toc-appendix-feeing-it-christmas-carols" class="nav-link" data-scroll-target="#appendix-feeing-it-christmas-carols"><span class="header-section-number">12</span> Appendix: Feeing it Christmas Carols 🎄</a></li>
   </ul>
 </nav>
     </div>
@@ -763,23 +766,7 @@ p {
 </div>
 </div>
 <p>And let’s load a single file and convert it to a PyTorch tensor called <code>notes_tensor</code>, and we’ll go ahead and convert “start” and “end” times “step” and “duration” times.</p>
-<div class="cell" data-execution_count="47">
-<div class="cell-output cell-output-display">
-
-<style>
-.dataframe {
-    width: 35%; /* Adjust this value as needed */
-    margin-left: auto;
-    margin-right: auto;
-}
-.dataframe th, .dataframe td {
-    text-align: center;
-    width: auto !important;
-}
-</style>
-</div>
-</div>
-<div class="cell" data-execution_count="48">
+<div class="cell" data-execution_count="62">
 <details>
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> midi_file_to_tensor(filenames, i<span class="op">=</span><span class="va">None</span>, keep_start_end<span class="op">=</span><span class="va">False</span>):  <span class="co"># filenames could just be a single filename</span></span>
@@ -805,31 +792,63 @@ p {
 <span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>notes_tensor <span class="op">=</span> midi_file_to_tensor(midi_file)</span>
 <span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.notebook_repr_html'</span>, <span class="va">True</span>)</span>
 <span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>notes_df <span class="op">=</span> pd.DataFrame(notes_tensor, columns<span class="op">=</span>[<span class="st">'pitch'</span>,<span class="st">'step'</span>,<span class="st">'duration'</span>]) <span class="co"># actually df's look nicer</span></span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="co">#print("First 8 notes of notes_tensor:")</span></span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>notes_df[:<span class="dv">8</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="co"># making it look better in the blog: adjust width of pandas dataframes</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>display(HTML(<span class="st">'''</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;style&gt;</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="st">.dataframe {</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="st">    width: 40%; /* Adjust this value as needed */</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="st">    margin-left: auto;</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="st">    margin-right: auto;</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="st">.dataframe th, .dataframe td {</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="st">    text-align: center;</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a><span class="st">    width: auto !important;</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="st">table {</span></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a><span class="st">    margin-left: auto;</span></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a><span class="st">    margin-right: auto;</span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a><span class="st">th, td {</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a><span class="st">    text-align: center;</span></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="st">    min-width: 100px; /* Or any other width */</span></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;/style&gt;</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a><span class="st">'''</span>))</span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>HTML(notes_df[:<span class="dv">8</span>].to_html(index<span class="op">=</span><span class="va">False</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="48">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="cell-output cell-output-display">
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
 
-    .dataframe thead th {
-        text-align: right;
-    }
+<style>
+.dataframe {
+    width: 35%; /* Adjust this value as needed */
+    margin-left: auto;
+    margin-right: auto;
+}
+.dataframe th, .dataframe td {
+    text-align: center;
+    width: auto !important;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
+th, td {
+    text-align: center;
+    min-width: 100px; /* Or any other width */
+}
 </style>
-
+</div>
+<div class="cell-output cell-output-display" data-execution_count="62">
 <div id="tbl-firstnotes" class="anchored">
 <table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <caption>Table&nbsp;1<strong>.</strong> First 8 notes of <code>notes_tensor</code></caption>
 <thead>
 <tr class="header">
-<th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th">pitch</th>
 <th data-quarto-table-cell-role="th">step</th>
 <th data-quarto-table-cell-role="th">duration</th>
@@ -837,57 +856,47 @@ p {
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
 <td>53.0</td>
 <td>0.000000</td>
 <td>0.479545</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
 <td>57.0</td>
 <td>0.000000</td>
 <td>0.479545</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
 <td>60.0</td>
 <td>0.000000</td>
 <td>1.440909</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
 <td>65.0</td>
 <td>0.000000</td>
 <td>0.479545</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
 <td>52.0</td>
 <td>0.479545</td>
 <td>0.479545</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
 <td>55.0</td>
 <td>0.000000</td>
 <td>0.479545</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
 <td>72.0</td>
 <td>0.000000</td>
 <td>0.240909</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
 <td>70.0</td>
 <td>0.240909</td>
 <td>0.238636</td>
 </tr>
 </tbody>
 </table>
-</div>
-
 </div>
 </div>
 </div>
@@ -2965,14 +2974,22 @@ The following are some ideas for taking this lesson further.
 <summary>
 Details
 </summary>
-<section id="improving-outputs-with-beam-search" class="level2" data-number="10.1">
-<h2 data-number="10.1" class="anchored" data-anchor-id="improving-outputs-with-beam-search"><span class="header-section-number">10.1</span> Improving Outputs with Beam Search</h2>
+<section id="change-the-hyperparamters" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="change-the-hyperparamters"><span class="header-section-number">10.1</span> Change the Hyperparamters</h2>
+<p>I did a <em>lot</em> of that already. Now it’s your turn. Maybe even trying WandB’s Sweeps feature.</p>
 </section>
-<section id="using-hugginfaces-transformers-instead" class="level2" data-number="10.2">
-<h2 data-number="10.2" class="anchored" data-anchor-id="using-hugginfaces-transformers-instead"><span class="header-section-number">10.2</span> Using Hugginface’s <code>Transformers</code> instead</h2>
+<section id="improving-outputs-with-beam-search" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="improving-outputs-with-beam-search"><span class="header-section-number">10.2</span> Improving Outputs with Beam Search</h2>
 </section>
-<section id="raw-audio" class="level2" data-number="10.3">
-<h2 data-number="10.3" class="anchored" data-anchor-id="raw-audio"><span class="header-section-number">10.3</span> Raw Audio</h2>
+<section id="using-huggingfaces-transformers-instead" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="using-huggingfaces-transformers-instead"><span class="header-section-number">10.3</span> Using Huggingface’s <code>transformers</code> instead</h2>
+<p><code>trasformers</code> is a package that is optimized for general applications and would probably outperform the above code in numerous ways.</p>
+</section>
+<section id="pitch-only-estimation" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="pitch-only-estimation"><span class="header-section-number">10.4</span> Pitch-Only Estimation</h2>
+</section>
+<section id="raw-audio" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="raw-audio"><span class="header-section-number">10.5</span> Raw Audio</h2>
 <p>If you were to instead use raw audio, I’d recommend converting it to spectrograms, treating each column of the spectrogram as a “word vector.” However, there’d likely be a lot of “wasted space” so you’d probably want to (invertibly) compress the dimensionality of your “audio-word vectors” via something like <a href="https://drscotthawley.github.io/blog/posts/2023-06-12-RVQ.html">(Residual) Vector Quantization</a>, an <a href="https://drscotthawley.github.io/audio-algebra/given-models.html">autoencoder</a>, or <a href="https://umap-learn.readthedocs.io/en/latest/">UMAP</a>. …And then you’d need to expand/decode it on the output side to be able to listen. Relatedly, a pretrained sytem like Meta’s <a href="https://github.com/facebookresearch/encodec">EnCodec</a> would likely provide such functions nicely.</p>
 </section>
 </details></section>
@@ -2984,6 +3001,10 @@ Details
 <li><p>Various papers by the Google Magenta team – the undisputed ML-MIDI experts in my book – were helpful in figuring out what to do. This lesson was influenced by their tutorial <a href="https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/audio/music_generation.ipynb">“Generate Music with an RNN”</a>, which I converted PyTorch. In this lesson, code that wasn’t lifted from Karpathy was lifted from that.</p></li>
 <li><p>As I included in the Preface, thanks to <a href="https://twitter.com/mamodrzejewski">Mateusz Modrzejewski</a> for what I took to be a word of encouragement.</p></li>
 </ul>
+</section>
+<section id="appendix-feeing-it-christmas-carols" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> Appendix: Feeing it Christmas Carols 🎄</h1>
+<p>This is probably a bad idea for so many reasons – this will be <em>wayyy</em> outside the distribution of the training data – but given the time of year, I’ma try it anyway.</p>
 <!--- comment 
 
 ---
