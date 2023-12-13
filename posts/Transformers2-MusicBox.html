@@ -407,22 +407,20 @@ PE_{(pos,2i+1)} = \cos(pos / 10000^{2i/d_{model}})
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">    cf. https://twitter.com/francoisfleuret/status/1263516788479922176"""</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> math.ceil(math.log(seq_length) <span class="op">/</span> math.log(<span class="fl">2.0</span>))</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    positional_input <span class="op">=</span> ((torch.arange(seq_length).unsqueeze(<span class="dv">0</span>) <span class="op">//</span> <span class="dv">2</span><span class="op">**</span>torch.arange(c).unsqueeze(<span class="dv">1</span>))<span class="op">%</span><span class="dv">2</span>).<span class="bu">float</span>()</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">#positional_input = positional_input[:, 0:this_seq_length]  # clip it</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">#print("this_seq_length, positional_input.shape =",this_seq_length, positional_input.shape)</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> channel_index<span class="op">==</span><span class="dv">1</span>: positional_input <span class="op">=</span> positional_input.unsqueeze(<span class="dv">0</span>)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> positional_input</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>test_seq_length <span class="op">=</span>  <span class="dv">64</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>pe <span class="op">=</span> get_positional_input(test_seq_length)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot what these PE channels look like:</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(nrows<span class="op">=</span>pe.shape[<span class="dv">0</span>], figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">7</span>))</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> <span class="bu">range</span>(pe.shape[<span class="dv">0</span>]):</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    ax[c].plot(pe[c,:],<span class="st">'o-'</span>)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    ax[c].set_ylabel(<span class="ss">f"Channel </span><span class="sc">{</span>c<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>ax[c].set_xlabel(<span class="ss">f"Sequence position"</span>)</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>plt.plot()</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>pe<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> PE channels for test_seq_length = </span><span class="sc">{</span>test_seq_length<span class="sc">}</span><span class="ss">.  (Check: log_2(</span><span class="sc">{</span>test_seq_length<span class="sc">}</span><span class="ss">) = </span><span class="sc">{</span>math<span class="sc">.</span>log2(test_seq_length)<span class="sc">}</span><span class="ss">)."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> channel_index<span class="op">==</span><span class="dv">1</span>: positional_input <span class="op">=</span> positional_input.unsqueeze(<span class="dv">0</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> positional_input</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>test_seq_length <span class="op">=</span>  <span class="dv">64</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>pe <span class="op">=</span> get_positional_input(test_seq_length)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot what these PE channels look like:</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(nrows<span class="op">=</span>pe.shape[<span class="dv">0</span>], figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">7</span>))</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> <span class="bu">range</span>(pe.shape[<span class="dv">0</span>]):</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    ax[c].plot(pe[c,:],<span class="st">'o-'</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    ax[c].set_ylabel(<span class="ss">f"Channel </span><span class="sc">{</span>c<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>ax[c].set_xlabel(<span class="ss">f"Sequence position"</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>plt.plot()</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>pe<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> PE channels for test_seq_length = </span><span class="sc">{</span>test_seq_length<span class="sc">}</span><span class="ss">.  (Check: log_2(</span><span class="sc">{</span>test_seq_length<span class="sc">}</span><span class="ss">) = </span><span class="sc">{</span>math<span class="sc">.</span>log2(test_seq_length)<span class="sc">}</span><span class="ss">)."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>6 PE channels for test_seq_length = 64.  (Check: log_2(64) = 6.0).</code></pre>
