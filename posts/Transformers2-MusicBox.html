@@ -483,9 +483,23 @@ PE_{(pos,2i+1)} = \cos(pos / 10000^{2i/d_{model}})
 <section id="multi-head-attention" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="multi-head-attention"><span class="header-section-number">2.4</span> Multi-Head Attention</h2>
 <p>As described in the previous lesson, Multi-Head Attention simply involves allowing differently-weighted attention operators (called “heads”) to perform attention operations, allowing them to focus on different “senses” of phrases, parts of speech, or in our case, musical structures.</p>
+<style>
+.img-mh {
+    /*transform-origin: top left;*/
+    width:250px;
+    transition:transform 0.4s ease;
+    position: relative;
+    z-index: 0;
+}
+.img-mh:hover {
+    -webkit-transform:scale(1.7);
+    transform:scale(1.7);
+    z-index:1;
+}
+</style>
 <div id="fig-mh-attn" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="https://machinelearningmastery.com/wp-content/uploads/2021/09/tour_4.png" class="img-fluid figure-img" width="200"></p>
+<p><img src="https://machinelearningmastery.com/wp-content/uploads/2021/09/tour_4.png" class="img-mh img-fluid figure-img"></p>
 <figcaption class="figure-caption"><strong>Figure</strong>&nbsp;5<strong>.</strong> Diagram of Multi-Head Attention. The multiple attention “heads” are shown below as depthwise semi-transparent copies, which are then concatenated into “one big long thing” via the Concat operation, and then mapped into the the output for the module via the last Linear layer: (Source: AIAYN paper.)</figcaption>
 </figure>
 </div>
@@ -496,7 +510,7 @@ PE_{(pos,2i+1)} = \cos(pos / 10000^{2i/d_{model}})
 <style>
 .img-ln {
     /*transform-origin: top left;*/
-    width:450px;
+    width:400px;
     transition:transform 0.4s ease;
     position: relative;
     z-index: 0;
