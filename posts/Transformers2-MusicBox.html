@@ -485,7 +485,7 @@ Details
 <div id="fig-loss-landscape" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="https://miro.medium.com/v2/resize:fit:723/1*_Qd_txKxRlsMdfuH2J-k4g.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;4<strong>.</strong> Loss landscape picture</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;4<strong>.</strong> Loss landscape picture. TODO: I find this a bit gratuitous and may remove.</figcaption>
 </figure>
 </div>
 </details></section>
@@ -536,7 +536,7 @@ Details
 <figcaption class="figure-caption"><strong>Figure</strong>&nbsp;6<strong>.</strong> (Mouse-over or press to expand.) Batch normalization vs.&nbsp;Layer normalization. Source: TODO</figcaption>
 </figure>
 </div>
-<p>One big advantage of doing our normalization across layers instead of batches is that <em>it allows for small batch sizes.</em> Language models are often <em>large</em>, so they take up a lot of memory, which means you might need very small batches. But small batches will not allow you to do very good batch normalization. So, LayerNorm lets us get good statistics for the mean and variance that we use to normalize by.</p>
+<p>One big advantage of doing our normalization across layers instead of batches is that <em>it allows for small batch sizes.</em> Language models are often <em>large</em>, so they take up a lot of memory, which means you might need very small batches. But small batches will not allow you to do very good batch normalization. So, LayerNorm helps us get good statistics for the mean and variance that we use to normalize.</p>
 </section>
 <section id="stacking-blocks-embeddings-of-embeddingsof-embeddings" class="level2" data-number="2.6">
 <h2 data-number="2.6" class="anchored" data-anchor-id="stacking-blocks-embeddings-of-embeddingsof-embeddings"><span class="header-section-number">2.6</span> Stacking Blocks: Embeddings of Embeddings…of Embeddings</h2>
@@ -751,7 +751,22 @@ p {
 </div>
 </div>
 <p>And let’s load a single file and convert it to a PyTorch tensor called <code>notes_tensor</code>, and we’ll go ahead and convert “start” and “end” times “step” and “duration” times.</p>
-<div class="cell" data-execution_count="10">
+<div class="cell" data-execution_count="40">
+<div class="cell-output cell-output-display">
+<style>
+.dataframe {
+    width: 30%; /* Adjust this value as needed */
+    margin-left: auto;
+    margin-right: auto;
+}
+.dataframe th, .dataframe td {
+    text-align: center;
+    width: auto !important;
+}
+</style>
+</div>
+</div>
+<div class="cell" data-execution_count="41">
 <details>
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> midi_file_to_tensor(filenames, i<span class="op">=</span><span class="va">None</span>, keep_start_end<span class="op">=</span><span class="va">False</span>):  <span class="co"># filenames could just be a single filename</span></span>
@@ -783,7 +798,7 @@ p {
 <div class="cell-output cell-output-stdout">
 <pre><code>First 8 notes of notes_tensor:</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div class="cell-output cell-output-display" data-execution_count="41">
 <div>
 
 
