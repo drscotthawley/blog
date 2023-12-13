@@ -439,8 +439,12 @@ PE_{(pos,2i+1)} = \cos(pos / 10000^{2i/d_{model}})
 </details></section>
 <section id="residual-connections" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="residual-connections"><span class="header-section-number">2.3</span> Residual Connections</h2>
-<p>In the Transfomer model diagram of <a href="#fig-trans-diag">Figure&nbsp;1</a>, wherever you see arrows going <em>around</em> something and connecting to a yellow “Add &amp; Norm” block, that is indicative of a “skip residual” or just “residual” connection. (The “norm” part, we’ll get to in the next section.)</p>
-<p>This is a pretty simple idea that sees payoffs in many areas of numerical modeling: You model the <em>change</em> in something instead of modeling the whole thing.</p>
+<p>In the Transfomer model diagram of <a href="#fig-trans-diag">Figure&nbsp;1</a>, wherever you see arrows going <em>around</em> something and connecting to a yellow “Add &amp; Norm” block, that is indicative of a “skip residual” or just “residual” connection. Readers will likely seen residual / skip connections in other contexts, so we’ll make this section “Details”-expandable for those who haven’t encountered them.</p>
+<details>
+<summary>
+Details
+</summary>
+<p>This is a pretty simple idea that yields payoffs in many areas of numerical modeling: You model the <em>change</em> in something instead of modeling the whole thing.</p>
 <div class="cell" data-execution_count="4">
 <details>
 <summary>Show the code that made the flowchart</summary>
@@ -484,7 +488,7 @@ PE_{(pos,2i+1)} = \cos(pos / 10000^{2i/d_{model}})
 <figcaption class="figure-caption"><strong>Figure</strong>&nbsp;4<strong>.</strong> Loss landscape picture</figcaption>
 </figure>
 </div>
-</section>
+</details></section>
 <section id="multi-head-attention" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="multi-head-attention"><span class="header-section-number">2.4</span> Multi-Head Attention</h2>
 <p>As described in the previous lesson, Multi-Head Attention simply involves allowing differently-weighted attention operators (called “heads”) to perform attention operations, allowing them to focus on different “senses” of phrases, parts of speech, or in our case, musical structures.</p>
