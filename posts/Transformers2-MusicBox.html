@@ -313,16 +313,26 @@ It's way harder to train a simple MIDI transformer to sound OK than a next-chara
 </section>
 <section id="intuiting-the-rest-of-the-transformer" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Intuiting the Rest of the Transformer</h1>
-<details>
-<summary>
-Details
-</summary>
 <p>The <a href="https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html">previous lesson</a> left some things out. In this section, we’ll build some intuitive understanding of these other components, and a bit of code.</p>
 <p>Below is a picture of the original Transformer model diagram, whose parts we will elucide as we go on. It’s set up like the traditional <a href="https://tex.stackexchange.com/questions/374926/drawing-an-encoder-decoder-architecture-in-tikz">“encoder-decoder” architecture</a> one often sees in the form of an <a href="images/EncoderDecoder_feedback_large.png">“hourglass shape”</a>, although it may not be obvious from the Transformer diagram:</p>
+<style>
+.img1 {
+    /*transform-origin: top left;*/
+    width:450px;
+    transition:transform 0.4s ease;
+    position: relative;
+    z-index: 0;
+}
+.img1:hover {
+    -webkit-transform:scale(1.7);
+    transform:scale(1.7);
+    z-index:1;
+}
+</style>
 <div id="fig-trans-diag" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="images/TransformerSchematic_labeled.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;1<strong>.</strong> Original Transformer architecture illustration, blue and red annotations added by me. The “Encoder side” in red is often used for generating embeddings for analysis-based workflows such as classification tasks; one of which of the most famous ‘encoder-only’ models was BERT (which stood Bidirectional Encoder Representations from Transformers). For langauge translation tasks, both the Encoder and Decoder (circled in blue) are used. For purely “generative” systems like the GPT variants and what we’ll do today, we’ll use the Decoder side. Note however that even the Decoder can involve some encoding, as we combine an embedding of the words / MIDI / “tokens” with Positional Encoding information. PE is discussed below.</figcaption>
+<p><img src="images/TransformerSchematic_labeled.png" class="img1 img-fluid figure-img"></p>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;1<strong>.</strong> (Mouse-over or press to expand.) Original Transformer architecture illustration, blue and red annotations added by me. The “Encoder side” in red is often used for generating embeddings for analysis-based workflows such as classification tasks; one of which of the most famous ‘encoder-only’ models was BERT (which stood Bidirectional Encoder Representations from Transformers). For langauge translation tasks, both the Encoder and Decoder (circled in blue) are used. For purely “generative” systems like the GPT variants and what we’ll do today, we’ll use the Decoder side. Note however that even the Decoder can involve some encoding, as we combine an embedding of the words / MIDI / “tokens” with Positional Encoding information. PE is discussed below.</figcaption>
 </figure>
 </div>
 <p>We’re going to go through the various components that make up the above diagram. But first, let’s point out something about the Attention mechanism that we skipped over in the previous less, namely the computational “cost” associated with making every part of a sequence with every other part.</p>
@@ -340,6 +350,7 @@ Details
 <figcaption class="figure-caption"><strong>Figure</strong>&nbsp;2<strong>.</strong> Various schemes for reducing the <big>𝒪</big>(<span class="math inline">\(N^2)\)</span> cost of Attention. Many such schemes involve replacing the <code>Linear</code> layers with convolution operations, such as with the local receptive fields shown in b) and c). (Source: S.H. Hawley, <a href="https://hedges.belmont.edu/AES_ML_2020/">“Learning Tunable Audio Effects via Neural Networks with Self-Attention”</a>, AES Virtual Symposium: Applications of Machine Learning in Audio, Sep 28, 2020.)</figcaption>
 </figure>
 </div>
+<p>TODO: crop that image</p>
 <p>For this lesson, we’ll see how far we can get with the basic <span class="math inline">\(N^2\)</span> attention. Beyond that, I encourage you to check the literature for whatever the latest/hottest cost-reducing model might be. Popular candidates include <a href="https://arxiv.org/abs/2205.14135">FlashAttention</a> and <a href="https://arxiv.org/abs/2107.14795">PercieverIO</a>. Even sliding windows are <a href="https://twitter.com/hrishioa/status/1712199009308398079">still in use in ways that some people find significant</a>.</p>
 </details></section>
 <section id="positional-encoding-aka-positional-embeddings" class="level2" data-number="2.2">
@@ -349,6 +360,7 @@ Details
 <summary>
 Details
 </summary>
+<p>TODO: I want to redo this whole thing.</p>
 <p>Various models will encode position by either adding numbers to our input encodings(/embeddings), or by concatenating additional channels.</p>
 <p>For example the official Transformer model used with NLP employes sines &amp; cosines (i.e., Fourier series) for the PEs and <em>adds</em> them to the text embeddings. The frequencies of the functions the original used underwent some tweaking (as in the “10000”s in the equations below):</p>
 <p><span class="math display">\[
@@ -481,15 +493,24 @@ PE_{(pos,2i+1)} = \cos(pos / 10000^{2i/d_{model}})
 <section id="layer-normalization" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="layer-normalization"><span class="header-section-number">2.5</span> Layer Normalization</h2>
 <p>This alternative to <a href="https://paperswithcode.com/method/batch-normalization">Batch Normalization</a> (in which we perform elementwise operations where we subtract the mean across the batch dimension and divide by the variance). Instead of doing this across the batch dimension, we do it across the feature dimension(s).</p>
+<style>
+.img-ln {
+    /*transform-origin: top left;*/
+    width:450px;
+    transition:transform 0.4s ease;
+    position: relative;
+    z-index: 0;
+}
+.img-ln:hover {
+    -webkit-transform:scale(1.7);
+    transform:scale(1.7);
+    z-index:1;
+}
+</style>
 <div id="fig-norm-types" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://production-media.paperswithcode.com/methods/Screen_Shot_2020-05-19_at_4.24.42_PM.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">bn vs ln</figcaption>
-</figure>
-</div>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;6<strong>.</strong> Batch normalization vs.&nbsp;Layer normalization</figcaption>
+<p><img src="https://production-media.paperswithcode.com/methods/Screen_Shot_2020-05-19_at_4.24.42_PM.png" class="img-ln img-fluid figure-img"></p>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;6<strong>.</strong> (Mouse-over or press to expand.) Batch normalization vs.&nbsp;Layer normalization. Source: TODO</figcaption>
 </figure>
 </div>
 <p>One big advantage of doing our normalization across layers instead of batches is that <em>it allows for small batch sizes.</em> Language models are often <em>large</em>, so they take up a lot of memory, which means you might need very small batches. But small batches will not allow you to do very good batch normalization. So, LayerNorm lets us get good statistics for the mean and variance that we use to normalize by.</p>
@@ -498,14 +519,10 @@ PE_{(pos,2i+1)} = \cos(pos / 10000^{2i/d_{model}})
 <h2 data-number="2.6" class="anchored" data-anchor-id="stacking-blocks-embeddings-of-embeddingsof-embeddings"><span class="header-section-number">2.6</span> Stacking Blocks: Embeddings of Embeddings…of Embeddings</h2>
 <p>By stacking layers of our transformers, i.e.&nbsp;feeding embeddings into layers that will render them as new embeddings, we wil increase the representational power of our model. In terms of code, this is easy to do by looping over a list of layers.</p>
 </section>
-</details></section>
+</section>
 <section id="the-music-midi-dataset" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> The Music (MIDI) Dataset</h1>
 <p>This section adopts a first-person perspective because I want to convey a personal tone: I confess that I’m “not a MIDI guy,” having always worked with raw audio exclusively. I vastly underestimated how difficult it would be to get decent results. Starting from Google’s well-known <a href="https://magenta.tensorflow.org/datasets/maestro">MAESTRO dataset</a> of solo piano performances – NOTE: <em>virtuoso</em> piano performances! –I kept downgrading the “difficulty” of the dataset until settling on <a href="https://github.com/czhuang/JSB-Chorales-dataset">Bach chorales</a>.</p>
-<details>
-<summary>
-Details
-</summary>
 <section id="learning-about-midi-data" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="learning-about-midi-data"><span class="header-section-number">3.1</span> Learning About MIDI Data</h2>
 <details>
@@ -861,6 +878,9 @@ len(notes_tensor_list) = 382</code></pre>
 <h2 data-number="3.4" class="anchored" data-anchor-id="making-a-tokenizer"><span class="header-section-number">3.4</span> Making a Tokenizer</h2>
 Rather than try something sophisticated like calling <a href="https://github.com/Natooz/MidiTok">MidiTok</a>, we’re going to treat this like a “char-level RNN” and just regard each note as a “parallel” group of 3 tokens (one token for pitch, step, and duration). This means that we will need 3 “codebooks” that can encode &amp; decode between true values and their tokens.
 <details>
+<summary>
+Details
+</summary>
 <p>For the pitch values, it’s pretty easy since there are up to 128 pitches. Probably they won’t all be used, so we <em>could</em> limit the range of pitches, however, I’m going to want to do some pitch-bending data augmentation, so the pitch tokens will just be <code>int</code> versions of their <code>floats</code>, indices in a 128-dimensional space.</p>
 <p>For the timing – which I don’t plan to do any augmentation of – we’ll just write down what unique values are present. These will form the “vocabularies” that we often see used in NLP settings.</p>
 <p>Oh, also: The timing values end up being <em>reaaalllly</em> long in some cases. Like, notes with 15 seconds in duration? I’m going to go ahead an clamp those to a maximum value of 4 seconds.</p>
@@ -1372,7 +1392,7 @@ Checks passed! :-) </code></pre>
 <p>Ok. Now that we have a feel for how to handle our data, let’s get setup for the Transformer!</p>
 </section>
 </section>
-</details></section>
+</section>
 <section id="hyperparameters-model-configuration" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Hyperparameters / Model Configuration</h1>
 <p>Here’s where we’ll put all of our architecture design variables, storing it in a dict-like “<code>dataclass</code>” object for easy passing around.</p>
@@ -1839,10 +1859,6 @@ Syncing run <strong><a href="https://wandb.ai/drscotthawley/musicbox-jsb-tutoria
 </details></section>
 <section id="train-the-model" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> Train the Model</h1>
-<details>
-<summary>
-Details
-</summary>
 <div class="cell" data-execution_count="28">
 <details>
 <summary>Show the code</summary>
@@ -2177,14 +2193,10 @@ W&amp;B sync reduced upload amount by 16.1%
 Find logs at: <code>./wandb/run-20231212_223438-iebjb60g/logs</code>
 </div>
 </div>
-</details></section>
+</section>
 <section id="evaluate-the-model" class="level1" data-number="8">
 <h1 data-number="8"><span class="header-section-number">8</span> Evaluate the Model</h1>
-<p>Now we’ll grab some data from the hitherto-unseen <code>test</code> dataset, and use it to prompt the model. We’ll see how it “scores” – in more ways than one!</p>
-<details>
-<summary>
-Details
-</summary>
+<p>Now we’ll grab some data from the hitherto-unseen <code>test</code> dataset, and use it to prompt the model. We’ll see how it “scores” – in more ways than one! First we’ll set a “prompt” from the <code>test</code> set to see how the model continues it.</p>
 <div class="cell" data-execution_count="30">
 <details>
 <summary>Show the code</summary>
@@ -2864,10 +2876,11 @@ p {
             </iframe>
 </div>
 </div>
-</details></section>
+</section>
 <section id="summary" class="level1" data-number="9">
 <h1 data-number="9"><span class="header-section-number">9</span> Summary</h1>
-<p>Here’s the full code in a Colab notebook:</p>
+<p>TODO: write more</p>
+<p>Here’s the full code in a Colab notebook: TODO</p>
 </section>
 <section id="sec-further" class="level1" data-number="10">
 <h1 data-number="10"><span class="header-section-number">10</span> Further Exploration</h1>
