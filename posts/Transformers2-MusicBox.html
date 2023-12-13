@@ -227,11 +227,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#making-pytorch-datasets" id="toc-making-pytorch-datasets" class="nav-link" data-scroll-target="#making-pytorch-datasets"><span class="header-section-number">3.5</span> Making PyTorch Dataset(s)</a>
   <ul class="collapse">
   <li><a href="#data-augmentation" id="toc-data-augmentation" class="nav-link" data-scroll-target="#data-augmentation"><span class="header-section-number">3.5.1</span> Data Augmentation</a></li>
+  <li><a href="#dataset-object-definition" id="toc-dataset-object-definition" class="nav-link" data-scroll-target="#dataset-object-definition"><span class="header-section-number">3.5.2</span> Dataset Object Definition</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#hyperparameters-model-configuration" id="toc-hyperparameters-model-configuration" class="nav-link" data-scroll-target="#hyperparameters-model-configuration"><span class="header-section-number">4</span> Hyperparameters / Model Configuration</a></li>
   <li><a href="#transformer-model-code" id="toc-transformer-model-code" class="nav-link" data-scroll-target="#transformer-model-code"><span class="header-section-number">5</span> Transformer Model Code</a></li>
-  <li><a href="#preliminaries-before-training" id="toc-preliminaries-before-training" class="nav-link" data-scroll-target="#preliminaries-before-training"><span class="header-section-number">6</span> Preliminaries Before Training</a>
+  <li><a href="#preliminaries-before-training" id="toc-preliminaries-before-training" class="nav-link" data-scroll-target="#preliminaries-before-training"><span class="header-section-number">6</span> Preliminaries before Training</a>
   <ul class="collapse">
   <li><a href="#set-up-the-gpucpu-device" id="toc-set-up-the-gpucpu-device" class="nav-link" data-scroll-target="#set-up-the-gpucpu-device"><span class="header-section-number">6.1</span> Set Up the GPU/CPU <code>device</code></a></li>
   <li><a href="#prompt-for-demos" id="toc-prompt-for-demos" class="nav-link" data-scroll-target="#prompt-for-demos"><span class="header-section-number">6.2</span> Prompt for Demos</a></li>
@@ -1244,6 +1245,9 @@ augmented data =
 Checks passed! :-) </code></pre>
 </div>
 </div>
+</section>
+<section id="dataset-object-definition" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="dataset-object-definition"><span class="header-section-number">3.5.2</span> Dataset Object Definition</h3>
 <p>Here we go with the dataset:</p>
 <div class="cell" data-execution_count="19">
 <details>
@@ -1612,7 +1616,8 @@ Details
 </div>
 </details></section>
 <section id="preliminaries-before-training" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Preliminaries Before Training</h1>
+<h1 data-number="6"><span class="header-section-number">6</span> Preliminaries before Training</h1>
+GPU device, Demo prompts, WandB logging, Re-Init
 <details>
 <summary>
 Details
