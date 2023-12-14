@@ -405,7 +405,9 @@ PE_{(pos,2i+1)} = \cos(pos / 10000^{2i/d_{model}})
 </section>
 <section id="pes-to-add-or-concatenate" class="level3" data-number="2.2.2">
 <h3 data-number="2.2.2" class="anchored" data-anchor-id="pes-to-add-or-concatenate"><span class="header-section-number">2.2.2</span> PEs: To Add or Concatenate?</h3>
-<p>Here’s a design question: Should we add these PEs to our inputs or concatenate them? That’s debateable, and it depends. <a href="https://www.youtube.com/watch?v=M2ToEXF6Olw">Here’s a great video discussing this topic</a>. If the number of PE channels is less than the number of input channels (or input embedding dimensions), then we’ll definitely need to concatenate the PEs as additional channels for the inputs. That’s what Fleuret did when he was working with only one channel of floating point inputs, BTW. Here’s some code we’ll use later to concatenate the PEs to our data sequences.</p>
+<p>Here’s a design question: Should we add these PEs to our inputs or concatenate them?</p>
+<p>TODO: revise this.</p>
+<p>That’s debateable, and it depends. <a href="https://www.youtube.com/watch?v=M2ToEXF6Olw">Here’s a great video discussing this topic</a>. If the number of PE channels is less than the number of input channels (or input embedding dimensions), then we’ll definitely need to concatenate the PEs as additional channels for the inputs. That’s what Fleuret did when he was working with only one channel of floating point inputs, BTW. Here’s some code we’ll use later to concatenate the PEs to our data sequences.</p>
 </section></details>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -3049,7 +3051,7 @@ p {
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>test_ds <span class="op">=</span> NotesDataset(test_notes_tl, config.seq_length, len_mult<span class="op">=</span>config.batch_size)</span>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>test_ds <span class="op">=</span> NotesDataset(test_notes_tl, config.seq_length, len_mult<span class="op">=</span>config.batch_size, pad<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>test_dl <span class="op">=</span> DataLoader(train_ds, batch_size<span class="op">=</span>config.batch_size, shuffle<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>total, batches <span class="op">=</span> <span class="dv">0</span>, <span class="dv">0</span> </span>
@@ -3064,18 +3066,17 @@ p {
 <span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"(Average) Perplexity = </span><span class="sc">{</span>perplexity<span class="sc">:5.3f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
-<pre><code>100%|█████████████████████████████████████████████████████████████| 229/229 [00:08&lt;00:00, 28.39it/s]</code></pre>
+<pre><code>100%|█████████████████████████████████████████████████████████████| 229/229 [00:07&lt;00:00, 30.59it/s]</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(Average) Perplexity = 2.401</code></pre>
+<pre><code>(Average) Perplexity = 2.393</code></pre>
 </div>
 </div>
 <p>Interesting. That seems really low. Perhaps all it means is that once you’ve seen a couple hundred Bach chorales, new ones aren’t very surprising! ;-)</p>
 </section>
 <section id="accuracy-score" class="level2" data-number="8.3">
 <h2 data-number="8.3" class="anchored" data-anchor-id="accuracy-score"><span class="header-section-number">8.3</span> Accuracy Score</h2>
-<p>This is pretty simple: How often did the model guess the “correct” next note?</p>
-<p>TODO</p>
+<p>This is pretty simple: How often did the model guess the “correct” next note? …Uh… TODO later.</p>
 </section>
 <section id="data-distributions" class="level2" data-number="8.4">
 <h2 data-number="8.4" class="anchored" data-anchor-id="data-distributions"><span class="header-section-number">8.4</span> Data Distributions</h2>
