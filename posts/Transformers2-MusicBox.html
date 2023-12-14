@@ -285,6 +285,7 @@ details > summary {
 <h1>
 — DRAFT MODE: Work in progress. —
 </h1>
+TODOs: redo positional embeddings, add perplexity, …other todos
 </center>
 <div class="cell">
 <div class="cell-output cell-output-display">
@@ -362,9 +363,10 @@ Note
 <div id="fig-trans-diag" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/TransformerSchematic_labeled.png" class="img1 img-fluid figure-img"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;1<strong>.</strong> (Mouse-over or press to expand.) Original Transformer architecture illustration, blue and red annotations added by me. The “Encoder side” in red is often used for generating embeddings for analysis-based workflows such as classification tasks; one of which of the most famous ‘encoder-only’ models was BERT (which stood Bidirectional Encoder Representations from Transformers). For langauge translation tasks, both the Encoder and Decoder (circled in blue) are used. For purely “generative” systems like the GPT variants and what we’ll do today, we’ll use the Decoder side. Note however that even the Decoder can involve some encoding, as we combine an embedding of the words / MIDI / “tokens” with Positional Encoding information. PE is discussed below.</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;1<strong>.</strong> (Mouse-over or press to expand.) Original Transformer architecture illustration, blue and red annotations added by me. The “Encoder side” in red is often used for generating embeddings for analysis-based workflows such as classification tasks; one of which of the most famous ‘encoder-only’ models was BERT (which stood Bidirectional Encoder Representations from Transformers).</figcaption>
 </figure>
 </div>
+<p>For langauge translation tasks, both the Encoder and Decoder (circled in blue) are used. For purely “generative” systems like the GPT variants and what we’ll do today, we’ll use the Decoder side. Note however that even the Decoder can involve some encoding, as we combine an embedding of the words / MIDI / “tokens” with Positional Encoding information. PE is discussed below.</p>
 <p>We’re going to go through the various components that make up the above diagram. But first, let’s point out something about the Attention mechanism that we skipped over in the previous less, namely the computational “cost” associated with making every part of a sequence with every other part.</p>
 <section id="the-cost-of-attention" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="the-cost-of-attention"><span class="header-section-number">2.1</span> The Cost of Attention</h2>
@@ -380,7 +382,6 @@ Details
 <figcaption class="figure-caption"><strong>Figure</strong>&nbsp;2<strong>.</strong> Various schemes for reducing the <big>𝒪</big>(<span class="math inline">\(N^2)\)</span> cost of Attention. Many such schemes involve replacing the <code>Linear</code> layers with convolution operations, such as with the local receptive fields shown in b) and c). (Source: S.H. Hawley, <a href="https://hedges.belmont.edu/AES_ML_2020/">“Learning Tunable Audio Effects via Neural Networks with Self-Attention”</a>, AES Virtual Symposium: Applications of Machine Learning in Audio, Sep 28, 2020.)</figcaption>
 </figure>
 </div>
-<p>TODO: crop that image</p>
 <p>For this lesson, we’ll see how far we can get with the basic <span class="math inline">\(N^2\)</span> attention. Beyond that, I encourage you to check the literature for whatever the latest/hottest cost-reducing model might be. Popular candidates include <a href="https://arxiv.org/abs/2205.14135">FlashAttention</a> and <a href="https://arxiv.org/abs/2107.14795">PercieverIO</a>. Even sliding windows are <a href="https://twitter.com/hrishioa/status/1712199009308398079">still in use in ways that some people find significant</a>.</p>
 </details></section>
 <section id="positional-encoding-aka-positional-embeddings" class="level2" data-number="2.2">
@@ -2390,10 +2391,10 @@ p {
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>file_ind <span class="op">=</span> <span class="dv">1</span>  <span class="co"># unless i got things mixed up, this is a famous hymn</span></span>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>file_ind <span class="op">=</span> <span class="dv">1</span>  </span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>original <span class="op">=</span> test_notes_tl[file_ind]</span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>num_tokens <span class="op">=</span> <span class="bu">len</span>(original)</span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>display(midiplayer(original, title<span class="op">=</span><span class="ss">f"Full Evaluation Target: &lt;a href='https://en.wikipedia.org/wiki/Praise_to_the_Lord,_the_Almighty'&gt;This Hymn&lt;/a&gt;, </span><span class="sc">{</span>num_tokens<span class="sc">}</span><span class="ss"> notes long"</span>))</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>display(midiplayer(original, title<span class="op">=</span><span class="ss">f"Full Evaluation Target, </span><span class="sc">{</span>num_tokens<span class="sc">}</span><span class="ss"> notes long"</span>))</span>
 <span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>prompt_len <span class="op">=</span> <span class="dv">21</span></span>
@@ -2401,88 +2402,6 @@ p {
 <span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>display(midiplayer(prompt, title<span class="op">=</span><span class="ss">f"Evaluation Prompt, </span><span class="sc">{</span>prompt_len<span class="sc">}</span><span class="ss"> notes long"</span>))</span>
 <span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>prompt_tokens <span class="op">=</span> encode(prompt).unsqueeze(<span class="dv">0</span>).to(device)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display">
-<iframe srcdoc="<script src=&quot;https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0&quot;></script>
-
-<style>
-/* Custom player style */
-p { 
-  margin:0; 
-  color: #c4c4c4; /* mid-lightness text color for title, intended for dark backgrounds */
-}
-
-#section632 midi-player {
-  display: block;
-  width: inherit;
-  margin: 4px;
-  margin-bottom: 0;
-  color: #d4d4d4; /* Lighter text color for better readability */
-}
-#section632 midi-player::part(control-panel) {
-  background: #222; /* Dark background */
-  border: 2px solid #888; /* Lightened border color for contrast */
-  border-radius: 10px 10px 0 0;
-}
-#section632 midi-player::part(play-button) {
-  color: #ffffff; /* White text for visibility */
-  border: 2px solid currentColor;
-  background-color: #6c7a89; 
-  border-radius: 20px;
-  transition: all 0.2s;
-  content: 'hello';
-}
-#section632 midi-player::part(play-button):hover {
-  color: #00a; 
-  background-color: #9fafc9; 
-  border-radius: 10px;
-}
-#section632 midi-player::part(time) {
-  font-family: monospace; /* Monospace font for time */
-}
-
-/* Custom visualizer style */
-#section632 midi-visualizer .piano-roll-visualizer {
-  background: #333; /* Dark background for visualizer */
-  border: 2px solid #505050; /* Dark border for subtle appearance */
-  border-top: none;
-  border-radius: 0 0 10px 10px;
-  margin: 4px;
-  width: inherit;
-  margin-top: 0;
-  overflow: auto;
-}
-#section632 midi-visualizer svg rect.note {
-  opacity: 0.9; 
-  stroke-width: 1; /* Stroke width for note clarity */
-}
-
-/* Different instrument colors */
-#section632 midi-visualizer svg rect.note[data-instrument=&quot;0&quot;]{
-  fill: #7aa6ed; /*  blue for Instrument 0 */
-  stroke: #444; 
-}
-#section632 midi-visualizer svg rect.note[data-instrument=&quot;2&quot;]{
-  fill: #d586d0; /* purple for Instrument 2 for consistency */
-  stroke: #444; /* White stroke for visibility */
-}
-#section632 midi-visualizer svg rect.note[data-is-drum=&quot;true&quot;]{
-  fill: brightorange; 
-  stroke: #bbb;
-}
-#section632 midi-visualizer svg rect.note.active {
-  opacity: 0.9; /* Highlight active notes */
-  stroke: #ddd; /* White stroke for maximum contrast */
-  stroke-width: 2; /* Thicker stroke for active notes */
-}
-</style>
-
-          <section id=&quot;section632&quot;><p style=&quot;text-align:left;font-family:Arial;&quot;>Full Evaluation Target: <a href='https://en.wikipedia.org/wiki/Praise_to_the_Lord,_the_Almighty'>This Hymn</a>, 210 notes long<span style=&quot;float:right;&quot;><a href=&quot;data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAE/QDAAACQNkAAPUAAQkAARUBqPQAAPkBpNgAAPUAAPgAAQEAAQgBqQkBpO0AAPQAAPkAAQAAAQgAAREAARQAATEBqOUAAOwAAPUAAPgAARAAARUBqOEAAOQAAO0AAPQAARQAAR0CBUzgAADlAADsAAEBAAEcAAEpAAEwAaUlAAEoAajtAAD9AAEAAAEdAAEkAajdAADkAaTZAADcAADlAADsAAD8AAEBAAEcAAElAajRAADYAADdAADkAaTQAADZAADcAADlAAD5AAEAAAEkAAEpAajJAADYAAD4AAEVAAElAAEoAajIAADRAADkAAEBAAERAAEUAAEdAAEkAaT5AAEAAai1AADQAAD1AAD4AAEBAAEQAAEVAAEcAhHktAAAyQAA5QAA9AABAAABCQIFUMgAAM0AARQAAR0BpMwAANEBqOEAAOQAAQEAAQgAARwAASUBpNAAANUAAPUAAQABqOAAAO0AAPQAAREAASQAASkBqNQAANkAAOUAAOwAAQkAARABpNgAAOEAAOQAAO0AAQEAAQgAAR0AASgBqOAAAOUAAP0AAQABpOEAAOQAAPwAAQEAARwAATEA1QAAAQkA1NEAAOAAAOwAAQEAAQgAAREBqNAAAO0AARAAARUAATAAATkBpP0AAQAAAQkAARQBqNEAAOwAAPwAAQEAAQgAAREAATEAATgCBUzQAADlAAEQAAEVAAElAAEwAajhAADkAaTZAADgAAEAAAEJAajRAADYAAEkAAEpAaTJAADQAAEUAAEZAAEoAAExAajFAADIAai9AADEAAEYAAEdAAEpAAEwAaUVAAEcAai8AADRAAEBAAEIAAERAAEUAAElAAEoAaTJAADQAAEJAAEQAAEdAAEkAajFAADIAAEIAAEVAAEcAai9AADEAAD5AAEAAAEJAAEUAAEdANEIAAERANS1AAC8AAD1AAD4AAEQAAEVAAEcAAElAaj0AAD9AAEJAAEUAaS0AADRAAD8AAEBAAEIAAERAAEdAAEkAgVQtQAA0AABEAABFQABHAABJQGlEQABFAGotAAAyQAA+QABAAABCQABEAABFQABJAGkyAAA0QAA9QAA+AGoyQAA0AAA9AAA+QABFAABHQGoxQAAyAAA+AABAQABCAABEQABHAABJQDREAABGQDUvQAAxAABAAABCQABGAABHQABJAABKQIFTLwAANkAARkAARwAASUAASgBqQEAAQgBqNgAAN0AAPkAAQAAARgAAR0AASQBpNkAANwAARUBqNEAANgAAPgAAQEAAQ0AARQAARwAASUCBUzJAADQAADlAAEAAAEJAAEMAAEkAAEpAgVMtQAAyAABAQABCAABJQABKAGpAAABFQGktAAA0QAA5AAA7QABHQABJAGpEQABFAGo7AAA9QABFQABHAGk9AAA/QABCQABEAGo/AABAQABCAABEQABFAABMQGk0AAA2QABEAABFQGo2AAA4QABFAABHQGo0QAA4AABKQABMAGk0AAA5QABJQABKAGo4QAA5AAA9QABHAGk2QAA4AAA5QAA9AABAAABFQABJAABKQGo0QAA2AAA5AAA9QABJQABKAGoyQAA0AAA9AABCQABHQABJAGkvQAAyAAA+QABCAGovAAA0QAA7QAA+AABEQABFAGk7AABAQGotQAA0AAA9QABEAABFQABHAIZNLQAAPQAAQAAARQAB/y8A&quot; target=&quot;_blank&quot;>Download MIDI</a><br></span></p>
-          <midi-player src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAE/QDAAACQNkAAPUAAQkAARUBqPQAAPkBpNgAAPUAAPgAAQEAAQgBqQkBpO0AAPQAAPkAAQAAAQgAAREAARQAATEBqOUAAOwAAPUAAPgAARAAARUBqOEAAOQAAO0AAPQAARQAAR0CBUzgAADlAADsAAEBAAEcAAEpAAEwAaUlAAEoAajtAAD9AAEAAAEdAAEkAajdAADkAaTZAADcAADlAADsAAD8AAEBAAEcAAElAajRAADYAADdAADkAaTQAADZAADcAADlAAD5AAEAAAEkAAEpAajJAADYAAD4AAEVAAElAAEoAajIAADRAADkAAEBAAERAAEUAAEdAAEkAaT5AAEAAai1AADQAAD1AAD4AAEBAAEQAAEVAAEcAhHktAAAyQAA5QAA9AABAAABCQIFUMgAAM0AARQAAR0BpMwAANEBqOEAAOQAAQEAAQgAARwAASUBpNAAANUAAPUAAQABqOAAAO0AAPQAAREAASQAASkBqNQAANkAAOUAAOwAAQkAARABpNgAAOEAAOQAAO0AAQEAAQgAAR0AASgBqOAAAOUAAP0AAQABpOEAAOQAAPwAAQEAARwAATEA1QAAAQkA1NEAAOAAAOwAAQEAAQgAAREBqNAAAO0AARAAARUAATAAATkBpP0AAQAAAQkAARQBqNEAAOwAAPwAAQEAAQgAAREAATEAATgCBUzQAADlAAEQAAEVAAElAAEwAajhAADkAaTZAADgAAEAAAEJAajRAADYAAEkAAEpAaTJAADQAAEUAAEZAAEoAAExAajFAADIAai9AADEAAEYAAEdAAEpAAEwAaUVAAEcAai8AADRAAEBAAEIAAERAAEUAAElAAEoAaTJAADQAAEJAAEQAAEdAAEkAajFAADIAAEIAAEVAAEcAai9AADEAAD5AAEAAAEJAAEUAAEdANEIAAERANS1AAC8AAD1AAD4AAEQAAEVAAEcAAElAaj0AAD9AAEJAAEUAaS0AADRAAD8AAEBAAEIAAERAAEdAAEkAgVQtQAA0AABEAABFQABHAABJQGlEQABFAGotAAAyQAA+QABAAABCQABEAABFQABJAGkyAAA0QAA9QAA+AGoyQAA0AAA9AAA+QABFAABHQGoxQAAyAAA+AABAQABCAABEQABHAABJQDREAABGQDUvQAAxAABAAABCQABGAABHQABJAABKQIFTLwAANkAARkAARwAASUAASgBqQEAAQgBqNgAAN0AAPkAAQAAARgAAR0AASQBpNkAANwAARUBqNEAANgAAPgAAQEAAQ0AARQAARwAASUCBUzJAADQAADlAAEAAAEJAAEMAAEkAAEpAgVMtQAAyAABAQABCAABJQABKAGpAAABFQGktAAA0QAA5AAA7QABHQABJAGpEQABFAGo7AAA9QABFQABHAGk9AAA/QABCQABEAGo/AABAQABCAABEQABFAABMQGk0AAA2QABEAABFQGo2AAA4QABFAABHQGo0QAA4AABKQABMAGk0AAA5QABJQABKAGo4QAA5AAA9QABHAGk2QAA4AAA5QAA9AABAAABFQABJAABKQGo0QAA2AAA5AAA9QABJQABKAGoyQAA0AAA9AABCQABHQABJAGkvQAAyAAA+QABCAGovAAA0QAA7QAA+AABEQABFAGk7AABAQGotQAA0AAA9QABEAABFQABHAIZNLQAAPQAAQAAARQAB/y8A sound-font visualizer=&quot;#section632 midi-visualizer&quot;></midi-player>
-          <midi-visualizer src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAE/QDAAACQNkAAPUAAQkAARUBqPQAAPkBpNgAAPUAAPgAAQEAAQgBqQkBpO0AAPQAAPkAAQAAAQgAAREAARQAATEBqOUAAOwAAPUAAPgAARAAARUBqOEAAOQAAO0AAPQAARQAAR0CBUzgAADlAADsAAEBAAEcAAEpAAEwAaUlAAEoAajtAAD9AAEAAAEdAAEkAajdAADkAaTZAADcAADlAADsAAD8AAEBAAEcAAElAajRAADYAADdAADkAaTQAADZAADcAADlAAD5AAEAAAEkAAEpAajJAADYAAD4AAEVAAElAAEoAajIAADRAADkAAEBAAERAAEUAAEdAAEkAaT5AAEAAai1AADQAAD1AAD4AAEBAAEQAAEVAAEcAhHktAAAyQAA5QAA9AABAAABCQIFUMgAAM0AARQAAR0BpMwAANEBqOEAAOQAAQEAAQgAARwAASUBpNAAANUAAPUAAQABqOAAAO0AAPQAAREAASQAASkBqNQAANkAAOUAAOwAAQkAARABpNgAAOEAAOQAAO0AAQEAAQgAAR0AASgBqOAAAOUAAP0AAQABpOEAAOQAAPwAAQEAARwAATEA1QAAAQkA1NEAAOAAAOwAAQEAAQgAAREBqNAAAO0AARAAARUAATAAATkBpP0AAQAAAQkAARQBqNEAAOwAAPwAAQEAAQgAAREAATEAATgCBUzQAADlAAEQAAEVAAElAAEwAajhAADkAaTZAADgAAEAAAEJAajRAADYAAEkAAEpAaTJAADQAAEUAAEZAAEoAAExAajFAADIAai9AADEAAEYAAEdAAEpAAEwAaUVAAEcAai8AADRAAEBAAEIAAERAAEUAAElAAEoAaTJAADQAAEJAAEQAAEdAAEkAajFAADIAAEIAAEVAAEcAai9AADEAAD5AAEAAAEJAAEUAAEdANEIAAERANS1AAC8AAD1AAD4AAEQAAEVAAEcAAElAaj0AAD9AAEJAAEUAaS0AADRAAD8AAEBAAEIAAERAAEdAAEkAgVQtQAA0AABEAABFQABHAABJQGlEQABFAGotAAAyQAA+QABAAABCQABEAABFQABJAGkyAAA0QAA9QAA+AGoyQAA0AAA9AAA+QABFAABHQGoxQAAyAAA+AABAQABCAABEQABHAABJQDREAABGQDUvQAAxAABAAABCQABGAABHQABJAABKQIFTLwAANkAARkAARwAASUAASgBqQEAAQgBqNgAAN0AAPkAAQAAARgAAR0AASQBpNkAANwAARUBqNEAANgAAPgAAQEAAQ0AARQAARwAASUCBUzJAADQAADlAAEAAAEJAAEMAAEkAAEpAgVMtQAAyAABAQABCAABJQABKAGpAAABFQGktAAA0QAA5AAA7QABHQABJAGpEQABFAGo7AAA9QABFQABHAGk9AAA/QABCQABEAGo/AABAQABCAABEQABFAABMQGk0AAA2QABEAABFQGo2AAA4QABFAABHQGo0QAA4AABKQABMAGk0AAA5QABJQABKAGo4QAA5AAA9QABHAGk2QAA4AAA5QAA9AABAAABFQABJAABKQGo0QAA2AAA5AAA9QABJQABKAGoyQAA0AAA9AABCQABHQABJAGkvQAAyAAA+QABCAGovAAA0QAA7QAA+AABEQABFAGk7AABAQGotQAA0AAA9QABEAABFQABHAIZNLQAAPQAAQAAARQAB/y8A type=piano-roll></midi-visualizer>
-          </section>
-          " width="100%" height="400" style="border:none !important;" "allowfullscreen"="" "webkitallowfullscreen"="" "mozallowfullscreen"="">'
-            </iframe>
-</div>
 <div class="cell-output cell-output-display">
 <iframe srcdoc="<script src=&quot;https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0&quot;></script>
 
@@ -2558,8 +2477,90 @@ p {
 }
 </style>
 
-          <section id=&quot;section947&quot;><p style=&quot;text-align:left;font-family:Arial;&quot;>Evaluation Prompt, 21 notes long<span style=&quot;float:right;&quot;><a href=&quot;data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAAhwDAAACQNkAAPUAAQkAARUBqPQAAPkBpNgAAPUAAPgAAQEAAQgBqQkBpO0AAPQAAPkAAQAAAQgAAREAARQAATEBqOUAAOwAAPUAAPgAARAAARUBqOEAAOQAAO0AAPQAARQAAR0CBUzgAADlAADsAAEBAAEcAAEpAAEwAaUoAakAAajkAAf8vAA==&quot; target=&quot;_blank&quot;>Download MIDI</a><br></span></p>
-          <midi-player src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAAhwDAAACQNkAAPUAAQkAARUBqPQAAPkBpNgAAPUAAPgAAQEAAQgBqQkBpO0AAPQAAPkAAQAAAQgAAREAARQAATEBqOUAAOwAAPUAAPgAARAAARUBqOEAAOQAAO0AAPQAARQAAR0CBUzgAADlAADsAAEBAAEcAAEpAAEwAaUoAakAAajkAAf8vAA== sound-font visualizer=&quot;#section947 midi-visualizer&quot;></midi-player>
+          <section id=&quot;section947&quot;><p style=&quot;text-align:left;font-family:Arial;&quot;>Full Evaluation Target, 210 notes long<span style=&quot;float:right;&quot;><a href=&quot;data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAE/QDAAACQNkAAPUAAQkAARUBqPQAAPkBpNgAAPUAAPgAAQEAAQgBqQkBpO0AAPQAAPkAAQAAAQgAAREAARQAATEBqOUAAOwAAPUAAPgAARAAARUBqOEAAOQAAO0AAPQAARQAAR0CBUzgAADlAADsAAEBAAEcAAEpAAEwAaUlAAEoAajtAAD9AAEAAAEdAAEkAajdAADkAaTZAADcAADlAADsAAD8AAEBAAEcAAElAajRAADYAADdAADkAaTQAADZAADcAADlAAD5AAEAAAEkAAEpAajJAADYAAD4AAEVAAElAAEoAajIAADRAADkAAEBAAERAAEUAAEdAAEkAaT5AAEAAai1AADQAAD1AAD4AAEBAAEQAAEVAAEcAhHktAAAyQAA5QAA9AABAAABCQIFUMgAAM0AARQAAR0BpMwAANEBqOEAAOQAAQEAAQgAARwAASUBpNAAANUAAPUAAQABqOAAAO0AAPQAAREAASQAASkBqNQAANkAAOUAAOwAAQkAARABpNgAAOEAAOQAAO0AAQEAAQgAAR0AASgBqOAAAOUAAP0AAQABpOEAAOQAAPwAAQEAARwAATEA1QAAAQkA1NEAAOAAAOwAAQEAAQgAAREBqNAAAO0AARAAARUAATAAATkBpP0AAQAAAQkAARQBqNEAAOwAAPwAAQEAAQgAAREAATEAATgCBUzQAADlAAEQAAEVAAElAAEwAajhAADkAaTZAADgAAEAAAEJAajRAADYAAEkAAEpAaTJAADQAAEUAAEZAAEoAAExAajFAADIAai9AADEAAEYAAEdAAEpAAEwAaUVAAEcAai8AADRAAEBAAEIAAERAAEUAAElAAEoAaTJAADQAAEJAAEQAAEdAAEkAajFAADIAAEIAAEVAAEcAai9AADEAAD5AAEAAAEJAAEUAAEdANEIAAERANS1AAC8AAD1AAD4AAEQAAEVAAEcAAElAaj0AAD9AAEJAAEUAaS0AADRAAD8AAEBAAEIAAERAAEdAAEkAgVQtQAA0AABEAABFQABHAABJQGlEQABFAGotAAAyQAA+QABAAABCQABEAABFQABJAGkyAAA0QAA9QAA+AGoyQAA0AAA9AAA+QABFAABHQGoxQAAyAAA+AABAQABCAABEQABHAABJQDREAABGQDUvQAAxAABAAABCQABGAABHQABJAABKQIFTLwAANkAARkAARwAASUAASgBqQEAAQgBqNgAAN0AAPkAAQAAARgAAR0AASQBpNkAANwAARUBqNEAANgAAPgAAQEAAQ0AARQAARwAASUCBUzJAADQAADlAAEAAAEJAAEMAAEkAAEpAgVMtQAAyAABAQABCAABJQABKAGpAAABFQGktAAA0QAA5AAA7QABHQABJAGpEQABFAGo7AAA9QABFQABHAGk9AAA/QABCQABEAGo/AABAQABCAABEQABFAABMQGk0AAA2QABEAABFQGo2AAA4QABFAABHQGo0QAA4AABKQABMAGk0AAA5QABJQABKAGo4QAA5AAA9QABHAGk2QAA4AAA5QAA9AABAAABFQABJAABKQGo0QAA2AAA5AAA9QABJQABKAGoyQAA0AAA9AABCQABHQABJAGkvQAAyAAA+QABCAGovAAA0QAA7QAA+AABEQABFAGk7AABAQGotQAA0AAA9QABEAABFQABHAIZNLQAAPQAAQAAARQAB/y8A&quot; target=&quot;_blank&quot;>Download MIDI</a><br></span></p>
+          <midi-player src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAE/QDAAACQNkAAPUAAQkAARUBqPQAAPkBpNgAAPUAAPgAAQEAAQgBqQkBpO0AAPQAAPkAAQAAAQgAAREAARQAATEBqOUAAOwAAPUAAPgAARAAARUBqOEAAOQAAO0AAPQAARQAAR0CBUzgAADlAADsAAEBAAEcAAEpAAEwAaUlAAEoAajtAAD9AAEAAAEdAAEkAajdAADkAaTZAADcAADlAADsAAD8AAEBAAEcAAElAajRAADYAADdAADkAaTQAADZAADcAADlAAD5AAEAAAEkAAEpAajJAADYAAD4AAEVAAElAAEoAajIAADRAADkAAEBAAERAAEUAAEdAAEkAaT5AAEAAai1AADQAAD1AAD4AAEBAAEQAAEVAAEcAhHktAAAyQAA5QAA9AABAAABCQIFUMgAAM0AARQAAR0BpMwAANEBqOEAAOQAAQEAAQgAARwAASUBpNAAANUAAPUAAQABqOAAAO0AAPQAAREAASQAASkBqNQAANkAAOUAAOwAAQkAARABpNgAAOEAAOQAAO0AAQEAAQgAAR0AASgBqOAAAOUAAP0AAQABpOEAAOQAAPwAAQEAARwAATEA1QAAAQkA1NEAAOAAAOwAAQEAAQgAAREBqNAAAO0AARAAARUAATAAATkBpP0AAQAAAQkAARQBqNEAAOwAAPwAAQEAAQgAAREAATEAATgCBUzQAADlAAEQAAEVAAElAAEwAajhAADkAaTZAADgAAEAAAEJAajRAADYAAEkAAEpAaTJAADQAAEUAAEZAAEoAAExAajFAADIAai9AADEAAEYAAEdAAEpAAEwAaUVAAEcAai8AADRAAEBAAEIAAERAAEUAAElAAEoAaTJAADQAAEJAAEQAAEdAAEkAajFAADIAAEIAAEVAAEcAai9AADEAAD5AAEAAAEJAAEUAAEdANEIAAERANS1AAC8AAD1AAD4AAEQAAEVAAEcAAElAaj0AAD9AAEJAAEUAaS0AADRAAD8AAEBAAEIAAERAAEdAAEkAgVQtQAA0AABEAABFQABHAABJQGlEQABFAGotAAAyQAA+QABAAABCQABEAABFQABJAGkyAAA0QAA9QAA+AGoyQAA0AAA9AAA+QABFAABHQGoxQAAyAAA+AABAQABCAABEQABHAABJQDREAABGQDUvQAAxAABAAABCQABGAABHQABJAABKQIFTLwAANkAARkAARwAASUAASgBqQEAAQgBqNgAAN0AAPkAAQAAARgAAR0AASQBpNkAANwAARUBqNEAANgAAPgAAQEAAQ0AARQAARwAASUCBUzJAADQAADlAAEAAAEJAAEMAAEkAAEpAgVMtQAAyAABAQABCAABJQABKAGpAAABFQGktAAA0QAA5AAA7QABHQABJAGpEQABFAGo7AAA9QABFQABHAGk9AAA/QABCQABEAGo/AABAQABCAABEQABFAABMQGk0AAA2QABEAABFQGo2AAA4QABFAABHQGo0QAA4AABKQABMAGk0AAA5QABJQABKAGo4QAA5AAA9QABHAGk2QAA4AAA5QAA9AABAAABFQABJAABKQGo0QAA2AAA5AAA9QABJQABKAGoyQAA0AAA9AABCQABHQABJAGkvQAAyAAA+QABCAGovAAA0QAA7QAA+AABEQABFAGk7AABAQGotQAA0AAA9QABEAABFQABHAIZNLQAAPQAAQAAARQAB/y8A sound-font visualizer=&quot;#section947 midi-visualizer&quot;></midi-player>
+          <midi-visualizer src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAE/QDAAACQNkAAPUAAQkAARUBqPQAAPkBpNgAAPUAAPgAAQEAAQgBqQkBpO0AAPQAAPkAAQAAAQgAAREAARQAATEBqOUAAOwAAPUAAPgAARAAARUBqOEAAOQAAO0AAPQAARQAAR0CBUzgAADlAADsAAEBAAEcAAEpAAEwAaUlAAEoAajtAAD9AAEAAAEdAAEkAajdAADkAaTZAADcAADlAADsAAD8AAEBAAEcAAElAajRAADYAADdAADkAaTQAADZAADcAADlAAD5AAEAAAEkAAEpAajJAADYAAD4AAEVAAElAAEoAajIAADRAADkAAEBAAERAAEUAAEdAAEkAaT5AAEAAai1AADQAAD1AAD4AAEBAAEQAAEVAAEcAhHktAAAyQAA5QAA9AABAAABCQIFUMgAAM0AARQAAR0BpMwAANEBqOEAAOQAAQEAAQgAARwAASUBpNAAANUAAPUAAQABqOAAAO0AAPQAAREAASQAASkBqNQAANkAAOUAAOwAAQkAARABpNgAAOEAAOQAAO0AAQEAAQgAAR0AASgBqOAAAOUAAP0AAQABpOEAAOQAAPwAAQEAARwAATEA1QAAAQkA1NEAAOAAAOwAAQEAAQgAAREBqNAAAO0AARAAARUAATAAATkBpP0AAQAAAQkAARQBqNEAAOwAAPwAAQEAAQgAAREAATEAATgCBUzQAADlAAEQAAEVAAElAAEwAajhAADkAaTZAADgAAEAAAEJAajRAADYAAEkAAEpAaTJAADQAAEUAAEZAAEoAAExAajFAADIAai9AADEAAEYAAEdAAEpAAEwAaUVAAEcAai8AADRAAEBAAEIAAERAAEUAAElAAEoAaTJAADQAAEJAAEQAAEdAAEkAajFAADIAAEIAAEVAAEcAai9AADEAAD5AAEAAAEJAAEUAAEdANEIAAERANS1AAC8AAD1AAD4AAEQAAEVAAEcAAElAaj0AAD9AAEJAAEUAaS0AADRAAD8AAEBAAEIAAERAAEdAAEkAgVQtQAA0AABEAABFQABHAABJQGlEQABFAGotAAAyQAA+QABAAABCQABEAABFQABJAGkyAAA0QAA9QAA+AGoyQAA0AAA9AAA+QABFAABHQGoxQAAyAAA+AABAQABCAABEQABHAABJQDREAABGQDUvQAAxAABAAABCQABGAABHQABJAABKQIFTLwAANkAARkAARwAASUAASgBqQEAAQgBqNgAAN0AAPkAAQAAARgAAR0AASQBpNkAANwAARUBqNEAANgAAPgAAQEAAQ0AARQAARwAASUCBUzJAADQAADlAAEAAAEJAAEMAAEkAAEpAgVMtQAAyAABAQABCAABJQABKAGpAAABFQGktAAA0QAA5AAA7QABHQABJAGpEQABFAGo7AAA9QABFQABHAGk9AAA/QABCQABEAGo/AABAQABCAABEQABFAABMQGk0AAA2QABEAABFQGo2AAA4QABFAABHQGo0QAA4AABKQABMAGk0AAA5QABJQABKAGo4QAA5AAA9QABHAGk2QAA4AAA5QAA9AABAAABFQABJAABKQGo0QAA2AAA5AAA9QABJQABKAGoyQAA0AAA9AABCQABHQABJAGkvQAAyAAA+QABCAGovAAA0QAA7QAA+AABEQABFAGk7AABAQGotQAA0AAA9QABEAABFQABHAIZNLQAAPQAAQAAARQAB/y8A type=piano-roll></midi-visualizer>
+          </section>
+          " width="100%" height="400" style="border:none !important;" "allowfullscreen"="" "webkitallowfullscreen"="" "mozallowfullscreen"="">'
+            </iframe>
+</div>
+<div class="cell-output cell-output-display">
+<iframe srcdoc="<script src=&quot;https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0&quot;></script>
+
+<style>
+/* Custom player style */
+p { 
+  margin:0; 
+  color: #c4c4c4; /* mid-lightness text color for title, intended for dark backgrounds */
+}
+
+#section546 midi-player {
+  display: block;
+  width: inherit;
+  margin: 4px;
+  margin-bottom: 0;
+  color: #d4d4d4; /* Lighter text color for better readability */
+}
+#section546 midi-player::part(control-panel) {
+  background: #222; /* Dark background */
+  border: 2px solid #888; /* Lightened border color for contrast */
+  border-radius: 10px 10px 0 0;
+}
+#section546 midi-player::part(play-button) {
+  color: #ffffff; /* White text for visibility */
+  border: 2px solid currentColor;
+  background-color: #6c7a89; 
+  border-radius: 20px;
+  transition: all 0.2s;
+  content: 'hello';
+}
+#section546 midi-player::part(play-button):hover {
+  color: #00a; 
+  background-color: #9fafc9; 
+  border-radius: 10px;
+}
+#section546 midi-player::part(time) {
+  font-family: monospace; /* Monospace font for time */
+}
+
+/* Custom visualizer style */
+#section546 midi-visualizer .piano-roll-visualizer {
+  background: #333; /* Dark background for visualizer */
+  border: 2px solid #505050; /* Dark border for subtle appearance */
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  margin: 4px;
+  width: inherit;
+  margin-top: 0;
+  overflow: auto;
+}
+#section546 midi-visualizer svg rect.note {
+  opacity: 0.9; 
+  stroke-width: 1; /* Stroke width for note clarity */
+}
+
+/* Different instrument colors */
+#section546 midi-visualizer svg rect.note[data-instrument=&quot;0&quot;]{
+  fill: #7aa6ed; /*  blue for Instrument 0 */
+  stroke: #444; 
+}
+#section546 midi-visualizer svg rect.note[data-instrument=&quot;2&quot;]{
+  fill: #d586d0; /* purple for Instrument 2 for consistency */
+  stroke: #444; /* White stroke for visibility */
+}
+#section546 midi-visualizer svg rect.note[data-is-drum=&quot;true&quot;]{
+  fill: brightorange; 
+  stroke: #bbb;
+}
+#section546 midi-visualizer svg rect.note.active {
+  opacity: 0.9; /* Highlight active notes */
+  stroke: #ddd; /* White stroke for maximum contrast */
+  stroke-width: 2; /* Thicker stroke for active notes */
+}
+</style>
+
+          <section id=&quot;section546&quot;><p style=&quot;text-align:left;font-family:Arial;&quot;>Evaluation Prompt, 21 notes long<span style=&quot;float:right;&quot;><a href=&quot;data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAAhwDAAACQNkAAPUAAQkAARUBqPQAAPkBpNgAAPUAAPgAAQEAAQgBqQkBpO0AAPQAAPkAAQAAAQgAAREAARQAATEBqOUAAOwAAPUAAPgAARAAARUBqOEAAOQAAO0AAPQAARQAAR0CBUzgAADlAADsAAEBAAEcAAEpAAEwAaUoAakAAajkAAf8vAA==&quot; target=&quot;_blank&quot;>Download MIDI</a><br></span></p>
+          <midi-player src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAAhwDAAACQNkAAPUAAQkAARUBqPQAAPkBpNgAAPUAAPgAAQEAAQgBqQkBpO0AAPQAAPkAAQAAAQgAAREAARQAATEBqOUAAOwAAPUAAPgAARAAARUBqOEAAOQAAO0AAPQAARQAAR0CBUzgAADlAADsAAEBAAEcAAEpAAEwAaUoAakAAajkAAf8vAA== sound-font visualizer=&quot;#section546 midi-visualizer&quot;></midi-player>
           <midi-visualizer src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAAhwDAAACQNkAAPUAAQkAARUBqPQAAPkBpNgAAPUAAPgAAQEAAQgBqQkBpO0AAPQAAPkAAQAAAQgAAREAARQAATEBqOUAAOwAAPUAAPgAARAAARUBqOEAAOQAAO0AAPQAARQAAR0CBUzgAADlAADsAAEBAAEcAAEpAAEwAaUoAakAAajkAAf8vAA== type=piano-roll></midi-visualizer>
           </section>
           " width="100%" height="400" style="border:none !important;" "allowfullscreen"="" "webkitallowfullscreen"="" "mozallowfullscreen"="">'
