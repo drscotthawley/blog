@@ -242,7 +242,7 @@ details > summary {
   <ul class="collapse">
   <li><a href="#set-up-the-gpucpu-device" id="toc-set-up-the-gpucpu-device" class="nav-link" data-scroll-target="#set-up-the-gpucpu-device"><span class="header-section-number">6.1</span> Set Up the GPU/CPU <code>device</code></a></li>
   <li><a href="#prompt-for-demos" id="toc-prompt-for-demos" class="nav-link" data-scroll-target="#prompt-for-demos"><span class="header-section-number">6.2</span> Prompt for Demos</a></li>
-  <li><a href="#re-init-everything" id="toc-re-init-everything" class="nav-link" data-scroll-target="#re-init-everything"><span class="header-section-number">6.3</span> (Re-)Init Everything</a></li>
+  <li><a href="#re-init-things" id="toc-re-init-things" class="nav-link" data-scroll-target="#re-init-things"><span class="header-section-number">6.3</span> (Re-)Init Things</a></li>
   </ul></li>
   <li><a href="#train-the-model" id="toc-train-the-model" class="nav-link" data-scroll-target="#train-the-model"><span class="header-section-number">7</span> Train the Model</a>
   <ul class="collapse">
@@ -307,7 +307,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The goal of this exercise is building <em>some understanding</em>, not building a killer MIDI-generating app. If you want the latter, check out <a href="https://magenta.tensorflow.org/music-transformer">Google Magenta’s paper</a> from 2018, or various extensions since then. If you just want to play around with a great MIDI model, check out <a href="https://huggingface.co/spaces/skytnt/midi-composer">SkyTNT’s HuggingFace Space</a>. By “some” understanding, I also mean that we’re going to largely ignore the many, many variants and improvements on Transformers made over the past several years. I find that <a href="https://twitter.com/rasbt">Sebastian Raschka</a>’s posts to be helpful for considering major updates on the Transformer “theme”.</p>
+<p>The goal of this exercise is building <em>some understanding</em>, not building a killer MIDI-generating app. If you want the latter, check out <a href="https://magenta.tensorflow.org/music-transformer">Google Magenta’s paper</a> from 2018, or various extensions since then. If you just want to play around with a great MIDI model, check out <a href="https://huggingface.co/spaces/skytnt/midi-composer">SkyTNT’s HuggingFace Space</a>. By “some” understanding, I also mean that we’re going to largely ignore the many, many variants and improvements on Transformers made over the past several years – lately <a href="https://arxiv.org/abs/2312.00752">“Mamba”</a> is generating consierable buzz. I find that <a href="https://twitter.com/rasbt">Sebastian Raschka</a>’s posts to be helpful for considering major updates on the Transformer “theme”.</p>
 </div>
 </div>
 <section id="managing-expectations" class="level2" data-number="1.1">
@@ -1392,32 +1392,11 @@ Checks passed! :-) </code></pre>
 <span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># other handy bookkeeping</span></span>
 <span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>    vocab_sizes: <span class="bu">tuple</span> <span class="op">=</span> <span class="bu">tuple</span>(vocab_sizes)</span>
-<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
-<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MusicBoxConfig2:  <span class="co"># matches what I was doing previously</span></span>
-<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># model architecture details</span></span>
-<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>    seq_length: <span class="bu">int</span> <span class="op">=</span> <span class="dv">64</span></span>
-<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a>    batch_size: <span class="bu">int</span> <span class="op">=</span> <span class="dv">32</span></span>
-<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>    n_embd:     <span class="bu">int</span> <span class="op">=</span> <span class="dv">128</span>     <span class="co"># embedding dimension to use for tokens &amp; positions</span></span>
-<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>    n_heads:    <span class="bu">int</span> <span class="op">=</span> <span class="dv">8</span>       <span class="co"># number of attention heads</span></span>
-<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>    n_blocks:   <span class="bu">int</span> <span class="op">=</span> <span class="dv">4</span>       <span class="co"># number of attention blocks</span></span>
-<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a>    dropout:  <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.1</span>     <span class="co"># dropout value applied everywhere</span></span>
-<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a>    bias:      <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>   <span class="co"># True: bias in Linears and LayerNorms, like GPT-2. False: a bit better and faster</span></span>
-<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># training details</span></span>
-<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a>    learning_rate: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.001</span></span>
-<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a>    weight_decay:  <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.01</span>   <span class="co"># 0.01 is pytorch default</span></span>
-<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a>    epochs:          <span class="bu">int</span> <span class="op">=</span> <span class="dv">20</span></span>
-<span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># other handy bookkeeping</span></span>
-<span id="cb28-41"><a href="#cb28-41" aria-hidden="true" tabindex="-1"></a>    vocab_sizes: <span class="bu">tuple</span> <span class="op">=</span> <span class="bu">tuple</span>(vocab_sizes)</span>
-<span id="cb28-42"><a href="#cb28-42" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb28-43"><a href="#cb28-43" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb28-44"><a href="#cb28-44" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> MusicBoxConfig()</span>
-<span id="cb28-45"><a href="#cb28-45" aria-hidden="true" tabindex="-1"></a>pp <span class="op">=</span> pprint.PrettyPrinter(indent<span class="op">=</span><span class="dv">4</span>)</span>
-<span id="cb28-46"><a href="#cb28-46" aria-hidden="true" tabindex="-1"></a>pp.pprint(config)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> MusicBoxConfig()</span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>pp <span class="op">=</span> pprint.PrettyPrinter(indent<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>pp.pprint(config)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>MusicBoxConfig(seq_length=64,
@@ -1794,8 +1773,8 @@ p {
 </div>
 </div>
 </section>
-<section id="re-init-everything" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="re-init-everything"><span class="header-section-number">6.3</span> (Re-)Init Everything</h2>
+<section id="re-init-things" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="re-init-things"><span class="header-section-number">6.3</span> (Re-)Init Things</h2>
 <p>Just to keep things ‘clean’, re-setup the datasets &amp; loaders for good measure, instantiate a model and optimizer.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>set_seeds(<span class="dv">0</span>)</span>

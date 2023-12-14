@@ -994,11 +994,11 @@
     "text": "6.2 Prompt for Demos\nLet’s create a “prompt” from the validation dataset so we can monitor the models capabilities in producing “demos” of the music\n\n\nShow the code\ndemo_prompt_idx = 0    # file index from which to pull the demo prompt\ndemo_target = val_notes_tl[demo_prompt_idx]\ndisplay(midiplayer(demo_target, title=f\"Full demo 'target', {len(demo_target)} notes in length\"))\n\ndemo_prompt_length = 16  # number of notes in demo prompt context\ndemo_max_new_tokens = min(150, len(demo_target))  # try to make the whole song, but don't go on too long\nprompt = demo_target[:demo_prompt_length]\ndisplay(midiplayer(prompt, title=f\"{demo_prompt_length}-note 'prompt' for demos\"))\nprompt_tokens = encode(prompt).unsqueeze(0).to(device)\n\n\n'\n            \n\n\n'"
   },
   {
-    "objectID": "posts/Transformers2-MusicBox.html#re-init-everything",
-    "href": "posts/Transformers2-MusicBox.html#re-init-everything",
+    "objectID": "posts/Transformers2-MusicBox.html#re-init-things",
+    "href": "posts/Transformers2-MusicBox.html#re-init-things",
     "title": "Understanding Transformers, Part 2: Wee Music Box",
-    "section": "6.3 (Re-)Init Everything",
-    "text": "6.3 (Re-)Init Everything\nJust to keep things ‘clean’, re-setup the datasets & loaders for good measure, instantiate a model and optimizer.\n\nset_seeds(0)\n\ntrain_ds = NotesDataset(train_notes_tl, config.seq_length, len_mult=config.batch_size)\nval_ds = NotesDataset(val_notes_tl, seq_length, aug_callback=None, len_mult=1000000) # no aug, neverending\n\ntrain_dl = DataLoader(train_ds, batch_size=config.batch_size, shuffle=True)\nval_dl   = DataLoader(val_ds,   batch_size=config.batch_size, shuffle=False)\n\nmodel = Transformer(config)\n#model = BigramLanguageModel()\nmodel = model.to(device)\ntotal_params_str = f'{sum(p.numel() for p in model.parameters())/1e6} M'\nprint(total_params_str,'parameters in the model')  \n\noptimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay)\n\n0.843947 M parameters in the model"
+    "section": "6.3 (Re-)Init Things",
+    "text": "6.3 (Re-)Init Things\nJust to keep things ‘clean’, re-setup the datasets & loaders for good measure, instantiate a model and optimizer.\n\nset_seeds(0)\n\ntrain_ds = NotesDataset(train_notes_tl, config.seq_length, len_mult=config.batch_size)\nval_ds = NotesDataset(val_notes_tl, seq_length, aug_callback=None, len_mult=1000000) # no aug, neverending\n\ntrain_dl = DataLoader(train_ds, batch_size=config.batch_size, shuffle=True)\nval_dl   = DataLoader(val_ds,   batch_size=config.batch_size, shuffle=False)\n\nmodel = Transformer(config)\n#model = BigramLanguageModel()\nmodel = model.to(device)\ntotal_params_str = f'{sum(p.numel() for p in model.parameters())/1e6} M'\nprint(total_params_str,'parameters in the model')  \n\noptimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate, weight_decay=config.weight_decay)\n\n0.843947 M parameters in the model"
   },
   {
     "objectID": "posts/Transformers2-MusicBox.html#optional-setup-wandb-run-tracking",
