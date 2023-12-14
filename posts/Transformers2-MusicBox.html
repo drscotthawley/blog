@@ -617,7 +617,7 @@ Number of files: 382</code></pre>
 <details>
 <summary>Show the code for MIDI player usage</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> midi_player <span class="im">import</span> MIDIPlayer</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> midi_player.stylers <span class="im">import</span> dark <span class="co"># I like dark mode</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> midi_player.stylers <span class="im">import</span> general, dark <span class="co"># I like dark mode</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>midi_file <span class="op">=</span> filenames[<span class="dv">0</span>]</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>MIDIPlayer(midi_file, <span class="dv">360</span>, styler<span class="op">=</span>dark, title<span class="op">=</span><span class="ss">f"midi_file = </span><span class="sc">{</span>midi_file<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -633,19 +633,19 @@ p {
   color: #c4c4c4; /* mid-lightness text color for title, intended for dark backgrounds */
 }
 
-#section947 midi-player {
+#section782 midi-player {
   display: block;
   width: inherit;
   margin: 4px;
   margin-bottom: 0;
   color: #d4d4d4; /* Lighter text color for better readability */
 }
-#section947 midi-player::part(control-panel) {
+#section782 midi-player::part(control-panel) {
   background: #222; /* Dark background */
   border: 2px solid #888; /* Lightened border color for contrast */
   border-radius: 10px 10px 0 0;
 }
-#section947 midi-player::part(play-button) {
+#section782 midi-player::part(play-button) {
   color: #ffffff; /* White text for visibility */
   border: 2px solid currentColor;
   background-color: #6c7a89; 
@@ -653,17 +653,17 @@ p {
   transition: all 0.2s;
   content: 'hello';
 }
-#section947 midi-player::part(play-button):hover {
+#section782 midi-player::part(play-button):hover {
   color: #00a; 
   background-color: #9fafc9; 
   border-radius: 10px;
 }
-#section947 midi-player::part(time) {
+#section782 midi-player::part(time) {
   font-family: monospace; /* Monospace font for time */
 }
 
 /* Custom visualizer style */
-#section947 midi-visualizer .piano-roll-visualizer {
+#section782 midi-visualizer .piano-roll-visualizer {
   background: #333; /* Dark background for visualizer */
   border: 2px solid #505050; /* Dark border for subtle appearance */
   border-top: none;
@@ -673,33 +673,33 @@ p {
   margin-top: 0;
   overflow: auto;
 }
-#section947 midi-visualizer svg rect.note {
+#section782 midi-visualizer svg rect.note {
   opacity: 0.9; 
   stroke-width: 1; /* Stroke width for note clarity */
 }
 
 /* Different instrument colors */
-#section947 midi-visualizer svg rect.note[data-instrument=&quot;0&quot;]{
+#section782 midi-visualizer svg rect.note[data-instrument=&quot;0&quot;]{
   fill: #7aa6ed; /*  blue for Instrument 0 */
   stroke: #444; 
 }
-#section947 midi-visualizer svg rect.note[data-instrument=&quot;2&quot;]{
+#section782 midi-visualizer svg rect.note[data-instrument=&quot;2&quot;]{
   fill: #d586d0; /* purple for Instrument 2 for consistency */
   stroke: #444; /* White stroke for visibility */
 }
-#section947 midi-visualizer svg rect.note[data-is-drum=&quot;true&quot;]{
+#section782 midi-visualizer svg rect.note[data-is-drum=&quot;true&quot;]{
   fill: brightorange; 
   stroke: #bbb;
 }
-#section947 midi-visualizer svg rect.note.active {
+#section782 midi-visualizer svg rect.note.active {
   opacity: 0.9; /* Highlight active notes */
   stroke: #ddd; /* White stroke for maximum contrast */
   stroke-width: 2; /* Thicker stroke for active notes */
 }
 </style>
 
-          <section id=&quot;section947&quot;><p style=&quot;text-align:left;font-family:Arial;&quot;>midi_file = midi_data/test/jsb_chorale_test_0.mid<span style=&quot;float:right;&quot;><a href=&quot;data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAEhQDAAACQNUAAOUAAPEAAQUCBUzRAADUAADdAADkAAEEAAEhAakZAAEgAaTQAADVAADcAAEVAAEYAajRAADUAADdAAENAAEUAajJAADQAADcAADlAADwAAD5AAEFAAEMAaTkAADpAAD4AAEBAai1AADIAADoAADxAAEAAAEhAgVMtAAAuQABIAABKQGouAAAwQAA6QAA8ADQ5QAA6ADUwAAAyQAA5AAA6QGoyAAA0QGk0AAA1QAA5QAA6AABIQABKAIFUNEAANQAAOQAAPEAAQQAAQ0CBUzQAADVAAEMAAEVAAEgAAEpAgVM1AAA3QAA7QAA8AABDQABFAABKAABMQIFTNwAAOUAAOwAAPEAAQUAAQwAATAAATUBqOQAAOkAAPAAAPkAAQQAAQ0BpOgAAPEAAPgAAQEAATEAATQBqNEAAN0AAPAAAQABqNAAANUAANwAAOUAAQUAAQwAASkAATABpMkAANQAAOQAAPkBqMgAAN0AAO0AAPgCBUzBAADcAADsAADxAAEBAAEEAAEhAAEoAgVMwAAA1QABAAABBQABFQABIAIFTLkAANQAAOkAAPAAARQAASkBqOUAAOgBqLgAAMEAAN0AAOQAAQEAAQQAASEAASgCBUzAAADJAADcAAD5AAEAAAEFAAEZAAEgAaTIAADRAADxAAD4AAEEAAENAajQAADVAAEFAAEMAAEVAAEYAai5AADUAaS4AADBAAENAAEUAgVNAQABBAIFUKUAAMAAAQAAAQUAAQwCDJikAADRAAEEAAENAAEhAgyY0AAA1QABDAABFQABIAIMnMEAANQAAQ0AARQAASECDJilAADAAAEFAAEMAAEVAAEgAhBApAAArQGorAAAtQGktAAAuQGouAAAwQABAQABBAABDQABFAGowAAAyQAA+QABAAGkyAAA0QAA+AGowQAA0AAA6QGkwAAA1QAA5QAA6AABDAABFQGo1AAA3QAA5AAA6QGo3AAA5QAA6AGk5AAA6QAA+QGo6AAA+AABAQABDQABFAGk6QGo5QAA6AGo3QAA5AGk1QAA3AABAAABBQABDAABFQGo0QAA1AGkyQAA0AAA8AAA+QGowQAAyAGouQAAwAABDQABFAGkrQAAuAGorAAAwQAA8QAA+AABAQABBAGk6QAA8AGopQAAwAAA5QAA6AABAAABBQABDAIMmJkAAKQAAOQAAPkAAQQAARUAATUBqJgAAKUAAPEAAPgBqKQAAK0AAOkAAPAAAQ0AARQAATEAATQBpKwAALUBqLQAALkAAQUAAQwAASkAATABpOUAAOgBqLgAAMEAAN0AAOQAAQEAAQQAASEAASgCBUzAAADJAADVAADcAAD5AAEAAAEZAAEgAajIAADRAADUAADdAaTQAADVAADcAADlAADxAAD4AAEVAAEYAai1AADUAADkAai0AAC5AADpAADwAAD5AAENAAEUAaStAAC4ANTlAADoANSsAADBAADdAADkAADxAAD4AgVMpQAAwAAA3AAA5QABBQABDAIMmKQAAOQAAPAAAQQAB/y8A&quot; target=&quot;_blank&quot;>Download MIDI</a><br></span></p>
-          <midi-player src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAEhQDAAACQNUAAOUAAPEAAQUCBUzRAADUAADdAADkAAEEAAEhAakZAAEgAaTQAADVAADcAAEVAAEYAajRAADUAADdAAENAAEUAajJAADQAADcAADlAADwAAD5AAEFAAEMAaTkAADpAAD4AAEBAai1AADIAADoAADxAAEAAAEhAgVMtAAAuQABIAABKQGouAAAwQAA6QAA8ADQ5QAA6ADUwAAAyQAA5AAA6QGoyAAA0QGk0AAA1QAA5QAA6AABIQABKAIFUNEAANQAAOQAAPEAAQQAAQ0CBUzQAADVAAEMAAEVAAEgAAEpAgVM1AAA3QAA7QAA8AABDQABFAABKAABMQIFTNwAAOUAAOwAAPEAAQUAAQwAATAAATUBqOQAAOkAAPAAAPkAAQQAAQ0BpOgAAPEAAPgAAQEAATEAATQBqNEAAN0AAPAAAQABqNAAANUAANwAAOUAAQUAAQwAASkAATABpMkAANQAAOQAAPkBqMgAAN0AAO0AAPgCBUzBAADcAADsAADxAAEBAAEEAAEhAAEoAgVMwAAA1QABAAABBQABFQABIAIFTLkAANQAAOkAAPAAARQAASkBqOUAAOgBqLgAAMEAAN0AAOQAAQEAAQQAASEAASgCBUzAAADJAADcAAD5AAEAAAEFAAEZAAEgAaTIAADRAADxAAD4AAEEAAENAajQAADVAAEFAAEMAAEVAAEYAai5AADUAaS4AADBAAENAAEUAgVNAQABBAIFUKUAAMAAAQAAAQUAAQwCDJikAADRAAEEAAENAAEhAgyY0AAA1QABDAABFQABIAIMnMEAANQAAQ0AARQAASECDJilAADAAAEFAAEMAAEVAAEgAhBApAAArQGorAAAtQGktAAAuQGouAAAwQABAQABBAABDQABFAGowAAAyQAA+QABAAGkyAAA0QAA+AGowQAA0AAA6QGkwAAA1QAA5QAA6AABDAABFQGo1AAA3QAA5AAA6QGo3AAA5QAA6AGk5AAA6QAA+QGo6AAA+AABAQABDQABFAGk6QGo5QAA6AGo3QAA5AGk1QAA3AABAAABBQABDAABFQGo0QAA1AGkyQAA0AAA8AAA+QGowQAAyAGouQAAwAABDQABFAGkrQAAuAGorAAAwQAA8QAA+AABAQABBAGk6QAA8AGopQAAwAAA5QAA6AABAAABBQABDAIMmJkAAKQAAOQAAPkAAQQAARUAATUBqJgAAKUAAPEAAPgBqKQAAK0AAOkAAPAAAQ0AARQAATEAATQBpKwAALUBqLQAALkAAQUAAQwAASkAATABpOUAAOgBqLgAAMEAAN0AAOQAAQEAAQQAASEAASgCBUzAAADJAADVAADcAAD5AAEAAAEZAAEgAajIAADRAADUAADdAaTQAADVAADcAADlAADxAAD4AAEVAAEYAai1AADUAADkAai0AAC5AADpAADwAAD5AAENAAEUAaStAAC4ANTlAADoANSsAADBAADdAADkAADxAAD4AgVMpQAAwAAA3AAA5QABBQABDAIMmKQAAOQAAPAAAQQAB/y8A sound-font visualizer=&quot;#section947 midi-visualizer&quot;></midi-player>
+          <section id=&quot;section782&quot;><p style=&quot;text-align:left;font-family:Arial;&quot;>midi_file = midi_data/test/jsb_chorale_test_0.mid<span style=&quot;float:right;&quot;><a href=&quot;data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAEhQDAAACQNUAAOUAAPEAAQUCBUzRAADUAADdAADkAAEEAAEhAakZAAEgAaTQAADVAADcAAEVAAEYAajRAADUAADdAAENAAEUAajJAADQAADcAADlAADwAAD5AAEFAAEMAaTkAADpAAD4AAEBAai1AADIAADoAADxAAEAAAEhAgVMtAAAuQABIAABKQGouAAAwQAA6QAA8ADQ5QAA6ADUwAAAyQAA5AAA6QGoyAAA0QGk0AAA1QAA5QAA6AABIQABKAIFUNEAANQAAOQAAPEAAQQAAQ0CBUzQAADVAAEMAAEVAAEgAAEpAgVM1AAA3QAA7QAA8AABDQABFAABKAABMQIFTNwAAOUAAOwAAPEAAQUAAQwAATAAATUBqOQAAOkAAPAAAPkAAQQAAQ0BpOgAAPEAAPgAAQEAATEAATQBqNEAAN0AAPAAAQABqNAAANUAANwAAOUAAQUAAQwAASkAATABpMkAANQAAOQAAPkBqMgAAN0AAO0AAPgCBUzBAADcAADsAADxAAEBAAEEAAEhAAEoAgVMwAAA1QABAAABBQABFQABIAIFTLkAANQAAOkAAPAAARQAASkBqOUAAOgBqLgAAMEAAN0AAOQAAQEAAQQAASEAASgCBUzAAADJAADcAAD5AAEAAAEFAAEZAAEgAaTIAADRAADxAAD4AAEEAAENAajQAADVAAEFAAEMAAEVAAEYAai5AADUAaS4AADBAAENAAEUAgVNAQABBAIFUKUAAMAAAQAAAQUAAQwCDJikAADRAAEEAAENAAEhAgyY0AAA1QABDAABFQABIAIMnMEAANQAAQ0AARQAASECDJilAADAAAEFAAEMAAEVAAEgAhBApAAArQGorAAAtQGktAAAuQGouAAAwQABAQABBAABDQABFAGowAAAyQAA+QABAAGkyAAA0QAA+AGowQAA0AAA6QGkwAAA1QAA5QAA6AABDAABFQGo1AAA3QAA5AAA6QGo3AAA5QAA6AGk5AAA6QAA+QGo6AAA+AABAQABDQABFAGk6QGo5QAA6AGo3QAA5AGk1QAA3AABAAABBQABDAABFQGo0QAA1AGkyQAA0AAA8AAA+QGowQAAyAGouQAAwAABDQABFAGkrQAAuAGorAAAwQAA8QAA+AABAQABBAGk6QAA8AGopQAAwAAA5QAA6AABAAABBQABDAIMmJkAAKQAAOQAAPkAAQQAARUAATUBqJgAAKUAAPEAAPgBqKQAAK0AAOkAAPAAAQ0AARQAATEAATQBpKwAALUBqLQAALkAAQUAAQwAASkAATABpOUAAOgBqLgAAMEAAN0AAOQAAQEAAQQAASEAASgCBUzAAADJAADVAADcAAD5AAEAAAEZAAEgAajIAADRAADUAADdAaTQAADVAADcAADlAADxAAD4AAEVAAEYAai1AADUAADkAai0AAC5AADpAADwAAD5AAENAAEUAaStAAC4ANTlAADoANSsAADBAADdAADkAADxAAD4AgVMpQAAwAAA3AAA5QABBQABDAIMmKQAAOQAAPAAAQQAB/y8A&quot; target=&quot;_blank&quot;>Download MIDI</a><br></span></p>
+          <midi-player src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAEhQDAAACQNUAAOUAAPEAAQUCBUzRAADUAADdAADkAAEEAAEhAakZAAEgAaTQAADVAADcAAEVAAEYAajRAADUAADdAAENAAEUAajJAADQAADcAADlAADwAAD5AAEFAAEMAaTkAADpAAD4AAEBAai1AADIAADoAADxAAEAAAEhAgVMtAAAuQABIAABKQGouAAAwQAA6QAA8ADQ5QAA6ADUwAAAyQAA5AAA6QGoyAAA0QGk0AAA1QAA5QAA6AABIQABKAIFUNEAANQAAOQAAPEAAQQAAQ0CBUzQAADVAAEMAAEVAAEgAAEpAgVM1AAA3QAA7QAA8AABDQABFAABKAABMQIFTNwAAOUAAOwAAPEAAQUAAQwAATAAATUBqOQAAOkAAPAAAPkAAQQAAQ0BpOgAAPEAAPgAAQEAATEAATQBqNEAAN0AAPAAAQABqNAAANUAANwAAOUAAQUAAQwAASkAATABpMkAANQAAOQAAPkBqMgAAN0AAO0AAPgCBUzBAADcAADsAADxAAEBAAEEAAEhAAEoAgVMwAAA1QABAAABBQABFQABIAIFTLkAANQAAOkAAPAAARQAASkBqOUAAOgBqLgAAMEAAN0AAOQAAQEAAQQAASEAASgCBUzAAADJAADcAAD5AAEAAAEFAAEZAAEgAaTIAADRAADxAAD4AAEEAAENAajQAADVAAEFAAEMAAEVAAEYAai5AADUAaS4AADBAAENAAEUAgVNAQABBAIFUKUAAMAAAQAAAQUAAQwCDJikAADRAAEEAAENAAEhAgyY0AAA1QABDAABFQABIAIMnMEAANQAAQ0AARQAASECDJilAADAAAEFAAEMAAEVAAEgAhBApAAArQGorAAAtQGktAAAuQGouAAAwQABAQABBAABDQABFAGowAAAyQAA+QABAAGkyAAA0QAA+AGowQAA0AAA6QGkwAAA1QAA5QAA6AABDAABFQGo1AAA3QAA5AAA6QGo3AAA5QAA6AGk5AAA6QAA+QGo6AAA+AABAQABDQABFAGk6QGo5QAA6AGo3QAA5AGk1QAA3AABAAABBQABDAABFQGo0QAA1AGkyQAA0AAA8AAA+QGowQAAyAGouQAAwAABDQABFAGkrQAAuAGorAAAwQAA8QAA+AABAQABBAGk6QAA8AGopQAAwAAA5QAA6AABAAABBQABDAIMmJkAAKQAAOQAAPkAAQQAARUAATUBqJgAAKUAAPEAAPgBqKQAAK0AAOkAAPAAAQ0AARQAATEAATQBpKwAALUBqLQAALkAAQUAAQwAASkAATABpOUAAOgBqLgAAMEAAN0AAOQAAQEAAQQAASEAASgCBUzAAADJAADVAADcAAD5AAEAAAEZAAEgAajIAADRAADUAADdAaTQAADVAADcAADlAADxAAD4AAEVAAEYAai1AADUAADkAai0AAC5AADpAADwAAD5AAENAAEUAaStAAC4ANTlAADoANSsAADBAADdAADkAADxAAD4AgVMpQAAwAAA3AAA5QABBQABDAIMmKQAAOQAAPAAAQQAB/y8A sound-font visualizer=&quot;#section782 midi-visualizer&quot;></midi-player>
           <midi-visualizer src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAEhQDAAACQNUAAOUAAPEAAQUCBUzRAADUAADdAADkAAEEAAEhAakZAAEgAaTQAADVAADcAAEVAAEYAajRAADUAADdAAENAAEUAajJAADQAADcAADlAADwAAD5AAEFAAEMAaTkAADpAAD4AAEBAai1AADIAADoAADxAAEAAAEhAgVMtAAAuQABIAABKQGouAAAwQAA6QAA8ADQ5QAA6ADUwAAAyQAA5AAA6QGoyAAA0QGk0AAA1QAA5QAA6AABIQABKAIFUNEAANQAAOQAAPEAAQQAAQ0CBUzQAADVAAEMAAEVAAEgAAEpAgVM1AAA3QAA7QAA8AABDQABFAABKAABMQIFTNwAAOUAAOwAAPEAAQUAAQwAATAAATUBqOQAAOkAAPAAAPkAAQQAAQ0BpOgAAPEAAPgAAQEAATEAATQBqNEAAN0AAPAAAQABqNAAANUAANwAAOUAAQUAAQwAASkAATABpMkAANQAAOQAAPkBqMgAAN0AAO0AAPgCBUzBAADcAADsAADxAAEBAAEEAAEhAAEoAgVMwAAA1QABAAABBQABFQABIAIFTLkAANQAAOkAAPAAARQAASkBqOUAAOgBqLgAAMEAAN0AAOQAAQEAAQQAASEAASgCBUzAAADJAADcAAD5AAEAAAEFAAEZAAEgAaTIAADRAADxAAD4AAEEAAENAajQAADVAAEFAAEMAAEVAAEYAai5AADUAaS4AADBAAENAAEUAgVNAQABBAIFUKUAAMAAAQAAAQUAAQwCDJikAADRAAEEAAENAAEhAgyY0AAA1QABDAABFQABIAIMnMEAANQAAQ0AARQAASECDJilAADAAAEFAAEMAAEVAAEgAhBApAAArQGorAAAtQGktAAAuQGouAAAwQABAQABBAABDQABFAGowAAAyQAA+QABAAGkyAAA0QAA+AGowQAA0AAA6QGkwAAA1QAA5QAA6AABDAABFQGo1AAA3QAA5AAA6QGo3AAA5QAA6AGk5AAA6QAA+QGo6AAA+AABAQABDQABFAGk6QGo5QAA6AGo3QAA5AGk1QAA3AABAAABBQABDAABFQGo0QAA1AGkyQAA0AAA8AAA+QGowQAAyAGouQAAwAABDQABFAGkrQAAuAGorAAAwQAA8QAA+AABAQABBAGk6QAA8AGopQAAwAAA5QAA6AABAAABBQABDAIMmJkAAKQAAOQAAPkAAQQAARUAATUBqJgAAKUAAPEAAPgBqKQAAK0AAOkAAPAAAQ0AARQAATEAATQBpKwAALUBqLQAALkAAQUAAQwAASkAATABpOUAAOgBqLgAAMEAAN0AAOQAAQEAAQQAASEAASgCBUzAAADJAADVAADcAAD5AAEAAAEZAAEgAajIAADRAADUAADdAaTQAADVAADcAADlAADxAAD4AAEVAAEYAai1AADUAADkAai0AAC5AADpAADwAAD5AAENAAEUAaStAAC4ANTlAADoANSsAADBAADdAADkAADxAAD4AgVMpQAAwAAA3AAA5QABBQABDAIMmKQAAOQAAPAAAQQAB/y8A type=piano-roll></midi-visualizer>
           </section>
           " width="100%" height="360" style="border:none !important;" "allowfullscreen"="" "webkitallowfullscreen"="" "mozallowfullscreen"="">'
@@ -1102,10 +1102,11 @@ Checks pass! :-)</code></pre>
 <span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pm</span>
 <span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> midiplayer(notes_tensor, height<span class="op">=</span><span class="dv">400</span>, time_rescale<span class="op">=</span><span class="va">None</span>, midi_file<span class="op">=</span><span class="st">"/tmp/tmp.mid"</span>, title<span class="op">=</span><span class="st">''</span>):</span>
-<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>    <span class="co">"MIDIplayer that writes input tensor to temporary file"</span></span>
-<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>    pm <span class="op">=</span> notes_to_midi(notes_tensor, time_rescale<span class="op">=</span>time_rescale, out_file<span class="op">=</span>midi_file)</span>
-<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> MIDIPlayer(midi_file, height, styler<span class="op">=</span>dark, dl<span class="op">=</span><span class="va">True</span>, title<span class="op">=</span>title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> midiplayer(notes_tensor, height<span class="op">=</span><span class="dv">400</span>, time_rescale<span class="op">=</span><span class="va">None</span>, midi_file<span class="op">=</span><span class="st">"/tmp/tmp.mid"</span>, title<span class="op">=</span><span class="st">''</span>, styler<span class="op">=</span>dark):</span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>    <span class="co">"MIDIplayer that writes input tensor to temporary file"</span></span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>    pm <span class="op">=</span> notes_to_midi(notes_tensor, time_rescale<span class="op">=</span>time_rescale, out_file<span class="op">=</span>midi_file)</span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> MIDIPlayer(midi_file, height, styler<span class="op">=</span>dark, dl<span class="op">=</span><span class="va">True</span>, title<span class="op">=</span>title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>We’re going to encode &amp; decode, and write to a MIDI file, and play that midi file. Using the same file as above:</p>
@@ -1121,19 +1122,19 @@ p {
   color: #c4c4c4; /* mid-lightness text color for title, intended for dark backgrounds */
 }
 
-#section351 midi-player {
+#section64 midi-player {
   display: block;
   width: inherit;
   margin: 4px;
   margin-bottom: 0;
   color: #d4d4d4; /* Lighter text color for better readability */
 }
-#section351 midi-player::part(control-panel) {
+#section64 midi-player::part(control-panel) {
   background: #222; /* Dark background */
   border: 2px solid #888; /* Lightened border color for contrast */
   border-radius: 10px 10px 0 0;
 }
-#section351 midi-player::part(play-button) {
+#section64 midi-player::part(play-button) {
   color: #ffffff; /* White text for visibility */
   border: 2px solid currentColor;
   background-color: #6c7a89; 
@@ -1141,17 +1142,17 @@ p {
   transition: all 0.2s;
   content: 'hello';
 }
-#section351 midi-player::part(play-button):hover {
+#section64 midi-player::part(play-button):hover {
   color: #00a; 
   background-color: #9fafc9; 
   border-radius: 10px;
 }
-#section351 midi-player::part(time) {
+#section64 midi-player::part(time) {
   font-family: monospace; /* Monospace font for time */
 }
 
 /* Custom visualizer style */
-#section351 midi-visualizer .piano-roll-visualizer {
+#section64 midi-visualizer .piano-roll-visualizer {
   background: #333; /* Dark background for visualizer */
   border: 2px solid #505050; /* Dark border for subtle appearance */
   border-top: none;
@@ -1161,33 +1162,33 @@ p {
   margin-top: 0;
   overflow: auto;
 }
-#section351 midi-visualizer svg rect.note {
+#section64 midi-visualizer svg rect.note {
   opacity: 0.9; 
   stroke-width: 1; /* Stroke width for note clarity */
 }
 
 /* Different instrument colors */
-#section351 midi-visualizer svg rect.note[data-instrument=&quot;0&quot;]{
+#section64 midi-visualizer svg rect.note[data-instrument=&quot;0&quot;]{
   fill: #7aa6ed; /*  blue for Instrument 0 */
   stroke: #444; 
 }
-#section351 midi-visualizer svg rect.note[data-instrument=&quot;2&quot;]{
+#section64 midi-visualizer svg rect.note[data-instrument=&quot;2&quot;]{
   fill: #d586d0; /* purple for Instrument 2 for consistency */
   stroke: #444; /* White stroke for visibility */
 }
-#section351 midi-visualizer svg rect.note[data-is-drum=&quot;true&quot;]{
+#section64 midi-visualizer svg rect.note[data-is-drum=&quot;true&quot;]{
   fill: brightorange; 
   stroke: #bbb;
 }
-#section351 midi-visualizer svg rect.note.active {
+#section64 midi-visualizer svg rect.note.active {
   opacity: 0.9; /* Highlight active notes */
   stroke: #ddd; /* White stroke for maximum contrast */
   stroke-width: 2; /* Thicker stroke for active notes */
 }
 </style>
 
-          <section id=&quot;section351&quot;><p style=&quot;text-align:left;font-family:Arial;&quot;>Encode-Decode Test<span style=&quot;float:right;&quot;><a href=&quot;data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAEhgDAAACQNUAAOUAAPEAAQUCBUzRAADUAADdAADkAAEEAAEhAakZAAEgAaTQAADVAADcAAEVAAEYAajRAADUAADdAAENAAEUAajJAADQAADcAADlAADwAAD5AAEFAAEMAaTkAADpAAD4AAEBAai1AADIAADoAADxAAEAAAEhAgVMtAAAuQABIAABKQGouAAAwQAA6QAA8ADQ5QAA6ADUwAAAyQAA5AAA6QGoyAAA0QGk0AAA1QAA5QAA6AABIQABKAIFUNEAANQAAOQAAPEAAQQAAQ0CBUzQAADVAAEMAAEVAAEgAAEpAgVM1AAA3QAA7QAA8AABDQABFAABKAABMQIFTNwAAOUAAOwAAPEAAQUAAQwAATAAATUBqOQAAOkAAPAAAPkAAQQAAQ0BpOgAAPEAAPgAAQEAATEAATQBqNEAAN0AAPAAAQABqNAAANUAANwAAOUAAQUAAQwAASkAATABpMkAANQAAOQAAPkBqMgAAN0AAO0AAPgCBUzBAADcAADsAADxAAEBAAEEAAEhAAEoAgVMwAAA1QABAAABBQABFQABIAIFTLkAANQAAOkAAPAAARQAASkBqOUAAOgBqLgAAMEAAN0AAOQAAQEAAQQAASEAASgCBUzAAADJAADcAAD5AAEAAAEFAAEZAAEgAaTIAADRAADxAAD4AAEEAAENAajQAADVAAEFAAEMAAEVAAEYAai5AADUAaS4AADBAAENAAEUAgVNAQABBAIFUKUAAMAAAQAAAQUAAQwCDJikAADRAAEEAAENAAEhAgyY0AAA1QABDAABFQABIAIEwPACBdzBAADUAAENAAEUAAEhAgyYpQAAwAABBQABDAABFQABIAIQQKQAAK0BqKwAALUBpLQAALkBqLgAAMEAAQEAAQQAAQ0AARQBqMAAAMkAAPkAAQABpMgAANEAAPgBqMEAANAAAOkBpMAAANUAAOUAAOgAAQwAARUBqNQAAN0AAOQAAOkBqNwAAOUAAOgBpOQAAOkAAPkBqOgAAPgAAQEAAQ0AARQBpOkBqOUAAOgBqN0AAOQBpNUAANwAAQAAAQUAAQwAARUBqNEAANQBpMkAANAAAPkBqMEAAMgBqLkAAMAAAQ0AARQBpK0AALgBqKwAAMEAAPEAAPgAAQEAAQQBpOkAAPABqKUAAMAAAOUAAOgAAQAAAQUAAQwCDJiZAACkAADkAAD5AAEEAAEVAAE1AaiYAAClAADxAAD4AaikAACtAADpAADwAAENAAEUAAExAAE0AaSsAAC1Aai0AAC5AAEFAAEMAAEpAAEwAaTlAADoAai4AADBAADdAADkAAEBAAEEAAEhAAEoAgVMwAAAyQAA1QAA3AAA+QABAAABGQABIAGoyAAA0QAA1AAA3QGk0AAA1QAA3AAA5QAA8QAA+AABFQABGAGotQAA1AAA5AGotAAAuQAA6QAA8AAA+QABDQABFAGkrQAAuADU5QAA6ADUrAAAwQAA3QAA5AAA8QAA+AIFTKUAAMAAANwAAOUAAQUAAQwCDJikAADkAADwAAEEAAf8vAA==&quot; target=&quot;_blank&quot;>Download MIDI</a><br></span></p>
-          <midi-player src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAEhgDAAACQNUAAOUAAPEAAQUCBUzRAADUAADdAADkAAEEAAEhAakZAAEgAaTQAADVAADcAAEVAAEYAajRAADUAADdAAENAAEUAajJAADQAADcAADlAADwAAD5AAEFAAEMAaTkAADpAAD4AAEBAai1AADIAADoAADxAAEAAAEhAgVMtAAAuQABIAABKQGouAAAwQAA6QAA8ADQ5QAA6ADUwAAAyQAA5AAA6QGoyAAA0QGk0AAA1QAA5QAA6AABIQABKAIFUNEAANQAAOQAAPEAAQQAAQ0CBUzQAADVAAEMAAEVAAEgAAEpAgVM1AAA3QAA7QAA8AABDQABFAABKAABMQIFTNwAAOUAAOwAAPEAAQUAAQwAATAAATUBqOQAAOkAAPAAAPkAAQQAAQ0BpOgAAPEAAPgAAQEAATEAATQBqNEAAN0AAPAAAQABqNAAANUAANwAAOUAAQUAAQwAASkAATABpMkAANQAAOQAAPkBqMgAAN0AAO0AAPgCBUzBAADcAADsAADxAAEBAAEEAAEhAAEoAgVMwAAA1QABAAABBQABFQABIAIFTLkAANQAAOkAAPAAARQAASkBqOUAAOgBqLgAAMEAAN0AAOQAAQEAAQQAASEAASgCBUzAAADJAADcAAD5AAEAAAEFAAEZAAEgAaTIAADRAADxAAD4AAEEAAENAajQAADVAAEFAAEMAAEVAAEYAai5AADUAaS4AADBAAENAAEUAgVNAQABBAIFUKUAAMAAAQAAAQUAAQwCDJikAADRAAEEAAENAAEhAgyY0AAA1QABDAABFQABIAIEwPACBdzBAADUAAENAAEUAAEhAgyYpQAAwAABBQABDAABFQABIAIQQKQAAK0BqKwAALUBpLQAALkBqLgAAMEAAQEAAQQAAQ0AARQBqMAAAMkAAPkAAQABpMgAANEAAPgBqMEAANAAAOkBpMAAANUAAOUAAOgAAQwAARUBqNQAAN0AAOQAAOkBqNwAAOUAAOgBpOQAAOkAAPkBqOgAAPgAAQEAAQ0AARQBpOkBqOUAAOgBqN0AAOQBpNUAANwAAQAAAQUAAQwAARUBqNEAANQBpMkAANAAAPkBqMEAAMgBqLkAAMAAAQ0AARQBpK0AALgBqKwAAMEAAPEAAPgAAQEAAQQBpOkAAPABqKUAAMAAAOUAAOgAAQAAAQUAAQwCDJiZAACkAADkAAD5AAEEAAEVAAE1AaiYAAClAADxAAD4AaikAACtAADpAADwAAENAAEUAAExAAE0AaSsAAC1Aai0AAC5AAEFAAEMAAEpAAEwAaTlAADoAai4AADBAADdAADkAAEBAAEEAAEhAAEoAgVMwAAAyQAA1QAA3AAA+QABAAABGQABIAGoyAAA0QAA1AAA3QGk0AAA1QAA3AAA5QAA8QAA+AABFQABGAGotQAA1AAA5AGotAAAuQAA6QAA8AAA+QABDQABFAGkrQAAuADU5QAA6ADUrAAAwQAA3QAA5AAA8QAA+AIFTKUAAMAAANwAAOUAAQUAAQwCDJikAADkAADwAAEEAAf8vAA== sound-font visualizer=&quot;#section351 midi-visualizer&quot;></midi-player>
+          <section id=&quot;section64&quot;><p style=&quot;text-align:left;font-family:Arial;&quot;>Encode-Decode Test<span style=&quot;float:right;&quot;><a href=&quot;data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAEhgDAAACQNUAAOUAAPEAAQUCBUzRAADUAADdAADkAAEEAAEhAakZAAEgAaTQAADVAADcAAEVAAEYAajRAADUAADdAAENAAEUAajJAADQAADcAADlAADwAAD5AAEFAAEMAaTkAADpAAD4AAEBAai1AADIAADoAADxAAEAAAEhAgVMtAAAuQABIAABKQGouAAAwQAA6QAA8ADQ5QAA6ADUwAAAyQAA5AAA6QGoyAAA0QGk0AAA1QAA5QAA6AABIQABKAIFUNEAANQAAOQAAPEAAQQAAQ0CBUzQAADVAAEMAAEVAAEgAAEpAgVM1AAA3QAA7QAA8AABDQABFAABKAABMQIFTNwAAOUAAOwAAPEAAQUAAQwAATAAATUBqOQAAOkAAPAAAPkAAQQAAQ0BpOgAAPEAAPgAAQEAATEAATQBqNEAAN0AAPAAAQABqNAAANUAANwAAOUAAQUAAQwAASkAATABpMkAANQAAOQAAPkBqMgAAN0AAO0AAPgCBUzBAADcAADsAADxAAEBAAEEAAEhAAEoAgVMwAAA1QABAAABBQABFQABIAIFTLkAANQAAOkAAPAAARQAASkBqOUAAOgBqLgAAMEAAN0AAOQAAQEAAQQAASEAASgCBUzAAADJAADcAAD5AAEAAAEFAAEZAAEgAaTIAADRAADxAAD4AAEEAAENAajQAADVAAEFAAEMAAEVAAEYAai5AADUAaS4AADBAAENAAEUAgVNAQABBAIFUKUAAMAAAQAAAQUAAQwCDJikAADRAAEEAAENAAEhAgyY0AAA1QABDAABFQABIAIEwPACBdzBAADUAAENAAEUAAEhAgyYpQAAwAABBQABDAABFQABIAIQQKQAAK0BqKwAALUBpLQAALkBqLgAAMEAAQEAAQQAAQ0AARQBqMAAAMkAAPkAAQABpMgAANEAAPgBqMEAANAAAOkBpMAAANUAAOUAAOgAAQwAARUBqNQAAN0AAOQAAOkBqNwAAOUAAOgBpOQAAOkAAPkBqOgAAPgAAQEAAQ0AARQBpOkBqOUAAOgBqN0AAOQBpNUAANwAAQAAAQUAAQwAARUBqNEAANQBpMkAANAAAPkBqMEAAMgBqLkAAMAAAQ0AARQBpK0AALgBqKwAAMEAAPEAAPgAAQEAAQQBpOkAAPABqKUAAMAAAOUAAOgAAQAAAQUAAQwCDJiZAACkAADkAAD5AAEEAAEVAAE1AaiYAAClAADxAAD4AaikAACtAADpAADwAAENAAEUAAExAAE0AaSsAAC1Aai0AAC5AAEFAAEMAAEpAAEwAaTlAADoAai4AADBAADdAADkAAEBAAEEAAEhAAEoAgVMwAAAyQAA1QAA3AAA+QABAAABGQABIAGoyAAA0QAA1AAA3QGk0AAA1QAA3AAA5QAA8QAA+AABFQABGAGotQAA1AAA5AGotAAAuQAA6QAA8AAA+QABDQABFAGkrQAAuADU5QAA6ADUrAAAwQAA3QAA5AAA8QAA+AIFTKUAAMAAANwAAOUAAQUAAQwCDJikAADkAADwAAEEAAf8vAA==&quot; target=&quot;_blank&quot;>Download MIDI</a><br></span></p>
+          <midi-player src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAEhgDAAACQNUAAOUAAPEAAQUCBUzRAADUAADdAADkAAEEAAEhAakZAAEgAaTQAADVAADcAAEVAAEYAajRAADUAADdAAENAAEUAajJAADQAADcAADlAADwAAD5AAEFAAEMAaTkAADpAAD4AAEBAai1AADIAADoAADxAAEAAAEhAgVMtAAAuQABIAABKQGouAAAwQAA6QAA8ADQ5QAA6ADUwAAAyQAA5AAA6QGoyAAA0QGk0AAA1QAA5QAA6AABIQABKAIFUNEAANQAAOQAAPEAAQQAAQ0CBUzQAADVAAEMAAEVAAEgAAEpAgVM1AAA3QAA7QAA8AABDQABFAABKAABMQIFTNwAAOUAAOwAAPEAAQUAAQwAATAAATUBqOQAAOkAAPAAAPkAAQQAAQ0BpOgAAPEAAPgAAQEAATEAATQBqNEAAN0AAPAAAQABqNAAANUAANwAAOUAAQUAAQwAASkAATABpMkAANQAAOQAAPkBqMgAAN0AAO0AAPgCBUzBAADcAADsAADxAAEBAAEEAAEhAAEoAgVMwAAA1QABAAABBQABFQABIAIFTLkAANQAAOkAAPAAARQAASkBqOUAAOgBqLgAAMEAAN0AAOQAAQEAAQQAASEAASgCBUzAAADJAADcAAD5AAEAAAEFAAEZAAEgAaTIAADRAADxAAD4AAEEAAENAajQAADVAAEFAAEMAAEVAAEYAai5AADUAaS4AADBAAENAAEUAgVNAQABBAIFUKUAAMAAAQAAAQUAAQwCDJikAADRAAEEAAENAAEhAgyY0AAA1QABDAABFQABIAIEwPACBdzBAADUAAENAAEUAAEhAgyYpQAAwAABBQABDAABFQABIAIQQKQAAK0BqKwAALUBpLQAALkBqLgAAMEAAQEAAQQAAQ0AARQBqMAAAMkAAPkAAQABpMgAANEAAPgBqMEAANAAAOkBpMAAANUAAOUAAOgAAQwAARUBqNQAAN0AAOQAAOkBqNwAAOUAAOgBpOQAAOkAAPkBqOgAAPgAAQEAAQ0AARQBpOkBqOUAAOgBqN0AAOQBpNUAANwAAQAAAQUAAQwAARUBqNEAANQBpMkAANAAAPkBqMEAAMgBqLkAAMAAAQ0AARQBpK0AALgBqKwAAMEAAPEAAPgAAQEAAQQBpOkAAPABqKUAAMAAAOUAAOgAAQAAAQUAAQwCDJiZAACkAADkAAD5AAEEAAEVAAE1AaiYAAClAADxAAD4AaikAACtAADpAADwAAENAAEUAAExAAE0AaSsAAC1Aai0AAC5AAEFAAEMAAEpAAEwAaTlAADoAai4AADBAADdAADkAAEBAAEEAAEhAAEoAgVMwAAAyQAA1QAA3AAA+QABAAABGQABIAGoyAAA0QAA1AAA3QGk0AAA1QAA3AAA5QAA8QAA+AABFQABGAGotQAA1AAA5AGotAAAuQAA6QAA8AAA+QABDQABFAGkrQAAuADU5QAA6ADUrAAAwQAA3QAA5AAA8QAA+AIFTKUAAMAAANwAAOUAAQUAAQwCDJikAADkAADwAAEEAAf8vAA== sound-font visualizer=&quot;#section64 midi-visualizer&quot;></midi-player>
           <midi-visualizer src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAEhgDAAACQNUAAOUAAPEAAQUCBUzRAADUAADdAADkAAEEAAEhAakZAAEgAaTQAADVAADcAAEVAAEYAajRAADUAADdAAENAAEUAajJAADQAADcAADlAADwAAD5AAEFAAEMAaTkAADpAAD4AAEBAai1AADIAADoAADxAAEAAAEhAgVMtAAAuQABIAABKQGouAAAwQAA6QAA8ADQ5QAA6ADUwAAAyQAA5AAA6QGoyAAA0QGk0AAA1QAA5QAA6AABIQABKAIFUNEAANQAAOQAAPEAAQQAAQ0CBUzQAADVAAEMAAEVAAEgAAEpAgVM1AAA3QAA7QAA8AABDQABFAABKAABMQIFTNwAAOUAAOwAAPEAAQUAAQwAATAAATUBqOQAAOkAAPAAAPkAAQQAAQ0BpOgAAPEAAPgAAQEAATEAATQBqNEAAN0AAPAAAQABqNAAANUAANwAAOUAAQUAAQwAASkAATABpMkAANQAAOQAAPkBqMgAAN0AAO0AAPgCBUzBAADcAADsAADxAAEBAAEEAAEhAAEoAgVMwAAA1QABAAABBQABFQABIAIFTLkAANQAAOkAAPAAARQAASkBqOUAAOgBqLgAAMEAAN0AAOQAAQEAAQQAASEAASgCBUzAAADJAADcAAD5AAEAAAEFAAEZAAEgAaTIAADRAADxAAD4AAEEAAENAajQAADVAAEFAAEMAAEVAAEYAai5AADUAaS4AADBAAENAAEUAgVNAQABBAIFUKUAAMAAAQAAAQUAAQwCDJikAADRAAEEAAENAAEhAgyY0AAA1QABDAABFQABIAIEwPACBdzBAADUAAENAAEUAAEhAgyYpQAAwAABBQABDAABFQABIAIQQKQAAK0BqKwAALUBpLQAALkBqLgAAMEAAQEAAQQAAQ0AARQBqMAAAMkAAPkAAQABpMgAANEAAPgBqMEAANAAAOkBpMAAANUAAOUAAOgAAQwAARUBqNQAAN0AAOQAAOkBqNwAAOUAAOgBpOQAAOkAAPkBqOgAAPgAAQEAAQ0AARQBpOkBqOUAAOgBqN0AAOQBpNUAANwAAQAAAQUAAQwAARUBqNEAANQBpMkAANAAAPkBqMEAAMgBqLkAAMAAAQ0AARQBpK0AALgBqKwAAMEAAPEAAPgAAQEAAQQBpOkAAPABqKUAAMAAAOUAAOgAAQAAAQUAAQwCDJiZAACkAADkAAD5AAEEAAEVAAE1AaiYAAClAADxAAD4AaikAACtAADpAADwAAENAAEUAAExAAE0AaSsAAC1Aai0AAC5AAEFAAEMAAEpAAEwAaTlAADoAai4AADBAADdAADkAAEBAAEEAAEhAAEoAgVMwAAAyQAA1QAA3AAA+QABAAABGQABIAGoyAAA0QAA1AAA3QGk0AAA1QAA3AAA5QAA8QAA+AABFQABGAGotQAA1AAA5AGotAAAuQAA6QAA8AAA+QABDQABFAGkrQAAuADU5QAA6ADUrAAAwQAA3QAA5AAA8QAA+AIFTKUAAMAAANwAAOUAAQUAAQwCDJikAADkAADwAAEEAAf8vAA== type=piano-roll></midi-visualizer>
           </section>
           " width="100%" height="400" style="border:none !important;" "allowfullscreen"="" "webkitallowfullscreen"="" "mozallowfullscreen"="">'
@@ -3230,21 +3231,100 @@ https://medium.com/data-science-in-your-pocket/music-generation-using-musictrans
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> christmas_ohno(filename, title<span class="op">=</span><span class="st">""</span>, time_rescale<span class="op">=</span><span class="fl">0.242</span><span class="op">/</span><span class="fl">0.2880</span>, debug<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    url <span class="op">=</span> <span class="st">"https://www.mfiles.co.uk/downloads/"</span><span class="op">+</span>filename</span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>wget <span class="op">-</span>qq <span class="op">-</span>N {url}</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> midi_file_to_tensor(filename)</span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> debug: <span class="bu">print</span>(<span class="st">"notes = "</span>,notes)</span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>    notes[:,<span class="dv">1</span>:] <span class="op">=</span> quantize_times(notes[:,<span class="dv">1</span>:]<span class="op">*</span>time_rescale, res_ms<span class="op">=</span><span class="dv">10</span>) <span class="co"># time rescale is mainly to get codebooks to agree</span></span>
-<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    prompt <span class="op">=</span> notes[:<span class="dv">30</span>]</span>
-<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    prompt_tokens <span class="op">=</span> encode(prompt).unsqueeze(<span class="dv">0</span>).to(device)</span>
-<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    set_seeds(<span class="dv">1</span>)</span>
-<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> decode( model.generate(prompt_tokens, max_new_tokens<span class="op">=</span>new_tokens, temperature<span class="op">=</span><span class="fl">0.9</span>)[<span class="dv">0</span>].cpu() )</span>
-<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>    display(midiplayer(notes,title<span class="op">=</span>title))</span>
-<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>christmas_ohno(<span class="st">"jingle-bells-keyboard.mid"</span>, title<span class="op">=</span><span class="st">"Janky Bells"</span>)</span>
-<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>christmas_ohno(<span class="st">"away-in-a-manger.mid"</span>, title<span class="op">=</span><span class="st">"Away in a Mangled"</span>, time_rescale<span class="op">=</span><span class="fl">.48</span><span class="op">/</span><span class="fl">.68</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>xmas_css <span class="op">=</span> <span class="st">'''</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;style&gt;</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="st">/* Custom player style */</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="st">p { </span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="st">  margin: 0; </span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="st">  color: #c4c4c4; /* mid-lightness text color for title, intended for dark backgrounds */</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-player {</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a><span class="st">  display: block;</span></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="st">  width: inherit;</span></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a><span class="st">  margin: 4px;</span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a><span class="st">  margin-bottom: 0;</span></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a><span class="st">  color: #d4d4d4; /* Lighter text color for better readability */</span></span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-player::part(control-panel) {</span></span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a><span class="st">  background: #004400; /* green background */</span></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="st">  border: 2px solid #888; /* Lightened border color for contrast */</span></span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a><span class="st">  border-radius: 10px 10px 0 0;</span></span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-player::part(play-button) {</span></span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a><span class="st">  color: #ffffff; /* White text for visibility */</span></span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a><span class="st">  border: 2px solid currentColor;</span></span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a><span class="st">  background-color: #ff00000; </span></span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a><span class="st">  border-radius: 20px;</span></span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a><span class="st">  transition: all 0.2s;</span></span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a><span class="st">  content: 'hello';</span></span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-player::part(play-button):hover {</span></span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a><span class="st">  color: #a00; </span></span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a><span class="st">  background-color: #9fafc9; </span></span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a><span class="st">  border-radius: 10px;</span></span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-player::part(time) {</span></span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a><span class="st">  font-family: monospace; /* Monospace font for time */</span></span>
+<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a><span class="st">/* Custom visualizer style */</span></span>
+<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer .piano-roll-visualizer {</span></span>
+<span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a><span class="st">  background: #900; /* red background for visualizer */</span></span>
+<span id="cb50-41"><a href="#cb50-41" aria-hidden="true" tabindex="-1"></a><span class="st">  border: 2px solid #505050; /* Dark border for subtle appearance */</span></span>
+<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a><span class="st">  border-top: none;</span></span>
+<span id="cb50-43"><a href="#cb50-43" aria-hidden="true" tabindex="-1"></a><span class="st">  border-radius: 0 0 10px 10px;</span></span>
+<span id="cb50-44"><a href="#cb50-44" aria-hidden="true" tabindex="-1"></a><span class="st">  margin: 4px;</span></span>
+<span id="cb50-45"><a href="#cb50-45" aria-hidden="true" tabindex="-1"></a><span class="st">  width: inherit;</span></span>
+<span id="cb50-46"><a href="#cb50-46" aria-hidden="true" tabindex="-1"></a><span class="st">  margin-top: 0;</span></span>
+<span id="cb50-47"><a href="#cb50-47" aria-hidden="true" tabindex="-1"></a><span class="st">  overflow: auto;</span></span>
+<span id="cb50-48"><a href="#cb50-48" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb50-49"><a href="#cb50-49" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer svg rect.note {</span></span>
+<span id="cb50-50"><a href="#cb50-50" aria-hidden="true" tabindex="-1"></a><span class="st">  opacity: 0.9; </span></span>
+<span id="cb50-51"><a href="#cb50-51" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke-width: 1; /* Stroke width for note clarity */</span></span>
+<span id="cb50-52"><a href="#cb50-52" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb50-53"><a href="#cb50-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-54"><a href="#cb50-54" aria-hidden="true" tabindex="-1"></a><span class="st">/* Different instrument colors */</span></span>
+<span id="cb50-55"><a href="#cb50-55" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer svg rect.note[data-instrument="0"]{</span></span>
+<span id="cb50-56"><a href="#cb50-56" aria-hidden="true" tabindex="-1"></a><span class="st">  fill: #00f000; /* Green for Instrument 0 */</span></span>
+<span id="cb50-57"><a href="#cb50-57" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke: #444; </span></span>
+<span id="cb50-58"><a href="#cb50-58" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb50-59"><a href="#cb50-59" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer svg rect.note[data-instrument="2"]{</span></span>
+<span id="cb50-60"><a href="#cb50-60" aria-hidden="true" tabindex="-1"></a><span class="st">  fill: #008000; /* Green for Instrument 2 */</span></span>
+<span id="cb50-61"><a href="#cb50-61" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke: #444;</span></span>
+<span id="cb50-62"><a href="#cb50-62" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb50-63"><a href="#cb50-63" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer svg rect.note[data-is-drum="true"]{</span></span>
+<span id="cb50-64"><a href="#cb50-64" aria-hidden="true" tabindex="-1"></a><span class="st">  fill: #008000; /* Green for drum notes */</span></span>
+<span id="cb50-65"><a href="#cb50-65" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke: #bbb;</span></span>
+<span id="cb50-66"><a href="#cb50-66" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb50-67"><a href="#cb50-67" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer svg rect.note.active {</span></span>
+<span id="cb50-68"><a href="#cb50-68" aria-hidden="true" tabindex="-1"></a><span class="st">  opacity: 0.9; /* Highlight active notes */</span></span>
+<span id="cb50-69"><a href="#cb50-69" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke: #ffffff; /* White stroke for maximum contrast */</span></span>
+<span id="cb50-70"><a href="#cb50-70" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke-width: 2; /* Thicker stroke for active notes */</span></span>
+<span id="cb50-71"><a href="#cb50-71" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb50-72"><a href="#cb50-72" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;/style&gt;</span></span>
+<span id="cb50-73"><a href="#cb50-73" aria-hidden="true" tabindex="-1"></a><span class="st">'''</span></span>
+<span id="cb50-74"><a href="#cb50-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-75"><a href="#cb50-75" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> xmasplayer(notes_tensor, height<span class="op">=</span><span class="dv">400</span>, time_rescale<span class="op">=</span><span class="va">None</span>, midi_file<span class="op">=</span><span class="st">"/tmp/tmp.mid"</span>, title<span class="op">=</span><span class="st">''</span>, styler<span class="op">=</span>general, css<span class="op">=</span>xmas_css):</span>
+<span id="cb50-76"><a href="#cb50-76" aria-hidden="true" tabindex="-1"></a>    <span class="co">"MIDIplayer that writes input tensor to temporary file"</span></span>
+<span id="cb50-77"><a href="#cb50-77" aria-hidden="true" tabindex="-1"></a>    pm <span class="op">=</span> notes_to_midi(notes_tensor, time_rescale<span class="op">=</span>time_rescale, out_file<span class="op">=</span>midi_file)</span>
+<span id="cb50-78"><a href="#cb50-78" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> MIDIPlayer(midi_file, height, styler<span class="op">=</span>partial(styler, css<span class="op">=</span>css), dl<span class="op">=</span><span class="va">True</span>, title<span class="op">=</span>title)</span>
+<span id="cb50-79"><a href="#cb50-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-80"><a href="#cb50-80" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> christmas_ohno(filename, title<span class="op">=</span><span class="st">""</span>, time_rescale<span class="op">=</span><span class="fl">0.242</span><span class="op">/</span><span class="fl">0.2880</span>, debug<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb50-81"><a href="#cb50-81" aria-hidden="true" tabindex="-1"></a>    url <span class="op">=</span> <span class="st">"https://www.mfiles.co.uk/downloads/"</span><span class="op">+</span>filename</span>
+<span id="cb50-82"><a href="#cb50-82" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>wget <span class="op">-</span>qq <span class="op">-</span>N {url}</span>
+<span id="cb50-83"><a href="#cb50-83" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb50-84"><a href="#cb50-84" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> midi_file_to_tensor(filename)</span>
+<span id="cb50-85"><a href="#cb50-85" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> debug: <span class="bu">print</span>(<span class="st">"notes = "</span>,notes)</span>
+<span id="cb50-86"><a href="#cb50-86" aria-hidden="true" tabindex="-1"></a>    notes[:,<span class="dv">1</span>:] <span class="op">=</span> quantize_times(notes[:,<span class="dv">1</span>:]<span class="op">*</span>time_rescale, res_ms<span class="op">=</span><span class="dv">10</span>) <span class="co"># time rescale is mainly to get codebooks to agree</span></span>
+<span id="cb50-87"><a href="#cb50-87" aria-hidden="true" tabindex="-1"></a>    prompt <span class="op">=</span> notes[:<span class="dv">30</span>]</span>
+<span id="cb50-88"><a href="#cb50-88" aria-hidden="true" tabindex="-1"></a>    prompt_tokens <span class="op">=</span> encode(prompt).unsqueeze(<span class="dv">0</span>).to(device)</span>
+<span id="cb50-89"><a href="#cb50-89" aria-hidden="true" tabindex="-1"></a>    set_seeds(<span class="dv">1</span>)</span>
+<span id="cb50-90"><a href="#cb50-90" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> decode( model.generate(prompt_tokens, max_new_tokens<span class="op">=</span>new_tokens, temperature<span class="op">=</span><span class="fl">0.9</span>)[<span class="dv">0</span>].cpu() )</span>
+<span id="cb50-91"><a href="#cb50-91" aria-hidden="true" tabindex="-1"></a>    display(xmasplayer(notes,title<span class="op">=</span>title))</span>
+<span id="cb50-92"><a href="#cb50-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-93"><a href="#cb50-93" aria-hidden="true" tabindex="-1"></a>christmas_ohno(<span class="st">"jingle-bells-keyboard.mid"</span>, title<span class="op">=</span><span class="st">"Janky Bells"</span>)</span>
+<span id="cb50-94"><a href="#cb50-94" aria-hidden="true" tabindex="-1"></a>christmas_ohno(<span class="st">"away-in-a-manger.mid"</span>, title<span class="op">=</span><span class="st">"Away in a Mangled"</span>, time_rescale<span class="op">=</span><span class="fl">.48</span><span class="op">/</span><span class="fl">.68</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <iframe srcdoc="<script src=&quot;https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0&quot;></script>
@@ -3252,7 +3332,7 @@ https://medium.com/data-science-in-your-pocket/music-generation-using-musictrans
 <style>
 /* Custom player style */
 p { 
-  margin:0; 
+  margin: 0; 
   color: #c4c4c4; /* mid-lightness text color for title, intended for dark backgrounds */
 }
 
@@ -3264,20 +3344,20 @@ p {
   color: #d4d4d4; /* Lighter text color for better readability */
 }
 #section137 midi-player::part(control-panel) {
-  background: #222; /* Dark background */
+  background: #004400; /* green background */
   border: 2px solid #888; /* Lightened border color for contrast */
   border-radius: 10px 10px 0 0;
 }
 #section137 midi-player::part(play-button) {
   color: #ffffff; /* White text for visibility */
   border: 2px solid currentColor;
-  background-color: #6c7a89; 
+  background-color: #ff00000; 
   border-radius: 20px;
   transition: all 0.2s;
   content: 'hello';
 }
 #section137 midi-player::part(play-button):hover {
-  color: #00a; 
+  color: #a00; 
   background-color: #9fafc9; 
   border-radius: 10px;
 }
@@ -3287,7 +3367,7 @@ p {
 
 /* Custom visualizer style */
 #section137 midi-visualizer .piano-roll-visualizer {
-  background: #333; /* Dark background for visualizer */
+  background: #900; /* red background for visualizer */
   border: 2px solid #505050; /* Dark border for subtle appearance */
   border-top: none;
   border-radius: 0 0 10px 10px;
@@ -3303,20 +3383,20 @@ p {
 
 /* Different instrument colors */
 #section137 midi-visualizer svg rect.note[data-instrument=&quot;0&quot;]{
-  fill: #7aa6ed; /*  blue for Instrument 0 */
+  fill: #00f000; /* Green for Instrument 0 */
   stroke: #444; 
 }
 #section137 midi-visualizer svg rect.note[data-instrument=&quot;2&quot;]{
-  fill: #d586d0; /* purple for Instrument 2 for consistency */
-  stroke: #444; /* White stroke for visibility */
+  fill: #008000; /* Green for Instrument 2 */
+  stroke: #444;
 }
 #section137 midi-visualizer svg rect.note[data-is-drum=&quot;true&quot;]{
-  fill: brightorange; 
+  fill: #008000; /* Green for drum notes */
   stroke: #bbb;
 }
 #section137 midi-visualizer svg rect.note.active {
   opacity: 0.9; /* Highlight active notes */
-  stroke: #ddd; /* White stroke for maximum contrast */
+  stroke: #ffffff; /* White stroke for maximum contrast */
   stroke-width: 2; /* Thicker stroke for active notes */
 }
 </style>
@@ -3334,7 +3414,7 @@ p {
 <style>
 /* Custom player style */
 p { 
-  margin:0; 
+  margin: 0; 
   color: #c4c4c4; /* mid-lightness text color for title, intended for dark backgrounds */
 }
 
@@ -3346,20 +3426,20 @@ p {
   color: #d4d4d4; /* Lighter text color for better readability */
 }
 #section137 midi-player::part(control-panel) {
-  background: #222; /* Dark background */
+  background: #004400; /* green background */
   border: 2px solid #888; /* Lightened border color for contrast */
   border-radius: 10px 10px 0 0;
 }
 #section137 midi-player::part(play-button) {
   color: #ffffff; /* White text for visibility */
   border: 2px solid currentColor;
-  background-color: #6c7a89; 
+  background-color: #ff00000; 
   border-radius: 20px;
   transition: all 0.2s;
   content: 'hello';
 }
 #section137 midi-player::part(play-button):hover {
-  color: #00a; 
+  color: #a00; 
   background-color: #9fafc9; 
   border-radius: 10px;
 }
@@ -3369,7 +3449,7 @@ p {
 
 /* Custom visualizer style */
 #section137 midi-visualizer .piano-roll-visualizer {
-  background: #333; /* Dark background for visualizer */
+  background: #900; /* red background for visualizer */
   border: 2px solid #505050; /* Dark border for subtle appearance */
   border-top: none;
   border-radius: 0 0 10px 10px;
@@ -3385,20 +3465,20 @@ p {
 
 /* Different instrument colors */
 #section137 midi-visualizer svg rect.note[data-instrument=&quot;0&quot;]{
-  fill: #7aa6ed; /*  blue for Instrument 0 */
+  fill: #00f000; /* Green for Instrument 0 */
   stroke: #444; 
 }
 #section137 midi-visualizer svg rect.note[data-instrument=&quot;2&quot;]{
-  fill: #d586d0; /* purple for Instrument 2 for consistency */
-  stroke: #444; /* White stroke for visibility */
+  fill: #008000; /* Green for Instrument 2 */
+  stroke: #444;
 }
 #section137 midi-visualizer svg rect.note[data-is-drum=&quot;true&quot;]{
-  fill: brightorange; 
+  fill: #008000; /* Green for drum notes */
   stroke: #bbb;
 }
 #section137 midi-visualizer svg rect.note.active {
   opacity: 0.9; /* Highlight active notes */
-  stroke: #ddd; /* White stroke for maximum contrast */
+  stroke: #ffffff; /* White stroke for maximum contrast */
   stroke-width: 2; /* Thicker stroke for active notes */
 }
 </style>
@@ -3419,7 +3499,7 @@ p {
 <style>
 /* Custom player style */
 p { 
-  margin:0; 
+  margin: 0; 
   color: #c4c4c4; /* mid-lightness text color for title, intended for dark backgrounds */
 }
 
@@ -3431,20 +3511,20 @@ p {
   color: #d4d4d4; /* Lighter text color for better readability */
 }
 #section137 midi-player::part(control-panel) {
-  background: #222; /* Dark background */
+  background: #004400; /* green background */
   border: 2px solid #888; /* Lightened border color for contrast */
   border-radius: 10px 10px 0 0;
 }
 #section137 midi-player::part(play-button) {
   color: #ffffff; /* White text for visibility */
   border: 2px solid currentColor;
-  background-color: #6c7a89; 
+  background-color: #ff00000; 
   border-radius: 20px;
   transition: all 0.2s;
   content: 'hello';
 }
 #section137 midi-player::part(play-button):hover {
-  color: #00a; 
+  color: #a00; 
   background-color: #9fafc9; 
   border-radius: 10px;
 }
@@ -3454,7 +3534,7 @@ p {
 
 /* Custom visualizer style */
 #section137 midi-visualizer .piano-roll-visualizer {
-  background: #333; /* Dark background for visualizer */
+  background: #900; /* red background for visualizer */
   border: 2px solid #505050; /* Dark border for subtle appearance */
   border-top: none;
   border-radius: 0 0 10px 10px;
@@ -3470,20 +3550,20 @@ p {
 
 /* Different instrument colors */
 #section137 midi-visualizer svg rect.note[data-instrument=&quot;0&quot;]{
-  fill: #7aa6ed; /*  blue for Instrument 0 */
+  fill: #00f000; /* Green for Instrument 0 */
   stroke: #444; 
 }
 #section137 midi-visualizer svg rect.note[data-instrument=&quot;2&quot;]{
-  fill: #d586d0; /* purple for Instrument 2 for consistency */
-  stroke: #444; /* White stroke for visibility */
+  fill: #008000; /* Green for Instrument 2 */
+  stroke: #444;
 }
 #section137 midi-visualizer svg rect.note[data-is-drum=&quot;true&quot;]{
-  fill: brightorange; 
+  fill: #008000; /* Green for drum notes */
   stroke: #bbb;
 }
 #section137 midi-visualizer svg rect.note.active {
   opacity: 0.9; /* Highlight active notes */
-  stroke: #ddd; /* White stroke for maximum contrast */
+  stroke: #ffffff; /* White stroke for maximum contrast */
   stroke-width: 2; /* Thicker stroke for active notes */
 }
 </style>
