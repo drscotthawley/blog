@@ -252,8 +252,8 @@ details > summary {
   <li><a href="#evaluate-the-model" id="toc-evaluate-the-model" class="nav-link" data-scroll-target="#evaluate-the-model"><span class="header-section-number">8</span> Evaluate the Model</a>
   <ul class="collapse">
   <li><a href="#sample-generations" id="toc-sample-generations" class="nav-link" data-scroll-target="#sample-generations"><span class="header-section-number">8.1</span> Sample Generations</a></li>
-  <li><a href="#accuracy-score" id="toc-accuracy-score" class="nav-link" data-scroll-target="#accuracy-score"><span class="header-section-number">8.2</span> Accuracy Score</a></li>
-  <li><a href="#perplexity-score" id="toc-perplexity-score" class="nav-link" data-scroll-target="#perplexity-score"><span class="header-section-number">8.3</span> Perplexity Score</a></li>
+  <li><a href="#perplexity-score" id="toc-perplexity-score" class="nav-link" data-scroll-target="#perplexity-score"><span class="header-section-number">8.2</span> Perplexity Score</a></li>
+  <li><a href="#accuracy-score" id="toc-accuracy-score" class="nav-link" data-scroll-target="#accuracy-score"><span class="header-section-number">8.3</span> Accuracy Score</a></li>
   <li><a href="#data-distributions" id="toc-data-distributions" class="nav-link" data-scroll-target="#data-distributions"><span class="header-section-number">8.4</span> Data Distributions</a></li>
   </ul></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">9</span> Summary</a></li>
@@ -3036,13 +3036,8 @@ p {
 </div>
 </div>
 </section>
-<section id="accuracy-score" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="accuracy-score"><span class="header-section-number">8.2</span> Accuracy Score</h2>
-<p>This is pretty simple: How often did the model guess the “correct” next note?</p>
-<p>TODO</p>
-</section>
-<section id="perplexity-score" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="perplexity-score"><span class="header-section-number">8.3</span> Perplexity Score</h2>
+<section id="perplexity-score" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="perplexity-score"><span class="header-section-number">8.2</span> Perplexity Score</h2>
 <p>“<a href="https://blog.echen.me/2021/12/23/a-laymans-introduction-to-perplexity-in-nlp/">Perplexity</a>” is a common metric for language models which comes from the field of information theory. It is often described as a measure of how “surprised” your model is by novel data.</p>
 <p>Operationally, it’s just the exponential of the value of the loss function – like, …yea, that’s it.</p>
 <p>Why do people report perplexity instead of just the loss value (since the exponential function is monotonic)? Well…because of custom, and because perplexity has some natural relation to entropy, and because it relates to something called the “branching factor” of a language… but “because custom” is enough.</p>
@@ -3073,54 +3068,58 @@ p {
 </div>
 <p>Interesting. That seems really low. Perhaps all it means is that once you’ve seen a couple hundred Bach chorales, new ones aren’t very surprising! ;-)</p>
 </section>
+<section id="accuracy-score" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="accuracy-score"><span class="header-section-number">8.3</span> Accuracy Score</h2>
+<p>This is pretty simple: How often did the model guess the “correct” next note?</p>
+<p>TODO</p>
+</section>
 <section id="data-distributions" class="level2" data-number="8.4">
 <h2 data-number="8.4" class="anchored" data-anchor-id="data-distributions"><span class="header-section-number">8.4</span> Data Distributions</h2>
 <p>Let’s compare statistics of true points vs.&nbsp;generated points. We’ll generate a lot of data, and then compare histograms:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate a big batch of fake data. </span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="co"># this is SUPER slow but could be optimized</span></span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>prompt_len <span class="op">=</span> <span class="dv">12</span></span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>new_notes_list <span class="op">=</span> []</span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, notes <span class="kw">in</span> <span class="bu">enumerate</span>(tqdm(test_notes_tl, ncols<span class="op">=</span><span class="dv">100</span>)): <span class="co"># this is gonna take a little while</span></span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>    ptoks <span class="op">=</span> encode(notes[:prompt_len]).unsqueeze(<span class="dv">0</span>).to(device)</span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>    new_notes_list.append( decode( model.generate(ptoks, max_new_tokens<span class="op">=</span><span class="dv">130</span>)[<span class="dv">0</span>].cpu() ) )</span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>all_new_notes <span class="op">=</span> torch.vstack(new_notes_list).<span class="bu">type</span>(torch.float32)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>all_test_notes <span class="op">=</span> torch.vstack(test_notes_tl).<span class="bu">type</span>(torch.float32)</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>all_test_notes <span class="op">=</span> all_test_notes[:<span class="bu">len</span>(all_test_notes)<span class="op">//</span><span class="dv">4</span>]  <span class="co"># to save time, let's not do stats on ALL-all of them, just a quarter</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="co"># generate a big batch of fake data. this is super slow because our generator only works for batches of one, oops</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>prompt_len, max_new_tokens <span class="op">=</span> <span class="dv">12</span>, <span class="dv">55</span>   <span class="co"># I just made these numbers up. not great science yet, sorry.</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>new_notes_list <span class="op">=</span> []</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Generating new notes..."</span>) </span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, notes <span class="kw">in</span> <span class="bu">enumerate</span>(tqdm(test_notes_tl, ncols<span class="op">=</span><span class="dv">100</span>)): <span class="co"># this is gonna take a little while</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>    ptoks <span class="op">=</span> encode(notes[:prompt_len]).unsqueeze(<span class="dv">0</span>).to(device)</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>    new_notes_list.append( decode( model.generate(ptoks, max_new_tokens<span class="op">=</span>max_new_tokens)[<span class="dv">0</span>].cpu()[prompt_len:] ) )</span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>all_new_notes <span class="op">=</span> torch.vstack(new_notes_list).<span class="bu">type</span>(torch.float32)</span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"all_test_notes.shape, all_new_notes.shape  = "</span>,all_test_notes.shape, all_new_notes.shape )</span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> [<span class="st">'pitch'</span>, <span class="st">'step'</span>, <span class="st">'duration'</span>]</span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>    bins <span class="op">=</span> <span class="dv">32</span> <span class="cf">if</span> i <span class="op">!=</span><span class="dv">0</span> <span class="cf">else</span> <span class="fl">0.5</span> <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>np.arange(<span class="dv">128</span><span class="op">//</span><span class="dv">2</span>) </span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a>    ax[i].hist(all_test_notes[:,i].numpy(), bins<span class="op">=</span>bins, label<span class="op">=</span><span class="st">'test data'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a>    ax[i].hist(all_new_notes[:,i].numpy(),  bins<span class="op">=</span>bins, label<span class="op">=</span><span class="st">'generated'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a>    ax[i].set_title(names[i])</span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">==</span><span class="dv">2</span>: ax[i].legend()</span>
+<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a>    ax[i].set_xlabel(<span class="st">'Value'</span>)</span>
+<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">==</span><span class="dv">0</span>: ax[i].set_ylabel(<span class="st">'Frequency'</span>)</span>
+<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generating new notes...
+all_test_notes.shape, all_new_notes.shape  =  torch.Size([4159, 3]) torch.Size([4235, 3])</code></pre>
+</div>
 <div class="cell-output cell-output-stderr">
-<pre><code>100%|███████████████████████████████████████████████████████████████| 77/77 [05:02&lt;00:00,  3.93s/it]</code></pre>
+<pre><code>100%|███████████████████████████████████████████████████████████████| 77/77 [02:06&lt;00:00,  1.65s/it]</code></pre>
 </div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>all_test_notes <span class="op">=</span> torch.vstack(test_notes_tl).<span class="bu">type</span>(torch.float32)</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="co"># generate a big batch of fake data. this is super slow but could be optimized</span></span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">False</span>:</span>
-<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    prompt_len <span class="op">=</span> <span class="dv">12</span></span>
-<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    new_notes_list <span class="op">=</span> []</span>
-<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, notes <span class="kw">in</span> <span class="bu">enumerate</span>(tqdm(test_notes_tl, ncols<span class="op">=</span><span class="dv">100</span>)): <span class="co"># this is gonna take a little while</span></span>
-<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>        ptoks <span class="op">=</span> encode(notes[:prompt_len]).unsqueeze(<span class="dv">0</span>).to(device)</span>
-<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>        new_notes_list.append( decode( model.generate(ptoks, max_new_tokens<span class="op">=</span><span class="dv">130</span>)[<span class="dv">0</span>].cpu() ) )</span>
-<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>    all_new_notes <span class="op">=</span> torch.vstack(new_notes_list).<span class="bu">type</span>(torch.float32)</span>
-<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
-<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> [<span class="st">'pitch'</span>, <span class="st">'step'</span>, <span class="st">'duration'</span>]</span>
-<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
-<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>    ax[i].hist(all_test_notes[:,i].numpy(), bins<span class="op">=</span><span class="dv">32</span>, label<span class="op">=</span><span class="st">'test'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
-<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>    ax[i].hist(all_new_notes[:,i].numpy(),  bins<span class="op">=</span><span class="dv">32</span>, label<span class="op">=</span><span class="st">'predicted'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
-<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a>    ax[i].set_title(names[i])</span>
-<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">==</span><span class="dv">2</span>: ax[i].legend()</span>
-<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="Transformers2-MusicBox_files/figure-html/cell-32-output-1.png" class="img-fluid"></p>
+<p><img src="Transformers2-MusicBox_files/figure-html/cell-31-output-3.png" class="img-fluid"></p>
 </div>
 </div>
-<p>Interesting that the overall shapes of the pitches histograms agree, but that the true data has “stripes” carved out of it – presumably keys preferred by the composer – whereas the generated pitches seem to continuously fill in the range.</p>
-<p>The steps look reasonably similar, but – hey! Why is it that the durations of the predicted values all seem to be slightly larger (i.e.&nbsp;shifted one to the right) compared to the true test data? That’s pretty “sus”, and merits more careful checking later. For now, I need to finish this up.</p>
+<p>Hey! The generated and test data distributions look prety similar. I’m curious why the <code>step</code> values seem to be shifted to the right in the generated data; that’s a bit “sus” to me. But, that’ll be an investigation for another time. We need to wrap this up!</p>
 </section>
 </section>
 <section id="summary" class="level1" data-number="9">
