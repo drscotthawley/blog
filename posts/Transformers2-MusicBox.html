@@ -259,7 +259,7 @@ details > summary {
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">9</span> Summary</a></li>
   <li><a href="#sec-further" id="toc-sec-further" class="nav-link" data-scroll-target="#sec-further"><span class="header-section-number">10</span> Ideas for Further Exploration</a>
   <ul class="collapse">
-  <li><a href="#change-the-hyperparamters" id="toc-change-the-hyperparamters" class="nav-link" data-scroll-target="#change-the-hyperparamters"><span class="header-section-number">10.1</span> Change the Hyperparamters</a></li>
+  <li><a href="#change-hyperparamters-dataset" id="toc-change-hyperparamters-dataset" class="nav-link" data-scroll-target="#change-hyperparamters-dataset"><span class="header-section-number">10.1</span> Change Hyperparamters / Dataset</a></li>
   <li><a href="#report-individual-parts-of-the-loss" id="toc-report-individual-parts-of-the-loss" class="nav-link" data-scroll-target="#report-individual-parts-of-the-loss"><span class="header-section-number">10.2</span> Report Individual Parts of the Loss</a></li>
   <li><a href="#improving-generation-by-implementing-beam-search" id="toc-improving-generation-by-implementing-beam-search" class="nav-link" data-scroll-target="#improving-generation-by-implementing-beam-search"><span class="header-section-number">10.3</span> Improving Generation by Implementing Beam Search</a></li>
   <li><a href="#using-huggingfaces-transformers-instead" id="toc-using-huggingfaces-transformers-instead" class="nav-link" data-scroll-target="#using-huggingfaces-transformers-instead"><span class="header-section-number">10.4</span> Using Huggingface’s <code>transformers</code> instead</a></li>
@@ -3099,7 +3099,7 @@ p {
 # of test notes = 4159,  # of generated notes = 4158 --- Close enough!</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>100%|███████████████████████████████████████████████████████████████| 77/77 [02:03&lt;00:00,  1.60s/it]</code></pre>
+<pre><code>100%|███████████████████████████████████████████████████████████████| 77/77 [02:10&lt;00:00,  1.70s/it]</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <p><img src="Transformers2-MusicBox_files/figure-html/cell-30-output-3.png" class="img-fluid"></p>
@@ -3121,9 +3121,9 @@ The following are some ideas for taking this lesson further.
 <summary>
 Details
 </summary>
-<section id="change-the-hyperparamters" class="level2" data-number="10.1">
-<h2 data-number="10.1" class="anchored" data-anchor-id="change-the-hyperparamters"><span class="header-section-number">10.1</span> Change the Hyperparamters</h2>
-<p>I did a <em>lot</em> of that already. Now it’s your turn. Maybe even trying WandB’s Sweeps feature. Here’s one suggestion:</p>
+<section id="change-hyperparamters-dataset" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="change-hyperparamters-dataset"><span class="header-section-number">10.1</span> Change Hyperparamters / Dataset</h2>
+<p>I tried a <em>lot</em> of hyperparameter tuning already. Now it’s your turn. Maybe even trying WandB’s <a href="https://docs.wandb.ai/guides/sweeps">“Sweeps”</a>feature. Here’s a <code>config</code> suggestion <a href="https://wandb.ai/drscotthawley/musicbox-maestro-tutorial?workspace=user-drscotthawley">that I used for the MAESTRO dataset</a>:</p>
 <div class="cell">
 <details>
 <summary>Watch out, there’s a Monster in this code!</summary>
