@@ -490,7 +490,7 @@ Details
 <div id="fig-norm-types" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="https://production-media.paperswithcode.com/methods/Screen_Shot_2020-05-19_at_4.24.42_PM.png" class="img-ln img-fluid figure-img"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;6<strong>.</strong> (Mouse-over or press to expand.) Batch normalization vs.&nbsp;Layer normalization. Source: TODO</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;6<strong>.</strong> (Mouse-over or press to expand.) Batch normalization vs.&nbsp;Layer normalization. (Source: <a href="https://paperswithcode.com/method/layer-normalization">PapersWithCode</a>.)</figcaption>
 </figure>
 </div>
 <p>One big advantage of doing our normalization across layers instead of batches is that <em>it allows for small batch sizes.</em> Language models are often <em>large</em>, so they take up a lot of memory, which means you might need very small batches. But small batches will not allow you to do very good batch normalization. So, LayerNorm helps us get good statistics for the mean and variance that we use to normalize.</p>
