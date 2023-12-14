@@ -3230,14 +3230,21 @@ https://medium.com/data-science-in-your-pocket/music-generation-using-musictrans
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget <span class="op">-</span>qq <span class="op">-</span>N https:<span class="op">//</span>www.mfiles.co.uk<span class="op">/</span>downloads<span class="op">/</span>jingle<span class="op">-</span>bells<span class="op">-</span>keyboard.mid</span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>notes <span class="op">=</span> midi_file_to_tensor(<span class="st">"jingle-bells-keyboard.mid"</span>)</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="co"># yea I figured out the time rescaling to make the codebooks work out...;)</span></span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>notes[:,<span class="dv">1</span>:] <span class="op">=</span> quantize_times(notes[:,<span class="dv">1</span>:]<span class="op">*</span> <span class="fl">0.242</span> <span class="op">/</span> <span class="fl">0.2880</span>, res_ms<span class="op">=</span><span class="dv">10</span>) </span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> notes[:<span class="dv">30</span>]</span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>display(midiplayer(prompt, title<span class="op">=</span><span class="st">"Jingle Bells Prompt"</span>))</span>
-<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>prompt_tokens <span class="op">=</span> encode(prompt).unsqueeze(<span class="dv">0</span>).to(device)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> christmas_ohno(filename, title<span class="op">=</span><span class="st">""</span>, time_rescale<span class="op">=</span><span class="fl">0.242</span><span class="op">/</span><span class="fl">0.2880</span>, debug<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    url <span class="op">=</span> <span class="st">"https://www.mfiles.co.uk/downloads/"</span><span class="op">+</span>filename</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>wget <span class="op">-</span>qq <span class="op">-</span>N {url}</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> midi_file_to_tensor(filename)</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> debug: <span class="bu">print</span>(<span class="st">"notes = "</span>,notes)</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>    notes[:,<span class="dv">1</span>:] <span class="op">=</span> quantize_times(notes[:,<span class="dv">1</span>:]<span class="op">*</span>time_rescale, res_ms<span class="op">=</span><span class="dv">10</span>) <span class="co"># time rescale is mainly to get codebooks to agree</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    prompt <span class="op">=</span> notes[:<span class="dv">30</span>]</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>    prompt_tokens <span class="op">=</span> encode(prompt).unsqueeze(<span class="dv">0</span>).to(device)</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    set_seeds(<span class="dv">1</span>)</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> decode( model.generate(prompt_tokens, max_new_tokens<span class="op">=</span>new_tokens, temperature<span class="op">=</span><span class="fl">0.9</span>)[<span class="dv">0</span>].cpu() )</span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>    display(midiplayer(notes,title<span class="op">=</span>title))</span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>christmas_ohno(<span class="st">"jingle-bells-keyboard.mid"</span>, title<span class="op">=</span><span class="st">"Janky Bells"</span>)</span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>christmas_ohno(<span class="st">"away-in-a-manger.mid"</span>, title<span class="op">=</span><span class="st">"Away in a Mangled"</span>, time_rescale<span class="op">=</span><span class="fl">.48</span><span class="op">/</span><span class="fl">.68</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <iframe srcdoc="<script src=&quot;https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0&quot;></script>
@@ -3249,19 +3256,19 @@ p {
   color: #c4c4c4; /* mid-lightness text color for title, intended for dark backgrounds */
 }
 
-#section435 midi-player {
+#section137 midi-player {
   display: block;
   width: inherit;
   margin: 4px;
   margin-bottom: 0;
   color: #d4d4d4; /* Lighter text color for better readability */
 }
-#section435 midi-player::part(control-panel) {
+#section137 midi-player::part(control-panel) {
   background: #222; /* Dark background */
   border: 2px solid #888; /* Lightened border color for contrast */
   border-radius: 10px 10px 0 0;
 }
-#section435 midi-player::part(play-button) {
+#section137 midi-player::part(play-button) {
   color: #ffffff; /* White text for visibility */
   border: 2px solid currentColor;
   background-color: #6c7a89; 
@@ -3269,17 +3276,17 @@ p {
   transition: all 0.2s;
   content: 'hello';
 }
-#section435 midi-player::part(play-button):hover {
+#section137 midi-player::part(play-button):hover {
   color: #00a; 
   background-color: #9fafc9; 
   border-radius: 10px;
 }
-#section435 midi-player::part(time) {
+#section137 midi-player::part(time) {
   font-family: monospace; /* Monospace font for time */
 }
 
 /* Custom visualizer style */
-#section435 midi-visualizer .piano-roll-visualizer {
+#section137 midi-visualizer .piano-roll-visualizer {
   background: #333; /* Dark background for visualizer */
   border: 2px solid #505050; /* Dark border for subtle appearance */
   border-top: none;
@@ -3289,42 +3296,38 @@ p {
   margin-top: 0;
   overflow: auto;
 }
-#section435 midi-visualizer svg rect.note {
+#section137 midi-visualizer svg rect.note {
   opacity: 0.9; 
   stroke-width: 1; /* Stroke width for note clarity */
 }
 
 /* Different instrument colors */
-#section435 midi-visualizer svg rect.note[data-instrument=&quot;0&quot;]{
+#section137 midi-visualizer svg rect.note[data-instrument=&quot;0&quot;]{
   fill: #7aa6ed; /*  blue for Instrument 0 */
   stroke: #444; 
 }
-#section435 midi-visualizer svg rect.note[data-instrument=&quot;2&quot;]{
+#section137 midi-visualizer svg rect.note[data-instrument=&quot;2&quot;]{
   fill: #d586d0; /* purple for Instrument 2 for consistency */
   stroke: #444; /* White stroke for visibility */
 }
-#section435 midi-visualizer svg rect.note[data-is-drum=&quot;true&quot;]{
+#section137 midi-visualizer svg rect.note[data-is-drum=&quot;true&quot;]{
   fill: brightorange; 
   stroke: #bbb;
 }
-#section435 midi-visualizer svg rect.note.active {
+#section137 midi-visualizer svg rect.note.active {
   opacity: 0.9; /* Highlight active notes */
   stroke: #ddd; /* White stroke for maximum contrast */
   stroke-width: 2; /* Thicker stroke for active notes */
 }
 </style>
 
-          <section id=&quot;section435&quot;><p style=&quot;text-align:left;font-family:Arial;&quot;>Jingle Bells Prompt<span style=&quot;float:right;&quot;><a href=&quot;data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAAvQDAAACQK0AAO0AAPkBqKwAAMkAAPgAAR0BpMgAAN0AARUAARwBqMkAANwAAQ0AARQBpK0AAMgAAOwAAO0AAPkAAQwBqKwAAMkBqMgAAN0BpMkAANwAAPgAAPkA1PgAAPkA1K0AAMgAAOwAAO0AAPgAAPkBpKwAAMkAAPgAAR0BqMgAAN0AARUAARwBqMkAANwAAQ0AARQBpMEAAMgAAOwAAPEAAQEAAQwBqMAAANEBpNACBVDwAAEAAAf8vAA==&quot; target=&quot;_blank&quot;>Download MIDI</a><br></span></p>
-          <midi-player src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAAvQDAAACQK0AAO0AAPkBqKwAAMkAAPgAAR0BpMgAAN0AARUAARwBqMkAANwAAQ0AARQBpK0AAMgAAOwAAO0AAPkAAQwBqKwAAMkBqMgAAN0BpMkAANwAAPgAAPkA1PgAAPkA1K0AAMgAAOwAAO0AAPgAAPkBpKwAAMkAAPgAAR0BqMgAAN0AARUAARwBqMkAANwAAQ0AARQBpMEAAMgAAOwAAPEAAQEAAQwBqMAAANEBpNACBVDwAAEAAAf8vAA== sound-font visualizer=&quot;#section435 midi-visualizer&quot;></midi-player>
-          <midi-visualizer src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAAvQDAAACQK0AAO0AAPkBqKwAAMkAAPgAAR0BpMgAAN0AARUAARwBqMkAANwAAQ0AARQBpK0AAMgAAOwAAO0AAPkAAQwBqKwAAMkBqMgAAN0BpMkAANwAAPgAAPkA1PgAAPkA1K0AAMgAAOwAAO0AAPgAAPkBpKwAAMkAAPgAAR0BqMgAAN0AARUAARwBqMkAANwAAQ0AARQBpMEAAMgAAOwAAPEAAQEAAQwBqMAAANEBpNACBVDwAAEAAAf8vAA== type=piano-roll></midi-visualizer>
+          <section id=&quot;section137&quot;><p style=&quot;text-align:left;font-family:Arial;&quot;>Janky Bells<span style=&quot;float:right;&quot;><a href=&quot;data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAFOwDAAACQK0AAO0AAPkBqKwAAMkAAPgAAR0BpMgAAN0AARUAARwBqMkAANwAAQ0AARQBpK0AAMgAAOwAAO0AAPkAAQwBqKwAAMkBqMgAAN0BpMkAANwAAPgAAPkA1PgAAPkA1K0AAMgAAOwAAO0AAPgAAPkBpKwAAMkAAPgAAR0BqMgAAN0AARUAARwBqMkAANwAAQ0AARQBpMEAAMgAAOwAAPEAAQEAAQwBqMAAANEBpNAAANUAARUBqNQAAN0BqNkAANwAAPAAAPkAAQABpNgAAQkBqRQBpN0AAO0CBVDsAAEIAAENAAEdAaT4AajFAADcAADlAAEBAAEMAAEVAAEcAgVM0QAA5AAA9QABAAGo9AAA+QGk0AAA+AABEQABFAABHQGotQAA5QAA9QABFQABHAGkxAAA3QAA5AABEAGoyQAA2QAA3AAA9AAA+QABFAABFQGotAABCQABFAGk2AAA3QAA7QAA+AABCAABDQIFTKkAAOUAAOwAAQwAARUBqNwBqMgAAPEAARQBpKgAAOQAAQ0BqK0AAO0AAPABpKwAANEAANkAAOUAAOwA1MkAANAAANgA1LUAAMEAAMgAANEAAOQBqLQAANEBpL0AAMAAAMkAANAAANAAAN0CBUy8AADBAADIAADRAADcAADxAgVQwAAAyQAA2QAA5QAA8AGkyQAA0AABDAGoyAAA2AAA3QAA5AAA7QGkyAAA+QGoxQAA0QAA3AAA5QAA7AAA+AABFQGo0AAA2QDQzQAA2ADUsQAAxAAAzAAA0QAA5AAA7QABFAABHQGoyQAA0AGksAAAtQAAyAAA0QABHAABJQGo5QAA7AGotAAAyQIFTMgAANEAAOQAAQkAASQBpMkAANAAAPkAAQgAAQ0BqNAAAO0BqPgBpMUAAOwAAQEAARUBqL0AAMQAAMgAAQwBpLUAALwAAPUBqLQAAL0BqLwAAMUAAREAARQCBUy1AAD0AAEAAAEFAAEJAgVMtAAAvQAAxAAA+QABBAABEAIFTLUAALwAAPUAAPgAAQECBUytAAC0AADZAAEAAAEIAAEVAaj0AAD5AaisAADFAADRAADYAADpAAD4AAENAAEUAaTJAADQAADoAADtAajBAADEAADIAADRAADsAADxAaTQAADpAADwAajAAADJAADlAADoAAEJAgVNDAGo5AAA+QGk3QABCAGoqQAAxQAA3AAA5QAA+AABFQGoxAAAyAAA0QGkqAAAyQAA0AAA5AAA7QAA8QABAQABFAGo3QAA7AAA7QAA8AGktQAAyAAA3AAA5QAA7AAA8QABAAABCQGo2QAA5AGotAAAvQAAyQAA2AAA7QAA8AGkxQAAyAGooQAAvAAAxAAAyQAA3QAA7AABCAABDQGkoAAAqQAA3AAA5QGooQAAqAAA3QAA5AIFTJkAAKAAALUAAMgAANwAAPkAAQkAAQwCBUyYAACtAAC0AAC9AADdAAD4AAEBAAEIAajRAADcAai8AADJAADQAADtAaTFAADIAAEAAAEJAaisAAC9AADEAADJAADZAADsAAEIAAENAaTRAADYAajIAADQAAD5AgVMqQAAvAAA2QAA5QAA+AAA+QABDAGo+AABCQGkoQAAqAAA2AAA3QAA5AAA7QABCAABDQIFUKAAAKkAAOkAAOwAAPUAAQwCDJioAADJAajoAaTIAADcAAD0AAEJAajZAaS9AADJAADYAADtAAD5AAEIAgVQvAAAyAAA7AAA+AABDQABHQGk2QAA+QABDAGotQAA2AAA+AABHAGktAAH/LwA=&quot; target=&quot;_blank&quot;>Download MIDI</a><br></span></p>
+          <midi-player src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAFOwDAAACQK0AAO0AAPkBqKwAAMkAAPgAAR0BpMgAAN0AARUAARwBqMkAANwAAQ0AARQBpK0AAMgAAOwAAO0AAPkAAQwBqKwAAMkBqMgAAN0BpMkAANwAAPgAAPkA1PgAAPkA1K0AAMgAAOwAAO0AAPgAAPkBpKwAAMkAAPgAAR0BqMgAAN0AARUAARwBqMkAANwAAQ0AARQBpMEAAMgAAOwAAPEAAQEAAQwBqMAAANEBpNAAANUAARUBqNQAAN0BqNkAANwAAPAAAPkAAQABpNgAAQkBqRQBpN0AAO0CBVDsAAEIAAENAAEdAaT4AajFAADcAADlAAEBAAEMAAEVAAEcAgVM0QAA5AAA9QABAAGo9AAA+QGk0AAA+AABEQABFAABHQGotQAA5QAA9QABFQABHAGkxAAA3QAA5AABEAGoyQAA2QAA3AAA9AAA+QABFAABFQGotAABCQABFAGk2AAA3QAA7QAA+AABCAABDQIFTKkAAOUAAOwAAQwAARUBqNwBqMgAAPEAARQBpKgAAOQAAQ0BqK0AAO0AAPABpKwAANEAANkAAOUAAOwA1MkAANAAANgA1LUAAMEAAMgAANEAAOQBqLQAANEBpL0AAMAAAMkAANAAANAAAN0CBUy8AADBAADIAADRAADcAADxAgVQwAAAyQAA2QAA5QAA8AGkyQAA0AABDAGoyAAA2AAA3QAA5AAA7QGkyAAA+QGoxQAA0QAA3AAA5QAA7AAA+AABFQGo0AAA2QDQzQAA2ADUsQAAxAAAzAAA0QAA5AAA7QABFAABHQGoyQAA0AGksAAAtQAAyAAA0QABHAABJQGo5QAA7AGotAAAyQIFTMgAANEAAOQAAQkAASQBpMkAANAAAPkAAQgAAQ0BqNAAAO0BqPgBpMUAAOwAAQEAARUBqL0AAMQAAMgAAQwBpLUAALwAAPUBqLQAAL0BqLwAAMUAAREAARQCBUy1AAD0AAEAAAEFAAEJAgVMtAAAvQAAxAAA+QABBAABEAIFTLUAALwAAPUAAPgAAQECBUytAAC0AADZAAEAAAEIAAEVAaj0AAD5AaisAADFAADRAADYAADpAAD4AAENAAEUAaTJAADQAADoAADtAajBAADEAADIAADRAADsAADxAaTQAADpAADwAajAAADJAADlAADoAAEJAgVNDAGo5AAA+QGk3QABCAGoqQAAxQAA3AAA5QAA+AABFQGoxAAAyAAA0QGkqAAAyQAA0AAA5AAA7QAA8QABAQABFAGo3QAA7AAA7QAA8AGktQAAyAAA3AAA5QAA7AAA8QABAAABCQGo2QAA5AGotAAAvQAAyQAA2AAA7QAA8AGkxQAAyAGooQAAvAAAxAAAyQAA3QAA7AABCAABDQGkoAAAqQAA3AAA5QGooQAAqAAA3QAA5AIFTJkAAKAAALUAAMgAANwAAPkAAQkAAQwCBUyYAACtAAC0AAC9AADdAAD4AAEBAAEIAajRAADcAai8AADJAADQAADtAaTFAADIAAEAAAEJAaisAAC9AADEAADJAADZAADsAAEIAAENAaTRAADYAajIAADQAAD5AgVMqQAAvAAA2QAA5QAA+AAA+QABDAGo+AABCQGkoQAAqAAA2AAA3QAA5AAA7QABCAABDQIFUKAAAKkAAOkAAOwAAPUAAQwCDJioAADJAajoAaTIAADcAAD0AAEJAajZAaS9AADJAADYAADtAAD5AAEIAgVQvAAAyAAA7AAA+AABDQABHQGk2QAA+QABDAGotQAA2AAA+AABHAGktAAH/LwA= sound-font visualizer=&quot;#section137 midi-visualizer&quot;></midi-player>
+          <midi-visualizer src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAFOwDAAACQK0AAO0AAPkBqKwAAMkAAPgAAR0BpMgAAN0AARUAARwBqMkAANwAAQ0AARQBpK0AAMgAAOwAAO0AAPkAAQwBqKwAAMkBqMgAAN0BpMkAANwAAPgAAPkA1PgAAPkA1K0AAMgAAOwAAO0AAPgAAPkBpKwAAMkAAPgAAR0BqMgAAN0AARUAARwBqMkAANwAAQ0AARQBpMEAAMgAAOwAAPEAAQEAAQwBqMAAANEBpNAAANUAARUBqNQAAN0BqNkAANwAAPAAAPkAAQABpNgAAQkBqRQBpN0AAO0CBVDsAAEIAAENAAEdAaT4AajFAADcAADlAAEBAAEMAAEVAAEcAgVM0QAA5AAA9QABAAGo9AAA+QGk0AAA+AABEQABFAABHQGotQAA5QAA9QABFQABHAGkxAAA3QAA5AABEAGoyQAA2QAA3AAA9AAA+QABFAABFQGotAABCQABFAGk2AAA3QAA7QAA+AABCAABDQIFTKkAAOUAAOwAAQwAARUBqNwBqMgAAPEAARQBpKgAAOQAAQ0BqK0AAO0AAPABpKwAANEAANkAAOUAAOwA1MkAANAAANgA1LUAAMEAAMgAANEAAOQBqLQAANEBpL0AAMAAAMkAANAAANAAAN0CBUy8AADBAADIAADRAADcAADxAgVQwAAAyQAA2QAA5QAA8AGkyQAA0AABDAGoyAAA2AAA3QAA5AAA7QGkyAAA+QGoxQAA0QAA3AAA5QAA7AAA+AABFQGo0AAA2QDQzQAA2ADUsQAAxAAAzAAA0QAA5AAA7QABFAABHQGoyQAA0AGksAAAtQAAyAAA0QABHAABJQGo5QAA7AGotAAAyQIFTMgAANEAAOQAAQkAASQBpMkAANAAAPkAAQgAAQ0BqNAAAO0BqPgBpMUAAOwAAQEAARUBqL0AAMQAAMgAAQwBpLUAALwAAPUBqLQAAL0BqLwAAMUAAREAARQCBUy1AAD0AAEAAAEFAAEJAgVMtAAAvQAAxAAA+QABBAABEAIFTLUAALwAAPUAAPgAAQECBUytAAC0AADZAAEAAAEIAAEVAaj0AAD5AaisAADFAADRAADYAADpAAD4AAENAAEUAaTJAADQAADoAADtAajBAADEAADIAADRAADsAADxAaTQAADpAADwAajAAADJAADlAADoAAEJAgVNDAGo5AAA+QGk3QABCAGoqQAAxQAA3AAA5QAA+AABFQGoxAAAyAAA0QGkqAAAyQAA0AAA5AAA7QAA8QABAQABFAGo3QAA7AAA7QAA8AGktQAAyAAA3AAA5QAA7AAA8QABAAABCQGo2QAA5AGotAAAvQAAyQAA2AAA7QAA8AGkxQAAyAGooQAAvAAAxAAAyQAA3QAA7AABCAABDQGkoAAAqQAA3AAA5QGooQAAqAAA3QAA5AIFTJkAAKAAALUAAMgAANwAAPkAAQkAAQwCBUyYAACtAAC0AAC9AADdAAD4AAEBAAEIAajRAADcAai8AADJAADQAADtAaTFAADIAAEAAAEJAaisAAC9AADEAADJAADZAADsAAEIAAENAaTRAADYAajIAADQAAD5AgVMqQAAvAAA2QAA5QAA+AAA+QABDAGo+AABCQGkoQAAqAAA2AAA3QAA5AAA7QABCAABDQIFUKAAAKkAAOkAAOwAAPUAAQwCDJioAADJAajoAaTIAADcAAD0AAEJAajZAaS9AADJAADYAADtAAD5AAEIAgVQvAAAyAAA7AAA+AABDQABHQGk2QAA+QABDAGotQAA2AAA+AABHAGktAAH/LwA= type=piano-roll></midi-visualizer>
           </section>
           " width="100%" height="400" style="border:none !important;" "allowfullscreen"="" "webkitallowfullscreen"="" "mozallowfullscreen"="">'
             </iframe>
 </div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>notes <span class="op">=</span> decode( model.generate(prompt_tokens, max_new_tokens<span class="op">=</span>new_tokens, temperature<span class="op">=</span><span class="fl">1.1</span>)[<span class="dv">0</span>].cpu() )</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>display(midiplayer(notes,title<span class="op">=</span><span class="st">'Our Continuation: "Janky Bells"'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <iframe srcdoc="<script src=&quot;https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0&quot;></script>
 
@@ -3335,19 +3338,19 @@ p {
   color: #c4c4c4; /* mid-lightness text color for title, intended for dark backgrounds */
 }
 
-#section921 midi-player {
+#section137 midi-player {
   display: block;
   width: inherit;
   margin: 4px;
   margin-bottom: 0;
   color: #d4d4d4; /* Lighter text color for better readability */
 }
-#section921 midi-player::part(control-panel) {
+#section137 midi-player::part(control-panel) {
   background: #222; /* Dark background */
   border: 2px solid #888; /* Lightened border color for contrast */
   border-radius: 10px 10px 0 0;
 }
-#section921 midi-player::part(play-button) {
+#section137 midi-player::part(play-button) {
   color: #ffffff; /* White text for visibility */
   border: 2px solid currentColor;
   background-color: #6c7a89; 
@@ -3355,17 +3358,17 @@ p {
   transition: all 0.2s;
   content: 'hello';
 }
-#section921 midi-player::part(play-button):hover {
+#section137 midi-player::part(play-button):hover {
   color: #00a; 
   background-color: #9fafc9; 
   border-radius: 10px;
 }
-#section921 midi-player::part(time) {
+#section137 midi-player::part(time) {
   font-family: monospace; /* Monospace font for time */
 }
 
 /* Custom visualizer style */
-#section921 midi-visualizer .piano-roll-visualizer {
+#section137 midi-visualizer .piano-roll-visualizer {
   background: #333; /* Dark background for visualizer */
   border: 2px solid #505050; /* Dark border for subtle appearance */
   border-top: none;
@@ -3375,34 +3378,119 @@ p {
   margin-top: 0;
   overflow: auto;
 }
-#section921 midi-visualizer svg rect.note {
+#section137 midi-visualizer svg rect.note {
   opacity: 0.9; 
   stroke-width: 1; /* Stroke width for note clarity */
 }
 
 /* Different instrument colors */
-#section921 midi-visualizer svg rect.note[data-instrument=&quot;0&quot;]{
+#section137 midi-visualizer svg rect.note[data-instrument=&quot;0&quot;]{
   fill: #7aa6ed; /*  blue for Instrument 0 */
   stroke: #444; 
 }
-#section921 midi-visualizer svg rect.note[data-instrument=&quot;2&quot;]{
+#section137 midi-visualizer svg rect.note[data-instrument=&quot;2&quot;]{
   fill: #d586d0; /* purple for Instrument 2 for consistency */
   stroke: #444; /* White stroke for visibility */
 }
-#section921 midi-visualizer svg rect.note[data-is-drum=&quot;true&quot;]{
+#section137 midi-visualizer svg rect.note[data-is-drum=&quot;true&quot;]{
   fill: brightorange; 
   stroke: #bbb;
 }
-#section921 midi-visualizer svg rect.note.active {
+#section137 midi-visualizer svg rect.note.active {
   opacity: 0.9; /* Highlight active notes */
   stroke: #ddd; /* White stroke for maximum contrast */
   stroke-width: 2; /* Thicker stroke for active notes */
 }
 </style>
 
-          <section id=&quot;section921&quot;><p style=&quot;text-align:left;font-family:Arial;&quot;>Our Continuation: &quot;Janky Bells&quot;<span style=&quot;float:right;&quot;><a href=&quot;data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAFPwDAAACQK0AAO0AAPkBqKwAAMkAAPgAAR0BpMgAAN0AARUAARwBqMkAANwAAQ0AARQBpK0AAMgAAOwAAO0AAPkAAQwBqKwAAMkBqMgAAN0BpMkAANwAAPgAAPkA1PgAAPkA1K0AAMgAAOwAAO0AAPgAAPkBpKwAAMkAAPgAAR0BqMgAAN0AARUAARwBqMkAANwAAQ0AARQBpMEAAMgAAOwAAPEAAQEAAQwBqMAAANEBpLUAANAAANkCBVC0AAC9AADNAADYAADtAADwAAEAAAEJAaS1AAC8AADlAADsAai0AADJAADMAADkAADtAgVMvQAAyAAA+QABCAABCQGotQAAvAABCAABDQGkrQAAtAAA3QAA7AAA+AABAQABDAGorAAA3AABAAABFQGk8QABAQIFUN0AAPAAAPkAAQAAAQkBpO0AAQEAAQgAARQBqNkAANwAAOUAAOwAAQAAAQkBpPgBqOQAARkBqSUBpL0AANgAARgAASkBqR0AASQBpLwAANEAAN0AAQgAAQ0AASgBqNwAASEBqMkAANAAAOUAAQkAAQwAARUAARwAASABpMgAANEAAN0AAOQAAQgAAQ0BqNAAANkAANwAAOUAAPkAAQwAARQAARUBpN0AAOQAAQ0A1PEAAPgAARQA1K0AANgAAO0AAPABqNwAAQUBpKwAAMEAAP0AAQQAAQkAAQwCBUzAAADJAADlAADsAAD8AAEIAgR85ADUyAIFTPkAAQkBpOUA1PEAAPgA1K0AAOQAAO0AAPAAAQgAAQ0CBUysAADsAAEdAgVNHAABTQGo9QABMQGpDAABMAABRQABTAGk7QAA9AAA+QABOQABRAIFTMEAAPgAAP0AATgAAT0CBVC1AADAAADVAAD8AAEdAAE8AgVMtAAA0QAA1AAA2QAA3QAA7AGk2AAA3AAA5QGoyQAA0AAA5AAA+QGoyAAA0QABAQGk0AAA2QAA5QAA9QAA+AABAAABFQABHAGo9AAA+QGk2AAA3QAA3QAA5AAA+AABAQABFAABHQGo2QAA3AAA3AAA+QABAAGo0QAA2AAA5QAA9QAA+AABHAABJQGk5AAA9AAA+QDU+AABCQDUvQAA0AABJAABKQGk7QGovAAA7AABCAABEQABHQABKAGoxQABBQGkxAAA2QAA9QABBAABCQABEAIFTNgAAQgAARkAARwCBVDZAgVM2AAA9AABCQABFQABGAIFTL0AAPUAARQAAR0CBUy8AADpAAD0AAD5AAEIAAENAAEcAAExAgVM5QAA6AAA9QAA+AABMAABNQGpMQABNADVKQABMADUtQAA9AABAQABDAABJQABKAIMmOQCBUzVAADZAADhAgVMyQAA1AAA2AAA3QAA5QABGQABJAIFULQAANwAAOAAAOUAAQAAAQkAARgBpOEAAOQBqMEAAMgAAM0AANkAAOAAAOQAAP0AAQgBpL0AAMAAAMUAAMwBqKkAALwAAMQAAOUAAPUAAPwBqNEAANgBpJkAAKgAANAAANkAAO0AAPQA1f0A1f0A1f0A0fwAAf0A1fwAAfwAAf0A1fwAAf0A1fwAAf0A1OQAAfwAAf0A0fwAAf0A1fwAAf0A1fwAAf0A1JgAANgAAOwAAfwAAf0A1fwAAf0A0fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A0fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A0fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A0fwAAf0A1fwAAf0A1fwAAf0A1fwA1fwAB/y8A&quot; target=&quot;_blank&quot;>Download MIDI</a><br></span></p>
-          <midi-player src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAFPwDAAACQK0AAO0AAPkBqKwAAMkAAPgAAR0BpMgAAN0AARUAARwBqMkAANwAAQ0AARQBpK0AAMgAAOwAAO0AAPkAAQwBqKwAAMkBqMgAAN0BpMkAANwAAPgAAPkA1PgAAPkA1K0AAMgAAOwAAO0AAPgAAPkBpKwAAMkAAPgAAR0BqMgAAN0AARUAARwBqMkAANwAAQ0AARQBpMEAAMgAAOwAAPEAAQEAAQwBqMAAANEBpLUAANAAANkCBVC0AAC9AADNAADYAADtAADwAAEAAAEJAaS1AAC8AADlAADsAai0AADJAADMAADkAADtAgVMvQAAyAAA+QABCAABCQGotQAAvAABCAABDQGkrQAAtAAA3QAA7AAA+AABAQABDAGorAAA3AABAAABFQGk8QABAQIFUN0AAPAAAPkAAQAAAQkBpO0AAQEAAQgAARQBqNkAANwAAOUAAOwAAQAAAQkBpPgBqOQAARkBqSUBpL0AANgAARgAASkBqR0AASQBpLwAANEAAN0AAQgAAQ0AASgBqNwAASEBqMkAANAAAOUAAQkAAQwAARUAARwAASABpMgAANEAAN0AAOQAAQgAAQ0BqNAAANkAANwAAOUAAPkAAQwAARQAARUBpN0AAOQAAQ0A1PEAAPgAARQA1K0AANgAAO0AAPABqNwAAQUBpKwAAMEAAP0AAQQAAQkAAQwCBUzAAADJAADlAADsAAD8AAEIAgR85ADUyAIFTPkAAQkBpOUA1PEAAPgA1K0AAOQAAO0AAPAAAQgAAQ0CBUysAADsAAEdAgVNHAABTQGo9QABMQGpDAABMAABRQABTAGk7QAA9AAA+QABOQABRAIFTMEAAPgAAP0AATgAAT0CBVC1AADAAADVAAD8AAEdAAE8AgVMtAAA0QAA1AAA2QAA3QAA7AGk2AAA3AAA5QGoyQAA0AAA5AAA+QGoyAAA0QABAQGk0AAA2QAA5QAA9QAA+AABAAABFQABHAGo9AAA+QGk2AAA3QAA3QAA5AAA+AABAQABFAABHQGo2QAA3AAA3AAA+QABAAGo0QAA2AAA5QAA9QAA+AABHAABJQGk5AAA9AAA+QDU+AABCQDUvQAA0AABJAABKQGk7QGovAAA7AABCAABEQABHQABKAGoxQABBQGkxAAA2QAA9QABBAABCQABEAIFTNgAAQgAARkAARwCBVDZAgVM2AAA9AABCQABFQABGAIFTL0AAPUAARQAAR0CBUy8AADpAAD0AAD5AAEIAAENAAEcAAExAgVM5QAA6AAA9QAA+AABMAABNQGpMQABNADVKQABMADUtQAA9AABAQABDAABJQABKAIMmOQCBUzVAADZAADhAgVMyQAA1AAA2AAA3QAA5QABGQABJAIFULQAANwAAOAAAOUAAQAAAQkAARgBpOEAAOQBqMEAAMgAAM0AANkAAOAAAOQAAP0AAQgBpL0AAMAAAMUAAMwBqKkAALwAAMQAAOUAAPUAAPwBqNEAANgBpJkAAKgAANAAANkAAO0AAPQA1f0A1f0A1f0A0fwAAf0A1fwAAfwAAf0A1fwAAf0A1fwAAf0A1OQAAfwAAf0A0fwAAf0A1fwAAf0A1fwAAf0A1JgAANgAAOwAAfwAAf0A1fwAAf0A0fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A0fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A0fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A0fwAAf0A1fwAAf0A1fwAAf0A1fwA1fwAB/y8A sound-font visualizer=&quot;#section921 midi-visualizer&quot;></midi-player>
-          <midi-visualizer src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAFPwDAAACQK0AAO0AAPkBqKwAAMkAAPgAAR0BpMgAAN0AARUAARwBqMkAANwAAQ0AARQBpK0AAMgAAOwAAO0AAPkAAQwBqKwAAMkBqMgAAN0BpMkAANwAAPgAAPkA1PgAAPkA1K0AAMgAAOwAAO0AAPgAAPkBpKwAAMkAAPgAAR0BqMgAAN0AARUAARwBqMkAANwAAQ0AARQBpMEAAMgAAOwAAPEAAQEAAQwBqMAAANEBpLUAANAAANkCBVC0AAC9AADNAADYAADtAADwAAEAAAEJAaS1AAC8AADlAADsAai0AADJAADMAADkAADtAgVMvQAAyAAA+QABCAABCQGotQAAvAABCAABDQGkrQAAtAAA3QAA7AAA+AABAQABDAGorAAA3AABAAABFQGk8QABAQIFUN0AAPAAAPkAAQAAAQkBpO0AAQEAAQgAARQBqNkAANwAAOUAAOwAAQAAAQkBpPgBqOQAARkBqSUBpL0AANgAARgAASkBqR0AASQBpLwAANEAAN0AAQgAAQ0AASgBqNwAASEBqMkAANAAAOUAAQkAAQwAARUAARwAASABpMgAANEAAN0AAOQAAQgAAQ0BqNAAANkAANwAAOUAAPkAAQwAARQAARUBpN0AAOQAAQ0A1PEAAPgAARQA1K0AANgAAO0AAPABqNwAAQUBpKwAAMEAAP0AAQQAAQkAAQwCBUzAAADJAADlAADsAAD8AAEIAgR85ADUyAIFTPkAAQkBpOUA1PEAAPgA1K0AAOQAAO0AAPAAAQgAAQ0CBUysAADsAAEdAgVNHAABTQGo9QABMQGpDAABMAABRQABTAGk7QAA9AAA+QABOQABRAIFTMEAAPgAAP0AATgAAT0CBVC1AADAAADVAAD8AAEdAAE8AgVMtAAA0QAA1AAA2QAA3QAA7AGk2AAA3AAA5QGoyQAA0AAA5AAA+QGoyAAA0QABAQGk0AAA2QAA5QAA9QAA+AABAAABFQABHAGo9AAA+QGk2AAA3QAA3QAA5AAA+AABAQABFAABHQGo2QAA3AAA3AAA+QABAAGo0QAA2AAA5QAA9QAA+AABHAABJQGk5AAA9AAA+QDU+AABCQDUvQAA0AABJAABKQGk7QGovAAA7AABCAABEQABHQABKAGoxQABBQGkxAAA2QAA9QABBAABCQABEAIFTNgAAQgAARkAARwCBVDZAgVM2AAA9AABCQABFQABGAIFTL0AAPUAARQAAR0CBUy8AADpAAD0AAD5AAEIAAENAAEcAAExAgVM5QAA6AAA9QAA+AABMAABNQGpMQABNADVKQABMADUtQAA9AABAQABDAABJQABKAIMmOQCBUzVAADZAADhAgVMyQAA1AAA2AAA3QAA5QABGQABJAIFULQAANwAAOAAAOUAAQAAAQkAARgBpOEAAOQBqMEAAMgAAM0AANkAAOAAAOQAAP0AAQgBpL0AAMAAAMUAAMwBqKkAALwAAMQAAOUAAPUAAPwBqNEAANgBpJkAAKgAANAAANkAAO0AAPQA1f0A1f0A1f0A0fwAAf0A1fwAAfwAAf0A1fwAAf0A1fwAAf0A1OQAAfwAAf0A0fwAAf0A1fwAAf0A1fwAAf0A1JgAANgAAOwAAfwAAf0A1fwAAf0A0fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A0fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A0fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A1fwAAf0A0fwAAf0A1fwAAf0A1fwAAf0A1fwA1fwAB/y8A type=piano-roll></midi-visualizer>
+          <section id=&quot;section137&quot;><p style=&quot;text-align:left;font-family:Arial;&quot;>Away in a Mangled<span style=&quot;float:right;&quot;><a href=&quot;data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAFRQDAAACQMEAAN0AAPECBUylAADAAADVAADcAADlAADwAAEFAgVNBAABBQIFUKQAALkAAOQAAOkAAQQAAQ0BpQwAARUBqKUAALgAANUAAOUAAOgAAQUAARQCBU0EAAEFAgVMpAAAyQAA5AABBAABBQABFQGpFAABGQGktQAAyAAA0QABBAABFQABGAABIQIFUQ0AARQAASAAASECBUzJAADQAAEJAAEMAAEgAAEpARjUAgQ0yAAA3QABAQABCAABJQABKAIFTMkAAPkAAQUAASQCBUzFAADIAAD4AAEEAAEZARzUAhDMmQAAxAAA3AAA6QABAAABBQABGAEYtAIENJgAALUAAOgAAPECBUyhAAC0AAC5AADpAADwAAD5AAEBAgVQoAAAtQAAuAAA5QAA6AAA8QAA+AABAAABBAABIQIFTK0AALQAAOQAAOkAAPAAAPkAARkAASABpKwAALkAARUAARgBqLgAAMEAAN0AAOgAARQAARkCBUzAAADJAADVAADcAAEVAAEYAgVMtQAAyAAA8QAA+AGo1AABDQABFAGotAAAuQAA8AAA+QABBQABDAGk3QGotQAAuAAAwQAA3AAA5QAA+AABAQABBAGkrQAAtAGorAAAuQAAwAAAyQAA1QAA5AAA+QABAAGoqQAAuAGkqAAArQAA6QAA+AIFTKEAAMEAAMgAANQCBVCZAACgAACsAADAAADJAADVAADlAADoAgVMkQAAmAAArQAAyAAA0QAA1AAA5AAA8QGkkAAAmQAA0AAA1QGomAAAoQAA1AAA3QAA6QAA8AIFTKAAAKUAAKwAAMEAANwAAOUAAOgBqOQAAOkBpLUAAMAAANUAAOgAAPEBqKQBqK0AALkAAPABpLgAANEBqKwAAMkAANAAANQAANUAAOUCBUyhAAC0AADBAADIAADUAADdAADkAADpAai5AADAAaSgAAClAAC4AADBAADlAADoAaihAACkAAC5AADkAADpAaSgAAClAAC4AADAAADBAADlAADoAgVQmQAApAAAwAAAyQAA3AAA6QGkyAAA0QGohQAAmAAAwQAA0AAA2QAA5AAA6AAA8QIFTH0AAIQAALkAAMAAAMkAANgAAOkAAPABqMgAAM0BpHwAAJkAALgAAMwAANUBqM0AANQBpIkAAJgAAMkAAMwAANUBqJEAAJkAAMEAAMgBqIgAAIkAAMAAAOgBpIgAAJEAAJgAAK0BqKwAAN0BpJAAAJABqJEAALkAALkAAMEAANEAANQAANwBqMAAAM0AANABpJAAAKUAALUAALgAALgAAMwAANUBqKQAALQAAOUBpJEAAMEAANEAANQAAN0AAOQBqMkAANABqHUAAJAAAMgAANUAANwAAOUBpN0AAOQBqHQAAIkAAKUAAMAAAMEAANQAANwAAOUBpIgAAJEBqJAAAJEAAMAAANEBqJAAAJkAAKQAAMkAANAAANUAAOQAAOkBpJEAAJgAAMgAANEAANQAAN0AAOgBqLUAAMkAANABpJAAALQAAMgAANUAAOUBqMkAANUAANwBqMEAAMgAANQBpIkAAMAAAOkAAPkBqIUAAIgAAOQBpH0AAIQAANQAAN0AAPEAAPgCBVB8AACFAADVAADcAADlAADoAaTNAADUAaiEAACJAADJAADMAADdAADkAADpAADwAgVMiAAAoQAA6AAA8QGokQAAoAAAwQAAyADQvQAAwADUkAAAmQAAtQAAvAAA8AAA+QIFTHkAAJgAAK0AALQAANwAAOkAAPgAAQEBqHgAAJEAAOgBqJAAAKwAAQAAB/y8A&quot; target=&quot;_blank&quot;>Download MIDI</a><br></span></p>
+          <midi-player src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAFRQDAAACQMEAAN0AAPECBUylAADAAADVAADcAADlAADwAAEFAgVNBAABBQIFUKQAALkAAOQAAOkAAQQAAQ0BpQwAARUBqKUAALgAANUAAOUAAOgAAQUAARQCBU0EAAEFAgVMpAAAyQAA5AABBAABBQABFQGpFAABGQGktQAAyAAA0QABBAABFQABGAABIQIFUQ0AARQAASAAASECBUzJAADQAAEJAAEMAAEgAAEpARjUAgQ0yAAA3QABAQABCAABJQABKAIFTMkAAPkAAQUAASQCBUzFAADIAAD4AAEEAAEZARzUAhDMmQAAxAAA3AAA6QABAAABBQABGAEYtAIENJgAALUAAOgAAPECBUyhAAC0AAC5AADpAADwAAD5AAEBAgVQoAAAtQAAuAAA5QAA6AAA8QAA+AABAAABBAABIQIFTK0AALQAAOQAAOkAAPAAAPkAARkAASABpKwAALkAARUAARgBqLgAAMEAAN0AAOgAARQAARkCBUzAAADJAADVAADcAAEVAAEYAgVMtQAAyAAA8QAA+AGo1AABDQABFAGotAAAuQAA8AAA+QABBQABDAGk3QGotQAAuAAAwQAA3AAA5QAA+AABAQABBAGkrQAAtAGorAAAuQAAwAAAyQAA1QAA5AAA+QABAAGoqQAAuAGkqAAArQAA6QAA+AIFTKEAAMEAAMgAANQCBVCZAACgAACsAADAAADJAADVAADlAADoAgVMkQAAmAAArQAAyAAA0QAA1AAA5AAA8QGkkAAAmQAA0AAA1QGomAAAoQAA1AAA3QAA6QAA8AIFTKAAAKUAAKwAAMEAANwAAOUAAOgBqOQAAOkBpLUAAMAAANUAAOgAAPEBqKQBqK0AALkAAPABpLgAANEBqKwAAMkAANAAANQAANUAAOUCBUyhAAC0AADBAADIAADUAADdAADkAADpAai5AADAAaSgAAClAAC4AADBAADlAADoAaihAACkAAC5AADkAADpAaSgAAClAAC4AADAAADBAADlAADoAgVQmQAApAAAwAAAyQAA3AAA6QGkyAAA0QGohQAAmAAAwQAA0AAA2QAA5AAA6AAA8QIFTH0AAIQAALkAAMAAAMkAANgAAOkAAPABqMgAAM0BpHwAAJkAALgAAMwAANUBqM0AANQBpIkAAJgAAMkAAMwAANUBqJEAAJkAAMEAAMgBqIgAAIkAAMAAAOgBpIgAAJEAAJgAAK0BqKwAAN0BpJAAAJABqJEAALkAALkAAMEAANEAANQAANwBqMAAAM0AANABpJAAAKUAALUAALgAALgAAMwAANUBqKQAALQAAOUBpJEAAMEAANEAANQAAN0AAOQBqMkAANABqHUAAJAAAMgAANUAANwAAOUBpN0AAOQBqHQAAIkAAKUAAMAAAMEAANQAANwAAOUBpIgAAJEBqJAAAJEAAMAAANEBqJAAAJkAAKQAAMkAANAAANUAAOQAAOkBpJEAAJgAAMgAANEAANQAAN0AAOgBqLUAAMkAANABpJAAALQAAMgAANUAAOUBqMkAANUAANwBqMEAAMgAANQBpIkAAMAAAOkAAPkBqIUAAIgAAOQBpH0AAIQAANQAAN0AAPEAAPgCBVB8AACFAADVAADcAADlAADoAaTNAADUAaiEAACJAADJAADMAADdAADkAADpAADwAgVMiAAAoQAA6AAA8QGokQAAoAAAwQAAyADQvQAAwADUkAAAmQAAtQAAvAAA8AAA+QIFTHkAAJgAAK0AALQAANwAAOkAAPgAAQEBqHgAAJEAAOgBqJAAAKwAAQAAB/y8A sound-font visualizer=&quot;#section137 midi-visualizer&quot;></midi-player>
+          <midi-visualizer src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAFRQDAAACQMEAAN0AAPECBUylAADAAADVAADcAADlAADwAAEFAgVNBAABBQIFUKQAALkAAOQAAOkAAQQAAQ0BpQwAARUBqKUAALgAANUAAOUAAOgAAQUAARQCBU0EAAEFAgVMpAAAyQAA5AABBAABBQABFQGpFAABGQGktQAAyAAA0QABBAABFQABGAABIQIFUQ0AARQAASAAASECBUzJAADQAAEJAAEMAAEgAAEpARjUAgQ0yAAA3QABAQABCAABJQABKAIFTMkAAPkAAQUAASQCBUzFAADIAAD4AAEEAAEZARzUAhDMmQAAxAAA3AAA6QABAAABBQABGAEYtAIENJgAALUAAOgAAPECBUyhAAC0AAC5AADpAADwAAD5AAEBAgVQoAAAtQAAuAAA5QAA6AAA8QAA+AABAAABBAABIQIFTK0AALQAAOQAAOkAAPAAAPkAARkAASABpKwAALkAARUAARgBqLgAAMEAAN0AAOgAARQAARkCBUzAAADJAADVAADcAAEVAAEYAgVMtQAAyAAA8QAA+AGo1AABDQABFAGotAAAuQAA8AAA+QABBQABDAGk3QGotQAAuAAAwQAA3AAA5QAA+AABAQABBAGkrQAAtAGorAAAuQAAwAAAyQAA1QAA5AAA+QABAAGoqQAAuAGkqAAArQAA6QAA+AIFTKEAAMEAAMgAANQCBVCZAACgAACsAADAAADJAADVAADlAADoAgVMkQAAmAAArQAAyAAA0QAA1AAA5AAA8QGkkAAAmQAA0AAA1QGomAAAoQAA1AAA3QAA6QAA8AIFTKAAAKUAAKwAAMEAANwAAOUAAOgBqOQAAOkBpLUAAMAAANUAAOgAAPEBqKQBqK0AALkAAPABpLgAANEBqKwAAMkAANAAANQAANUAAOUCBUyhAAC0AADBAADIAADUAADdAADkAADpAai5AADAAaSgAAClAAC4AADBAADlAADoAaihAACkAAC5AADkAADpAaSgAAClAAC4AADAAADBAADlAADoAgVQmQAApAAAwAAAyQAA3AAA6QGkyAAA0QGohQAAmAAAwQAA0AAA2QAA5AAA6AAA8QIFTH0AAIQAALkAAMAAAMkAANgAAOkAAPABqMgAAM0BpHwAAJkAALgAAMwAANUBqM0AANQBpIkAAJgAAMkAAMwAANUBqJEAAJkAAMEAAMgBqIgAAIkAAMAAAOgBpIgAAJEAAJgAAK0BqKwAAN0BpJAAAJABqJEAALkAALkAAMEAANEAANQAANwBqMAAAM0AANABpJAAAKUAALUAALgAALgAAMwAANUBqKQAALQAAOUBpJEAAMEAANEAANQAAN0AAOQBqMkAANABqHUAAJAAAMgAANUAANwAAOUBpN0AAOQBqHQAAIkAAKUAAMAAAMEAANQAANwAAOUBpIgAAJEBqJAAAJEAAMAAANEBqJAAAJkAAKQAAMkAANAAANUAAOQAAOkBpJEAAJgAAMgAANEAANQAAN0AAOgBqLUAAMkAANABpJAAALQAAMgAANUAAOUBqMkAANUAANwBqMEAAMgAANQBpIkAAMAAAOkAAPkBqIUAAIgAAOQBpH0AAIQAANQAAN0AAPEAAPgCBVB8AACFAADVAADcAADlAADoAaTNAADUAaiEAACJAADJAADMAADdAADkAADpAADwAgVMiAAAoQAA6AAA8QGokQAAoAAAwQAAyADQvQAAwADUkAAAmQAAtQAAvAAA8AAA+QIFTHkAAJgAAK0AALQAANwAAOkAAPgAAQEBqHgAAJEAAOgBqJAAAKwAAQAAB/y8A type=piano-roll></midi-visualizer>
+          </section>
+          " width="100%" height="400" style="border:none !important;" "allowfullscreen"="" "webkitallowfullscreen"="" "mozallowfullscreen"="">'
+            </iframe>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>christmas_ohno(<span class="st">"hark-the-herald-angels-sing.mid"</span>, title<span class="op">=</span><span class="st">"Arg the Herald Angels Cringe"</span>,time_rescale<span class="op">=</span><span class="fl">.48</span><span class="op">/</span><span class="fl">.616</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<iframe srcdoc="<script src=&quot;https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0&quot;></script>
+
+<style>
+/* Custom player style */
+p { 
+  margin:0; 
+  color: #c4c4c4; /* mid-lightness text color for title, intended for dark backgrounds */
+}
+
+#section137 midi-player {
+  display: block;
+  width: inherit;
+  margin: 4px;
+  margin-bottom: 0;
+  color: #d4d4d4; /* Lighter text color for better readability */
+}
+#section137 midi-player::part(control-panel) {
+  background: #222; /* Dark background */
+  border: 2px solid #888; /* Lightened border color for contrast */
+  border-radius: 10px 10px 0 0;
+}
+#section137 midi-player::part(play-button) {
+  color: #ffffff; /* White text for visibility */
+  border: 2px solid currentColor;
+  background-color: #6c7a89; 
+  border-radius: 20px;
+  transition: all 0.2s;
+  content: 'hello';
+}
+#section137 midi-player::part(play-button):hover {
+  color: #00a; 
+  background-color: #9fafc9; 
+  border-radius: 10px;
+}
+#section137 midi-player::part(time) {
+  font-family: monospace; /* Monospace font for time */
+}
+
+/* Custom visualizer style */
+#section137 midi-visualizer .piano-roll-visualizer {
+  background: #333; /* Dark background for visualizer */
+  border: 2px solid #505050; /* Dark border for subtle appearance */
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  margin: 4px;
+  width: inherit;
+  margin-top: 0;
+  overflow: auto;
+}
+#section137 midi-visualizer svg rect.note {
+  opacity: 0.9; 
+  stroke-width: 1; /* Stroke width for note clarity */
+}
+
+/* Different instrument colors */
+#section137 midi-visualizer svg rect.note[data-instrument=&quot;0&quot;]{
+  fill: #7aa6ed; /*  blue for Instrument 0 */
+  stroke: #444; 
+}
+#section137 midi-visualizer svg rect.note[data-instrument=&quot;2&quot;]{
+  fill: #d586d0; /* purple for Instrument 2 for consistency */
+  stroke: #444; /* White stroke for visibility */
+}
+#section137 midi-visualizer svg rect.note[data-is-drum=&quot;true&quot;]{
+  fill: brightorange; 
+  stroke: #bbb;
+}
+#section137 midi-visualizer svg rect.note.active {
+  opacity: 0.9; /* Highlight active notes */
+  stroke: #ddd; /* White stroke for maximum contrast */
+  stroke-width: 2; /* Thicker stroke for active notes */
+}
+</style>
+
+          <section id=&quot;section137&quot;><p style=&quot;text-align:left;font-family:Arial;&quot;>Arg the Herald Angels Cringe<span style=&quot;float:right;&quot;><a href=&quot;data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAFPADAAACQNUAAOUAAPECBUzUAADVAADkAADlAADwAADxAAEFAgVM1AAA1QAA5AAA5QAA8AAA8QABBAABBQIFUMEAANQBpN0AAOQAAPAAAPEAAQEAAQQBqLUAAMAAANwAAOUAAPAAAPEAAQAAAQUCBUylAAC0AADkAADwAADxAAEEAAEFAAEVAgVMpAAAwQAA8AAA8QABBAABBQABFAABFQIFTQEAAQQAAQ0AARQCBVC1AAEAAAEFAAEMAaUBAailAAC0AADlAAEEAaTkAAEAAAEFAaikAADxAAEBAAEEAakNAaTpAADwAAEAAAEFAakMAaTlAgyc6AEYwAAA8AIENMEAAN0AAOQAAPEAAQEAAQQCBUy5AADAAADVAADcAADpAADwAAD1AAEAAajhAADoAaS4AADBAADUAAD0AAD9AgVQpQAAwAAA1QAA4AAA4QAA9QAA/AGkoQAApAAA1AAA8QAA9AGomQAAoAAA1QAA4AAA6QAA8AAA9QGkmAAAoQGooAAApQAA8QAA9AGosQAA1ADQqQAAsADUgQAApAAAqAAAwQAA4QAA6AAA8AAA/QIFTIAAAKUAAMAAAMUAAOAAAOEBqMEAAMQBqKQAAK0AALkAAMAAAOAAAOkAAPUAAPwBpLgAAM0BqKwAALEAAMwAANUAAOgAAPEAAPQBpK0AALABqKwAALEAAM0BqMwBpLAAALkAAMUAANQAAOkAAPAAAPkBqLEAALgAAPEAAPgBpK0AALAAAMQAAM0AAPAAAP0CBVCsAADMAADNAADdAADoAADpAaThAADoAajBAADMAADNAADcAAD8AAERAaTJAADMAai5AADAAADIAADNAADdAADgAAENAAEQAajhAAEFAAEMAaS4AADBAADcAADdAADgAAD9AAEEAajJAADMAaSlAADAAADBAADIAADcAADhAAD8AAEFAajdAADgAAD9AAEEAaiVAACkAAC5AADAAADVAADcAAD8AAEFAaSRAACUAADRAADUAaiJAACQAAClAAC4AADQAADpAAD5AAEEAaSkAADhAaiIAACdAADdAADgAAD4AAD9AajhAADoAaSRAADcAADdAADxAAD8AajgAgj0kAAAzQAA3AAA3QAA6QIFTJwAAMEAAMEAAMkAAMwAANUAANwAAOUAAOgAAOkAAPABpLkAAMAAAMgAAPkBqMAAANQAAN0AAOgAAPgAAP0BqLUAALgAANUAAOQAAPEAAPwBpNwAAOUAAPAAAPkBqLQAALkAAM0AANQAAN0AAOQAAPEAAPgBpMwAANUAANwAAOUAAPAAAPkBqLgAAMkAANQAANUAAOQAAO0BqMEAAMgAAM0AANQAAN0AAOwAAPEAAPgBpMAAAMkAAMwAANkAAOUAAPABqJkAANgAANwAAO0BpJgAAJ0AAOQBqJwAAK0AAN0BqKwAAOkAAOwBpJkAAMkAANkAANwAAOUAAOgBqMgBpJgAAMEAAMgAANgAAN0AAOQAAQECBVC9AADAAADJAAD5AAEAAaS1AAC8AADcAADlAaitAAC0AADIAADdAADkAADtAaTZAADcAaisAAC1AADBAADRAADYAADsAADxAAD4AgVMmQAAtAAAwAAAyQAA0AAA2QGojQAAmAGkjAAAwQAA5QAA8AGowAAAyAAAyQGoyAAA2AAA2QAA+QGkvQAA2AAA2QAA3QAA5AGotQAAvAAA0QAA2AAA3AAA8QGkrQAAtAAA7QAA8AGorAAAtQAAwQAA5QAA7AGowAAAyQGktAAAyAAA5AAA+AIFTNAAB/y8A&quot; target=&quot;_blank&quot;>Download MIDI</a><br></span></p>
+          <midi-player src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAFPADAAACQNUAAOUAAPECBUzUAADVAADkAADlAADwAADxAAEFAgVM1AAA1QAA5AAA5QAA8AAA8QABBAABBQIFUMEAANQBpN0AAOQAAPAAAPEAAQEAAQQBqLUAAMAAANwAAOUAAPAAAPEAAQAAAQUCBUylAAC0AADkAADwAADxAAEEAAEFAAEVAgVMpAAAwQAA8AAA8QABBAABBQABFAABFQIFTQEAAQQAAQ0AARQCBVC1AAEAAAEFAAEMAaUBAailAAC0AADlAAEEAaTkAAEAAAEFAaikAADxAAEBAAEEAakNAaTpAADwAAEAAAEFAakMAaTlAgyc6AEYwAAA8AIENMEAAN0AAOQAAPEAAQEAAQQCBUy5AADAAADVAADcAADpAADwAAD1AAEAAajhAADoAaS4AADBAADUAAD0AAD9AgVQpQAAwAAA1QAA4AAA4QAA9QAA/AGkoQAApAAA1AAA8QAA9AGomQAAoAAA1QAA4AAA6QAA8AAA9QGkmAAAoQGooAAApQAA8QAA9AGosQAA1ADQqQAAsADUgQAApAAAqAAAwQAA4QAA6AAA8AAA/QIFTIAAAKUAAMAAAMUAAOAAAOEBqMEAAMQBqKQAAK0AALkAAMAAAOAAAOkAAPUAAPwBpLgAAM0BqKwAALEAAMwAANUAAOgAAPEAAPQBpK0AALABqKwAALEAAM0BqMwBpLAAALkAAMUAANQAAOkAAPAAAPkBqLEAALgAAPEAAPgBpK0AALAAAMQAAM0AAPAAAP0CBVCsAADMAADNAADdAADoAADpAaThAADoAajBAADMAADNAADcAAD8AAERAaTJAADMAai5AADAAADIAADNAADdAADgAAENAAEQAajhAAEFAAEMAaS4AADBAADcAADdAADgAAD9AAEEAajJAADMAaSlAADAAADBAADIAADcAADhAAD8AAEFAajdAADgAAD9AAEEAaiVAACkAAC5AADAAADVAADcAAD8AAEFAaSRAACUAADRAADUAaiJAACQAAClAAC4AADQAADpAAD5AAEEAaSkAADhAaiIAACdAADdAADgAAD4AAD9AajhAADoAaSRAADcAADdAADxAAD8AajgAgj0kAAAzQAA3AAA3QAA6QIFTJwAAMEAAMEAAMkAAMwAANUAANwAAOUAAOgAAOkAAPABpLkAAMAAAMgAAPkBqMAAANQAAN0AAOgAAPgAAP0BqLUAALgAANUAAOQAAPEAAPwBpNwAAOUAAPAAAPkBqLQAALkAAM0AANQAAN0AAOQAAPEAAPgBpMwAANUAANwAAOUAAPAAAPkBqLgAAMkAANQAANUAAOQAAO0BqMEAAMgAAM0AANQAAN0AAOwAAPEAAPgBpMAAAMkAAMwAANkAAOUAAPABqJkAANgAANwAAO0BpJgAAJ0AAOQBqJwAAK0AAN0BqKwAAOkAAOwBpJkAAMkAANkAANwAAOUAAOgBqMgBpJgAAMEAAMgAANgAAN0AAOQAAQECBVC9AADAAADJAAD5AAEAAaS1AAC8AADcAADlAaitAAC0AADIAADdAADkAADtAaTZAADcAaisAAC1AADBAADRAADYAADsAADxAAD4AgVMmQAAtAAAwAAAyQAA0AAA2QGojQAAmAGkjAAAwQAA5QAA8AGowAAAyAAAyQGoyAAA2AAA2QAA+QGkvQAA2AAA2QAA3QAA5AGotQAAvAAA0QAA2AAA3AAA8QGkrQAAtAAA7QAA8AGorAAAtQAAwQAA5QAA7AGowAAAyQGktAAAyAAA5AAA+AIFTNAAB/y8A sound-font visualizer=&quot;#section137 midi-visualizer&quot;></midi-player>
+          <midi-visualizer src=data:audio/midi;base64,TVRoZAAAAAYAAQACANxNVHJrAAAAEwD/UQMHoSAA/1gEBAIYCAH/LwBNVHJrAAAFPADAAACQNUAAOUAAPECBUzUAADVAADkAADlAADwAADxAAEFAgVM1AAA1QAA5AAA5QAA8AAA8QABBAABBQIFUMEAANQBpN0AAOQAAPAAAPEAAQEAAQQBqLUAAMAAANwAAOUAAPAAAPEAAQAAAQUCBUylAAC0AADkAADwAADxAAEEAAEFAAEVAgVMpAAAwQAA8AAA8QABBAABBQABFAABFQIFTQEAAQQAAQ0AARQCBVC1AAEAAAEFAAEMAaUBAailAAC0AADlAAEEAaTkAAEAAAEFAaikAADxAAEBAAEEAakNAaTpAADwAAEAAAEFAakMAaTlAgyc6AEYwAAA8AIENMEAAN0AAOQAAPEAAQEAAQQCBUy5AADAAADVAADcAADpAADwAAD1AAEAAajhAADoAaS4AADBAADUAAD0AAD9AgVQpQAAwAAA1QAA4AAA4QAA9QAA/AGkoQAApAAA1AAA8QAA9AGomQAAoAAA1QAA4AAA6QAA8AAA9QGkmAAAoQGooAAApQAA8QAA9AGosQAA1ADQqQAAsADUgQAApAAAqAAAwQAA4QAA6AAA8AAA/QIFTIAAAKUAAMAAAMUAAOAAAOEBqMEAAMQBqKQAAK0AALkAAMAAAOAAAOkAAPUAAPwBpLgAAM0BqKwAALEAAMwAANUAAOgAAPEAAPQBpK0AALABqKwAALEAAM0BqMwBpLAAALkAAMUAANQAAOkAAPAAAPkBqLEAALgAAPEAAPgBpK0AALAAAMQAAM0AAPAAAP0CBVCsAADMAADNAADdAADoAADpAaThAADoAajBAADMAADNAADcAAD8AAERAaTJAADMAai5AADAAADIAADNAADdAADgAAENAAEQAajhAAEFAAEMAaS4AADBAADcAADdAADgAAD9AAEEAajJAADMAaSlAADAAADBAADIAADcAADhAAD8AAEFAajdAADgAAD9AAEEAaiVAACkAAC5AADAAADVAADcAAD8AAEFAaSRAACUAADRAADUAaiJAACQAAClAAC4AADQAADpAAD5AAEEAaSkAADhAaiIAACdAADdAADgAAD4AAD9AajhAADoAaSRAADcAADdAADxAAD8AajgAgj0kAAAzQAA3AAA3QAA6QIFTJwAAMEAAMEAAMkAAMwAANUAANwAAOUAAOgAAOkAAPABpLkAAMAAAMgAAPkBqMAAANQAAN0AAOgAAPgAAP0BqLUAALgAANUAAOQAAPEAAPwBpNwAAOUAAPAAAPkBqLQAALkAAM0AANQAAN0AAOQAAPEAAPgBpMwAANUAANwAAOUAAPAAAPkBqLgAAMkAANQAANUAAOQAAO0BqMEAAMgAAM0AANQAAN0AAOwAAPEAAPgBpMAAAMkAAMwAANkAAOUAAPABqJkAANgAANwAAO0BpJgAAJ0AAOQBqJwAAK0AAN0BqKwAAOkAAOwBpJkAAMkAANkAANwAAOUAAOgBqMgBpJgAAMEAAMgAANgAAN0AAOQAAQECBVC9AADAAADJAAD5AAEAAaS1AAC8AADcAADlAaitAAC0AADIAADdAADkAADtAaTZAADcAaisAAC1AADBAADRAADYAADsAADxAAD4AgVMmQAAtAAAwAAAyQAA0AAA2QGojQAAmAGkjAAAwQAA5QAA8AGowAAAyAAAyQGoyAAA2AAA2QAA+QGkvQAA2AAA2QAA3QAA5AGotQAAvAAA0QAA2AAA3AAA8QGkrQAAtAAA7QAA8AGorAAAtQAAwQAA5QAA7AGowAAAyQGktAAAyAAA5AAA+AIFTNAAB/y8A type=piano-roll></midi-visualizer>
           </section>
           " width="100%" height="400" style="border:none !important;" "allowfullscreen"="" "webkitallowfullscreen"="" "mozallowfullscreen"="">'
             </iframe>
