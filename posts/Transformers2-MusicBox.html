@@ -3088,36 +3088,38 @@ p {
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>all_test_notes <span class="op">=</span> torch.vstack(test_notes_tl).<span class="bu">type</span>(torch.float32)</span>
 <span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>all_test_notes <span class="op">=</span> all_test_notes[:<span class="bu">len</span>(all_test_notes)<span class="op">//</span><span class="dv">4</span>]  <span class="co"># to save time, let's not do stats on ALL-all of them, just a quarter</span></span>
 <span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="co"># generate a big batch of fake data. this is super slow because our generator only works for batches of one, oops</span></span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>prompt_len, max_new_tokens <span class="op">=</span> <span class="dv">12</span>, <span class="dv">55</span>   <span class="co"># I just made these numbers up. not great science yet, sorry.</span></span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>new_notes_list <span class="op">=</span> []</span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Generating new notes..."</span>) </span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, notes <span class="kw">in</span> <span class="bu">enumerate</span>(tqdm(test_notes_tl, ncols<span class="op">=</span><span class="dv">100</span>)): <span class="co"># this is gonna take a little while</span></span>
-<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>    ptoks <span class="op">=</span> encode(notes[:prompt_len]).unsqueeze(<span class="dv">0</span>).to(device)</span>
-<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>    new_notes_list.append( decode( model.generate(ptoks, max_new_tokens<span class="op">=</span>max_new_tokens)[<span class="dv">0</span>].cpu()[prompt_len:] ) )</span>
-<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>all_new_notes <span class="op">=</span> torch.vstack(new_notes_list).<span class="bu">type</span>(torch.float32)</span>
-<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"all_test_notes.shape, all_new_notes.shape  = "</span>,all_test_notes.shape, all_new_notes.shape )</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="co"># generate a big batch of fake data. </span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">WARNING</span><span class="co">: this is super slow because our generator only works for batches of one, oops</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>prompt_len, max_new_tokens <span class="op">=</span> <span class="dv">12</span>, <span class="dv">54</span>          <span class="co"># I just made these numbers up. not great science yet, sorry.</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>new_notes_list <span class="op">=</span> []</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Generating new notes..."</span>) </span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, notes <span class="kw">in</span> <span class="bu">enumerate</span>(tqdm(test_notes_tl, ncols<span class="op">=</span><span class="dv">100</span>)): </span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>    ptoks <span class="op">=</span> encode(notes[:prompt_len]).unsqueeze(<span class="dv">0</span>).to(device)</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># generate more notes, chop off prompt before adding to list of all generated notes</span></span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>    new_notes_list.append( decode( model.generate(ptoks, max_new_tokens<span class="op">=</span>max_new_tokens)[<span class="dv">0</span>].cpu()[prompt_len:] ) )</span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>all_new_notes <span class="op">=</span> torch.vstack(new_notes_list).<span class="bu">type</span>(torch.float32)</span>
 <span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
-<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> [<span class="st">'pitch'</span>, <span class="st">'step'</span>, <span class="st">'duration'</span>]</span>
-<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
-<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>    bins <span class="op">=</span> <span class="dv">32</span> <span class="cf">if</span> i <span class="op">!=</span><span class="dv">0</span> <span class="cf">else</span> <span class="fl">0.5</span> <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>np.arange(<span class="dv">128</span><span class="op">//</span><span class="dv">2</span>) </span>
-<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>    ax[i].hist(all_test_notes[:,i].numpy(), bins<span class="op">=</span>bins, label<span class="op">=</span><span class="st">'test data'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
-<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a>    ax[i].hist(all_new_notes[:,i].numpy(),  bins<span class="op">=</span>bins, label<span class="op">=</span><span class="st">'generated'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
-<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a>    ax[i].set_title(names[i])</span>
-<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">==</span><span class="dv">2</span>: ax[i].legend()</span>
-<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a>    ax[i].set_xlabel(<span class="st">'Value'</span>)</span>
-<span id="cb46-27"><a href="#cb46-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">==</span><span class="dv">0</span>: ax[i].set_ylabel(<span class="st">'Frequency'</span>)</span>
-<span id="cb46-28"><a href="#cb46-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"all_test_notes.shape, all_new_notes.shape  = "</span>,all_test_notes.shape, all_new_notes.shape )</span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> [<span class="st">'pitch'</span>, <span class="st">'step'</span>, <span class="st">'duration'</span>]</span>
+<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
+<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a>    bins <span class="op">=</span> <span class="dv">32</span> <span class="cf">if</span> i <span class="op">!=</span><span class="dv">0</span> <span class="cf">else</span> <span class="fl">0.5</span> <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>np.arange(<span class="dv">128</span><span class="op">//</span><span class="dv">2</span>) </span>
+<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a>    ax[i].hist(all_test_notes[:,i].numpy(), bins<span class="op">=</span>bins, label<span class="op">=</span><span class="st">'test data'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a>    ax[i].hist(all_new_notes[:,i].numpy(),  bins<span class="op">=</span>bins, label<span class="op">=</span><span class="st">'generated'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a>    ax[i].set_title(names[i])</span>
+<span id="cb46-27"><a href="#cb46-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">==</span><span class="dv">2</span>: ax[i].legend()</span>
+<span id="cb46-28"><a href="#cb46-28" aria-hidden="true" tabindex="-1"></a>    ax[i].set_xlabel(<span class="st">'Value'</span>)</span>
+<span id="cb46-29"><a href="#cb46-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">==</span><span class="dv">0</span>: ax[i].set_ylabel(<span class="st">'Frequency'</span>)</span>
+<span id="cb46-30"><a href="#cb46-30" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Generating new notes...
-all_test_notes.shape, all_new_notes.shape  =  torch.Size([4159, 3]) torch.Size([4235, 3])</code></pre>
+all_test_notes.shape, all_new_notes.shape  =  torch.Size([4159, 3]) torch.Size([4158, 3])</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>100%|███████████████████████████████████████████████████████████████| 77/77 [02:06&lt;00:00,  1.65s/it]</code></pre>
+<pre><code>100%|███████████████████████████████████████████████████████████████| 77/77 [02:05&lt;00:00,  1.63s/it]</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <p><img src="Transformers2-MusicBox_files/figure-html/cell-30-output-3.png" class="img-fluid"></p>
