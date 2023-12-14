@@ -718,7 +718,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Sometimes the <code>MIDIPlayer</code>’s piano roll view will appear blank if the notes are below the end of the frame. Scroll downward inside the player to reveal all the notes. The piano roll also scrolls left &amp; right.</p>
+<p>Sometimes the <code>MIDIPlayer</code>’s piano roll view will appear blank if the notes are below the bottom of the visible frame. Scroll downward inside the player to reveal all the notes. The piano roll also scrolls left &amp; right.</p>
 </div>
 </div>
 <p>Let’s load a single file and convert it to a PyTorch tensor called <code>notes_tensor</code>, and we’ll go ahead and convert “start” and “end” times “step” and “duration” times. So, displaying the first several notes (using a <code>pandas</code> dataframe for style) we see…</p>
@@ -3192,6 +3192,7 @@ Details
 <li><p>Super huge thanks to <a href="https://twitter.com/jeremyjordan">Jeremy Jordan</a> for many fruitful discussions as I developed this! Check out <a href="https://www.jeremyjordan.me/">his blog</a> for many helpful posts, esp.&nbsp;on Transformers, Attention, and many other Machine Learning topics.</p></li>
 <li><p>I referred to <a href="https://www.youtube.com/watch?v=kCc8FmEb1nY">Andrej Karpathy’s lesson and codes</a> frequently when my own code wasn’t working to my satisfaction (i.e.&nbsp;all the time).</p></li>
 <li><p>Various papers by the Google Magenta team – the undisputed ML-MIDI experts in my book – were helpful in figuring out what to do. This lesson was influenced by their tutorial <a href="https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/audio/music_generation.ipynb">“Generate Music with an RNN”</a>, which I converted PyTorch. In this lesson, code that wasn’t lifted from Karpathy was lifted from that.</p></li>
+<li><p>I’m thankful to <a href="https://github.com/cifkao">Ondřej Cífka</a> for the exchanges that led to my development of Jupyter support for the MIDI player object(s) that he built off Magenta’s work.</p></li>
 <li><p>As I included in the Preface, thanks to <a href="https://twitter.com/mamodrzejewski">Mateusz Modrzejewski</a> for what I took to be a word of encouragement.</p></li>
 <li><p>ChatGPT was used extensively for helping with what I’ll unapologetically term “annoying formatting bullshit” (with pandas, tqdm, CSS,…), but not for anything more significant.</p></li>
 </ul>
