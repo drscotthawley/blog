@@ -1504,7 +1504,7 @@ Checks passed! :-) </code></pre>
 </section>
 <section id="dataset-object-definition" class="level3" data-number="3.5.2">
 <h3 data-number="3.5.2" class="anchored" data-anchor-id="dataset-object-definition"><span class="header-section-number">3.5.2</span> Dataset Object Definition</h3>
-<p>Here we go with the dataset:</p>
+<p>Here we go with the dataset. We’re going to produce input,target pairs of token sequences, in which the targets have been shifted by one token so the model learns to predict what comes next. (This training method is called “<a href="https://en.wikipedia.org/wiki/Teacher_forcing">Teacher Forcing</a>” btw. I didn’t know it needed a name.)</p>
 <div class="cell">
 <details>
 <summary>Show the Pytorch Dataset code</summary>
