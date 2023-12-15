@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Scott H. Hawley">
-<meta name="dcterms.date" content="2023-12-14">
+<meta name="dcterms.date" content="2023-12-15">
 <meta name="description" content="Toy Transformer Tunes">
 
 <title>blog - Understanding Transformers, Part 2: Wee Music Box</title>
@@ -188,7 +188,7 @@ details > summary {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">December 14, 2023</p>
+        <p class="date">December 15, 2023</p>
       </div>
     </div>
     
@@ -3526,11 +3526,14 @@ https://medium.com/data-science-in-your-pocket/music-generation-using-musictrans
 <span id="cb49-88"><a href="#cb49-88" aria-hidden="true" tabindex="-1"></a>    prompt_tokens <span class="op">=</span> encode(prompt).unsqueeze(<span class="dv">0</span>).to(device)</span>
 <span id="cb49-89"><a href="#cb49-89" aria-hidden="true" tabindex="-1"></a>    set_seeds(<span class="dv">1</span>)</span>
 <span id="cb49-90"><a href="#cb49-90" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> decode( model.generate(prompt_tokens, max_new_tokens<span class="op">=</span>new_tokens, temperature<span class="op">=</span><span class="fl">0.9</span>)[<span class="dv">0</span>].cpu() )</span>
-<span id="cb49-91"><a href="#cb49-91" aria-hidden="true" tabindex="-1"></a>    display(xmasplayer(notes,title<span class="op">=</span>title))</span>
+<span id="cb49-91"><a href="#cb49-91" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> xmasplayer(notes,title<span class="op">=</span>title)</span>
 <span id="cb49-92"><a href="#cb49-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-93"><a href="#cb49-93" aria-hidden="true" tabindex="-1"></a>christmas_ohno(<span class="st">"jingle-bells-keyboard.mid"</span>, title<span class="op">=</span><span class="st">"Janky Bells"</span>)</span>
-<span id="cb49-94"><a href="#cb49-94" aria-hidden="true" tabindex="-1"></a>christmas_ohno(<span class="st">"away-in-a-manger.mid"</span>, title<span class="op">=</span><span class="st">"Away in a Mangled"</span>, time_rescale<span class="op">=</span><span class="fl">.48</span><span class="op">/</span><span class="fl">.68</span>)</span>
-<span id="cb49-95"><a href="#cb49-95" aria-hidden="true" tabindex="-1"></a>christmas_ohno(<span class="st">"hark-the-herald-angels-sing.mid"</span>, title<span class="op">=</span><span class="st">"Arg the Herald Angels Cringe"</span>,time_rescale<span class="op">=</span><span class="fl">.48</span><span class="op">/</span><span class="fl">.616</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb49-93"><a href="#cb49-93" aria-hidden="true" tabindex="-1"></a>c1 <span class="op">=</span> christmas_ohno(<span class="st">"jingle-bells-keyboard.mid"</span>, title<span class="op">=</span><span class="st">"Janky Bells"</span>)</span>
+<span id="cb49-94"><a href="#cb49-94" aria-hidden="true" tabindex="-1"></a>c2 <span class="op">=</span> christmas_ohno(<span class="st">"away-in-a-manger.mid"</span>, title<span class="op">=</span><span class="st">"Away in a Mangled"</span>, time_rescale<span class="op">=</span><span class="fl">.48</span><span class="op">/</span><span class="fl">.68</span>)</span>
+<span id="cb49-95"><a href="#cb49-95" aria-hidden="true" tabindex="-1"></a>c3 <span class="op">=</span> christmas_ohno(<span class="st">"hark-the-herald-angels-sing.mid"</span>, title<span class="op">=</span><span class="st">"Arg the Herald Angels Cringe"</span>,time_rescale<span class="op">=</span><span class="fl">.48</span><span class="op">/</span><span class="fl">.616</span>)</span>
+<span id="cb49-96"><a href="#cb49-96" aria-hidden="true" tabindex="-1"></a>display(c1)</span>
+<span id="cb49-97"><a href="#cb49-97" aria-hidden="true" tabindex="-1"></a>display(c2)</span>
+<span id="cb49-98"><a href="#cb49-98" aria-hidden="true" tabindex="-1"></a>display(c3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <iframe srcdoc="<script src=&quot;https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.23.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.5.0&quot;></script>
@@ -3793,6 +3796,9 @@ Tip
 <p>For more holiday-themed Machine Learning instruction, check out <a href="https://hedges.belmont.edu/~shawley/naughty/">“🎅 Naughty by Numbers: Classifications at Christmas”</a>!</p>
 </div>
 </div>
+<center>
+My official December faculty photo:<br> <strong>“Happy Holidays from Dr.&nbsp;Hawley and Wedge the Destroyer”</strong><br> <img src="images/hawley_wedge.jpeg" width="300px">
+</center>
 <hr>
 <p>Copyright (c) 2023, Scott H. Hawley. Code is MIT-licensed, text is licensed CC-BY-NC 4.0.</p>
 
