@@ -1047,7 +1047,7 @@
     "href": "posts/Transformers2-MusicBox.html#faq",
     "title": "Understanding Transformers, Part 2: Wee Music Box",
     "section": "9.1 FAQ",
-    "text": "9.1 FAQ\n\nCan we have a Colab with just the code from this lesson? Sure! Here it is."
+    "text": "9.1 FAQ\n\nCan we have a Colab with just the code from this lesson? Sure! Here it is.    \nIf the Transformer is predicting “chunks” of tokens at a time, couldn’t we do faster autoregressive generation by predicting multiple tokens ahead (instead of just one at a time)? Well, for starters, recall that our target data for “teacher forcing” is only shifted one token ahead, so you’d need to change that first. After that,…you’re welcome to try it, but… I don’t see people doing this much. There are probably “good reasons” of stability or “the curse of dimensionality” (so speculates Jeremy Jordan) for why this isn’t common practice."
   },
   {
     "objectID": "posts/Transformers2-MusicBox.html#change-hyperparamters-dataset",
