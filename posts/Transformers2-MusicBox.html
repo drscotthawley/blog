@@ -1997,12 +1997,11 @@ p {
 <span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>val_dl   <span class="op">=</span> DataLoader(val_ds,   batch_size<span class="op">=</span>config.batch_size, shuffle<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> Transformer(config)</span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co">#model = BigramLanguageModel()</span></span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> model.to(device)</span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>total_params_str <span class="op">=</span> <span class="ss">f'</span><span class="sc">{</span><span class="bu">sum</span>(p.numel() <span class="cf">for</span> p <span class="kw">in</span> model.parameters())<span class="op">/</span><span class="fl">1e6</span><span class="sc">}</span><span class="ss"> M'</span></span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(total_params_str,<span class="st">'parameters in the model'</span>)  </span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.AdamW(model.parameters(), lr<span class="op">=</span>config.learning_rate, weight_decay<span class="op">=</span>config.weight_decay)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> model.to(device)</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>total_params_str <span class="op">=</span> <span class="ss">f'</span><span class="sc">{</span><span class="bu">sum</span>(p.numel() <span class="cf">for</span> p <span class="kw">in</span> model.parameters())<span class="op">/</span><span class="fl">1e6</span><span class="sc">}</span><span class="ss"> M'</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(total_params_str,<span class="st">'parameters in the model'</span>)  </span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.AdamW(model.parameters(), lr<span class="op">=</span>config.learning_rate, weight_decay<span class="op">=</span>config.weight_decay)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>0.843947 M parameters in the model</code></pre>
 </div>
