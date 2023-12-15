@@ -1409,6 +1409,8 @@ p {
 <h2 data-number="3.5" class="anchored" data-anchor-id="making-pytorch-datasets"><span class="header-section-number">3.5</span> Making PyTorch Dataset(s)</h2>
 <p>Our particular dataset already comes with a test/train/valid split in its subdirectores, so let’s use that split. We’ll go ahead and re-load the files:</p>
 <div class="cell">
+<details>
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tensor lists</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>train_filenames <span class="op">=</span> [x <span class="cf">for</span> x <span class="kw">in</span> filenames <span class="cf">if</span> <span class="st">'/train'</span> <span class="kw">in</span> x]</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>val_filenames   <span class="op">=</span> [x <span class="cf">for</span> x <span class="kw">in</span> filenames <span class="cf">if</span> <span class="st">'/val'</span>   <span class="kw">in</span> x]</span>
@@ -1421,10 +1423,11 @@ p {
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, tl <span class="kw">in</span> <span class="bu">zip</span>([<span class="st">'train'</span>,<span class="st">'val'</span>,<span class="st">'test'</span>],[train_notes_tl, val_notes_tl, test_notes_tl]):</span>
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    stack <span class="op">=</span> torch.vstack(tl)</span>
 <span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(tl)<span class="sc">}</span><span class="ss"> songs in </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>stack<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> notes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stderr">
-<pre><code>100%|███████████████████████████████████████████████████████████████████████████████████████████| 229/229 [00:01&lt;00:00, 148.46it/s]
-100%|█████████████████████████████████████████████████████████████████████████████████████████████| 76/76 [00:00&lt;00:00, 154.68it/s]
-100%|█████████████████████████████████████████████████████████████████████████████████████████████| 77/77 [00:00&lt;00:00, 142.49it/s]</code></pre>
+<pre><code>100%|█████████████████████████████████████████████████████████████████████████████████████████| 229/229 [00:01&lt;00:00, 148.65it/s]
+100%|███████████████████████████████████████████████████████████████████████████████████████████| 76/76 [00:00&lt;00:00, 152.29it/s]
+100%|███████████████████████████████████████████████████████████████████████████████████████████| 77/77 [00:00&lt;00:00, 140.92it/s]</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>229 songs in train, 46660 notes
@@ -1546,6 +1549,8 @@ Checks passed! :-) </code></pre>
 </div>
 <p>And before we use it, let’s seed all the Random Number Generators for the sake of reproducibility</p>
 <div class="cell">
+<details>
+<summary>Show the Pytorch Dataset code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#  set RNG seeds for reproducibility.</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> set_seeds(seed):</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    torch.manual_seed(seed)</span>
@@ -1563,6 +1568,7 @@ Checks passed! :-) </code></pre>
 <span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>batch_x, batch_y <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(train_dl))</span>
 <span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"batch_x.shape, batch_y.shape = "</span>,batch_x.shape, batch_y.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>batch_x.shape, batch_y.shape =  torch.Size([128, 64, 3]) torch.Size([128, 64, 3])</code></pre>
 </div>
