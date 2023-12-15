@@ -233,7 +233,7 @@ details > summary {
   <li><a href="#making-pytorch-datasets" id="toc-making-pytorch-datasets" class="nav-link" data-scroll-target="#making-pytorch-datasets"><span class="header-section-number">3.5</span> Making PyTorch Dataset(s)</a>
   <ul class="collapse">
   <li><a href="#data-augmentation" id="toc-data-augmentation" class="nav-link" data-scroll-target="#data-augmentation"><span class="header-section-number">3.5.1</span> Data Augmentation</a></li>
-  <li><a href="#dataset-object-definition" id="toc-dataset-object-definition" class="nav-link" data-scroll-target="#dataset-object-definition"><span class="header-section-number">3.5.2</span> Dataset Object Definition</a></li>
+  <li><a href="#pytorch-dataset-object-definition" id="toc-pytorch-dataset-object-definition" class="nav-link" data-scroll-target="#pytorch-dataset-object-definition"><span class="header-section-number">3.5.2</span> PyTorch Dataset Object Definition</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#hyperparameters-model-configuration" id="toc-hyperparameters-model-configuration" class="nav-link" data-scroll-target="#hyperparameters-model-configuration"><span class="header-section-number">4</span> Hyperparameters / Model Configuration</a></li>
@@ -1502,9 +1502,9 @@ Checks passed! :-) </code></pre>
 </div>
 </div>
 </section>
-<section id="dataset-object-definition" class="level3" data-number="3.5.2">
-<h3 data-number="3.5.2" class="anchored" data-anchor-id="dataset-object-definition"><span class="header-section-number">3.5.2</span> Dataset Object Definition</h3>
-<p>Here we go with the dataset. We’re going to produce <code>input, target</code> pairs of token sequences, in which the targets have been shifted by one token so the model learns to predict what comes next. This method is called “<a href="https://en.wikipedia.org/wiki/Teacher_forcing">Teacher Forcing</a>” by the way. (I didn’t know it needed a name! Seems like regular-old Supervised Learning to me.)</p>
+<section id="pytorch-dataset-object-definition" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="pytorch-dataset-object-definition"><span class="header-section-number">3.5.2</span> PyTorch Dataset Object Definition</h3>
+<p>Now we’re ready to define our <code>Dataset</code> class/object. We’re going to yield <code>input, target</code> pairs of token sequences in which the targets have been shifted by one token so the model learns to predict what comes next. This method is called “<a href="https://en.wikipedia.org/wiki/Teacher_forcing">Teacher Forcing</a>” by the way. (I didn’t know it needed a name; seems like ordinary Supervised Learning to me!)</p>
 <div class="cell">
 <details>
 <summary>Show the Pytorch Dataset code</summary>
