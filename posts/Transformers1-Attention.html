@@ -551,8 +551,9 @@ Key Idea
 <h1 data-number="4"><span class="header-section-number">4</span> Making Attention Mathematical</h1>
 <p>We’ll start by showing the full formula for the Attention mechanism in Transformer models, and then we’ll unpack that to explain what its parts are and <em>why</em> they are there.</p>
 <p>The set of attention weights <span class="math inline">\(A\)</span> – the ones used in the weighted average – are given by</p>
-<p><span id="eq-atnn-mine"><span class="math display">\[ A = {\rm softmax}\left( Q K^T \over \sqrt{d_k} \right). \tag{1}\]</span></span> We then multiply these by the input values <span class="math inline">\(V\)</span> to get the context <span class="math inline">\(C = A V\)</span>. Or, putting these together in the form that appears in the original AIAYN paper,</p>
-<p><span id="eq-atnn-full"><span class="math display">\[ {\rm Attention}(Q,K,V) = {\rm softmax}\left( Q K^T \over \sqrt{d_k} \right)V \tag{2}\]</span></span></p>
+<p><span class="math display">\[ A = {\rm softmax}\left( Q K^T \over \sqrt{d_k} \right).\]</span></p>
+<p>We then multiply these by the input values <span class="math inline">\(V\)</span> to get the context <span class="math inline">\(C = A V\)</span>. Or, putting these together in the form that appears in the original AIAYN paper,</p>
+<p><span class="math display">\[ {\rm Attention}(Q,K,V) = {\rm softmax}\left( Q K^T \over \sqrt{d_k} \right)V\]</span></p>
 <style>
 .img3 {
     /*transform-origin: top left;*/
