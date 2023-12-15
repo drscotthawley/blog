@@ -405,9 +405,10 @@ PE_{(pos,2i+1)} = \cos(pos / 10000^{2i/d_{model}})
 </section>
 <section id="pes-to-add-or-concatenate" class="level3" data-number="2.2.2">
 <h3 data-number="2.2.2" class="anchored" data-anchor-id="pes-to-add-or-concatenate"><span class="header-section-number">2.2.2</span> PEs: To Add or Concatenate?</h3>
-<p>Here’s a design question: Should we add these PEs to our inputs or concatenate them?</p>
-<p>TODO: revise this.</p>
-<p>That’s debateable, and it depends. <a href="https://www.youtube.com/watch?v=M2ToEXF6Olw">Here’s a great video discussing this topic</a>. If the number of PE channels is less than the number of input channels (or input embedding dimensions), then we’ll definitely need to concatenate the PEs as additional channels for the inputs. That’s what Fleuret did when he was working with only one channel of floating point inputs, BTW. Here’s some code we’ll use later to concatenate the PEs to our data sequences.</p>
+<p>Here’s a design question: Should we add these PEs to our inputs or concatenate them? There are a variety of views on this, such as those <a href="https://www.youtube.com/watch?v=M2ToEXF6Olw">described in video</a>.</p>
+<p><strong>Here’s my opinion on this:</strong></p>
+<p>Your token embeddings (for the words, or notes, or whatever) are already going to be very high-dimensional. Now, for low-dimensional spaces, adding things up can sort of “destroy” or “obscure information,” but when you’re upwards of 128, 256, 1028 dimensions, etc., adding ends up being <em>like</em> a kind of concatenation anyway (just in some wonky subspace). If you were to concatenate, then sure, your positional info always stays separate from the content. But if you’re going to allow your overall (high-dimensional) embeddings to be <em>learned</em> anyway, then you might as well let the learning aspect find useful ways to combine the position info with the content info.</p>
+<p>In the code that follows below, all our embeddigns will be learned and added together, and the position info be treated similarly. One exception may be an option to include the “ALIBI” scheme that essentially just moves the PEs to inside the attention computation.</p>
 </section></details>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -530,23 +531,25 @@ Details
 <div class="cell">
 <details>
 <summary>Show the code for system-wide installs</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> platform</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> install_package(package_name):</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"For installing system binaries on Linux (Ubuntu/Debia) or Mac (via Homebrew)"</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> platform.system() <span class="op">==</span> <span class="st">'Darwin'</span>:</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        os.system(<span class="ss">f'brew install </span><span class="sc">{</span>package_name<span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> platform.system() <span class="op">==</span> <span class="st">'Linux'</span>:</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="im">import</span> getpass  <span class="co"># </span><span class="al">TODO</span><span class="co">: colab doesn't need a password for sudo</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        password <span class="op">=</span> getpass.getpass()</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        command <span class="op">=</span> <span class="ss">f"sudo -S apt-get install </span><span class="sc">{</span>package_name<span class="sc">}</span><span class="ss">"</span> </span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        os.popen(command, <span class="st">'w'</span>).write(password<span class="op">+</span><span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Unsupported Operating System"</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># skip it for now</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">#install_package('fluidsynth')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Somehow you need to install fluidsynth</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> platform</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> install_package(package_name):</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"For installing system binaries on Linux (Ubuntu/Debia) or Mac (via Homebrew)"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> platform.system() <span class="op">==</span> <span class="st">'Darwin'</span>:</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        os.system(<span class="ss">f'brew install </span><span class="sc">{</span>package_name<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> platform.system() <span class="op">==</span> <span class="st">'Linux'</span>:</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="im">import</span> getpass  <span class="co"># </span><span class="al">NOTE</span><span class="co">: colab doesn't need a password for sudo</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        password <span class="op">=</span> getpass.getpass()</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        command <span class="op">=</span> <span class="ss">f"sudo -S apt-get install </span><span class="sc">{</span>package_name<span class="sc">}</span><span class="ss">"</span> </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        os.popen(command, <span class="st">'w'</span>).write(password<span class="op">+</span><span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Unsupported Operating System"</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># commenting out b/c I keep re-running this notebook</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">#install_package('fluidsynth')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
