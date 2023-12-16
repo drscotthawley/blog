@@ -213,8 +213,8 @@ details > summary {
   <li><a href="#the-cost-of-attention" id="toc-the-cost-of-attention" class="nav-link" data-scroll-target="#the-cost-of-attention"><span class="header-section-number">2.1</span> The Cost of Attention</a></li>
   <li><a href="#positional-encoding-aka-positional-embeddings" id="toc-positional-encoding-aka-positional-embeddings" class="nav-link" data-scroll-target="#positional-encoding-aka-positional-embeddings"><span class="header-section-number">2.2</span> Positional Encoding (aka Positional Embeddings)</a>
   <ul class="collapse">
-  <li><a href="#some-options-for-pes" id="toc-some-options-for-pes" class="nav-link" data-scroll-target="#some-options-for-pes"><span class="header-section-number">2.2.1</span> Some Options for PEs</a></li>
-  <li><a href="#pes-to-add-or-concatenate" id="toc-pes-to-add-or-concatenate" class="nav-link" data-scroll-target="#pes-to-add-or-concatenate"><span class="header-section-number">2.2.2</span> PEs: To Add or Concatenate?</a></li>
+  <li><a href="#some-options-for-pe" id="toc-some-options-for-pe" class="nav-link" data-scroll-target="#some-options-for-pe"><span class="header-section-number">2.2.1</span> Some Options for PE</a></li>
+  <li><a href="#pe-to-add-or-concatenate" id="toc-pe-to-add-or-concatenate" class="nav-link" data-scroll-target="#pe-to-add-or-concatenate"><span class="header-section-number">2.2.2</span> PE: To Add or Concatenate?</a></li>
   </ul></li>
   <li><a href="#residual-connections" id="toc-residual-connections" class="nav-link" data-scroll-target="#residual-connections"><span class="header-section-number">2.3</span> Residual Connections</a></li>
   <li><a href="#multi-head-attention" id="toc-multi-head-attention" class="nav-link" data-scroll-target="#multi-head-attention"><span class="header-section-number">2.4</span> Multi-Head Attention</a></li>
@@ -388,10 +388,10 @@ Details
 <p>MLPs and/or ConvNets don’t come with (much of) a sense of position, but giving them one can improve performance on tasks where ordering and position matters. There many ways people have have endowed such models with position-awareness and… TBH there’s not necessarily a “silver bullet” solution, so a variety of approaches can end up performing about the same. In what follows we’ll describe various schemes for doing PEs.</p>
 <details>
 <summary>
-Details on PEs
+Details on PE
 </summary>
-<section id="some-options-for-pes" class="level3" data-number="2.2.1">
-<h3 data-number="2.2.1" class="anchored" data-anchor-id="some-options-for-pes"><span class="header-section-number">2.2.1</span> Some Options for PEs</h3>
+<section id="some-options-for-pe" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="some-options-for-pe"><span class="header-section-number">2.2.1</span> Some Options for PE</h3>
 <ol type="1">
 <li><p>You could just concatenate a “linear ramp” of values to provide some position values, but… you wouldn’t want to do that. You won’t get very good gradients, especially for long sequences.</p></li>
 <li><p>There’s the orignal positional encoding from the <a href="https://arxiv.org/abs/1706.03762">AIAYN</a> paper, which uses a set of sines &amp; cosines of expontially-increasing wavelength. They tweaked these wavelengths for their use case and ended up with the following equations: <span class="math display">\[
@@ -407,8 +407,8 @@ PE_{(pos,2i+1)} = \cos(pos / 10000^{2i/d_{model}})
 <li><p>Rotary Encodings. If you view the PEs not as objects themselves but as a set of <em>transformations</em>, and then you require that these be <em>unitary</em> (i.e., magnitude-preserving) transformations,…one could imagine that might help a bit. Rotary encodings are becoming increasingly prevelent in SOTA models, but in our toy case I hypothesize that any gains from this scheme will be swamped by the error from other sources, and thus unnoticeable. Note that the sines &amp; cosines from the original AIAYN paper (Option 2 above) are reminiscent of the “components” of rotations.</p></li>
 </ol>
 </section>
-<section id="pes-to-add-or-concatenate" class="level3" data-number="2.2.2">
-<h3 data-number="2.2.2" class="anchored" data-anchor-id="pes-to-add-or-concatenate"><span class="header-section-number">2.2.2</span> PEs: To Add or Concatenate?</h3>
+<section id="pe-to-add-or-concatenate" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="pe-to-add-or-concatenate"><span class="header-section-number">2.2.2</span> PE: To Add or Concatenate?</h3>
 <p>Here’s a design question: Should we add these PEs to our inputs or concatenate them? There are a variety of views on this, such as those <a href="https://www.youtube.com/watch?v=M2ToEXF6Olw">described in this video</a>.</p>
 <p><strong>Here’s my opinion on this:</strong></p>
 <p>Your token embeddings (for the words, or notes, or whatever) are already going to be very high-dimensional. Now, for low-dimensional spaces, adding things up can sort of “destroy” or “obscure” information, but when you’re upwards of 128, 256, 1028 dimensions, etc., then adding ends up being <em>akin</em> to a kind of concatenation anyway (just in some wonky subspace). If you were to concatenate, then sure, your positional info always stays separate from the content. But if you’re going to allow your overall (high-dimensional) embeddings to be <em>learned</em> anyway, then you might as well let the learning dynamic find useful ways to combine the position info with the content info. Otherwise you’re kind of “wasting space” (with concatenation) and doing more calculations than you’d need compared to the “compressed” representation gained by adding learned embeddings.</p>
