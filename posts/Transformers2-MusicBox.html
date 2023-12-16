@@ -1599,13 +1599,13 @@ Checks passed! :-) </code></pre>
 <pre><code>batch_x.shape, batch_y.shape =  torch.Size([128, 64, 3]) torch.Size([128, 64, 3])</code></pre>
 </div>
 </div>
-<p>Ok. Now that we have a feel for how to handle our data, let’s get setup for the Transformer!</p>
+<p>Ok. Now that we have a feel for how to handle our data, let’s get set up for the Transformer!</p>
 </section>
 </section>
 </section>
 <section id="hyperparameters-model-configuration" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Hyperparameters / Model Configuration</h1>
-<p>Here’s where we’ll put all of our architecture design variables, storing it in a dict-like “<code>dataclass</code>” object for easy passing around.</p>
+<p>Here’s where we’ll put all of our architecture design variables, storing them in a dict-like “<code>dataclass</code>” object for easy passing around.</p>
 <div class="cell">
 <details>
 <summary>Show the config-creation code</summary>
@@ -1652,7 +1652,7 @@ Checks passed! :-) </code></pre>
 </section>
 <section id="transformer-model-code" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> Transformer Model Code</h1>
-<p>I did write my own Transformer code(s) – <a href="https://github.com/drscotthawley/TTTT/tree/main/notebooks">honest!</a> – but it in the <a href="https://wandb.ai/drscotthawley/projects">quest</a> to get better results, I increasingly borrowed from Andrej Karpathy’s lesson code (feeling like the “Salieri” to his “Mozart”), to the point where the following is really a set of minor modifications, such as my added support for multiple codebooks, and passing around the config.</p>
+<p>I did write my own Transformer code(s) – <a href="https://github.com/drscotthawley/TTTT/tree/main/notebooks">honest!</a> – but in the <a href="https://wandb.ai/drscotthawley/projects">quest</a> to get better results, I increasingly borrowed from Andrej Karpathy’s lesson code (feeling like the “Salieri” to his “Mozart”), to the point where the following is really a set of minor modifications, such as my added support for multiple codebooks, and passing around the config.</p>
 <details>
 <summary>
 Details
@@ -2776,7 +2776,7 @@ p {
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>new_tokens <span class="op">=</span> num_tokens <span class="op">-</span> prompt_len</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> temperature <span class="kw">in</span> [ <span class="fl">0.7</span>, <span class="fl">0.85</span>, <span class="fl">0.92</span>, <span class="fl">1.0</span>, <span class="fl">1.2</span>, <span class="fl">1.5</span>]:</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    set_seeds(<span class="dv">1337</span>) <span class="co"># same temp for same seed will yield same output</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    set_seeds(<span class="dv">1337</span>) </span>
 <span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> decode( model.generate(prompt_tokens, max_new_tokens<span class="op">=</span>new_tokens, temperature<span class="op">=</span>temperature)[<span class="dv">0</span>].cpu() )</span>
 <span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    display(midiplayer(notes, title<span class="op">=</span><span class="ss">f"Temperature = </span><span class="sc">{</span>temperature<span class="sc">}</span><span class="ss">"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -3278,7 +3278,7 @@ p {
 <p>“<a href="https://blog.echen.me/2021/12/23/a-laymans-introduction-to-perplexity-in-nlp/">Perplexity</a>” is a common metric for language models which comes from the field of information theory. It is often described as a measure of how “surprised” your model is by novel data.</p>
 <p>Operationally, it’s just the exponential of the value of the loss function – like, …yea, that’s it.</p>
 <p>Why do people report perplexity instead of just the loss value (since the exponential function is monotonic)? Well…because of custom, and because perplexity has some natural relation to entropy, and because it relates to something called the “branching factor” of a language… but “because custom” is enough.</p>
-<p>So, all we’re going to do is feed the test set into our model and measure the loss, and take the exponential of that and… that’s our perplexity! Lower is better.</p>
+<p>So, all we’re going to do is feed the test set into our model, measure the loss, and take the exponential of that and… that’s our perplexity! Lower is better.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -3358,7 +3358,7 @@ p {
 <p><img src="Transformers2-MusicBox_files/figure-html/cell-30-output-3.png" class="img-fluid"></p>
 </div>
 </div>
-<p>Hey! The generated and test data distributions look prety similar. The generated pitches have a slighly larger spread, which is consistent with what we observe in the generated examples, and may be due to the pitch-shifting in our data augmentation.</p>
+<p>Hey! The generated and test data distributions look pretty similar. The generated pitches have a slightly larger spread, which is consistent with what we observe in the generated examples, and may be due to the pitch-shifting in our data augmentation.</p>
 <p>I’m curious why the <code>step</code> values seem to be shifted to the right in the generated data; that’s a bit “sus” to me. But, that’ll be an investigation for another time. We need to wrap this up!</p>
 </section>
 </section>
