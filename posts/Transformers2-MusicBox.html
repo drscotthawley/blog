@@ -1433,7 +1433,7 @@ p {
 </details></section>
 <section id="making-pytorch-datasets" class="level2" data-number="3.5">
 <h2 data-number="3.5" class="anchored" data-anchor-id="making-pytorch-datasets"><span class="header-section-number">3.5</span> Making PyTorch Dataset(s)</h2>
-<p>Our particular dataset already comes with a test/train/valid split in its subdirectores, so let’s use that split. We’ll go ahead and re-load the files:</p>
+<p>Our particular dataset already comes with a test/train/valid split in its subdirectories, so let’s use that split. We’ll go ahead and re-load the files:</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -1461,7 +1461,7 @@ p {
 77 songs in test, 16637 notes</code></pre>
 </div>
 </div>
-<p>…that’s not a ton of data. We should incude some data augmentation.</p>
+<p>…that’s not a ton of data. We should include some data augmentation.</p>
 <section id="data-augmentation" class="level3" data-number="3.5.1">
 <h3 data-number="3.5.1" class="anchored" data-anchor-id="data-augmentation"><span class="header-section-number">3.5.1</span> Data Augmentation</h3>
 <p>We’ll augment the pitch values by raising &amp; lowering them within an octave, except we’ll leave the rest pitch (=127 for the JSB chorales) alone since that sometimes gets used as a rest. And we’ll leave the timing values alone.</p>
