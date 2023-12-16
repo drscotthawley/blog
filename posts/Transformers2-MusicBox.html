@@ -955,7 +955,7 @@ len(notes_tensor_list) = 382</code></pre>
 </section>
 <section id="making-a-tokenizer" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="making-a-tokenizer"><span class="header-section-number">3.4</span> Making a Tokenizer</h2>
-Rather than try something sophisticated like calling <a href="https://github.com/Natooz/MidiTok">MidiTok</a>, we’re going to treat this like a “char-level RNN” and just regard each note as a “parallel” group of 3 tokens (one token for pitch, step, and duration). This means that we will need 3 “codebooks” that can encode &amp; decode between true values and their tokens.
+Rather than try something sophisticated like calling <a href="https://github.com/Natooz/MidiTok">MidiTok</a>, we’re going to treat this like a “char-level RNN” and just regard each note as a “parallel” group of 3 tokens (i.e., one token each for pitch, step, and duration). This means that we will need 3 “codebooks” that can encode &amp; decode between true values and their tokens.
 <details>
 <summary>
 Details
