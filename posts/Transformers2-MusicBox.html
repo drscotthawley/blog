@@ -238,7 +238,7 @@ details > summary {
   </ul></li>
   <li><a href="#hyperparameters-model-configuration" id="toc-hyperparameters-model-configuration" class="nav-link" data-scroll-target="#hyperparameters-model-configuration"><span class="header-section-number">4</span> Hyperparameters / Model Configuration</a></li>
   <li><a href="#transformer-model-code" id="toc-transformer-model-code" class="nav-link" data-scroll-target="#transformer-model-code"><span class="header-section-number">5</span> Transformer Model Code</a></li>
-  <li><a href="#preliminaries-before-training" id="toc-preliminaries-before-training" class="nav-link" data-scroll-target="#preliminaries-before-training"><span class="header-section-number">6</span> Preliminaries before Training</a>
+  <li><a href="#preliminaries-before-training" id="toc-preliminaries-before-training" class="nav-link" data-scroll-target="#preliminaries-before-training"><span class="header-section-number">6</span> Preliminaries Before Training</a>
   <ul class="collapse">
   <li><a href="#set-up-the-gpucpu-device" id="toc-set-up-the-gpucpu-device" class="nav-link" data-scroll-target="#set-up-the-gpucpu-device"><span class="header-section-number">6.1</span> Set Up the GPU/CPU <code>device</code></a></li>
   <li><a href="#prompt-for-demos" id="toc-prompt-for-demos" class="nav-link" data-scroll-target="#prompt-for-demos"><span class="header-section-number">6.2</span> Prompt for Demos</a></li>
@@ -298,7 +298,7 @@ details > summary {
 </div>
 <section id="preface" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Preface</h1>
-<p>This is a follow-up to an earlier lesson, <a href="https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html">“To Understand Transformers, Focus on Attention”</a>. If you haven’t read that yet, <em>do</em>. IMHO, it’s really good. ;-) In this lesson, we’ll fill the “blanks” we left in the Transformer architecture last time, and go on to build a working example.</p>
+<p>This is a follow-up to an earlier lesson, <a href="https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html">“To Understand Transformers, Focus on Attention”</a>. If you haven’t read that yet, <em>do</em>. IMHO, it’s really good. ;-) In this lesson, we’ll fill in the “blanks” we left in the Transformer architecture last time, and go on to build a working example.</p>
 <p>For that example, let’s do something different from the many other online lessons about working with text &amp; Natural Language Processing (NLP): Let’s make a “Generative Music Transformer.” To keep things “small,” we’ll work in terms of MIDI instead of raw audio. For ideas about trying raw audio, see “Further Study” in <a href="#sec-further">Section&nbsp;10</a>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -310,7 +310,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The goal of this exercise is building <em>some understanding</em>, not building a killer MIDI-generating app. If you want the latter, check out <a href="https://magenta.tensorflow.org/music-transformer">Google Magenta’s paper</a> from 2018, or various extensions since then. If you just want to play around with a great MIDI model, check out <a href="https://huggingface.co/spaces/skytnt/midi-composer">SkyTNT’s HuggingFace Space</a>. By “some” understanding, I also mean that we’re going to largely ignore the many variants and improvements on Transformers made over the past several years – lately <a href="https://www.youtube.com/watch?v=ouF-H35atOY">“Mamba”</a> is generating consierable buzz. I find that <a href="https://twitter.com/rasbt">Sebastian Raschka</a>’s posts to be helpful for considering major updates on the Transformer “theme”.</p>
+<p>The goal of this exercise is to build <em>some understanding</em>, not to build a killer MIDI-generating app. If you want the latter, check out <a href="https://magenta.tensorflow.org/music-transformer">Google Magenta’s paper</a> from 2018, or various extensions since then. If you just want to play around with a great MIDI model, check out <a href="https://huggingface.co/spaces/skytnt/midi-composer">SkyTNT’s HuggingFace Space</a>. By “some” understanding, I also mean that we’re going to largely ignore the many variants and improvements on Transformers made over the past several years – lately <a href="https://www.youtube.com/watch?v=ouF-H35atOY">“Mamba”</a> is generating considerable buzz. I find <a href="https://twitter.com/rasbt">Sebastian Raschka</a>’s posts to be informative about major updates on the Transformer “theme”. Even as improvements are made, the Transformer architecture will continue to form an important part of the conversation about neural network design.</p>
 </div>
 </div>
 <section id="managing-expectations" class="level2" data-number="1.1">
@@ -343,8 +343,8 @@ Note
 </section>
 <section id="intuiting-the-rest-of-the-transformer" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Intuiting the Rest of the Transformer</h1>
-<p>The <a href="https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html">previous lesson</a> left some things out. In this section, we’ll build some intuitive understanding of these other components, and a bit of code.</p>
-<p>Below is a picture of the original Transformer model diagram, whose parts we will elucide as we go on. It’s set up like the traditional <a href="https://tex.stackexchange.com/questions/374926/drawing-an-encoder-decoder-architecture-in-tikz">“encoder-decoder” architecture</a> one often sees in the form of an <a href="images/EncoderDecoder_feedback_large.png">“hourglass shape”</a>, although it may not be obvious from the Transformer diagram:</p>
+<p>The <a href="https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html">previous lesson</a> left some things out. In this section, we’ll build some intuitive understanding of these other components and a bit of code.</p>
+<p>Below is a picture of the original Transformer model diagram, whose parts we will elucidate as we go on. It’s set up like the traditional <a href="https://tex.stackexchange.com/questions/374926/drawing-an-encoder-decoder-architecture-in-tikz">“encoder-decoder” architecture</a> one often sees in the form of an <a href="images/EncoderDecoder_feedback_large.png">“hourglass shape”</a>, although it may not be obvious from the Transformer diagram:</p>
 <style>
 .img1 {
     /*transform-origin: top left;*/
@@ -362,11 +362,11 @@ Note
 <div id="fig-trans-diag" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/TransformerSchematic_labeled.png" class="img1 img-fluid figure-img"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;1<strong>.</strong> (Mouse-over or press to expand.) Original Transformer architecture illustration, blue and red annotations added by me. The “Encoder side” circled in red is often used for generating embeddings for analysis-based workflows such as classification tasks; one of which of the most famous ‘encoder-only’ models was BERT (which stood Bidirectional Encoder Representations from Transformers). There’s already an <a href="https://pytorch.org/tutorials/beginner/transformer_tutorial.html">official PyTorch tutorial</a> for the Encoder side. For this lesson, we’ll implement just the Decoder side circled in blue.</figcaption>
+<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;1<strong>.</strong> (Mouse-over or press to expand.) Original Transformer architecture illustration, blue and red annotations added by me. The “Encoder side” circled in red is often used for generating embeddings for analysis-based workflows such as classification tasks; of the most famous ‘encoder-only’ models was BERT (which stood Bidirectional Encoder Representations from Transformers). There’s already an <a href="https://pytorch.org/tutorials/beginner/transformer_tutorial.html">official PyTorch tutorial</a> for the Encoder side. For this lesson, we’ll implement just the Decoder side circled in blue.</figcaption>
 </figure>
 </div>
-<p>For langauge translation tasks, both the Encoder (cirled in red) and Decoder (circled in blue) are used. For purely “generative” systems like the GPT variants and what we’ll do today, we’ll use the Decoder side. Note however that even the Decoder can involve some encoding, as we combine an embedding of the words / MIDI / “tokens” with Positional Encoding information. PE is discussed below.</p>
-<p>We’re going to go through the various components that make up the above diagram. But first, let’s point out something about the Attention mechanism that we skipped over in the previous less, namely the computational “cost” associated with making every part of a sequence with every other part.</p>
+<p>For language translation tasks, both the Encoder (circled in red) and Decoder (circled in blue) are used. For purely “generative” systems like the GPT variants and what we’ll do today, we’ll use the Decoder side. Note however that even the Decoder can involve some encoding, as we combine an embedding of the words / MIDI / “tokens” with Positional Encoding information. PE is discussed below.</p>
+<p>We’re going to go through the various components that make up the above diagram. But first, let’s point out something about the Attention mechanism that we skipped over in the previous lesson, namely the computational “cost” associated with making every part of a sequence with every other part.</p>
 <section id="the-cost-of-attention" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="the-cost-of-attention"><span class="header-section-number">2.1</span> The Cost of Attention</h2>
 <p>The attention mechanism <em>per se</em> that we covered in the previous post has a serious drawback: the computational cost scales like the sequence length squared, i.e.&nbsp;for a sequence length of <span class="math inline">\(N\)</span>, the cost is <big>𝒪</big>(<span class="math inline">\(N^2)\)</span>. This is one reason that Large Language Models can be “Large” – trying to model long sequences results in big matrices!</p>
@@ -385,7 +385,7 @@ Details
 </details></section>
 <section id="positional-encoding-aka-positional-embeddings" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="positional-encoding-aka-positional-embeddings"><span class="header-section-number">2.2</span> Positional Encoding (aka Positional Embeddings)</h2>
-<p>MLPs and/or ConvNets don’t come with (much of) a sense of position, but giving them one can improve performance on tasks where ordering and position matters. There many ways people have have endowed such models with position-awareness and… TBH there’s not necessarily a “silver bullet” solution, so a variety of approaches can end up performing about the same. In what follows we’ll describe various schemes for doing PEs.</p>
+<p>MLPs and/or ConvNets don’t come with (much of) a sense of position, but giving them one can improve performance on tasks where ordering and position matters. There are many ways people have endowed such models with position-awareness and… TBH there’s not necessarily a “silver bullet” solution, so a variety of approaches can end up performing about the same. In what follows we’ll describe various schemes for doing PEs.</p>
 <details>
 <summary>
 Details on PE
@@ -432,7 +432,7 @@ Tip
 </section>
 <section id="residual-connections" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="residual-connections"><span class="header-section-number">2.3</span> Residual Connections</h2>
-<p>In the Transfomer model diagram of <a href="#fig-trans-diag">Figure&nbsp;1</a>, wherever you see arrows going <em>around</em> something and connecting to a yellow “Add &amp; Norm” block, that is indicative of a “skip residual” or just “residual” connection. Readers will likely have seen residual / skip connections in other contexts, so we’ll make this section “Details”-expandable for those who haven’t encountered them.</p>
+<p>In the Transformer model diagram of <a href="#fig-trans-diag">Figure&nbsp;1</a>, wherever you see arrows going <em>around</em> something and connecting to a yellow “Add &amp; Norm” block, that is indicative of a “skip residual” or just “residual” connection. Readers will likely have seen residual / skip connections in other contexts, so we’ll make this section “Details”-expandable for those who haven’t encountered them.</p>
 <details>
 <summary>
 Details
@@ -519,7 +519,7 @@ Tip
 </section>
 <section id="stacking-blocks-embeddings-of-embeddingsof-embeddings" class="level2" data-number="2.6">
 <h2 data-number="2.6" class="anchored" data-anchor-id="stacking-blocks-embeddings-of-embeddingsof-embeddings"><span class="header-section-number">2.6</span> Stacking Blocks: Embeddings of Embeddings…of Embeddings</h2>
-<p>By stacking layers of our transformers, i.e.&nbsp;feeding embeddings into layers that will render them as new embeddings, we wil increase the representational power of our model. In terms of code, this is easy to do by looping over a list of layers.</p>
+<p>By stacking layers of our transformers, i.e.&nbsp;feeding embeddings into layers that will render them as new embeddings, we will increase the representational power of our model. In terms of code, this is easy to do by looping over a list of layers.</p>
 </section>
 
 <section id="the-music-midi-dataset" class="level1" data-number="3">
@@ -1828,7 +1828,7 @@ Details
 </div>
 </details></section>
 <section id="preliminaries-before-training" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Preliminaries before Training</h1>
+<h1 data-number="6"><span class="header-section-number">6</span> Preliminaries Before Training</h1>
 GPU device, Demo prompts, Clean re-init
 <details>
 <summary>
