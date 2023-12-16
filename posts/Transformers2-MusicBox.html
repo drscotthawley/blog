@@ -734,71 +734,75 @@ Note
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> quantize_times(times, </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                   res_ms<span class="op">=</span><span class="dv">8</span>, <span class="co"># resolution in milliseconds. 8ms was deemed sufficient for MAESTRO.</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                   clamp_range_s<span class="op">=</span>[<span class="fl">0.0</span>,<span class="fl">4.0</span>]):</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    quant_step <span class="op">=</span> res_ms <span class="op">/</span> <span class="fl">1000.0</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    q_times <span class="op">=</span> torch.<span class="bu">round</span>(times <span class="op">/</span> quant_step) <span class="op">*</span> quant_step</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> clamp_range_s <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>: </span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        q_times <span class="op">=</span> torch.clamp(q_times, clamp_range_s[<span class="dv">0</span>], clamp_range_s[<span class="dv">1</span>])</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> q_times</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> midi_file_to_tensor(filenames, i<span class="op">=</span><span class="va">None</span>, keep_start_end<span class="op">=</span><span class="va">False</span>, rest_pitches<span class="op">=</span>[REST_PITCH]):  <span class="co"># filenames could just be a single filename</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    midi_file <span class="op">=</span> filenames <span class="cf">if</span> i <span class="kw">is</span> <span class="va">None</span> <span class="kw">or</span> <span class="bu">type</span>(filenames)<span class="op">==</span><span class="bu">str</span>  <span class="cf">else</span> filenames[i]</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">"reads a single midi file and converts it to tensor with elements (pitch, step, duration)"</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    pm <span class="op">=</span> pretty_midi.PrettyMIDI(midi_file) <span class="co"># read in the whole file. this can be very slow for long MIDI files (e.g. in MAESTRO)</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sort the notes first by start time (and then by pitch if two notes start at the same time)</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    sorted_notes <span class="op">=</span> <span class="bu">sorted</span>(pm.instruments[<span class="dv">0</span>].notes, key<span class="op">=</span><span class="kw">lambda</span> note: (note.start, note.pitch))</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">#notes = torch.empty( (len(sorted_notes), 3 + 2*keep_start_end), dtype=torch.float32 ) # allocate storage</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    prev_start <span class="op">=</span> sorted_notes[<span class="dv">0</span>].start</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> []</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, note <span class="kw">in</span> <span class="bu">enumerate</span>(sorted_notes):</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        new_note <span class="op">=</span>  torch.empty( (<span class="dv">3</span> <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>keep_start_end) , dtype<span class="op">=</span>torch.float32)</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">int</span>(note.pitch) <span class="kw">in</span> rest_pitches: <span class="cf">continue</span>  <span class="co"># we can actually delete the rests! </span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        new_note[<span class="dv">0</span>] <span class="op">=</span> note.pitch</span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        new_note[<span class="dv">1</span>] <span class="op">=</span> note.start <span class="op">-</span> prev_start  <span class="co"># step, i.e. time since start of previous note</span></span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        new_note[<span class="dv">2</span>] <span class="op">=</span> note.end <span class="op">-</span> note.start    <span class="co"># duration</span></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> keep_start_end:                     <span class="co"># might find it useful be able to keep these for easier analysis later</span></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>            new_note[<span class="dv">3</span>] <span class="op">=</span> note.start</span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>            new_note[<span class="dv">4</span>] <span class="op">=</span> note.end</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        prev_start <span class="op">=</span> note.start</span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>        notes.append(new_note)</span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> torch.vstack(notes)</span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    notes[:,<span class="dv">1</span>:] <span class="op">=</span> quantize_times(notes[:,<span class="dv">1</span>:])</span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> notes</span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: Replace quantization on the front end with rouding/nearest neighbors in the encoder</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#       Doing so would set us up for vector quantization approaches</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> quantize_times(times, </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                   res_ms<span class="op">=</span><span class="dv">8</span>, <span class="co"># resolution in milliseconds. 8ms was deemed sufficient for MAESTRO.</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                   clamp_range_s<span class="op">=</span>[<span class="fl">0.0</span>,<span class="fl">4.0</span>]):</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    quant_step <span class="op">=</span> res_ms <span class="op">/</span> <span class="fl">1000.0</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    q_times <span class="op">=</span> torch.<span class="bu">round</span>(times <span class="op">/</span> quant_step) <span class="op">*</span> quant_step</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> clamp_range_s <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>: </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        q_times <span class="op">=</span> torch.clamp(q_times, clamp_range_s[<span class="dv">0</span>], clamp_range_s[<span class="dv">1</span>])</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> q_times</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> midi_file_to_tensor(filenames, i<span class="op">=</span><span class="va">None</span>, keep_start_end<span class="op">=</span><span class="va">False</span>, rest_pitches<span class="op">=</span>[REST_PITCH]):  <span class="co"># filenames could just be a single filename</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    midi_file <span class="op">=</span> filenames <span class="cf">if</span> i <span class="kw">is</span> <span class="va">None</span> <span class="kw">or</span> <span class="bu">type</span>(filenames)<span class="op">==</span><span class="bu">str</span>  <span class="cf">else</span> filenames[i]</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">"reads a single midi file and converts it to tensor with elements (pitch, step, duration)"</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    pm <span class="op">=</span> pretty_midi.PrettyMIDI(midi_file) <span class="co"># read in the whole file. this can be very slow for long MIDI files (e.g. in MAESTRO)</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sort the notes first by start time (and then by pitch if two notes start at the same time)</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    sorted_notes <span class="op">=</span> <span class="bu">sorted</span>(pm.instruments[<span class="dv">0</span>].notes, key<span class="op">=</span><span class="kw">lambda</span> note: (note.start, note.pitch))</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">#notes = torch.empty( (len(sorted_notes), 3 + 2*keep_start_end), dtype=torch.float32 ) # allocate storage</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    prev_start <span class="op">=</span> sorted_notes[<span class="dv">0</span>].start</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> []</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, note <span class="kw">in</span> <span class="bu">enumerate</span>(sorted_notes):</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        new_note <span class="op">=</span>  torch.empty( (<span class="dv">3</span> <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>keep_start_end) , dtype<span class="op">=</span>torch.float32)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">int</span>(note.pitch) <span class="kw">in</span> rest_pitches: <span class="cf">continue</span>  <span class="co"># we can actually delete the rests! </span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        new_note[<span class="dv">0</span>] <span class="op">=</span> note.pitch</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>        new_note[<span class="dv">1</span>] <span class="op">=</span> note.start <span class="op">-</span> prev_start  <span class="co"># step, i.e. time since start of previous note</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        new_note[<span class="dv">2</span>] <span class="op">=</span> note.end <span class="op">-</span> note.start    <span class="co"># duration</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> keep_start_end:                     <span class="co"># might find it useful be able to keep these for easier analysis later</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>            new_note[<span class="dv">3</span>] <span class="op">=</span> note.start</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>            new_note[<span class="dv">4</span>] <span class="op">=</span> note.end</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>        prev_start <span class="op">=</span> note.start</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        notes.append(new_note)</span>
 <span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>notes_tensor <span class="op">=</span> midi_file_to_tensor(midi_file)</span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.notebook_repr_html'</span>, <span class="va">True</span>)</span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>notes_df <span class="op">=</span> pd.DataFrame(notes_tensor, columns<span class="op">=</span>[<span class="st">'pitch'</span>,<span class="st">'step (s)'</span>,<span class="st">'duration (s)'</span>]) <span class="co"># actually df's look nicer</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> torch.vstack(notes)</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    notes[:,<span class="dv">1</span>:] <span class="op">=</span> quantize_times(notes[:,<span class="dv">1</span>:])</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> notes</span>
 <span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="co"># making it look better in the blog: adjust width of pandas dataframes</span></span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>display(HTML(<span class="st">'''</span></span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;style&gt;</span></span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="st">.dataframe {</span></span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="st">    width: 40%; /* Adjust this value as needed */</span></span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="st">    margin-left: auto;</span></span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="st">    margin-right: auto;</span></span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="st">.dataframe th, .dataframe td {</span></span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="st">    text-align: center;</span></span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="st">    width: auto !important;</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>notes_tensor <span class="op">=</span> midi_file_to_tensor(midi_file)</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.notebook_repr_html'</span>, <span class="va">True</span>)</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>notes_df <span class="op">=</span> pd.DataFrame(notes_tensor, columns<span class="op">=</span>[<span class="st">'pitch'</span>,<span class="st">'step (s)'</span>,<span class="st">'duration (s)'</span>]) <span class="co"># actually df's look nicer</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="co"># making it look better in the blog: adjust width of pandas dataframes</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>display(HTML(<span class="st">'''</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;style&gt;</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="st">.dataframe {</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="st">    width: 40%; /* Adjust this value as needed */</span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="st">    margin-left: auto;</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="st">    margin-right: auto;</span></span>
 <span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="st">table {</span></span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="st">    margin-left: auto;</span></span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="st">    margin-right: auto;</span></span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="st">th, td {</span></span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a><span class="st">    text-align: center;</span></span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a><span class="st">    min-width: 100px; /* Or any other width */</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="st">.dataframe th, .dataframe td {</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="st">    text-align: center;</span></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="st">    width: auto !important;</span></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="st">table {</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a><span class="st">    margin-left: auto;</span></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a><span class="st">    margin-right: auto;</span></span>
 <span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;/style&gt;</span></span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a><span class="st">'''</span>))</span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>HTML(notes_df[:<span class="dv">8</span>].to_html(index<span class="op">=</span><span class="va">False</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="st">th, td {</span></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a><span class="st">    text-align: center;</span></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="st">    min-width: 100px; /* Or any other width */</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;/style&gt;</span></span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a><span class="st">'''</span>))</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>HTML(notes_df[:<span class="dv">8</span>].to_html(index<span class="op">=</span><span class="va">False</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 
