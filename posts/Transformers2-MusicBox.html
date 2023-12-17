@@ -471,7 +471,7 @@ Tip
 </section>
 <section id="multi-head-attention" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="multi-head-attention"><span class="header-section-number">2.4</span> Multi-Head Attention</h2>
-<p>As described in the previous lesson, Multi-Head Attention simply involves allowing differently-weighted attention operators (called “heads”) to perform attention operations, allowing them to focus on different “senses” of phrases, parts of speech, or in our case, musical structures.</p>
+<p>As described in the <a href="https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html">previous lesson</a>, Multi-Head Attention simply involves allowing differently-weighted attention operators (called “heads”) to perform attention operations, allowing them to focus on different “senses” of phrases, parts of speech, or in our case, musical structures.</p>
 <style>
 .img-mh {
     /*transform-origin: top left;*/
@@ -2788,7 +2788,7 @@ p {
             </iframe>
 </div>
 </div>
-<p>In what follows, we’ll vary the “temperature” parameter of the model (see the bottom of the previous lesson), to see its effect on what comes out.</p>
+<p>In what follows, we’ll vary the “temperature” parameter of the model (see the bottom of the <a href="https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html">previous lesson</a>), to see its effect on what comes out.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>new_tokens <span class="op">=</span> num_tokens <span class="op">-</span> prompt_len</span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -3381,7 +3381,7 @@ p {
 </section>
 <section id="summary-and-faq" class="level1" data-number="9">
 <h1 data-number="9"><span class="header-section-number">9</span> Summary and FAQ</h1>
-<p>We have delved into all the parts of the “classic” Transformer model architecture beyond just the Attention mechanism covered in the Part 1 lesson. Avoiding the typical example of text generation, we chose to do MIDI generation, taking our cues from the many successes of the Google Magenta team. MIDI data has some particularities that make it different from many other common data types, notably the “free floating” nature of the <em>timing</em> information. This proved to be a major (and unforeseen) challenge in developing the code for this lesson. In the end, we chose the relatively “easy” task of continuing Bach chorales – btw, a tradition in AI-music that goes back to at least the 1970s, if not the 1950s – and found that the results were tolerable. In what follows below, we provide some suggestions for further study. In particular, the fact that this project involved making predictions using multiple codebooks helps it generalize to complex datatypes such as video and audio. Overall, the development of this lesson was a great opportunity for self-education by the author! Thanks for joining me.</p>
+<p>We have delved into all the parts of the “classic” Transformer model architecture beyond just the Attention mechanism covered in the <a href="https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html">“Part 1”</a> lesson. Avoiding the typical example of text generation, we chose to do MIDI generation, taking our cues from the many successes of the Google Magenta team. MIDI data has some particularities that make it different from many other common data types, notably the “free floating” nature of the <em>timing</em> information. This proved to be a major (and unforeseen) challenge in developing the code for this lesson. In the end, we chose the relatively “easy” task of continuing Bach chorales – btw, a tradition in AI-music that goes back to at least the 1970s, if not the 1950s – and found that the results were tolerable. In what follows below, we provide some suggestions for further study. In particular, the fact that this project involved making predictions using multiple codebooks helps it generalize to complex datatypes such as video and audio. Overall, the development of this lesson was a great opportunity for self-education by the author! Thanks for joining me.</p>
 <p><strong>Invitation:</strong> If you have suggestions for improvements or critiques of this lesson, <em>please write to me!</em> I’m not an NLP or MIDI specialist and I want to learn more. Find me on social media as @drscotthawley and/or you can get contact info from my university page: https://hawley.belmont.edu</p>
 <section id="faq" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="faq"><span class="header-section-number">9.1</span> FAQ</h2>
