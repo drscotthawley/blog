@@ -1340,38 +1340,32 @@ Preliminary Encoding/Decoding checks pass! :-)</code></pre>
 <span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>                  instrument_name: <span class="bu">str</span> <span class="op">=</span> <span class="st">'Acoustic Grand Piano'</span>,</span>
 <span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>                  velocity: <span class="bu">int</span> <span class="op">=</span> <span class="dv">64</span>,  <span class="co"># default loudness for all notes</span></span>
 <span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>                 ) <span class="op">-&gt;</span> pretty_midi.PrettyMIDI:</span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> notes.clone() <span class="co"># just to avoid weird overwrites of memory addresses</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> notes.clone()       <span class="co"># just to avoid weird overwrites of memory addresses</span></span>
 <span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> notes.<span class="bu">min</span>() <span class="op">&lt;</span> <span class="fl">0.0</span>:</span>
 <span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>      <span class="bu">print</span>(<span class="st">"WARNING: You have negative pitches, steps or durations. Setting them to zero"</span>)</span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>      notes <span class="op">=</span> notes <span class="op">*</span> (notes <span class="op">&gt;=</span> <span class="dv">0</span>)</span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> time_rescale <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>: <span class="co"># just added this because sometime I want to slow/speed up</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>      notes <span class="op">=</span> notes <span class="op">*</span> (notes <span class="op">&gt;=</span> <span class="dv">0</span>)  <span class="co"># ReLU on all quantities</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> time_rescale <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:    <span class="co"># added because sometimes I want to slow/speed up</span></span>
 <span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>        notes[:,<span class="dv">1</span>:] <span class="op">=</span> notes[:,<span class="dv">1</span>:] <span class="op">*</span>time_rescale</span>
 <span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>        </span>
 <span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    pm <span class="op">=</span> pretty_midi.PrettyMIDI()</span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>    instrument <span class="op">=</span> pretty_midi.Instrument(</span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>        program<span class="op">=</span>pretty_midi.instrument_name_to_program(</span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>            instrument_name))</span>
-<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> notes.shape[<span class="op">-</span><span class="dv">1</span>] <span class="op">&lt;</span> <span class="dv">5</span>: notes <span class="op">=</span> get_startend(notes)</span>
-<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> notes.cpu().numpy()</span>
-<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>    prev_start <span class="op">=</span> <span class="fl">0.0</span></span>
-<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> note <span class="kw">in</span> notes: </span>
-<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>        pitch, start, end <span class="op">=</span> <span class="bu">int</span>(note[<span class="dv">0</span>]), note[<span class="dv">3</span>], note[<span class="dv">4</span>] </span>
-<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>        midi_note <span class="op">=</span> pretty_midi.Note( velocity<span class="op">=</span>velocity, pitch<span class="op">=</span>pitch, start<span class="op">=</span>start, end<span class="op">=</span>end, )</span>
-<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>        instrument.notes.append(midi_note)</span>
-<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>        prev_start <span class="op">=</span> start   </span>
-<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>    pm.instruments.append(instrument)</span>
-<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> out_file: pm.write(out_file)</span>
-<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pm</span>
-<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> midiplayer(notes_tensor, height<span class="op">=</span><span class="dv">400</span>, time_rescale<span class="op">=</span><span class="va">None</span>, midi_file<span class="op">=</span><span class="st">"/tmp/tmp.mid"</span>, title<span class="op">=</span><span class="st">''</span>, styler<span class="op">=</span>dark):</span>
-<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>    <span class="co">"MIDIplayer that writes input tensor to temporary file"</span></span>
-<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>    pm <span class="op">=</span> notes_to_midi(notes_tensor, time_rescale<span class="op">=</span>time_rescale, out_file<span class="op">=</span>midi_file)</span>
-<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> MIDIPlayer(midi_file, height, styler<span class="op">=</span>dark, dl<span class="op">=</span><span class="va">True</span>, title<span class="op">=</span>title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>    instrument <span class="op">=</span> pretty_midi.Instrument( program<span class="op">=</span>pretty_midi.instrument_name_to_program(instrument_name) )</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> notes.shape[<span class="op">-</span><span class="dv">1</span>] <span class="op">&lt;</span> <span class="dv">5</span>: notes <span class="op">=</span> get_startend(notes)  <span class="co"># figure out start,end times from step,dur, concat as new columns</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> notes.cpu().numpy()</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> note <span class="kw">in</span> notes: </span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>        midi_note <span class="op">=</span> pretty_midi.Note( velocity<span class="op">=</span>velocity, pitch<span class="op">=</span><span class="bu">int</span>(note[<span class="dv">0</span>]), start<span class="op">=</span>note[<span class="dv">3</span>], end<span class="op">=</span>note[<span class="dv">4</span>], )</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>        instrument.notes.append(midi_note)</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>    pm.instruments.append(instrument)</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> out_file: pm.write(out_file)</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pm</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> midiplayer(notes_tensor, height<span class="op">=</span><span class="dv">400</span>, time_rescale<span class="op">=</span><span class="va">None</span>, midi_file<span class="op">=</span><span class="st">"/tmp/tmp.mid"</span>, title<span class="op">=</span><span class="st">''</span>, styler<span class="op">=</span>dark):</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>    <span class="co">"MIDIplayer that writes input tensor to temporary file"</span></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>    pm <span class="op">=</span> notes_to_midi(notes_tensor, time_rescale<span class="op">=</span>time_rescale, out_file<span class="op">=</span>midi_file)</span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> MIDIPlayer(midi_file, height, styler<span class="op">=</span>dark, dl<span class="op">=</span><span class="va">True</span>, title<span class="op">=</span>title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>We’re going to encode &amp; decode, and write to a MIDI file, and play that midi file. Using the same file as above:</p>
