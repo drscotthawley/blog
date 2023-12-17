@@ -1562,13 +1562,13 @@ Checks passed! :-) </code></pre>
 <span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>train_ds <span class="op">=</span> NotesDataset(train_notes_tl, seq_length)</span>
 <span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>val_ds <span class="op">=</span> NotesDataset(val_notes_tl, seq_length, aug_callback<span class="op">=</span><span class="va">None</span>, len_mult<span class="op">=</span><span class="dv">1000000</span>) <span class="co"># no aug, neverending</span></span>
 <span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a><span class="co"># save test_ds for Evaluation section, later</span></span>
-<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(train_ds), <span class="bu">len</span>(val_ds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Dataset lengths:  Train: </span><span class="sc">{</span><span class="bu">len</span>(train_ds)<span class="sc">}</span><span class="ss"> notes, Validation: </span><span class="sc">{</span><span class="bu">len</span>(val_ds)<span class="sc">}</span><span class="ss"> notes."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display">
-<pre><code>(22900, 76000000)</code></pre>
+<div class="cell-output cell-output-stdout">
+<pre><code>Dataset lengths:  Train: 22900 notes, Validation: 76000000 notes.</code></pre>
 </div>
 </div>
-<p>And before we use it, let’s seed all the Random Number Generators for the sake of reproducibility</p>
+<p>Now we can use the <code>Dataset</code> instances to create <code>DataLoader</code> objects. Since the latter may involve random shuffling, let’s seed all the Random Number Generators for the sake of reproducibility.</p>
 <div class="cell">
 <details>
 <summary>Show the RNG-setting &amp; DataLoader code</summary>
@@ -1588,10 +1588,10 @@ Checks passed! :-) </code></pre>
 <span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>val_dl   <span class="op">=</span> DataLoader(val_ds,   batch_size<span class="op">=</span>batch_size, shuffle<span class="op">=</span><span class="va">False</span>, )</span>
 <span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>batch_x, batch_y <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(train_dl))</span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Batch shapes:  batch_x.shape, batch_y.shape = "</span>,batch_x.shape, batch_y.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Checking batch shapes:  batch_x.shape, batch_y.shape = "</span>,batch_x.shape, batch_y.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Batch shapes:  batch_x.shape, batch_y.shape =  torch.Size([128, 64, 3]) torch.Size([128, 64, 3])</code></pre>
+<pre><code>Checking batch shapes:  batch_x.shape, batch_y.shape =  torch.Size([128, 64, 3]) torch.Size([128, 64, 3])</code></pre>
 </div>
 </div>
 <p>Ok. Now that we have a feel for how to handle our data, let’s get set up for the Transformer!</p>
@@ -1616,7 +1616,7 @@ Checks passed! :-) </code></pre>
 <span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    n_blocks:   <span class="bu">int</span> <span class="op">=</span> <span class="dv">4</span>       <span class="co"># number of attention blocks</span></span>
 <span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    dropout:  <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.2</span>     <span class="co"># dropout value applied everywhere. since JSB is a small dataset, let's use more than usual</span></span>
 <span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    bias:      <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>   <span class="co"># True: bias in Linears and LayerNorms, like GPT-2. False: a bit better and faster</span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    use_alibi: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>   <span class="co"># use ALiBi for/instead of PE</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    use_alibi: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span>   <span class="co"># use ALiBi PE scheme</span></span>
 <span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># training details</span></span>
 <span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    learning_rate: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.001</span></span>
