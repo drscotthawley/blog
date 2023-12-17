@@ -229,7 +229,7 @@ details > summary {
   <li><a href="#making-a-tokenizer-codebooks" id="toc-making-a-tokenizer-codebooks" class="nav-link" data-scroll-target="#making-a-tokenizer-codebooks"><span class="header-section-number">3.4</span> Making a Tokenizer: Codebooks</a>
   <ul class="collapse">
   <li><a href="#encoding-and-decoding" id="toc-encoding-and-decoding" class="nav-link" data-scroll-target="#encoding-and-decoding"><span class="header-section-number">3.4.1</span> Encoding and Decoding</a></li>
-  <li><a href="#checking-tokenization-encoding-decoding" id="toc-checking-tokenization-encoding-decoding" class="nav-link" data-scroll-target="#checking-tokenization-encoding-decoding"><span class="header-section-number">3.4.2</span> Checking Tokenization, Encoding &amp; Decoding</a></li>
+  <li><a href="#checking-encoding-decoding-playing-tensors" id="toc-checking-encoding-decoding-playing-tensors" class="nav-link" data-scroll-target="#checking-encoding-decoding-playing-tensors"><span class="header-section-number">3.4.2</span> Checking Encoding &amp; Decoding, ‘Playing’ Tensors</a></li>
   </ul></li>
   <li><a href="#making-pytorch-datasets" id="toc-making-pytorch-datasets" class="nav-link" data-scroll-target="#making-pytorch-datasets"><span class="header-section-number">3.5</span> Making PyTorch Dataset(s)</a>
   <ul class="collapse">
@@ -995,8 +995,8 @@ Details
 <span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>display(HTML(<span class="ss">f"vocab_sizes = </span><span class="sc">{</span>vocab_sizes<span class="sc">}</span><span class="ss">"</span>))</span>
 <span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Just a nice way to display the codebooks in the blog post: </span></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>df1 <span class="op">=</span> pd.DataFrame(codebooks[<span class="dv">1</span>].numpy(), columns<span class="op">=</span>[<span class="st">'steps'</span>])</span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> pd.DataFrame(codebooks[<span class="dv">2</span>].numpy(), columns<span class="op">=</span>[<span class="st">'durations'</span>])</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>df1 <span class="op">=</span> pd.DataFrame(codebooks[<span class="dv">1</span>].numpy(), columns<span class="op">=</span>[<span class="st">'steps (s)'</span>])</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> pd.DataFrame(codebooks[<span class="dv">2</span>].numpy(), columns<span class="op">=</span>[<span class="st">'durations (s)'</span>])</span>
 <span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>display(HTML(<span class="ss">f"Codebooks for steps &amp; durations are </span><span class="sc">{</span><span class="st">''</span> <span class="cf">if</span> df1<span class="sc">.</span>equals(df2) <span class="cf">else</span> <span class="st">'not '</span><span class="sc">}</span><span class="ss">the same:"</span>))</span>
 <span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>html1, html2 <span class="op">=</span> df1.to_html(index<span class="op">=</span><span class="va">False</span>),  df2.to_html(index<span class="op">=</span><span class="va">False</span>)</span>
@@ -1016,7 +1016,7 @@ Details
 vocab_sizes = [128, 15, 28]
 </div>
 <div class="cell-output cell-output-display">
-Codebooks for steps &amp; durs are not the same:
+Codebooks for steps &amp; durations are not the same:
 </div>
 <div class="cell-output cell-output-display">
 <div style="width: 100%; text-align: center;">
@@ -1032,7 +1032,7 @@ Codebooks for steps &amp; durs are not the same:
 <td style="vertical-align: top"><table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
-<th data-quarto-table-cell-role="th">steps</th>
+<th data-quarto-table-cell-role="th">steps (s)</th>
 </tr>
 </thead>
 <tbody>
@@ -1087,7 +1087,7 @@ Codebooks for steps &amp; durs are not the same:
 <td style="vertical-align: top"><table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
-<th data-quarto-table-cell-role="th">durations</th>
+<th data-quarto-table-cell-role="th">durations (s)</th>
 </tr>
 </thead>
 <tbody>
@@ -1251,21 +1251,21 @@ Note
 <span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a><span class="co"># And let's do a little test</span></span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's do a little test to see if we get back what we encode</span></span>
 <span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>midi_seq <span class="op">=</span> all_notes[<span class="dv">0</span>:<span class="dv">8</span>].clone()</span>
 <span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Before encoding, midi_seq =</span><span class="ch">\n</span><span class="st">"</span>,midi_seq)</span>
 <span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>token_list <span class="op">=</span> encode(midi_seq)</span>
 <span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"After encoding, token_list =</span><span class="ch">\n</span><span class="st">"</span>,token_list)</span>
 <span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>return_seq <span class="op">=</span> decode(token_list)</span>
 <span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"After decoding, return_seq =</span><span class="ch">\n</span><span class="st">"</span>,return_seq)</span>
-<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> torch.equal(midi_seq, return_seq), <span class="ss">f"Oops. midi_seq=</span><span class="sc">{</span>midi_seq<span class="sc">}</span><span class="ss">, but return_seq=</span><span class="sc">{</span>return_seq<span class="sc">}</span><span class="ss">. Should be the same"</span></span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> torch.equal( midi_seq, return_seq), <span class="ss">f"Oops. midi_seq=</span><span class="sc">{</span>midi_seq<span class="sc">}</span><span class="ss">, but return_seq=</span><span class="sc">{</span>return_seq<span class="sc">}</span><span class="ss">. Should be the same"</span></span>
 <span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a><span class="co"># "safety" check re. values that exceed codebook range -- should get truncated to last cb entry</span></span>
 <span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a>midi_seq[<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="fl">100.0</span>  <span class="co"># give the last time a huge value to check that our mapper won't crash</span></span>
 <span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a>token_list <span class="op">=</span> encode(midi_seq, codebooks) <span class="co"># if it doesn't crash, we're good</span></span>
 <span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> token_list[<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>] <span class="op">==</span> <span class="bu">len</span>(codebooks[<span class="op">-</span><span class="dv">1</span>])<span class="op">-</span><span class="dv">1</span>, <span class="ss">f"Big value (</span><span class="sc">{</span>midi_seq[<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]<span class="sc">}</span><span class="ss">) should have gotten the last spot in the last codebook (</span><span class="sc">{</span><span class="bu">len</span>(codebooks[<span class="op">-</span><span class="dv">1</span>])<span class="op">-</span><span class="dv">1</span><span class="sc">}</span><span class="ss">) but came back as </span><span class="sc">{</span>token_list[<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]<span class="sc">}</span><span class="ss">"</span></span>
 <span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Checks pass! :-)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Preliminary Encoding/Decoding checks pass! :-)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Before encoding, midi_seq =
@@ -1295,12 +1295,12 @@ After decoding, return_seq =
         [55.0000,  0.0000,  0.4800],
         [72.0000,  0.0000,  0.2400],
         [70.0000,  0.2400,  0.2400]])
-Checks pass! :-)</code></pre>
+Preliminary Encoding/Decoding checks pass! :-)</code></pre>
 </div>
 </div>
 </section>
-<section id="checking-tokenization-encoding-decoding" class="level3" data-number="3.4.2">
-<h3 data-number="3.4.2" class="anchored" data-anchor-id="checking-tokenization-encoding-decoding"><span class="header-section-number">3.4.2</span> Checking Tokenization, Encoding &amp; Decoding</h3>
+<section id="checking-encoding-decoding-playing-tensors" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="checking-encoding-decoding-playing-tensors"><span class="header-section-number">3.4.2</span> Checking Encoding &amp; Decoding, ‘Playing’ Tensors</h3>
 <p>Before moving on, it’s a good idea to double check: Can we really encode and decode an entire midi sequence? Let’s write some more utility files. Notably the <code>midiplayer()</code> routine which will allow us to play our PyTorch tensors directly in this notebook.</p>
 <div class="cell">
 <details>
