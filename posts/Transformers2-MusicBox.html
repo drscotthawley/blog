@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Scott H. Hawley">
-<meta name="dcterms.date" content="2023-12-15">
+<meta name="dcterms.date" content="2023-12-18">
 <meta name="description" content="Toy Transformer Tunes">
 
 <title>blog - Understanding Transformers, Part 2: Wee Music Box</title>
@@ -188,7 +188,7 @@ details > summary {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">December 15, 2023</p>
+        <p class="date">December 18, 2023</p>
       </div>
     </div>
     
@@ -972,60 +972,45 @@ Details
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict </span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">###</span><span class="co"> OLD CODE used dicts</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># def make_codebooks_old(all_notes, verbose=False):</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#     codebooks = []</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#     n_codebooks = all_notes.shape[-1] # should be 3</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#     for i in range(n_codebooks): </span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#         if i==0:  # i=0 means pitch</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#             cb_vals = torch.arange(128)  # just use all possible pitches </span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">#         else:     # i!=0 means timing</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#             cb_vals = all_notes[:,i].unique().sort()[0] </span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">#         if verbose: print(f"\n---\ncb {i}: cb_vals = {cb_vals}")</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co">#         codebooks.append({'encode':{np.round(k.item(),3): int(v) for v, k in enumerate(cb_vals)}, # codebooks go both ways</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co">#                           'decode':{int(v): k for v, k in enumerate(cb_vals)}})</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co">#         codebooks.append(cb_vals)</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co">#         if verbose: print(f" cb {i}: cb keys = {codebooks[-1]['encode'].keys()}")</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co">#         if verbose: print(f" cb {i}: cb_vals = {cb_vals}")</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="co">#     return codebooks</span></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="co"># NEW version is simpler, just uses values:</span></span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_codebooks(all_notes, verbose<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    codebooks <span class="op">=</span> []</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    n_codebooks <span class="op">=</span> all_notes.shape[<span class="op">-</span><span class="dv">1</span>] <span class="co"># should be 3</span></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_codebooks): </span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i<span class="op">==</span><span class="dv">0</span>:  <span class="co"># i=0 means pitch</span></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>            cb_vals <span class="op">=</span> torch.arange(<span class="dv">128</span>)  <span class="co"># just use all possible pitches. could limit to min/max range but...not gonna. </span></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:     <span class="co"># i!=0 means timing</span></span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>            cb_vals <span class="op">=</span> all_notes[:,i].unique().sort()[<span class="dv">0</span>] </span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> verbose: <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">---</span><span class="ch">\n</span><span class="ss">cb </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">: cb_vals = </span><span class="sc">{</span>cb_vals<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>        codebooks.append(cb_vals)</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> codebooks</span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>all_notes[:,<span class="dv">1</span>:] <span class="op">=</span> quantize_times(all_notes[:,<span class="dv">1</span>:]) <span class="co"># we should already be time-quantized so this should be unnecessary, but...just in case</span></span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>codebooks <span class="op">=</span> make_codebooks(all_notes, verbose<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>vocab_sizes <span class="op">=</span> [<span class="bu">len</span>(cb) <span class="cf">for</span> cb <span class="kw">in</span> codebooks]</span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>display(HTML(<span class="ss">f"Codebook sizes = </span><span class="sc">{</span>vocab_sizes<span class="sc">}</span><span class="ss">"</span>))</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_codebooks(all_notes, verbose<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    codebooks <span class="op">=</span> []</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    n_codebooks <span class="op">=</span> all_notes.shape[<span class="op">-</span><span class="dv">1</span>] <span class="co"># should be 3</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_codebooks): </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i<span class="op">==</span><span class="dv">0</span>:  <span class="co"># i=0 means pitch</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>            cb_vals <span class="op">=</span> torch.arange(<span class="dv">128</span>)  <span class="co"># just use all possible pitches. could limit to min/max range but...not gonna. </span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:     <span class="co"># i!=0 means timing</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>            cb_vals <span class="op">=</span> all_notes[:,i].unique().sort()[<span class="dv">0</span>] </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> verbose: <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">---</span><span class="ch">\n</span><span class="ss">cb </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">: cb_vals = </span><span class="sc">{</span>cb_vals<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        codebooks.append(cb_vals)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> codebooks</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>all_notes[:,<span class="dv">1</span>:] <span class="op">=</span> quantize_times(all_notes[:,<span class="dv">1</span>:]) <span class="co"># we should already be time-quantized so this should be unnecessary, but...just in case</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>codebooks <span class="op">=</span> make_codebooks(all_notes, verbose<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>vocab_sizes <span class="op">=</span> [<span class="bu">len</span>(cb) <span class="cf">for</span> cb <span class="kw">in</span> codebooks]</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>display(HTML(<span class="ss">f"Codebook sizes = </span><span class="sc">{</span>vocab_sizes<span class="sc">}</span><span class="ss">"</span>))</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="co">###--- From here down, it's just a nice way to display the codebooks in the blog post: </span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>df1 <span class="op">=</span> pd.DataFrame(codebooks[<span class="dv">1</span>].numpy(), columns<span class="op">=</span>[<span class="st">'steps (s)'</span>])</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> pd.DataFrame(codebooks[<span class="dv">2</span>].numpy(), columns<span class="op">=</span>[<span class="st">'durations (s)'</span>])</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>display(HTML(<span class="ss">f"Codebooks for steps &amp; durations are </span><span class="sc">{</span><span class="st">''</span> <span class="cf">if</span> df1<span class="sc">.</span>equals(df2) <span class="cf">else</span> <span class="st">'not '</span><span class="sc">}</span><span class="ss">the same:"</span>))</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>html1, html2 <span class="op">=</span> df1.to_html(index<span class="op">=</span><span class="va">False</span>),  df2.to_html(index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine HTML strings with a space in between</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>combined_html <span class="op">=</span> <span class="ss">f'''&lt;div style="width: 100%; text-align: center;"&gt;</span></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;table style="margin-left: auto; margin-right: auto;"&gt; &lt;tr&gt;</span></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;td style="vertical-align: top;"&gt;</span><span class="sc">{</span>html1<span class="sc">}</span><span class="ss">&lt;/td&gt;</span></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;td style="width: 50px;"&gt;&lt;/td&gt;</span></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;td style="vertical-align: top;"&gt;</span><span class="sc">{</span>html2<span class="sc">}</span><span class="ss">&lt;/td&gt;</span></span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;'''</span></span>
 <span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Just a nice way to display the codebooks in the blog post: </span></span>
-<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>df1 <span class="op">=</span> pd.DataFrame(codebooks[<span class="dv">1</span>].numpy(), columns<span class="op">=</span>[<span class="st">'steps (s)'</span>])</span>
-<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> pd.DataFrame(codebooks[<span class="dv">2</span>].numpy(), columns<span class="op">=</span>[<span class="st">'durations (s)'</span>])</span>
-<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>display(HTML(<span class="ss">f"Codebooks for steps &amp; durations are </span><span class="sc">{</span><span class="st">''</span> <span class="cf">if</span> df1<span class="sc">.</span>equals(df2) <span class="cf">else</span> <span class="st">'not '</span><span class="sc">}</span><span class="ss">the same:"</span>))</span>
-<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>html1, html2 <span class="op">=</span> df1.to_html(index<span class="op">=</span><span class="va">False</span>),  df2.to_html(index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine HTML strings with a space in between</span></span>
-<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>combined_html <span class="op">=</span> <span class="ss">f'''&lt;div style="width: 100%; text-align: center;"&gt;</span></span>
-<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;table style="margin-left: auto; margin-right: auto;"&gt; &lt;tr&gt;</span></span>
-<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;td style="vertical-align: top;"&gt;</span><span class="sc">{</span>html1<span class="sc">}</span><span class="ss">&lt;/td&gt;</span></span>
-<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;td style="width: 50px;"&gt;&lt;/td&gt;</span></span>
-<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;td style="vertical-align: top;"&gt;</span><span class="sc">{</span>html2<span class="sc">}</span><span class="ss">&lt;/td&gt;</span></span>
-<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;'''</span></span>
-<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the combined HTML</span></span>
-<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>display(HTML(combined_html))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the combined HTML</span></span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>display(HTML(combined_html))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 Codebook sizes = [128, 15, 28]
@@ -1217,72 +1202,54 @@ Note
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#### OLD CODE used dicts-----</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># def remap_vals(seq, encdec_str, dtype=torch.long):</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#     out = torch.zeros_like(seq, dtype=dtype)</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#     for cb in range(seq.shape[-1]): </span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#         dict_map = codebooks[cb][encdec_str]</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">#         default_map = max(codebooks[cb][encdec_str].values())</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#         out[:,cb] = torch.tensor([dict_map.get(np.round(x.item(),3),default_map) for x in seq[:,cb]], dtype=dtype) # that np.round(,3) is good for avoiding KeyErrors</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">#     return out </span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co"># # We'll be calling these 'encode' and 'decode functions', which really just pull up the applicable part of the codebooks</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co"># encode = lambda s: remap_vals(s, 'encode')</span></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># decode = lambda s: remap_vals(s, 'decode', dtype=all_notes.dtype)</span></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co">####------------</span></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co">### New Code Uses argmin / "1-D vector quantization" </span></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode_one_cb(seq:torch.Tensor, cb:torch.Tensor) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">""" Encodes one 'column' of note info (either pitch, step, or duration)</span></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="co">        given new value(s) and codebook, return argmin of the difference</span></span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="co">        difficulty: seq and cb may have different shapes &amp; may not broadcast, so we may need to loop</span></span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    sidx <span class="op">=</span> torch.empty( seq.shape, dtype<span class="op">=</span><span class="bu">int</span>, device<span class="op">=</span>seq.device)</span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, note <span class="kw">in</span> <span class="bu">enumerate</span>(seq): <span class="co"># note: this is trivially parallel so could be parallelized if not in jupyter</span></span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>        sidx[i] <span class="op">=</span> torch.argmin( ( note <span class="op">-</span> cb )<span class="op">**</span><span class="dv">2</span>, dim<span class="op">=</span><span class="dv">0</span> )   <span class="co"># could use torch.abs() instead of ^2 since we're in 1-D, but I want this to be general</span></span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sidx</span>
-<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode_one_cb(xi, cb:torch.Tensor) <span class="op">-&gt;</span> torch.Tensor:</span>
-<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Decodes one 'column' of note-index info (either pitch_i, step_i, or duration_i)</span></span>
-<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="co">    xi should be an int, a list of ints, or a tensor of ints"""</span></span>
-<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cb[xi]</span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode_one_cb(seq:torch.Tensor, cb:torch.Tensor) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">""" Encodes one 'column' of note info (either pitches, steps, or durations)</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">        given new value(s) and codebook, return argmin of the difference</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">        Difficulty: seq and cb may have different lengths &amp; may not broadcast, </span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">        thus I wrote a loop that broadcasts each note over all cb values</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    sidx <span class="op">=</span> torch.empty( seq.shape, dtype<span class="op">=</span><span class="bu">int</span>, device<span class="op">=</span>seq.device)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, note <span class="kw">in</span> <span class="bu">enumerate</span>(seq):                          <span class="co"># note: this is trivially parallel but jupyter mp hangs for me :'-(</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        sidx[i] <span class="op">=</span> torch.argmin( ( note <span class="op">-</span> cb )<span class="op">**</span><span class="dv">2</span>, dim<span class="op">=</span><span class="dv">0</span> )   <span class="co"># could use torch.abs() instead of ^2 since we're in 1-D, but I want this to be general</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sidx</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode_one_cb(xi, cb:torch.Tensor) <span class="op">-&gt;</span> torch.Tensor:</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Decodes one 'column' of note-index info (either pitch_i, step_i, or duration_i)</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="co">    xi should be an int, a list of ints, or a tensor of ints"""</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> cb[xi]</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode(seq:torch.Tensor, cbs<span class="op">=</span>codebooks) <span class="op">-&gt;</span> torch.Tensor:</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Encodes a sequence of notes, where each note is (pitch, step, dur)"</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">len</span>(seq.shape) <span class="op">==</span> <span class="dv">2</span>, <span class="st">"Not set up for batch processing yet, but could be a fun exercise for a student ;-) "</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    encoded <span class="op">=</span> torch.empty( seq.shape, dtype<span class="op">=</span><span class="bu">int</span>, device<span class="op">=</span>seq.device)</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, cb <span class="kw">in</span> <span class="bu">enumerate</span>(cbs):</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>        encoded[:,i] <span class="op">=</span> encode_one_cb( seq[:,i], cb)</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> encoded</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode(sidx:torch.Tensor, cbs<span class="op">=</span>codebooks) <span class="op">-&gt;</span> torch.Tensor:</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Decodes a sequence of integer indices for notes (pitch_i, step_i, dur_i)"</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">len</span>(sidx.shape) <span class="op">==</span> <span class="dv">2</span>, <span class="st">"Not set up for batch processing yet, but could be a fun exercise for a student ;-)"</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>    decoded <span class="op">=</span> torch.empty( sidx.shape, dtype<span class="op">=</span>torch.float32, device<span class="op">=</span>sidx.device)</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, cb <span class="kw">in</span> <span class="bu">enumerate</span>(cbs):</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>        decoded[:,i] <span class="op">=</span> decode_one_cb( sidx[:,i], cb)</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> decoded    </span>
 <span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode(seq:torch.Tensor, cbs<span class="op">=</span>codebooks) <span class="op">-&gt;</span> torch.Tensor:</span>
-<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Encodes a sequence of notes, where each note is (pitch, step, dur)"</span></span>
-<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">len</span>(seq.shape) <span class="op">==</span> <span class="dv">2</span>, <span class="st">"Not set up for batch processing yet, but could be a fun exercise for a student ;-) "</span></span>
-<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>    encoded <span class="op">=</span> torch.empty( seq.shape, dtype<span class="op">=</span><span class="bu">int</span>, device<span class="op">=</span>seq.device)</span>
-<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, cb <span class="kw">in</span> <span class="bu">enumerate</span>(cbs):</span>
-<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>        encoded[:,i] <span class="op">=</span> encode_one_cb( seq[:,i], cb)</span>
-<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> encoded</span>
-<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode(sidx:torch.Tensor, cbs<span class="op">=</span>codebooks) <span class="op">-&gt;</span> torch.Tensor:</span>
-<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Decodes a sequence of integer indices for notes (pitch_i, step_i, dur_i)"</span></span>
-<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">len</span>(sidx.shape) <span class="op">==</span> <span class="dv">2</span>, <span class="st">"Not set up for batch processing yet, but could be a fun exercise for a student ;-)"</span></span>
-<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>    decoded <span class="op">=</span> torch.empty( sidx.shape, dtype<span class="op">=</span>torch.float32, device<span class="op">=</span>sidx.device)</span>
-<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, cb <span class="kw">in</span> <span class="bu">enumerate</span>(cbs):</span>
-<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>        decoded[:,i] <span class="op">=</span> decode_one_cb( sidx[:,i], cb)</span>
-<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> decoded    </span>
-<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's do a little test to see if we get back what we encode</span></span>
-<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>midi_seq <span class="op">=</span> all_notes[<span class="dv">0</span>:<span class="dv">8</span>].clone()</span>
-<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Before encoding, midi_seq =</span><span class="ch">\n</span><span class="st">"</span>,midi_seq)</span>
-<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>token_list <span class="op">=</span> encode(midi_seq)</span>
-<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"After encoding, token_list =</span><span class="ch">\n</span><span class="st">"</span>,token_list)</span>
-<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>return_seq <span class="op">=</span> decode(token_list)</span>
-<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"After decoding, return_seq =</span><span class="ch">\n</span><span class="st">"</span>,return_seq)</span>
-<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> torch.equal( midi_seq, return_seq), <span class="ss">f"Oops. midi_seq=</span><span class="sc">{</span>midi_seq<span class="sc">}</span><span class="ss">, but return_seq=</span><span class="sc">{</span>return_seq<span class="sc">}</span><span class="ss">. Should be the same"</span></span>
-<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a><span class="co"># "safety" check re. values that exceed codebook range -- should get truncated to last cb entry</span></span>
-<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>midi_seq[<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="fl">100.0</span>  <span class="co"># give the last time a huge value to check that our mapper won't crash</span></span>
-<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a>token_list <span class="op">=</span> encode(midi_seq, codebooks) <span class="co"># if it doesn't crash, we're good</span></span>
-<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> token_list[<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>] <span class="op">==</span> <span class="bu">len</span>(codebooks[<span class="op">-</span><span class="dv">1</span>])<span class="op">-</span><span class="dv">1</span>, <span class="ss">f"Big value (</span><span class="sc">{</span>midi_seq[<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]<span class="sc">}</span><span class="ss">) should have gotten the last spot in the last codebook (</span><span class="sc">{</span><span class="bu">len</span>(codebooks[<span class="op">-</span><span class="dv">1</span>])<span class="op">-</span><span class="dv">1</span><span class="sc">}</span><span class="ss">) but came back as </span><span class="sc">{</span>token_list[<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Preliminary Encoding/Decoding checks pass! :-)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's do a little test to see if we get back what we encode</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>midi_seq <span class="op">=</span> all_notes[<span class="dv">0</span>:<span class="dv">8</span>].clone()</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Before encoding, midi_seq =</span><span class="ch">\n</span><span class="st">"</span>,midi_seq)</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>token_list <span class="op">=</span> encode(midi_seq)</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"After encoding, token_list =</span><span class="ch">\n</span><span class="st">"</span>,token_list)</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>return_seq <span class="op">=</span> decode(token_list)</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"After decoding, return_seq =</span><span class="ch">\n</span><span class="st">"</span>,return_seq)</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> torch.equal( midi_seq, return_seq), <span class="ss">f"Oops. midi_seq=</span><span class="sc">{</span>midi_seq<span class="sc">}</span><span class="ss">, but return_seq=</span><span class="sc">{</span>return_seq<span class="sc">}</span><span class="ss">. Should be the same"</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a><span class="co"># "safety" check re. values that exceed codebook range -- should get truncated to last cb entry</span></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>midi_seq[<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="fl">100.0</span>  <span class="co"># give the last time a huge value to check that our mapper won't crash</span></span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>token_list <span class="op">=</span> encode(midi_seq, codebooks) <span class="co"># if it doesn't crash, we're good</span></span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> token_list[<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>] <span class="op">==</span> <span class="bu">len</span>(codebooks[<span class="op">-</span><span class="dv">1</span>])<span class="op">-</span><span class="dv">1</span>, <span class="ss">f"Big value (</span><span class="sc">{</span>midi_seq[<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]<span class="sc">}</span><span class="ss">) should have gotten the last spot in the last codebook (</span><span class="sc">{</span><span class="bu">len</span>(codebooks[<span class="op">-</span><span class="dv">1</span>])<span class="op">-</span><span class="dv">1</span><span class="sc">}</span><span class="ss">) but came back as </span><span class="sc">{</span>token_list[<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Preliminary Encoding/Decoding checks pass! :-)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Before encoding, midi_seq =
