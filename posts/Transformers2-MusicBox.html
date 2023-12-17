@@ -1072,7 +1072,7 @@ Note
 <span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode_one_cb(seq:torch.Tensor, cb:torch.Tensor) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
 <span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""given new value(s) and codebook, return argmin of the difference</span></span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="co">       difficulty: s and cb may have different shapes &amp; may not broadcast, so we may need to loop</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="co">       difficulty: seq and cb may have different shapes &amp; may not broadcast, so we may need to loop</span></span>
 <span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
 <span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    sidx <span class="op">=</span> torch.empty( seq.shape, dtype<span class="op">=</span><span class="bu">int</span>, device<span class="op">=</span>seq.device)</span>
 <span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, note <span class="kw">in</span> <span class="bu">enumerate</span>(seq): <span class="co"># note: this is trivially parallel so could be parallelized if not in jupyter</span></span>
