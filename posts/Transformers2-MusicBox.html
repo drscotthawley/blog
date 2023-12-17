@@ -1258,7 +1258,7 @@ Note
 <span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> decode(sidx:torch.Tensor, cbs<span class="op">=</span>codebooks) <span class="op">-&gt;</span> torch.Tensor:</span>
 <span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>    <span class="co">"decodes a sequence of integeer indices"</span></span>
 <span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">len</span>(sidx.shape) <span class="op">==</span> <span class="dv">2</span>, <span class="st">"Not set up for batch processing yet, but could be a fun exercise for a student ;-)"</span></span>
-<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>    decoded <span class="op">=</span> torch.zeros( sidx.shape, dtype<span class="op">=</span>torch.float32, device<span class="op">=</span>sidx.device)</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>    decoded <span class="op">=</span> torch.empty( sidx.shape, dtype<span class="op">=</span>torch.float32, device<span class="op">=</span>sidx.device)</span>
 <span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, cb <span class="kw">in</span> <span class="bu">enumerate</span>(cbs):</span>
 <span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>        decoded[:,i] <span class="op">=</span> decode_one_cb( sidx[:,i], cb)</span>
 <span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> decoded    </span>
@@ -1322,7 +1322,7 @@ Preliminary Encoding/Decoding checks pass! :-)</code></pre>
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_startend(notes:torch.Tensor) <span class="op">-&gt;</span> torch.Tensor:</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"integrates (step,duration) timing pairs to recover (start,end) info. concats them as new columns"</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    newnotes <span class="op">=</span> torch.zeros((<span class="bu">len</span>(notes), <span class="dv">5</span>), dtype<span class="op">=</span>notes.dtype, device<span class="op">=</span>notes.device)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    newnotes <span class="op">=</span> torch.empty((<span class="bu">len</span>(notes), <span class="dv">5</span>), dtype<span class="op">=</span>notes.dtype, device<span class="op">=</span>notes.device)</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    newnotes[:,:<span class="dv">3</span>] <span class="op">=</span> notes[:,:<span class="dv">3</span>]</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    prev_start <span class="op">=</span> <span class="fl">0.0</span></span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, note <span class="kw">in</span> <span class="bu">enumerate</span>(notes): </span>
