@@ -3297,10 +3297,22 @@ p {
 </section>
 <section id="perplexity-score" class="level2" data-number="8.2">
 <h2 data-number="8.2" class="anchored" data-anchor-id="perplexity-score"><span class="header-section-number">8.2</span> Perplexity Score</h2>
-<p>“<a href="https://blog.echen.me/2021/12/23/a-laymans-introduction-to-perplexity-in-nlp/">Perplexity</a>” is a common metric for language models; it comes from the field of information theory. Perplexity is often described as a measure of how “surprised” your model is by novel data.</p>
-<p>Operationally, it’s just the exponential of the value of the loss function – like, …yea, that’s it.</p>
-<p>Why do people report perplexity instead of just the loss value (since the exponential function is monotonic)? Well…because of custom, and because perplexity has some natural relation to entropy, and because it relates to something called the “branching factor” of a language… but “because custom” is enough.</p>
-<p>So, all we’re going to do is feed the test set into our model, measure the loss, and take the exponential of that and… that’s our perplexity! Lower is better.</p>
+<p>“<a href="https://blog.echen.me/2021/12/23/a-laymans-introduction-to-perplexity-in-nlp/">Perplexity</a>” is a common metric for language models; it comes from the field of information theory. Perplexity is often described as a measure of how “surprised” your model is by novel data.<br>
+Operationally, it’s just the exponential of the value of the (cross-entropy) loss function – like, …yea, that’s it.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Why do people report perplexity scores instead of just cross-entropy loss values (since the exponential function is monotonic)? Well…because of custom, and because perplexity has some natural relation to entropy (but so does cross-entropy, so…?), and because it relates to something called the “branching factor” of a language… But “because custom” is enough.</p>
+</div>
+</div>
+<p>So, all we’re going to do is feed the test set into our model, measure the loss, and take the exponential of that and that’s our perplexity! Lower scores are better.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -3325,7 +3337,7 @@ p {
 <pre><code>(Average) Perplexity = 2.626</code></pre>
 </div>
 </div>
-<p>Interesting. That seems really low. Perhaps all it means is that once you’ve seen a couple hundred Bach chorales, new ones aren’t very surprising! ;-)</p>
+<p>Interesting. That seems really low to me. Perhaps all it means is that once you’ve seen a couple hundred Bach chorales, new ones aren’t very surprising! ;-)</p>
 </section>
 <section id="accuracy-score" class="level2" data-number="8.3">
 <h2 data-number="8.3" class="anchored" data-anchor-id="accuracy-score"><span class="header-section-number">8.3</span> Accuracy Score</h2>
