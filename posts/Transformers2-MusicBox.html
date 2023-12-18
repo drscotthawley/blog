@@ -3348,6 +3348,8 @@ Note
 <h2 data-number="8.4" class="anchored" data-anchor-id="data-distributions"><span class="header-section-number">8.4</span> Data Distributions</h2>
 <p>Let’s compare statistics of true notes from the test set vs.&nbsp;our generated notes. We’ll generate a lot of data, and then compare histograms of the codebook indices:</p>
 <div class="cell">
+<details>
+<summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>redo_datadist_calc <span class="op">=</span> <span class="va">True</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> redo_datadist_calc:</span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>    all_test_notes <span class="op">=</span> torch.vstack([encode(t) <span class="cf">for</span> t <span class="kw">in</span> test_notes_tl]).<span class="bu">type</span>(torch.float32)</span>
@@ -3381,6 +3383,7 @@ Note
 <span id="cb45-31"><a href="#cb45-31" aria-hidden="true" tabindex="-1"></a>    ax[i].set_xlabel(<span class="st">'Value'</span>)</span>
 <span id="cb45-32"><a href="#cb45-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">==</span><span class="dv">0</span>: ax[i].set_ylabel(<span class="st">'Count'</span>)</span>
 <span id="cb45-33"><a href="#cb45-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Generating new notes...
 # of test notes = 4159,  # of generated notes = 4158 --- Close enough!</code></pre>
