@@ -933,7 +933,7 @@ th, td {
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>notes_tensor_list_filename <span class="op">=</span> <span class="ss">f'</span><span class="sc">{</span>data_source<span class="sc">}</span><span class="ss">_tensor_list.pt'</span>         <span class="co"># we'll save the result to a file for easier re-reading next time</span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>read_all_midi_files <span class="op">=</span> <span class="va">True</span> <span class="co"># not os.path.exists(notes_tensor_list_filename) # check to see if it already exists</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>read_all_midi_files <span class="op">=</span> <span class="kw">not</span> os.path.exists(notes_tensor_list_filename) <span class="co"># check to see if it already exists</span></span>
 <span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> read_all_midi_files:</span>
 <span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    notes_tensor_list <span class="op">=</span> files_to_tensor_list(filenames, serial<span class="op">=</span><span class="va">True</span>)</span>
