@@ -1089,7 +1089,7 @@
     "href": "posts/Transformers2-MusicBox.html#raw-audio",
     "title": "Understanding Transformers, Part 2: Wee Music Box",
     "section": "10.6 Raw Audio",
-    "text": "10.6 Raw Audio\nIf you were to instead use raw audio, I’d recommend converting it to spectrograms, treating each column of the spectrogram as a “word vector.” However, there’d likely be a lot of “wasted space” so you’d probably want to (invertibly) compress the dimensionality of your “audio-word vectors” via something like (Residual) Vector Quantization, an autoencoder, or UMAP. …And then you’d need to expand/decode it on the output side to be able to listen. Relatedly, a pretrained sytem like Meta’s EnCodec would likely provide such functions nicely."
+    "text": "10.6 Raw Audio\nIf you were to instead use raw audio, I’d recommend converting it to spectrograms, treating each column of the spectrogram as a “word vector.” However, there’d likely be a lot of “wasted space” so you’d probably want to (invertibly) compress the dimensionality of your “audio-word vectors” via something like (Residual) Vector Quantization, an autoencoder, or UMAP. …And then you’d need to expand/decode it on the output side to be able to listen. Relatedly, a pretrained system like Meta’s EnCodec would likely provide such functions nicely."
   },
   {
     "objectID": "posts/2018-12-16-Parallelizing-Python-Simplified.html",
