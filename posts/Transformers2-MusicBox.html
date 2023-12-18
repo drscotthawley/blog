@@ -471,7 +471,12 @@ Tip
 </section>
 <section id="multi-head-attention" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="multi-head-attention"><span class="header-section-number">2.4</span> Multi-Head Attention</h2>
-<p>As described in the <a href="https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html">previous lesson</a>, Multi-Head Attention simply involves allowing differently-weighted attention operators (called “heads”) to perform attention operations, allowing them to focus on different “senses” of phrases, parts of speech, or in our case, musical structures.</p>
+<p>We already covered this in the <a href="https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html">previous lesson</a> so I suggest going there. However, I’ll add a recap as Details here:</p>
+<details>
+<summary>
+Details
+</summary>
+<p>Multi-Head Attention simply involves allowing differently-weighted attention operators (called “heads”) to perform attention operations, allowing them to focus on different “senses” of phrases, parts of speech, or in our case, musical structures. The multiple heads are usually just extra dimensions of a big(ger) matrix multiplication, however they can also be implemented in the form of a loop over the heads to save precious GPU RAM.</p>
 <style>
 .img-mh {
     /*transform-origin: top left;*/
@@ -492,7 +497,7 @@ Tip
 <figcaption class="figure-caption"><strong>Figure</strong>&nbsp;5<strong>.</strong> Diagram of Multi-Head Attention. The multiple attention “heads” are shown below as depthwise semi-transparent copies, which are then concatenated into “one big long thing” via the Concat operation, and then mapped into the the output for the module via the last Linear layer: (Source: <a href="https://arxiv.org/abs/1706.03762">AIAYN</a>.)</figcaption>
 </figure>
 </div>
-</section>
+</details></section>
 <section id="layer-normalization" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="layer-normalization"><span class="header-section-number">2.5</span> Layer Normalization</h2>
 <p>This alternative to <a href="https://paperswithcode.com/method/batch-normalization">Batch Normalization</a>. With BN, we perform elementwise operations where we subtract the mean across the batch dimension and divide by the variance. With LN, instead of doing this across the batch dimension, we do it across the feature dimension(s).</p>
