@@ -367,7 +367,7 @@ Note
 </figure>
 </div>
 <p>For language translation tasks, both the Encoder (circled in red) and Decoder (circled in blue) are used. For purely “generative” systems like the GPT variants and what we’ll do today, we’ll use the Decoder side. Note however that even the Decoder can involve some encoding, as we combine an embedding of the words / MIDI / “tokens” with Positional Encoding information. PE is discussed below.</p>
-<p>We’re going to go through the various components that make up the above diagram. But first, let’s point out something about the Attention mechanism that we skipped over in the previous lesson, namely the computational “cost” associated with making every part of a sequence with every other part.</p>
+<p>We’re going to go through the various components that make up the above diagram. But first, let’s point out something about the Attention mechanism that we skipped over in the previous lesson, namely the computational “cost” associated with making every part of a sequence interact with every other part.</p>
 <section id="the-cost-of-attention" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="the-cost-of-attention"><span class="header-section-number">2.1</span> The Cost of Attention</h2>
 <p>The attention mechanism <em>per se</em> that we covered in the previous post has a serious drawback: the computational cost scales like the sequence length squared, i.e.&nbsp;for a sequence length of <span class="math inline">\(N\)</span>, the cost is <big>𝒪</big>(<span class="math inline">\(N^2)\)</span>. This is one reason that Large Language Models can be “Large” – trying to model long sequences results in big matrices!</p>
