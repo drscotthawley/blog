@@ -1487,7 +1487,7 @@ p {
 <span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>            </span>
 <span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># extra 'safety' constraint: clamp to range of valid values (of tokens)</span></span>
 <span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, cb <span class="kw">in</span> <span class="bu">enumerate</span>(codebooks):</span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>        datanew[:,i] <span class="op">=</span> torch.clamp(datanew[:,i], <span class="dv">0</span>, <span class="bu">len</span>(cb[<span class="st">'encode'</span>])<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>        datanew[:,i] <span class="op">=</span> torch.clamp(datanew[:,i], <span class="dv">0</span>, <span class="bu">len</span>(cb)<span class="op">-</span><span class="dv">1</span>)</span>
 <span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> datanew</span>
 <span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a></span>
@@ -1513,7 +1513,7 @@ original data =
         [126,   7,  12]])
 augmented data = 
  tensor([[ 52,  12,   6],
-        [ 59,   0,  40],
+        [ 59,   0,  27],
         [127,  14,   4],
         [ 84,   0,  12],
         [124,   7,  12]])
