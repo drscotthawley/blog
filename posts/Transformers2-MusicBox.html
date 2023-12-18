@@ -963,12 +963,12 @@ len(notes_tensor_list) = 382</code></pre>
 </section>
 <section id="making-a-tokenizer-codebooks" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="making-a-tokenizer-codebooks"><span class="header-section-number">3.4</span> Making a Tokenizer: Codebooks</h2>
-Rather than try something sophisticated like calling <a href="https://github.com/Natooz/MidiTok">MidiTok</a>, we’re going to treat this like a “char-level RNN” and just regard each note as a “parallel” group of 3 tokens (i.e., one token each for pitch, step, and duration). This means that we will need 3 “codebooks” that can encode &amp; decode between true values and their tokens.
+Rather than try something sophisticated like calling <a href="https://github.com/Natooz/MidiTok">MidiTok</a>, we’re going to treat this like a “char-level RNN” and just regard each note as a “parallel” group of 3 tokens (i.e., one token each for pitch, step, and duration). This means that we will need 3 “codebooks” that can encode &amp; decode between real-world values and their indices in the codebooks.
 <details>
 <summary>
 Details
 </summary>
-<p>For the pitch values, it’s pretty easy since there are up to 128 pitches. Probably they won’t all be used, so we <em>could</em> limit the range of pitches, however, I’m going to want to do some pitch-bending data augmentation, so the pitch tokens will just be <code>int</code> versions of their <code>floats</code>, indices in a 128-dimensional space.</p>
+<p>For the pitch values, it’s pretty easy since there are up to 128 MIDI pitches. Probably they won’t all be used, so we <em>could</em> limit the range of pitches, however, I’m going to want to do some pitch-bending data augmentation, so the pitch tokens will just be <code>int</code> versions of their <code>floats</code>, i.e., indices in a 128-dimensional space.</p>
 <p>For the timing – which I don’t plan to do any augmentation of – we’ll just write down what unique values are present. These will form the “vocabularies” that we often see used in NLP settings.</p>
 <p>Oh, also: The timing values end up being <em>reaaalllly</em> long in some cases. Like, notes with 15 seconds in duration? I’m going to go ahead an clamp those to a maximum value of 4 seconds.</p>
 <div class="cell">
