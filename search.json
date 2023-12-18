@@ -1092,6 +1092,13 @@
     "text": "10.6 Raw Audio\nIf you were to instead use raw audio, I’d recommend converting it to spectrograms, treating each column of the spectrogram as a “word vector.” However, there’d likely be a lot of “wasted space” so you’d probably want to (invertibly) compress the dimensionality of your “audio-word vectors” via something like (Residual) Vector Quantization, an autoencoder, or UMAP. …And then you’d need to expand/decode it on the output side to be able to listen. Relatedly, a pretrained system like Meta’s EnCodec would likely provide such functions nicely."
   },
   {
+    "objectID": "posts/Transformers2-MusicBox.html#penalize-generation-of-end-of-song-padding",
+    "href": "posts/Transformers2-MusicBox.html#penalize-generation-of-end-of-song-padding",
+    "title": "Understanding Transformers, Part 2: Wee Music Box",
+    "section": "10.7 Penalize Generation of “End of Song” Padding?",
+    "text": "10.7 Penalize Generation of “End of Song” Padding?\nYou’ll notice that in some of the examples, the generated song will reach its end really quickly and then just print out repeated REST_NOTEs, which is my current way of denoting the end of a song. Perhaps we could penalize the model for doing that (while it’s training), so it’s less likely to quit on us too early. Either that, or we just manually lower the probability of such notes in the generator code itself."
+  },
+  {
     "objectID": "posts/2018-12-16-Parallelizing-Python-Simplified.html",
     "href": "posts/2018-12-16-Parallelizing-Python-Simplified.html",
     "title": "Parallelizing Python, Simplified",

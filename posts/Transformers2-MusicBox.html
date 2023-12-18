@@ -269,6 +269,7 @@ details > summary {
   <li><a href="#using-huggingfaces-transformers-instead" id="toc-using-huggingfaces-transformers-instead" class="nav-link" data-scroll-target="#using-huggingfaces-transformers-instead"><span class="header-section-number">10.4</span> Using Huggingface’s <code>transformers</code> instead</a></li>
   <li><a href="#pitch-only-estimation" id="toc-pitch-only-estimation" class="nav-link" data-scroll-target="#pitch-only-estimation"><span class="header-section-number">10.5</span> Pitch-Only Estimation</a></li>
   <li><a href="#raw-audio" id="toc-raw-audio" class="nav-link" data-scroll-target="#raw-audio"><span class="header-section-number">10.6</span> Raw Audio</a></li>
+  <li><a href="#penalize-generation-of-end-of-song-padding" id="toc-penalize-generation-of-end-of-song-padding" class="nav-link" data-scroll-target="#penalize-generation-of-end-of-song-padding"><span class="header-section-number">10.7</span> Penalize Generation of “End of Song” Padding?</a></li>
   </ul></li>
   <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements"><span class="header-section-number">11</span> Acknowledgements</a></li>
   <li><a href="#appendix-feeding-it-christmas-carols" id="toc-appendix-feeding-it-christmas-carols" class="nav-link" data-scroll-target="#appendix-feeding-it-christmas-carols"><span class="header-section-number">12</span> Appendix: Feeding it Christmas Carols 🎄</a></li>
@@ -3463,6 +3464,10 @@ Details
 <section id="raw-audio" class="level2" data-number="10.6">
 <h2 data-number="10.6" class="anchored" data-anchor-id="raw-audio"><span class="header-section-number">10.6</span> Raw Audio</h2>
 <p>If you were to instead use raw audio, I’d recommend converting it to spectrograms, treating each column of the spectrogram as a “word vector.” However, there’d likely be a lot of “wasted space” so you’d probably want to (invertibly) compress the dimensionality of your “audio-word vectors” via something like <a href="https://drscotthawley.github.io/blog/posts/2023-06-12-RVQ.html">(Residual) Vector Quantization</a>, an <a href="https://drscotthawley.github.io/audio-algebra/given-models.html">autoencoder</a>, or <a href="https://umap-learn.readthedocs.io/en/latest/">UMAP</a>. …And then you’d need to expand/decode it on the output side to be able to listen. Relatedly, a pretrained system like Meta’s <a href="https://github.com/facebookresearch/encodec">EnCodec</a> would likely provide such functions nicely.</p>
+</section>
+<section id="penalize-generation-of-end-of-song-padding" class="level2" data-number="10.7">
+<h2 data-number="10.7" class="anchored" data-anchor-id="penalize-generation-of-end-of-song-padding"><span class="header-section-number">10.7</span> Penalize Generation of “End of Song” Padding?</h2>
+<p>You’ll notice that in some of the examples, the generated song will reach its end really quickly and then just print out repeated <code>REST_NOTE</code>s, which is my current way of denoting the end of a song. Perhaps we could penalize the model for doing that (while it’s training), so it’s less likely to quit on us too early. Either that, or we just manually lower the probability of such notes in the generator code itself.</p>
 </section>
 </details></section>
 <section id="acknowledgements" class="level1" data-number="11">
