@@ -1491,16 +1491,16 @@ p {
 <span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> datanew</span>
 <span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="co"># testing code: </span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="co"># A couple quick tests: </span></span>
 <span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">3</span>) <span class="co"># setting this just  to make sure something happens ;-) </span></span>
-<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> torch.tensor([[<span class="dv">54</span>,<span class="dv">12</span>,<span class="dv">6</span>],[<span class="dv">61</span>,<span class="dv">0</span>,<span class="dv">40</span>],[<span class="dv">127</span>,<span class="dv">14</span>,<span class="dv">4</span>],[<span class="dv">86</span>,<span class="dv">0</span>,<span class="dv">12</span>],[<span class="dv">126</span>,<span class="dv">7</span>,<span class="dv">12</span>]])</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> torch.tensor([[<span class="dv">54</span>,<span class="dv">12</span>,<span class="dv">6</span>],[<span class="dv">61</span>,<span class="dv">0</span>,<span class="dv">40</span>],[REST_PITCH,<span class="dv">14</span>,<span class="dv">4</span>],[<span class="dv">86</span>,<span class="dv">0</span>,<span class="dv">12</span>],[<span class="dv">126</span>,<span class="dv">7</span>,<span class="dv">12</span>]])</span>
 <span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"data.shape = "</span>,data.shape)</span>
 <span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"original data = </span><span class="ch">\n</span><span class="st">"</span>,data)</span>
 <span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>aug <span class="op">=</span> augment_data(data)</span>
 <span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"augmented data = </span><span class="ch">\n</span><span class="st">"</span>,aug) <span class="co"># </span></span>
 <span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="kw">not</span> torch.equal(aug[:,<span class="dv">0</span>], data[:,<span class="dv">0</span>]), <span class="st">"Oops, nothing changed"</span></span>
-<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> aug[<span class="dv">2</span>,<span class="dv">0</span>]<span class="op">==</span>data[<span class="dv">2</span>,<span class="dv">0</span>], <span class="st">"Oops,  The 127 got changed"</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> aug[<span class="dv">2</span>,<span class="dv">0</span>]<span class="op">==</span>data[<span class="dv">2</span>,<span class="dv">0</span>], <span class="st">"Oops,  The REST_PITCH got changed"</span></span>
 <span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Checks passed! :-) "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
