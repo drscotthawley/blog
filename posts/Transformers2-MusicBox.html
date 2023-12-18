@@ -2793,7 +2793,7 @@ p {
             </iframe>
 </div>
 </div>
-<p>In what follows, we’ll vary the “temperature” (aka “wackiness”) parameter of the model (see the bottom of the <a href="https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html">previous lesson</a>), to see its effect on the variety of notes produced.</p>
+<p>In what follows, we’ll vary the “temperature” (aka “wackiness”) parameter of the model (see the <a href="https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html#sec-softmax-fun">bottom of the previous lesson</a>), to see its effect on the variety of notes produced.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>new_tokens <span class="op">=</span> num_tokens <span class="op">-</span> prompt_len</span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -3297,7 +3297,7 @@ p {
 </section>
 <section id="perplexity-score" class="level2" data-number="8.2">
 <h2 data-number="8.2" class="anchored" data-anchor-id="perplexity-score"><span class="header-section-number">8.2</span> Perplexity Score</h2>
-<p>“<a href="https://blog.echen.me/2021/12/23/a-laymans-introduction-to-perplexity-in-nlp/">Perplexity</a>” is a common metric for language models which comes from the field of information theory. It is often described as a measure of how “surprised” your model is by novel data.</p>
+<p>“<a href="https://blog.echen.me/2021/12/23/a-laymans-introduction-to-perplexity-in-nlp/">Perplexity</a>” is a common metric for language models; it comes from the field of information theory. Perplexity is often described as a measure of how “surprised” your model is by novel data.</p>
 <p>Operationally, it’s just the exponential of the value of the loss function – like, …yea, that’s it.</p>
 <p>Why do people report perplexity instead of just the loss value (since the exponential function is monotonic)? Well…because of custom, and because perplexity has some natural relation to entropy, and because it relates to something called the “branching factor” of a language… but “because custom” is enough.</p>
 <p>So, all we’re going to do is feed the test set into our model, measure the loss, and take the exponential of that and… that’s our perplexity! Lower is better.</p>
