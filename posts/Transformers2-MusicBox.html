@@ -394,7 +394,7 @@ Details on PE
 <section id="some-options-for-pe" class="level3" data-number="2.2.1">
 <h3 data-number="2.2.1" class="anchored" data-anchor-id="some-options-for-pe"><span class="header-section-number">2.2.1</span> Some Options for PE</h3>
 <ol type="1">
-<li><p>You could just concatenate a “linear ramp” of values to provide some position values, but… you wouldn’t want to do that. You won’t get very good gradients, especially for long sequences.</p></li>
+<li><p>You could just concatenate a “linear ramp” of values to provide some position values, but… you wouldn’t want to do that. See, you don’t just want the <em>values</em> of the PEs to contain positional information, you want the <em>gradients</em> of the PEs to convey positional info too. But a linear ramp has a constant gradient.</p></li>
 <li><p>There’s the orignal positional encoding from the <a href="https://arxiv.org/abs/1706.03762">AIAYN</a> paper, which uses a set of sines &amp; cosines of expontially-increasing wavelength. They tweaked these wavelengths for their use case and ended up with the following equations: <span class="math display">\[
 \begin{aligned}
 PE_{(pos,2i)} = \sin(pos / 10000^{2i/d_{model}}) \\
