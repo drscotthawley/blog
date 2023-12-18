@@ -3346,58 +3346,53 @@ Note
 </section>
 <section id="data-distributions" class="level2" data-number="8.4">
 <h2 data-number="8.4" class="anchored" data-anchor-id="data-distributions"><span class="header-section-number">8.4</span> Data Distributions</h2>
-<p>Let’s compare statistics of true notes from the test set vs.&nbsp;our generated notes. We’ll generate a lot of data, and then compare histograms:</p>
+<p>Let’s compare statistics of true notes from the test set vs.&nbsp;our generated notes. We’ll generate a lot of data, and then compare histograms of the codebook indices:</p>
 <div class="cell">
-<details>
-<summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>redo_datadist_calc <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> redo_datadist_calc:</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>    all_test_notes <span class="op">=</span> torch.vstack(test_notes_tl).<span class="bu">type</span>(torch.float32)</span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>    all_test_notes <span class="op">=</span> all_test_notes[:<span class="bu">len</span>(all_test_notes)<span class="op">//</span><span class="dv">4</span>]  <span class="co"># to save time, let's not do stats on ALL-all of them, just a quarter</span></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#all_test_notes_encdec = torch.vstack([decode(encode(ns)) for ns in test_notes_tl]).type(torch.float32) # perhaps the encoder/decoder produces a different distribution?</span></span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#all_test_notes_encdec = all_test_notes_encdec[:len(all_test_notes_encdec)//4]</span></span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># generate a big batch of fake data. </span></span>
-<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># </span><span class="al">WARNING</span><span class="co">: this is super slow because our generator only works for batches of one, oops</span></span>
-<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>    prompt_len, max_new_tokens <span class="op">=</span> <span class="dv">12</span>, <span class="dv">54</span>          <span class="co"># I just made these numbers up. not great science yet, sorry.</span></span>
-<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>    new_notes_list <span class="op">=</span> []</span>
-<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>    set_seeds(<span class="dv">0</span>)</span>
-<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Generating new notes..."</span>) </span>
-<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, notes <span class="kw">in</span> <span class="bu">enumerate</span>(tqdm(test_notes_tl, ncols<span class="op">=</span><span class="dv">100</span>)): </span>
-<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>        ptoks <span class="op">=</span> encode(notes[:prompt_len]).unsqueeze(<span class="dv">0</span>).to(device)</span>
-<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># generate more notes, chop off prompt before adding to list of all generated notes</span></span>
-<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>        new_notes_list.append( decode( model.generate(ptoks, max_new_tokens<span class="op">=</span>max_new_tokens)[<span class="dv">0</span>].cpu()[prompt_len:] ) )</span>
-<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>    all_new_notes <span class="op">=</span> torch.vstack(new_notes_list).<span class="bu">type</span>(torch.float32)</span>
-<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"# of test notes = </span><span class="sc">{</span><span class="bu">len</span>(all_test_notes)<span class="sc">}</span><span class="ss">,  # of generated notes = </span><span class="sc">{</span><span class="bu">len</span>(all_new_notes)<span class="sc">}</span><span class="ss"> --- Close enough!"</span>)</span>
-<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
-<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> [<span class="st">'pitch'</span>, <span class="st">'step'</span>, <span class="st">'duration'</span>]</span>
-<span id="cb45-28"><a href="#cb45-28" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
-<span id="cb45-29"><a href="#cb45-29" aria-hidden="true" tabindex="-1"></a>    bins <span class="op">=</span> <span class="dv">32</span> <span class="cf">if</span> i <span class="op">!=</span><span class="dv">0</span> <span class="cf">else</span> <span class="fl">0.5</span> <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>np.arange(<span class="dv">128</span><span class="op">//</span><span class="dv">2</span>) </span>
-<span id="cb45-30"><a href="#cb45-30" aria-hidden="true" tabindex="-1"></a>    ax[i].hist(all_test_notes[:,i].numpy(), bins<span class="op">=</span>bins, label<span class="op">=</span><span class="st">'test data'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
-<span id="cb45-31"><a href="#cb45-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">#ax[i].hist(all_test_notes_encdec[:,i].numpy(),  bins=bins, label='test data - enc/dec', alpha=0.6)</span></span>
-<span id="cb45-32"><a href="#cb45-32" aria-hidden="true" tabindex="-1"></a>    ax[i].hist(all_new_notes[:,i].numpy(),  bins<span class="op">=</span>bins, label<span class="op">=</span><span class="st">'generated'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
-<span id="cb45-33"><a href="#cb45-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-34"><a href="#cb45-34" aria-hidden="true" tabindex="-1"></a>    ax[i].set_title(names[i])</span>
-<span id="cb45-35"><a href="#cb45-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">==</span><span class="dv">2</span>: ax[i].legend()</span>
-<span id="cb45-36"><a href="#cb45-36" aria-hidden="true" tabindex="-1"></a>    ax[i].set_xlabel(<span class="st">'Value'</span><span class="op">+</span><span class="ss">f'</span><span class="sc">{</span><span class="st">" (s)"</span> <span class="cf">if</span> i<span class="op">&gt;</span><span class="dv">0</span> <span class="cf">else</span> <span class="st">""</span><span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb45-37"><a href="#cb45-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">==</span><span class="dv">0</span>: ax[i].set_ylabel(<span class="st">'Count'</span>)</span>
-<span id="cb45-38"><a href="#cb45-38" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>redo_datadist_calc <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> redo_datadist_calc:</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>    all_test_notes <span class="op">=</span> torch.vstack([encode(t) <span class="cf">for</span> t <span class="kw">in</span> test_notes_tl]).<span class="bu">type</span>(torch.float32)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>    all_test_notes <span class="op">=</span> all_test_notes[:<span class="bu">len</span>(all_test_notes)<span class="op">//</span><span class="dv">4</span>]  <span class="co"># to save time, let's not do stats on ALL-all of them, just a quarter</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># generate a big batch of fake data. </span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># </span><span class="al">WARNING</span><span class="co">: this is super slow because our generator only works for batches of one, oops</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>    prompt_len, max_new_tokens <span class="op">=</span> <span class="dv">12</span>, <span class="dv">54</span>          <span class="co"># I just made these numbers up. not great science yet, sorry.</span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>    new_notes_list <span class="op">=</span> []</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>    set_seeds(<span class="dv">0</span>)</span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Generating new notes..."</span>) </span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, notes <span class="kw">in</span> <span class="bu">enumerate</span>(tqdm(test_notes_tl, ncols<span class="op">=</span><span class="dv">100</span>)): </span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>        ptoks <span class="op">=</span> encode(notes[:prompt_len]).unsqueeze(<span class="dv">0</span>).to(device)</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># generate more notes, chop off prompt before adding to list of all generated notes</span></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>        new_notes_list.append( model.generate(ptoks, max_new_tokens<span class="op">=</span>max_new_tokens)[<span class="dv">0</span>].cpu()[prompt_len:]  )</span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>    all_new_notes <span class="op">=</span> torch.vstack(new_notes_list).<span class="bu">type</span>(torch.float32)</span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"# of test notes = </span><span class="sc">{</span><span class="bu">len</span>(all_test_notes)<span class="sc">}</span><span class="ss">,  # of generated notes = </span><span class="sc">{</span><span class="bu">len</span>(all_new_notes)<span class="sc">}</span><span class="ss"> --- Close enough!"</span>)</span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">5</span>))</span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> [<span class="st">'pitch'</span>, <span class="st">'step'</span>, <span class="st">'duration'</span>]</span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):</span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a>    bins <span class="op">=</span> <span class="dv">32</span> <span class="cf">if</span> i <span class="op">!=</span><span class="dv">0</span> <span class="cf">else</span> <span class="fl">0.5</span> <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>np.arange(<span class="dv">128</span><span class="op">//</span><span class="dv">2</span>) </span>
+<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a>    ax[i].hist(all_test_notes[:,i].numpy(), bins<span class="op">=</span>bins, label<span class="op">=</span><span class="st">'test indices'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>    ax[i].hist(all_new_notes[:,i].numpy(),  bins<span class="op">=</span>bins, label<span class="op">=</span><span class="st">'generated indices'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb45-28"><a href="#cb45-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-29"><a href="#cb45-29" aria-hidden="true" tabindex="-1"></a>    ax[i].set_title(names[i])</span>
+<span id="cb45-30"><a href="#cb45-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">==</span><span class="dv">2</span>: ax[i].legend()</span>
+<span id="cb45-31"><a href="#cb45-31" aria-hidden="true" tabindex="-1"></a>    ax[i].set_xlabel(<span class="st">'Value'</span>)</span>
+<span id="cb45-32"><a href="#cb45-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i<span class="op">==</span><span class="dv">0</span>: ax[i].set_ylabel(<span class="st">'Count'</span>)</span>
+<span id="cb45-33"><a href="#cb45-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># of test notes = 4159,  # of generated notes = 4158 --- Close enough!</code></pre>
+<pre><code>Generating new notes...
+# of test notes = 4159,  # of generated notes = 4158 --- Close enough!</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>100%|███████████████████████████████████████████████████████████████| 77/77 [02:05&lt;00:00,  1.63s/it]</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="Transformers2-MusicBox_files/figure-html/cell-30-output-2.png" class="img-fluid"></p>
+<p><img src="Transformers2-MusicBox_files/figure-html/cell-30-output-3.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Hey! The generated and test data distributions look pretty similar. The generated pitches have a slightly larger spread, which is consistent with what we observe in the generated examples, and may be due to the pitch-shifting in our data augmentation.</p>
-<p><strong>Addendum:</strong> After a few late-breaking changes that I thought would “improve” the code: I’m curious why the <code>step</code> and <code>duration</code> values seem to be shifted a bit to the right in the generated data. In previous runs, the <code>duration</code> values matched up nicely. (Is this really “in” the data, or could it just be an artifact of the histogram-plotting code?) Hmmm… I’ll keep investigating this descrepancy, and will update this post if I come up with a fix or at least an explanation. But for now, we need to wrap this up!</p>
 </section>
 </section>
 <section id="summary-and-faq" class="level1" data-number="9">
@@ -3424,25 +3419,25 @@ Details
 <div class="cell">
 <details>
 <summary>Watch out, there’s a Monster in this code!</summary>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LargeConfig:  <span class="co"># "Monster" size model ;-) </span></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># model architecture details</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    seq_length: <span class="bu">int</span> <span class="op">=</span> <span class="dv">128</span></span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    batch_size: <span class="bu">int</span> <span class="op">=</span> <span class="dv">256</span></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    n_embd:     <span class="bu">int</span> <span class="op">=</span> <span class="dv">256</span>     </span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    n_heads:    <span class="bu">int</span> <span class="op">=</span> <span class="dv">16</span>      </span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>    n_blocks:   <span class="bu">int</span> <span class="op">=</span> <span class="dv">8</span>       </span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    dropout:  <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.5</span>    </span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    bias:      <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>    use_alibi: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># training details</span></span>
-<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>    learning_rate: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.001</span></span>
-<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>    weight_decay:  <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.04</span>   <span class="co"># 0.01 is pytorch default</span></span>
-<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>    epochs:          <span class="bu">int</span> <span class="op">=</span> <span class="dv">12</span></span>
-<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># other handy bookkeeping</span></span>
-<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>    vocab_sizes: <span class="bu">tuple</span> <span class="op">=</span> <span class="bu">tuple</span>(vocab_sizes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LargeConfig:  <span class="co"># "Monster" size model ;-) </span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># model architecture details</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    seq_length: <span class="bu">int</span> <span class="op">=</span> <span class="dv">128</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>    batch_size: <span class="bu">int</span> <span class="op">=</span> <span class="dv">256</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>    n_embd:     <span class="bu">int</span> <span class="op">=</span> <span class="dv">256</span>     </span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>    n_heads:    <span class="bu">int</span> <span class="op">=</span> <span class="dv">16</span>      </span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>    n_blocks:   <span class="bu">int</span> <span class="op">=</span> <span class="dv">8</span>       </span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>    dropout:  <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.5</span>    </span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>    bias:      <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>    use_alibi: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># training details</span></span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>    learning_rate: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.001</span></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>    weight_decay:  <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.04</span>   <span class="co"># 0.01 is pytorch default</span></span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a>    epochs:          <span class="bu">int</span> <span class="op">=</span> <span class="dv">12</span></span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># other handy bookkeeping</span></span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>    vocab_sizes: <span class="bu">tuple</span> <span class="op">=</span> <span class="bu">tuple</span>(vocab_sizes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -3524,105 +3519,105 @@ https://medium.com/data-science-in-your-pocket/music-generation-using-musictrans
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>xmas_css <span class="op">=</span> <span class="st">'''</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;style&gt;</span></span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="st">/* Custom player style */</span></span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="st">p { </span></span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="st">  margin: 0; </span></span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="st">  color: #c4c4c4; /* mid-lightness text color for title, intended for dark backgrounds */</span></span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-player {</span></span>
-<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="st">  display: block;</span></span>
-<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="st">  width: inherit;</span></span>
-<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a><span class="st">  margin: 4px;</span></span>
-<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a><span class="st">  margin-bottom: 0;</span></span>
-<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a><span class="st">  color: #d4d4d4; /* Lighter text color for better readability */</span></span>
-<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-player::part(control-panel) {</span></span>
-<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a><span class="st">  background: #004400; /* green background */</span></span>
-<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a><span class="st">  border: 2px solid #888; /* Lightened border color for contrast */</span></span>
-<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a><span class="st">  border-radius: 10px 10px 0 0;</span></span>
-<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-player::part(play-button) {</span></span>
-<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a><span class="st">  color: #ffffff; /* White text for visibility */</span></span>
-<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a><span class="st">  border: 2px solid currentColor;</span></span>
-<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a><span class="st">  background-color: #ff00000; </span></span>
-<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a><span class="st">  border-radius: 20px;</span></span>
-<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a><span class="st">  transition: all 0.2s;</span></span>
-<span id="cb48-27"><a href="#cb48-27" aria-hidden="true" tabindex="-1"></a><span class="st">  content: 'hello';</span></span>
-<span id="cb48-28"><a href="#cb48-28" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb48-29"><a href="#cb48-29" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-player::part(play-button):hover {</span></span>
-<span id="cb48-30"><a href="#cb48-30" aria-hidden="true" tabindex="-1"></a><span class="st">  color: #a00; </span></span>
-<span id="cb48-31"><a href="#cb48-31" aria-hidden="true" tabindex="-1"></a><span class="st">  background-color: #9fafc9; </span></span>
-<span id="cb48-32"><a href="#cb48-32" aria-hidden="true" tabindex="-1"></a><span class="st">  border-radius: 10px;</span></span>
-<span id="cb48-33"><a href="#cb48-33" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb48-34"><a href="#cb48-34" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-player::part(time) {</span></span>
-<span id="cb48-35"><a href="#cb48-35" aria-hidden="true" tabindex="-1"></a><span class="st">  font-family: monospace; /* Monospace font for time */</span></span>
-<span id="cb48-36"><a href="#cb48-36" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb48-37"><a href="#cb48-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-38"><a href="#cb48-38" aria-hidden="true" tabindex="-1"></a><span class="st">/* Custom visualizer style */</span></span>
-<span id="cb48-39"><a href="#cb48-39" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer .piano-roll-visualizer {</span></span>
-<span id="cb48-40"><a href="#cb48-40" aria-hidden="true" tabindex="-1"></a><span class="st">  background: #900; /* red background for visualizer */</span></span>
-<span id="cb48-41"><a href="#cb48-41" aria-hidden="true" tabindex="-1"></a><span class="st">  border: 2px solid #505050; /* Dark border for subtle appearance */</span></span>
-<span id="cb48-42"><a href="#cb48-42" aria-hidden="true" tabindex="-1"></a><span class="st">  border-top: none;</span></span>
-<span id="cb48-43"><a href="#cb48-43" aria-hidden="true" tabindex="-1"></a><span class="st">  border-radius: 0 0 10px 10px;</span></span>
-<span id="cb48-44"><a href="#cb48-44" aria-hidden="true" tabindex="-1"></a><span class="st">  margin: 4px;</span></span>
-<span id="cb48-45"><a href="#cb48-45" aria-hidden="true" tabindex="-1"></a><span class="st">  width: inherit;</span></span>
-<span id="cb48-46"><a href="#cb48-46" aria-hidden="true" tabindex="-1"></a><span class="st">  margin-top: 0;</span></span>
-<span id="cb48-47"><a href="#cb48-47" aria-hidden="true" tabindex="-1"></a><span class="st">  overflow: auto;</span></span>
-<span id="cb48-48"><a href="#cb48-48" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb48-49"><a href="#cb48-49" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer svg rect.note {</span></span>
-<span id="cb48-50"><a href="#cb48-50" aria-hidden="true" tabindex="-1"></a><span class="st">  opacity: 0.9; </span></span>
-<span id="cb48-51"><a href="#cb48-51" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke-width: 1; /* Stroke width for note clarity */</span></span>
-<span id="cb48-52"><a href="#cb48-52" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb48-53"><a href="#cb48-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-54"><a href="#cb48-54" aria-hidden="true" tabindex="-1"></a><span class="st">/* Different instrument colors */</span></span>
-<span id="cb48-55"><a href="#cb48-55" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer svg rect.note[data-instrument="0"]{</span></span>
-<span id="cb48-56"><a href="#cb48-56" aria-hidden="true" tabindex="-1"></a><span class="st">  fill: #00f000; /* Green for Instrument 0 */</span></span>
-<span id="cb48-57"><a href="#cb48-57" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke: #444; </span></span>
-<span id="cb48-58"><a href="#cb48-58" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb48-59"><a href="#cb48-59" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer svg rect.note[data-instrument="2"]{</span></span>
-<span id="cb48-60"><a href="#cb48-60" aria-hidden="true" tabindex="-1"></a><span class="st">  fill: #008000; /* Green for Instrument 2 */</span></span>
-<span id="cb48-61"><a href="#cb48-61" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke: #444;</span></span>
-<span id="cb48-62"><a href="#cb48-62" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb48-63"><a href="#cb48-63" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer svg rect.note[data-is-drum="true"]{</span></span>
-<span id="cb48-64"><a href="#cb48-64" aria-hidden="true" tabindex="-1"></a><span class="st">  fill: #008000; /* Green for drum notes */</span></span>
-<span id="cb48-65"><a href="#cb48-65" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke: #bbb;</span></span>
-<span id="cb48-66"><a href="#cb48-66" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb48-67"><a href="#cb48-67" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer svg rect.note.active {</span></span>
-<span id="cb48-68"><a href="#cb48-68" aria-hidden="true" tabindex="-1"></a><span class="st">  opacity: 0.9; /* Highlight active notes */</span></span>
-<span id="cb48-69"><a href="#cb48-69" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke: #ffffff; /* White stroke for maximum contrast */</span></span>
-<span id="cb48-70"><a href="#cb48-70" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke-width: 2; /* Thicker stroke for active notes */</span></span>
-<span id="cb48-71"><a href="#cb48-71" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb48-72"><a href="#cb48-72" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;/style&gt;</span></span>
-<span id="cb48-73"><a href="#cb48-73" aria-hidden="true" tabindex="-1"></a><span class="st">'''</span></span>
-<span id="cb48-74"><a href="#cb48-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-75"><a href="#cb48-75" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> xmasplayer(notes_tensor, height<span class="op">=</span><span class="dv">400</span>, time_rescale<span class="op">=</span><span class="va">None</span>, midi_file<span class="op">=</span><span class="st">"/tmp/tmp.mid"</span>, title<span class="op">=</span><span class="st">''</span>, styler<span class="op">=</span>general, css<span class="op">=</span>xmas_css):</span>
-<span id="cb48-76"><a href="#cb48-76" aria-hidden="true" tabindex="-1"></a>    <span class="co">"MIDIplayer that writes input tensor to temporary file"</span></span>
-<span id="cb48-77"><a href="#cb48-77" aria-hidden="true" tabindex="-1"></a>    pm <span class="op">=</span> notes_to_midi(notes_tensor, time_rescale<span class="op">=</span>time_rescale, out_file<span class="op">=</span>midi_file)</span>
-<span id="cb48-78"><a href="#cb48-78" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> MIDIPlayer(midi_file, height, styler<span class="op">=</span>partial(styler, css<span class="op">=</span>css), dl<span class="op">=</span><span class="va">True</span>, title<span class="op">=</span>title)</span>
-<span id="cb48-79"><a href="#cb48-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-80"><a href="#cb48-80" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> christmas_ohno(filename, title<span class="op">=</span><span class="st">""</span>, time_rescale<span class="op">=</span><span class="fl">0.242</span><span class="op">/</span><span class="fl">0.2880</span>, debug<span class="op">=</span><span class="va">False</span>, seed<span class="op">=</span><span class="dv">0</span>, temperature<span class="op">=</span><span class="fl">0.9</span>):</span>
-<span id="cb48-81"><a href="#cb48-81" aria-hidden="true" tabindex="-1"></a>    url <span class="op">=</span> <span class="st">"https://www.mfiles.co.uk/downloads/"</span><span class="op">+</span>filename</span>
-<span id="cb48-82"><a href="#cb48-82" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>wget <span class="op">-</span>qq <span class="op">-</span>N {url}</span>
-<span id="cb48-83"><a href="#cb48-83" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb48-84"><a href="#cb48-84" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> midi_file_to_tensor(filename)</span>
-<span id="cb48-85"><a href="#cb48-85" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> debug: <span class="bu">print</span>(<span class="st">"notes = "</span>,notes)</span>
-<span id="cb48-86"><a href="#cb48-86" aria-hidden="true" tabindex="-1"></a>    notes[:,<span class="dv">1</span>:] <span class="op">=</span> quantize_times(notes[:,<span class="dv">1</span>:]<span class="op">*</span>time_rescale, res_ms<span class="op">=</span><span class="dv">10</span>) <span class="co"># time rescale is mainly to get codebooks to agree</span></span>
-<span id="cb48-87"><a href="#cb48-87" aria-hidden="true" tabindex="-1"></a>    prompt <span class="op">=</span> notes[:<span class="dv">30</span>]</span>
-<span id="cb48-88"><a href="#cb48-88" aria-hidden="true" tabindex="-1"></a>    prompt_tokens <span class="op">=</span> encode(prompt).unsqueeze(<span class="dv">0</span>).to(device)</span>
-<span id="cb48-89"><a href="#cb48-89" aria-hidden="true" tabindex="-1"></a>    set_seeds(seed)</span>
-<span id="cb48-90"><a href="#cb48-90" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> decode( model.generate(prompt_tokens, max_new_tokens<span class="op">=</span>new_tokens, temperature<span class="op">=</span>temperature)[<span class="dv">0</span>].cpu() )</span>
-<span id="cb48-91"><a href="#cb48-91" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> xmasplayer(notes,title<span class="op">=</span>title)</span>
-<span id="cb48-92"><a href="#cb48-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-93"><a href="#cb48-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-94"><a href="#cb48-94" aria-hidden="true" tabindex="-1"></a>c1 <span class="op">=</span> christmas_ohno(<span class="st">"jingle-bells-keyboard.mid"</span>, title<span class="op">=</span><span class="st">"Janky Bells"</span>, seed<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb48-95"><a href="#cb48-95" aria-hidden="true" tabindex="-1"></a>display(c1)</span>
-<span id="cb48-96"><a href="#cb48-96" aria-hidden="true" tabindex="-1"></a>c2 <span class="op">=</span> christmas_ohno(<span class="st">"away-in-a-manger.mid"</span>, title<span class="op">=</span><span class="st">"Away in a Mangled"</span>, time_rescale<span class="op">=</span><span class="fl">.48</span><span class="op">/</span><span class="fl">.68</span>, seed<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb48-97"><a href="#cb48-97" aria-hidden="true" tabindex="-1"></a>display(c2)</span>
-<span id="cb48-98"><a href="#cb48-98" aria-hidden="true" tabindex="-1"></a>c3 <span class="op">=</span> christmas_ohno(<span class="st">"hark-the-herald-angels-sing.mid"</span>, title<span class="op">=</span><span class="st">"Arg the Herald Angels Cringe"</span>,time_rescale<span class="op">=</span><span class="fl">.48</span><span class="op">/</span><span class="fl">.616</span>, seed<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb48-99"><a href="#cb48-99" aria-hidden="true" tabindex="-1"></a>display(c3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>xmas_css <span class="op">=</span> <span class="st">'''</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;style&gt;</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="st">/* Custom player style */</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="st">p { </span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="st">  margin: 0; </span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="st">  color: #c4c4c4; /* mid-lightness text color for title, intended for dark backgrounds */</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-player {</span></span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a><span class="st">  display: block;</span></span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a><span class="st">  width: inherit;</span></span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a><span class="st">  margin: 4px;</span></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a><span class="st">  margin-bottom: 0;</span></span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a><span class="st">  color: #d4d4d4; /* Lighter text color for better readability */</span></span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-player::part(control-panel) {</span></span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a><span class="st">  background: #004400; /* green background */</span></span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a><span class="st">  border: 2px solid #888; /* Lightened border color for contrast */</span></span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a><span class="st">  border-radius: 10px 10px 0 0;</span></span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-player::part(play-button) {</span></span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a><span class="st">  color: #ffffff; /* White text for visibility */</span></span>
+<span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a><span class="st">  border: 2px solid currentColor;</span></span>
+<span id="cb49-24"><a href="#cb49-24" aria-hidden="true" tabindex="-1"></a><span class="st">  background-color: #ff00000; </span></span>
+<span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a><span class="st">  border-radius: 20px;</span></span>
+<span id="cb49-26"><a href="#cb49-26" aria-hidden="true" tabindex="-1"></a><span class="st">  transition: all 0.2s;</span></span>
+<span id="cb49-27"><a href="#cb49-27" aria-hidden="true" tabindex="-1"></a><span class="st">  content: 'hello';</span></span>
+<span id="cb49-28"><a href="#cb49-28" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb49-29"><a href="#cb49-29" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-player::part(play-button):hover {</span></span>
+<span id="cb49-30"><a href="#cb49-30" aria-hidden="true" tabindex="-1"></a><span class="st">  color: #a00; </span></span>
+<span id="cb49-31"><a href="#cb49-31" aria-hidden="true" tabindex="-1"></a><span class="st">  background-color: #9fafc9; </span></span>
+<span id="cb49-32"><a href="#cb49-32" aria-hidden="true" tabindex="-1"></a><span class="st">  border-radius: 10px;</span></span>
+<span id="cb49-33"><a href="#cb49-33" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb49-34"><a href="#cb49-34" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-player::part(time) {</span></span>
+<span id="cb49-35"><a href="#cb49-35" aria-hidden="true" tabindex="-1"></a><span class="st">  font-family: monospace; /* Monospace font for time */</span></span>
+<span id="cb49-36"><a href="#cb49-36" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb49-37"><a href="#cb49-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-38"><a href="#cb49-38" aria-hidden="true" tabindex="-1"></a><span class="st">/* Custom visualizer style */</span></span>
+<span id="cb49-39"><a href="#cb49-39" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer .piano-roll-visualizer {</span></span>
+<span id="cb49-40"><a href="#cb49-40" aria-hidden="true" tabindex="-1"></a><span class="st">  background: #900; /* red background for visualizer */</span></span>
+<span id="cb49-41"><a href="#cb49-41" aria-hidden="true" tabindex="-1"></a><span class="st">  border: 2px solid #505050; /* Dark border for subtle appearance */</span></span>
+<span id="cb49-42"><a href="#cb49-42" aria-hidden="true" tabindex="-1"></a><span class="st">  border-top: none;</span></span>
+<span id="cb49-43"><a href="#cb49-43" aria-hidden="true" tabindex="-1"></a><span class="st">  border-radius: 0 0 10px 10px;</span></span>
+<span id="cb49-44"><a href="#cb49-44" aria-hidden="true" tabindex="-1"></a><span class="st">  margin: 4px;</span></span>
+<span id="cb49-45"><a href="#cb49-45" aria-hidden="true" tabindex="-1"></a><span class="st">  width: inherit;</span></span>
+<span id="cb49-46"><a href="#cb49-46" aria-hidden="true" tabindex="-1"></a><span class="st">  margin-top: 0;</span></span>
+<span id="cb49-47"><a href="#cb49-47" aria-hidden="true" tabindex="-1"></a><span class="st">  overflow: auto;</span></span>
+<span id="cb49-48"><a href="#cb49-48" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb49-49"><a href="#cb49-49" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer svg rect.note {</span></span>
+<span id="cb49-50"><a href="#cb49-50" aria-hidden="true" tabindex="-1"></a><span class="st">  opacity: 0.9; </span></span>
+<span id="cb49-51"><a href="#cb49-51" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke-width: 1; /* Stroke width for note clarity */</span></span>
+<span id="cb49-52"><a href="#cb49-52" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb49-53"><a href="#cb49-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-54"><a href="#cb49-54" aria-hidden="true" tabindex="-1"></a><span class="st">/* Different instrument colors */</span></span>
+<span id="cb49-55"><a href="#cb49-55" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer svg rect.note[data-instrument="0"]{</span></span>
+<span id="cb49-56"><a href="#cb49-56" aria-hidden="true" tabindex="-1"></a><span class="st">  fill: #00f000; /* Green for Instrument 0 */</span></span>
+<span id="cb49-57"><a href="#cb49-57" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke: #444; </span></span>
+<span id="cb49-58"><a href="#cb49-58" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb49-59"><a href="#cb49-59" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer svg rect.note[data-instrument="2"]{</span></span>
+<span id="cb49-60"><a href="#cb49-60" aria-hidden="true" tabindex="-1"></a><span class="st">  fill: #008000; /* Green for Instrument 2 */</span></span>
+<span id="cb49-61"><a href="#cb49-61" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke: #444;</span></span>
+<span id="cb49-62"><a href="#cb49-62" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb49-63"><a href="#cb49-63" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer svg rect.note[data-is-drum="true"]{</span></span>
+<span id="cb49-64"><a href="#cb49-64" aria-hidden="true" tabindex="-1"></a><span class="st">  fill: #008000; /* Green for drum notes */</span></span>
+<span id="cb49-65"><a href="#cb49-65" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke: #bbb;</span></span>
+<span id="cb49-66"><a href="#cb49-66" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb49-67"><a href="#cb49-67" aria-hidden="true" tabindex="-1"></a><span class="st">#section3 midi-visualizer svg rect.note.active {</span></span>
+<span id="cb49-68"><a href="#cb49-68" aria-hidden="true" tabindex="-1"></a><span class="st">  opacity: 0.9; /* Highlight active notes */</span></span>
+<span id="cb49-69"><a href="#cb49-69" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke: #ffffff; /* White stroke for maximum contrast */</span></span>
+<span id="cb49-70"><a href="#cb49-70" aria-hidden="true" tabindex="-1"></a><span class="st">  stroke-width: 2; /* Thicker stroke for active notes */</span></span>
+<span id="cb49-71"><a href="#cb49-71" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb49-72"><a href="#cb49-72" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;/style&gt;</span></span>
+<span id="cb49-73"><a href="#cb49-73" aria-hidden="true" tabindex="-1"></a><span class="st">'''</span></span>
+<span id="cb49-74"><a href="#cb49-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-75"><a href="#cb49-75" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> xmasplayer(notes_tensor, height<span class="op">=</span><span class="dv">400</span>, time_rescale<span class="op">=</span><span class="va">None</span>, midi_file<span class="op">=</span><span class="st">"/tmp/tmp.mid"</span>, title<span class="op">=</span><span class="st">''</span>, styler<span class="op">=</span>general, css<span class="op">=</span>xmas_css):</span>
+<span id="cb49-76"><a href="#cb49-76" aria-hidden="true" tabindex="-1"></a>    <span class="co">"MIDIplayer that writes input tensor to temporary file"</span></span>
+<span id="cb49-77"><a href="#cb49-77" aria-hidden="true" tabindex="-1"></a>    pm <span class="op">=</span> notes_to_midi(notes_tensor, time_rescale<span class="op">=</span>time_rescale, out_file<span class="op">=</span>midi_file)</span>
+<span id="cb49-78"><a href="#cb49-78" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> MIDIPlayer(midi_file, height, styler<span class="op">=</span>partial(styler, css<span class="op">=</span>css), dl<span class="op">=</span><span class="va">True</span>, title<span class="op">=</span>title)</span>
+<span id="cb49-79"><a href="#cb49-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-80"><a href="#cb49-80" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> christmas_ohno(filename, title<span class="op">=</span><span class="st">""</span>, time_rescale<span class="op">=</span><span class="fl">0.242</span><span class="op">/</span><span class="fl">0.2880</span>, debug<span class="op">=</span><span class="va">False</span>, seed<span class="op">=</span><span class="dv">0</span>, temperature<span class="op">=</span><span class="fl">0.9</span>):</span>
+<span id="cb49-81"><a href="#cb49-81" aria-hidden="true" tabindex="-1"></a>    url <span class="op">=</span> <span class="st">"https://www.mfiles.co.uk/downloads/"</span><span class="op">+</span>filename</span>
+<span id="cb49-82"><a href="#cb49-82" aria-hidden="true" tabindex="-1"></a>    <span class="op">!</span>wget <span class="op">-</span>qq <span class="op">-</span>N {url}</span>
+<span id="cb49-83"><a href="#cb49-83" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb49-84"><a href="#cb49-84" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> midi_file_to_tensor(filename)</span>
+<span id="cb49-85"><a href="#cb49-85" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> debug: <span class="bu">print</span>(<span class="st">"notes = "</span>,notes)</span>
+<span id="cb49-86"><a href="#cb49-86" aria-hidden="true" tabindex="-1"></a>    notes[:,<span class="dv">1</span>:] <span class="op">=</span> quantize_times(notes[:,<span class="dv">1</span>:]<span class="op">*</span>time_rescale, res_ms<span class="op">=</span><span class="dv">10</span>) <span class="co"># time rescale is mainly to get codebooks to agree</span></span>
+<span id="cb49-87"><a href="#cb49-87" aria-hidden="true" tabindex="-1"></a>    prompt <span class="op">=</span> notes[:<span class="dv">30</span>]</span>
+<span id="cb49-88"><a href="#cb49-88" aria-hidden="true" tabindex="-1"></a>    prompt_tokens <span class="op">=</span> encode(prompt).unsqueeze(<span class="dv">0</span>).to(device)</span>
+<span id="cb49-89"><a href="#cb49-89" aria-hidden="true" tabindex="-1"></a>    set_seeds(seed)</span>
+<span id="cb49-90"><a href="#cb49-90" aria-hidden="true" tabindex="-1"></a>    notes <span class="op">=</span> decode( model.generate(prompt_tokens, max_new_tokens<span class="op">=</span>new_tokens, temperature<span class="op">=</span>temperature)[<span class="dv">0</span>].cpu() )</span>
+<span id="cb49-91"><a href="#cb49-91" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> xmasplayer(notes,title<span class="op">=</span>title)</span>
+<span id="cb49-92"><a href="#cb49-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-93"><a href="#cb49-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-94"><a href="#cb49-94" aria-hidden="true" tabindex="-1"></a>c1 <span class="op">=</span> christmas_ohno(<span class="st">"jingle-bells-keyboard.mid"</span>, title<span class="op">=</span><span class="st">"Janky Bells"</span>, seed<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb49-95"><a href="#cb49-95" aria-hidden="true" tabindex="-1"></a>display(c1)</span>
+<span id="cb49-96"><a href="#cb49-96" aria-hidden="true" tabindex="-1"></a>c2 <span class="op">=</span> christmas_ohno(<span class="st">"away-in-a-manger.mid"</span>, title<span class="op">=</span><span class="st">"Away in a Mangled"</span>, time_rescale<span class="op">=</span><span class="fl">.48</span><span class="op">/</span><span class="fl">.68</span>, seed<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb49-97"><a href="#cb49-97" aria-hidden="true" tabindex="-1"></a>display(c2)</span>
+<span id="cb49-98"><a href="#cb49-98" aria-hidden="true" tabindex="-1"></a>c3 <span class="op">=</span> christmas_ohno(<span class="st">"hark-the-herald-angels-sing.mid"</span>, title<span class="op">=</span><span class="st">"Arg the Herald Angels Cringe"</span>,time_rescale<span class="op">=</span><span class="fl">.48</span><span class="op">/</span><span class="fl">.616</span>, seed<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb49-99"><a href="#cb49-99" aria-hidden="true" tabindex="-1"></a>display(c3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>…yea, not sure what that accomplished, but it was fun to try!</p>
