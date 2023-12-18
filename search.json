@@ -1061,7 +1061,7 @@
     "href": "posts/Transformers2-MusicBox.html#report-individual-parts-of-the-loss",
     "title": "Understanding Transformers, Part 2: Wee Music Box",
     "section": "10.2 Report Individual Parts of the Loss",
-    "text": "10.2 Report Individual Parts of the Loss\nCurrently we’re not reporting the contributions of pitch, step, and durations to the loss, separately. Doing so could be instructive!"
+    "text": "10.2 Report Individual Parts of the Loss\nCurrently we’re not reporting the contributions of pitch, step, and durations to the loss, separately. Doing so should be instructive! (My older codes had this, I just didn’t get around to putting it back in after a major rewrite.)"
   },
   {
     "objectID": "posts/Transformers2-MusicBox.html#improving-generation-by-implementing-beam-search",

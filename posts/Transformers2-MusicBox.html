@@ -3427,11 +3427,11 @@ Details
 </section>
 <section id="report-individual-parts-of-the-loss" class="level2" data-number="10.2">
 <h2 data-number="10.2" class="anchored" data-anchor-id="report-individual-parts-of-the-loss"><span class="header-section-number">10.2</span> Report Individual Parts of the Loss</h2>
-<p>Currently we’re not reporting the contributions of pitch, step, and durations to the loss, separately. Doing so could be instructive!</p>
+<p>Currently we’re not reporting the contributions of pitch, step, and durations to the loss, separately. Doing so should be instructive! (My older codes had this, I just didn’t get around to putting it back in after a major rewrite.)</p>
 </section>
 <section id="improving-generation-by-implementing-beam-search" class="level2" data-number="10.3">
 <h2 data-number="10.3" class="anchored" data-anchor-id="improving-generation-by-implementing-beam-search"><span class="header-section-number">10.3</span> Improving Generation by Implementing Beam Search</h2>
-<p>Right now we’re just sampling a single token from the predicted probability distribution. If we instead predicted the most likely estimates by looking two or three steps into the future, that could greatly improve our results. Check out “beam search” algorithms.</p>
+<p>Right now we’re just sampling a single token from the predicted probability distribution. If we instead predicted the most likely estimates by looking two or three steps into the future, that could greatly improve our results. Check out “<a href="https://towardsdatascience.com/foundations-of-nlp-explained-visually-beam-search-how-it-works-1586b9849a24">beam search</a>” algorithms.</p>
 </section>
 <section id="using-huggingfaces-transformers-instead" class="level2" data-number="10.4">
 <h2 data-number="10.4" class="anchored" data-anchor-id="using-huggingfaces-transformers-instead"><span class="header-section-number">10.4</span> Using Huggingface’s <code>transformers</code> instead</h2>
