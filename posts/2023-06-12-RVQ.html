@@ -250,6 +250,22 @@ require(['plotly'], function(Plotly) {
 <blockquote class="blockquote">
 <p>Note: Whenever I say something that applies to both VQ and RVQ, I’ll use the abbreviation “(R)VQ.”</p>
 </blockquote>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip: Analogies
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>Cities and Towns:</strong> RVQ is like a “hub-and-spoke” <em>graph</em> that often appears in logistics: Consider air travel, in which the major cities are “hubs” (Chicago, LA, Atlanta) from which you take smaller flights to get to smaller cities and towns. VQ would be like replacing every address with its nearest town – which could result in a lot of vectors! RVQ means we have a short list of hubs, then from each hub we have a list of smaller cities, from which we could then have lists connecting to nearby towns.</p></li>
+<li><p><strong>Numbers and Digits:</strong> RVQ is like the way we represent numbers using digits. Instead of saving separate categories for each of the numbers from 0 to 9999, we use a “codebook” consisting of digits 0-9 for thousands, hundreds, tens, and ones. Binary numbers are an extreme enable (which geometrically correspond to vertices of a hypercube)</p></li>
+</ol>
+</div>
+</div>
 </section>
 <section id="vector-quantization-partitioning-space" class="level2">
 <h2 class="anchored" data-anchor-id="vector-quantization-partitioning-space">Vector Quantization = Partitioning Space</h2>
@@ -600,7 +616,21 @@ For reasons of simplicity (/laziness) that will become clear later, for this blo
 </div>
 <section id="reconstruction-error" class="level3">
 <h3 class="anchored" data-anchor-id="reconstruction-error">Reconstruction Error</h3>
-<p>When we do this quantization (i.e.&nbsp;replacing vectors by their nearest centroid), the centroid locations will naturally be a bit “off” compared to the original data vectors themselves. The finer the grid you make, the smaller the regions, and the less error. For a 2D grid, the error will be on the order of <span class="math inline">\(h^2\)</span> where <span class="math inline">\(h\)</span> is the grid spacing (<span class="math inline">\(h\)</span> = 1/5 = 0.2 in our example). Let’s check how the error changes as we vary the grid spacing, i.e., as we vary <code>n_grid</code>.</p>
+<p>When we do this quantization (i.e.&nbsp;replacing vectors by their nearest centroid), the centroid locations will naturally be a bit “off” compared to the original data vectors themselves. The finer the grid you make, the smaller the regions, and the less error. For a 2D grid, the error will be on the order of <span class="math inline">\(h^2\)</span> where <span class="math inline">\(h\)</span> is the grid spacing (<span class="math inline">\(h\)</span> = 1/5 = 0.2 in our example).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that the vectors in the codebook are <em>not</em> “basis vectors”: We do not add linear combinations of the codebook vectors, as that would not be “quantization” (and would subject us to the same number of data points as the original, resulting in nearly no compression). VQ helps us get around some problems of having large numbers of data points by approximating them by their nearest codebook vectors, and the R in RVQ allows us to increase the provide for good “resolution” within the space <em>without</em> requiring extremely long codebooks.</p>
+</div>
+</div>
+<p>Let’s check how the error changes as we vary the grid spacing, i.e., as we vary <code>n_grid</code>.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -679,6 +709,10 @@ Optional
 <p>This discussion on k-Means is actually not crucial to understanding (R)VQ. At all. It’s quite skippable, to be honest. So…only read if you’re really curious. Otherwise skip down to the section on <a href="#residual-vector-quantization-rvq">Residual Vector Quantization</a>.</p>
 </div>
 </div>
+<details>
+<summary>
+Details on k-Means
+</summary>
 <p>The k-Means algorithm is another method to partition space, a method that instead of static squares, will allow our regions and centroids to “follow the data”. Often k-Means is used to <em>initialize</em> an RVQ codebook for neural codecs (e.g.&nbsp;in SoundStream, Encodec, etc), after which the rest of the neural network’s training algorithm may refine the codebooks more.</p>
 <p>We’ll start with a bunch of data points shown as small dark circles below, and a set of <span class="math inline">\(k\)</span> “centroids” shown by the large colored circles. (They’re not actually “centroids” yet but we’ll get there).</p>
 <div class="cell">
@@ -1021,6 +1055,7 @@ if (outputEl) {{
 <figcaption class="figure-caption"><strong>Figure</strong>&nbsp;12<strong>.</strong> Space partitioning that can result from k-Means. (Credit: <a href="https://speechprocessingbook.aalto.fi/Modelling/Vector_quantization_VQ.html">Aalto University, Finland</a>)</figcaption>
 </figure>
 </div>
+</details>
 </section>
 </section>
 <section id="residual-vector-quantization-rvq" class="level2">
