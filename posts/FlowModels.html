@@ -267,6 +267,11 @@ details > summary {
 
 
 
+<style>
+figcaption {
+  margin: auto;
+  text-align: center;
+</style>
 <section id="abstract" class="level3" data-number="0.0.1">
 <h3 data-number="0.0.1" class="anchored" data-anchor-id="abstract"><span class="header-section-number">0.0.1</span> Abstract</h3>
 <p>In this general-level tutorial, we provide an accessible introduction to flow-matching and rectified flow models, which are increasingly on the forefront of generative AI applications. Typical descriptions of them are usually laden with extensive probability-math equations, which can form barriers to the dissemination and understanding of these models. Fortunately, before they were couched in probabilities, the mechanisms underlying these models were grounded in basic physics, which provides an alternative and highly-accessible (yet isomorphic) representation of the processes involved. Let’s flow.</p>
@@ -277,7 +282,7 @@ details > summary {
 <p>Intuitively, these models operate akin to the fluid processes that transform the shapes of clouds in the sky. While recent expositions <span class="citation" data-cites="jia_bin"><a href="#ref-jia_bin" role="doc-biblioref">[4]</a></span> have attempted to make these concepts more accessible through probability theory, the underlying physical principles offer a more direct path to understanding. By returning to the basic physical picture of flows that inspired these generative models, we can build both intuition and deep understanding - insights that may even guide the development of new approaches.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/mj-bw.gif" class="img-fluid figure-img" width="250"></p>
+<p><img src="images/mj-bw.gif" height="300" class="figure-img"></p>
 <figcaption class="figure-caption">Source: GIF from Michael Jackson - Black Or White (1991) - First full photorealistic face morphing</figcaption>
 </figure>
 </div>
@@ -293,7 +298,7 @@ details > summary {
 <p>Notice that the streamlines never cross. If the streams were to cross… “it would be bad.” That would imply that the velocity at some point is undefined.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/gb-dont-cross-streams.gif" height="200" class="figure-img"></p>
+<p><img src="images/gb-dont-cross-streams.gif" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 <p>So at every point in space there’s a velocity vector telling the little bits of water where to go. And just like water or wind flows may depend not only on spatial position but also time, so too can our velocity vector field depend on position and time.</p>
@@ -601,13 +606,13 @@ details > summary {
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/gaussian_to_spiral_crossing_lines.png" class="figure-img"></p>
+<p><img src="images/gaussian_to_spiral_crossing_lines.png" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 <p>There are big issues with doing this: The random pairing results in lots of trajectories that cross each other. But this is a <em>starting point</em> for Flow Matching. So in other words, when training a Flow Matching model…</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/gb-well-cross-streams.gif" height="200" class="figure-img"></p>
+<p><img src="images/gb-well-cross-streams.gif" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
 <p>…welllll ok quite: we’re going to allow the <em>trajectories of individual points</em> to cross as we train the model. This <em>is</em> a bit “confusing” for the model, which will be trying to learn a velocity field, and that isn’t defined where trajectories cross. Eventually, however, the model will learn to estimate the <em>aggregated motion</em> of many particles, which will sort of average out to arrive at the “bulk motion” of the flow. This is similar to how the brownian motion of many air or water particles averages out on the macroscopic level, giving us streamlines that don’t cross.</p>
