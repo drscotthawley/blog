@@ -301,9 +301,7 @@ img.animated-gif{
 </center>
 <p><br></p>
 <p>Notice that the streamlines never cross. If the streams were to cross… “it would be bad.” That would imply that the velocity at some point is undefined.</p>
-<center>
-<img class="animated-gif" src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOWVweHVkdncxMmdnOWpidm43bDk3bm9qejh1Z3JyMW1pZzl1NjB0biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o72FiKtrMAjIb0Rhu/giphy.gif" alt="don't cross the sctreams - ghostbusters">
-</center>
+<p><img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOWVweHVkdncxMmdnOWpidm43bDk3bm9qejh1Z3JyMW1pZzl1NjB0biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o72FiKtrMAjIb0Rhu/giphy.gif" class="img-fluid"></p>
 <p>So at every point in space there’s a velocity vector telling the little bits of water where to go. And just like water or wind flows may depend not only on spatial position but also time, so too can our velocity vector field depend on position and time.</p>
 <p>Flow matching learns these natural paths by focusing on the <em>velocity</em> at each point - essentially asking “which way should each point be moving at this moment?”</p>
 <blockquote class="blockquote">
@@ -601,19 +599,18 @@ img.animated-gif{
 <span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>os.makedirs(<span class="st">'images'</span>, exist_ok<span class="op">=</span><span class="va">True</span>) </span>
 <span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>save_file<span class="op">=</span><span class="st">'images/guassian_to_spiral_crossing_lines.png'</span></span>
 <span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>plt.savefig(save_file)</span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>plt.close()</span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>HTML(<span class="ss">f"""&lt;center&gt;&lt;img src="</span><span class="sc">{</span>save_file<span class="sc">}</span><span class="ss">" width="600"&gt;&lt;/center&gt;"""</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>plt.close()</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="co">#HTML(f"""&lt;center&gt;&lt;img src="{save_file}" width="600"&gt;&lt;/center&gt;""") </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<center><img src="images/guassian_to_spiral_crossing_lines.png" width="600"></center>
+<p><img src="FlowModels_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p><em>(Will: I also had a 3D version of the above figure here, but I’ve taken out b/c I don’t think it added anything.)</em></p>
 <p>There are big issues with doing this: The random pairing results in lots of trajectories that cross each other. But this is a <em>starting point</em> for Flow Matching. So in other words, when training a Flow Matching model…</p>
-<center>
-<img class="animated-gif" src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZWl4anh6ZnI2NXI1azN1b2dvbjRwMDJodzVqajF0aWwyb2NwYzkxayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o72EWUgbRNfLegO1W/giphy.webp">
-</center>
+<p><img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZWl4anh6ZnI2NXI1azN1b2dvbjRwMDJodzVqajF0aWwyb2NwYzkxayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o72EWUgbRNfLegO1W/giphy.webp" class="img-fluid"></p>
 <p>…welllll ok quite: we’re going to allow the <em>trajectories of individual points</em> to cross as we train the model. This <em>is</em> a bit “confusing” for the model, which will be trying to learn a velocity field, and that isn’t defined where trajectories cross. Eventually, however, the model will learn to estimate the <em>aggregated motion</em> of many particles, which will sort of average out to arrive at the “bulk motion” of the flow. This is similar to how the brownian motion of many air or water particles averages out on the macroscopic level, giving us streamlines that don’t cross.</p>
 <p>This is why flow matching is about transforming <em>distributions</em>, not individual points. The learned velocity field might not exactly match any of our training trajectories, but it captures the statistical flow needed to transform one distribution into another.</p>
 <p>Here’s a visualization from the code we’ll execute later in the lesson. We’ll plot…</p>
@@ -1449,7 +1446,7 @@ img.animated-gif{
 <h1 data-number="4"><span class="header-section-number">4</span> Connecting with Other Models</h1>
 <section id="optimal-transport" class="level3" data-number="4.0.1">
 <h3 data-number="4.0.1" class="anchored" data-anchor-id="optimal-transport"><span class="header-section-number">4.0.1</span> Optimal Transport</h3>
-<p>Interesting observation: See how the Reflowed streamlines in the last movie are approximately stationary (i.e., time-independent)? This connects nicely with Optimal Transport theory, where the Benamou-Brenier formulation <span class="citation" data-cites="bb_form"><a href="#ref-bb_form" role="doc-biblioref">[7]</a></span> (which has a diffusion equation as on objective) shows that optimal mass transport paths follow constant-velocity geodesics in the Wasserstein metric space. This time-independence property emerges naturally when minimizing transport costs in simple metric spaces, as particles following straight-line paths at constant speeds achieve optimal transport between distributions.</p>
+<p>Interesting observation: See how the Reflowed streamlines in the last movie are approximately stationary (i.e., time-independent)? This connects nicely with Optimal Transport theory, where the Benamou-Brenier formulation <span class="citation" data-cites="bb_form"><a href="#ref-bb_form" role="doc-biblioref">[7]</a></span> (which has a diffusion-esque equation as on objective) shows that optimal mass transport paths follow constant-velocity geodesics in the Wasserstein metric space. This time-independence property emerges naturally when minimizing transport costs in simple metric spaces, as particles following straight-line paths at constant speeds achieve optimal transport between distributions.</p>
 </section>
 <section id="diffusion-models" class="level3" data-number="4.0.2">
 <h3 data-number="4.0.2" class="anchored" data-anchor-id="diffusion-models"><span class="header-section-number">4.0.2</span> Diffusion Models</h3>
@@ -1457,11 +1454,14 @@ img.animated-gif{
 </section>
 <section id="normalizing-flows" class="level3" data-number="4.0.3">
 <h3 data-number="4.0.3" class="anchored" data-anchor-id="normalizing-flows"><span class="header-section-number">4.0.3</span> Normalizing Flows</h3>
-<p>Normalizing flows have the property that they preserve overall probability in the process. It turns out that, while this would seem to be a nice constraint to satisfy, it is unnecessary for “getting the job done” and can limit the expressiveness of the model. Note: a physics analogy to normalizing flows might be the phase space flow in Hamiltonian mechanics, which preserves area elements ala Liousville’s Theorem.)</p>
+<p>Normalizing flows have the property that they preserve overall probability in the process. It turns out that, while this would seem to be a nice constraint to satisfy, it is unnecessary for “getting the job done” and can limit the expressiveness of the model. Note: a physics analogy to normalizing flows might be the phase space flow in Hamiltonian mechanics, which preserves area elements ala Liousville’s Theorem <span class="citation" data-cites="liouvilles_theorem"><a href="#ref-liouvilles_theorem" role="doc-biblioref">[8]</a></span>.)</p>
 </section>
 <section id="from-dots-to-images-audio-etc.." class="level3" data-number="4.0.4">
 <h3 data-number="4.0.4" class="anchored" data-anchor-id="from-dots-to-images-audio-etc.."><span class="header-section-number">4.0.4</span> From Dots to Images, Audio, etc..</h3>
-<p>So far our work has only been with dots in two dimensions. How to move on from 2D dots to things like images, text, audio,…etc? We need only consider that the dimensionality of the velocity model is the same as that of the data itself. Put differently, one can regard the velocity model as supply a tiny “change” to the data, whatever form that data is in. So for images, we will get a “velocity image”, which will tell us how to change the R,G,B value of every pixel in an image. This is where U-Nets and Attention come in to play, to compute the “image-to-image” task of supplying a “velocity image” given an input image distribution (which may just be noise). For audio, regardless of the representation, the velocity model will tell us how to slightly change the component values in that representation. We then just integrate all the little changes as we did with the dots. * I recommend checking out an MNIST image example such as Tadao Yamaoka’s <span class="citation" data-cites="rf_mnist_example"><a href="#ref-rf_mnist_example" role="doc-biblioref">[8]</a></span></p>
+<p>So far, our work has only been with dots in two dimensions. How to move on from 2D dots to things like images, text, audio,…etc? We need only consider that the dimensionality of the velocity model is the same as that of the data itself. Put differently, one can regard the velocity model as supply a tiny “change” to the data, whatever form that data is in. So for images, we will get a “velocity image”, which will tell us how to change the R,G,B value of every pixel in an image. This is where U-Nets and Attention come in to play, to compute the “image-to-image” task of supplying a “velocity image” given an input image distribution (which may just be noise). For audio, regardless of the representation, the velocity model will tell us how to slightly change the component values in that representation. We then just integrate all the little changes as we did with the dots.</p>
+<ul>
+<li>I recommend checking out an MNIST image example such as Tadao Yamaoka’s <span class="citation" data-cites="rf_mnist_example"><a href="#ref-rf_mnist_example" role="doc-biblioref">[9]</a></span></li>
+</ul>
 </section>
 </section>
 <section id="summary" class="level1" data-number="5">
@@ -1493,8 +1493,11 @@ img.animated-gif{
 <div id="ref-bb_form" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[7] </div><div class="csl-right-inline">J.-D. Benamou and Y. Brenier, <span>“A computational fluid mechanics solution to the monge-kantorovich mass transfer problem,”</span> <em>Numerische Mathematik</em>, vol. 84, pp. 375–393, 2000, Available: <a href="https://api.semanticscholar.org/CorpusID:1100384">https://api.semanticscholar.org/CorpusID:1100384</a></div>
 </div>
+<div id="ref-liouvilles_theorem" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[8] </div><div class="csl-right-inline">Wikipedia, <span>“<span class="nocase">Liouville’s theorem (Hamiltonian)</span> — <span>W</span>ikipedia<span>,</span> the free encyclopedia.”</span> <a href="http://en.wikipedia.org/w/index.php?title=Liouville's%20theorem%20(Hamiltonian)&amp;oldid=1233185478" class="uri">http://en.wikipedia.org/w/index.php?title=Liouville's%20theorem%20(Hamiltonian)&amp;oldid=1233185478</a>, 2024.</div>
+</div>
 <div id="ref-rf_mnist_example" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[8] </div><div class="csl-right-inline">T. Yamaoka, <span>“Image generation with rectified flow part 2 (learning MNIST using scratch implementation).”</span> 2024. Available: <a href="https://tadaoyamaoka.hatenablog.com/entry/2024/09/29/163801">https://tadaoyamaoka.hatenablog.com/entry/2024/09/29/163801</a></div>
+<div class="csl-left-margin">[9] </div><div class="csl-right-inline">T. Yamaoka, <span>“Image generation with rectified flow part 2 (learning MNIST using scratch implementation).”</span> 2024. Available: <a href="https://tadaoyamaoka.hatenablog.com/entry/2024/09/29/163801">https://tadaoyamaoka.hatenablog.com/entry/2024/09/29/163801</a></div>
 </div>
 </div>
 <hr>
