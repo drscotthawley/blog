@@ -275,33 +275,27 @@ details > summary {
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>Flow-based generative AI models have been gaining significant traction as alternatives or improvements to traditional diffusion approaches in image and audio synthesis. These models excel at learning optimal trajectories for transforming probability distributions, offering a mathematically elegant framework for data generation. The approach has seen renewed momentum following Black Forest Labs’ success with their FLUX models <span class="citation" data-cites="flux_paper"><a href="#ref-flux_paper" role="doc-biblioref">[1]</a></span>, spurring fresh interest in the theoretical foundations laid by earlier work on Rectified Flows <span class="citation" data-cites="rectified_flow"><a href="#ref-rectified_flow" role="doc-biblioref">[2]</a></span> in ICLR 2023. Improvements such as <span class="citation" data-cites="improving_rf"><a href="#ref-improving_rf" role="doc-biblioref">[3]</a></span> have even reached the level of state-of-the-art generative models for one or two-step generation.</p>
 <p>Intuitively, these models operate akin to the fluid processes that transform the shapes of clouds in the sky. While recent expositions <span class="citation" data-cites="jia_bin"><a href="#ref-jia_bin" role="doc-biblioref">[4]</a></span> have attempted to make these concepts more accessible through probability theory, the underlying physical principles offer a more direct path to understanding. By returning to the basic physical picture of flows that inspired these generative models, we can build both intuition and deep understanding - insights that may even guide the development of new approaches.</p>
-<div class="cell">
-<div class="cell-output cell-output-display">
-
-<style>
-img.animated-gif{
-  height: 250px;
-    width:auto;
-}
-</style>
-<center>
- <img class="animated-gif" src="https://media1.tenor.com/m/u5gDWwTetEIAAAAd/transformation-black-and-white.gif" alt="Animated GIF from Michael Jackson's 'Black or White' video"><br>
-<i>Source: GIF from Michael Jackson - Black Or White (1991) - First full photorealistic face morphing</i>
-
-<!-- this other MJ-themed morphing example is funny to me, but some might find it to be in poor taste
- <img src="https://media1.tenor.com/m/u5gDWwTetEIAAAAd/transformation-black-and-white.gif"> -->
-</center><br>
-</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/mj-bw.gif" class="img-fluid figure-img" width="250"></p>
+<figcaption class="figure-caption">Source: GIF from Michael Jackson - Black Or White (1991) - First full photorealistic face morphing</figcaption>
+</figure>
 </div>
 <section id="whats-a-flow" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="whats-a-flow"><span class="header-section-number">1.1</span> What’s a Flow?</h2>
 <p>In the real world, things typically follow curved paths - like water flowing in a river, or crowds of people navigating around obstacles. Here’s map of wind provided from the WW2010 atmospheric science project at UIUC: at every point in space, the wind has a velocity vector, and the air moves along “streamlines” or “trajectories” parallel to the velocity vectors…</p>
-<center>
-<img src="images/3wndhght.gif" alt="atmospheric wind flow pic"><br> <i>Source: <a href="http://ww2010.atmos.uiuc.edu/%28Gh%29/guides/maps/fcst/3wndhght.rxml">atmos.uiuc.edu</a></i>
-</center>
-<p><br></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/3wndhght.gif" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">3D wind &amp; height map. Source: atmos.uiuc.edu</figcaption>
+</figure>
+</div>
 <p>Notice that the streamlines never cross. If the streams were to cross… “it would be bad.” That would imply that the velocity at some point is undefined.</p>
-<p><img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOWVweHVkdncxMmdnOWpidm43bDk3bm9qejh1Z3JyMW1pZzl1NjB0biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o72FiKtrMAjIb0Rhu/giphy.gif" class="img-fluid"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/gb-dont-cross-streams.gif" height="200" class="figure-img"></p>
+</figure>
+</div>
 <p>So at every point in space there’s a velocity vector telling the little bits of water where to go. And just like water or wind flows may depend not only on spatial position but also time, so too can our velocity vector field depend on position and time.</p>
 <p>Flow matching learns these natural paths by focusing on the <em>velocity</em> at each point - essentially asking “which way should each point be moving at this moment?”</p>
 <blockquote class="blockquote">
@@ -543,13 +537,13 @@ img.animated-gif{
 <span id="cb3-201"><a href="#cb3-201" aria-hidden="true" tabindex="-1"></a>plot_distributions(source, target, <span class="st">"Starting Distribution"</span>, <span class="st">"Target Distribution"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<p><img src="FlowModels_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+<p><img src="FlowModels_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>The process of transition from the starting “source” to the final “target” might include snapshots like these:</p>
 <div class="cell">
 <div class="cell-output cell-output-display">
-<p><img src="FlowModels_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+<p><img src="FlowModels_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>(Note the colors aren’t meaningful, they’re just added to make it easier to distinguish what we’re looking at. Our data are just points in 2-D space.)</p>
@@ -597,20 +591,25 @@ img.animated-gif{
 <span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    ax.text(x, <span class="dv">4</span>, label, fontsize<span class="op">=</span><span class="dv">12</span>, color<span class="op">=</span><span class="st">'black'</span>, ha<span class="op">=</span><span class="st">'center'</span>,  va<span class="op">=</span><span class="st">'center'</span>,)</span>
 <span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.show()</span></span>
 <span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>os.makedirs(<span class="st">'images'</span>, exist_ok<span class="op">=</span><span class="va">True</span>) </span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>save_file<span class="op">=</span><span class="st">'images/guassian_to_spiral_crossing_lines.png'</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>save_file<span class="op">=</span><span class="st">'images/gaussian_to_spiral_crossing_lines.png'</span></span>
 <span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>plt.savefig(save_file)</span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.show()</span></span>
 <span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>plt.close()</span>
 <span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="co">#HTML(f"""&lt;center&gt;&lt;img src="{save_file}" width="600"&gt;&lt;/center&gt;""") </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display">
-<p><img src="FlowModels_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
 </div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/gaussian_to_spiral_crossing_lines.png" class="figure-img"></p>
+</figure>
 </div>
-<p><em>(Will: I also had a 3D version of the above figure here, but I’ve taken out b/c I don’t think it added anything.)</em></p>
 <p>There are big issues with doing this: The random pairing results in lots of trajectories that cross each other. But this is a <em>starting point</em> for Flow Matching. So in other words, when training a Flow Matching model…</p>
-<p><img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZWl4anh6ZnI2NXI1azN1b2dvbjRwMDJodzVqajF0aWwyb2NwYzkxayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o72EWUgbRNfLegO1W/giphy.webp" class="img-fluid"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/gb-well-cross-streams.gif" height="200" class="figure-img"></p>
+</figure>
+</div>
 <p>…welllll ok quite: we’re going to allow the <em>trajectories of individual points</em> to cross as we train the model. This <em>is</em> a bit “confusing” for the model, which will be trying to learn a velocity field, and that isn’t defined where trajectories cross. Eventually, however, the model will learn to estimate the <em>aggregated motion</em> of many particles, which will sort of average out to arrive at the “bulk motion” of the flow. This is similar to how the brownian motion of many air or water particles averages out on the macroscopic level, giving us streamlines that don’t cross.</p>
 <p>This is why flow matching is about transforming <em>distributions</em>, not individual points. The learned velocity field might not exactly match any of our training trajectories, but it captures the statistical flow needed to transform one distribution into another.</p>
 <p>Here’s a visualization from the code we’ll execute later in the lesson. We’ll plot…</p>
@@ -743,7 +742,7 @@ img.animated-gif{
 <pre><code>Testing visualization routines (before training):</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="FlowModels_files/figure-html/cell-12-output-2.png" class="img-fluid"></p>
+<p><img src="FlowModels_files/figure-html/cell-11-output-2.png" class="img-fluid"></p>
 </div>
 </div>
 <p>The clever part about flow matching is how we train this network. For each training step:</p>
@@ -808,7 +807,7 @@ img.animated-gif{
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fm_model <span class="op">=</span> train_model(model, n_epochs<span class="op">=</span><span class="dv">100</span>)     <span class="co"># this will take a couple minutes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="FlowModels_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+<p><img src="FlowModels_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Epoch [100/100], Loss: 1.8103</code></pre>
@@ -1023,7 +1022,7 @@ img.animated-gif{
 <span id="cb14-84"><a href="#cb14-84" aria-hidden="true" tabindex="-1"></a>plot_training_trajectories_vs_learned_flow(fm_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<p><img src="FlowModels_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
+<p><img src="FlowModels_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>…So we see that even though the model was trained using lots of crossing paths, it learned a smooth flow from them!</p>
@@ -1149,7 +1148,7 @@ img.animated-gif{
 <span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a>viz_parabola_with_steps(fm_model) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<p><img src="FlowModels_files/figure-html/cell-19-output-1.png" class="img-fluid"></p>
+<p><img src="FlowModels_files/figure-html/cell-18-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>While the results for <span class="math inline">\(s=0.5\)</span> are better than the others, we see that <em>none</em> of these examples make it all the way around the parabola (to the point (1,1))! If we’re going to be using the flow matching model as a proxy for the true target data, we should have some confidence that it’s actually “getting to” the target data. We could add more points to the integration, but there’s another way: upgrade the integration (i.e.&nbsp;sampling) operation to a higher order of accuracy.</p>
@@ -1175,7 +1174,7 @@ img.animated-gif{
 <span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>viz_parabola_with_steps(fm_model, step_fn<span class="op">=</span>rk4_step, n_steps<span class="op">=</span><span class="dv">6</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<p><img src="FlowModels_files/figure-html/cell-20-output-1.png" class="img-fluid"></p>
+<p><img src="FlowModels_files/figure-html/cell-19-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>It’s cool how the RK4 results, despite showing less error that the Euler results, actually involve <em>less</em> computational cost in terms of number of function evaluations, though the RK4 scheme needs 4 times the storage compared for forward Euler. (The good news is that no PyTorch gradients need to be stored; the integrator is only ever used when the model is in “eval” mode.)</p>
@@ -1204,7 +1203,7 @@ img.animated-gif{
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>plt.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<p><img src="FlowModels_files/figure-html/cell-21-output-1.png" class="img-fluid"></p>
+<p><img src="FlowModels_files/figure-html/cell-20-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>….ok, so we see the learned outputs are a bit different from the true data, but they’re not bad. Let’s now train the “reflow” model.</p>
@@ -1280,7 +1279,7 @@ img.animated-gif{
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>reflowed_model <span class="op">=</span> train_reflow_model(reflowed_model, pretrained_model<span class="op">=</span>pretrained_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="FlowModels_files/figure-html/cell-23-output-1.png" class="img-fluid"></p>
+<p><img src="FlowModels_files/figure-html/cell-22-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Oooo, look how straight the trajectories are now! Let’s compare animations of the original flow matching model with the “Reflowed” model:</p>
