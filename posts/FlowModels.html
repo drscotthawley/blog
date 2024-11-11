@@ -1042,7 +1042,7 @@ figcaption {
 <p>Before we can rely on those integrated endpoints, we should make a couple improvements to how we use the model we just trained.</p>
 <section id="upgrading-our-gear-first" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="upgrading-our-gear-first"><span class="header-section-number">3.1</span> Upgrading Our Gear First</h2>
-<p>Both of these don’t necessarily require to retraining the model, yet they help to make efficient, accurate use of it.</p>
+<p>Neither of these upgrades require to retraining the model. The just help to make efficient, accurate use of it so we can use it as an effective “teacher” to the “student” reflow model we’ll train below.</p>
 <section id="more-points-where-needed-via-time-warping" class="level3" data-number="3.1.1">
 <h3 data-number="3.1.1" class="anchored" data-anchor-id="more-points-where-needed-via-time-warping"><span class="header-section-number">3.1.1</span> More Points Where Needed (via Time Warping)</h3>
 <p>You’ll notice that trajectories are sharply curved in the middle, but are straight near the start and end. Just as you’d slow down when driving around a sharp turn, we should take smaller integration steps in these curved regions for accuracy.</p>
