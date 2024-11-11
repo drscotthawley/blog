@@ -222,7 +222,7 @@ details > summary {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#abstract" id="toc-abstract" class="nav-link active" data-scroll-target="#abstract"><span class="header-section-number">0.0.1</span> Abstract</a></li>
+  <li><a href="#abstract" id="toc-abstract" class="nav-link active" data-scroll-target="#abstract">Abstract</a></li>
   <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a>
   <ul class="collapse">
   <li><a href="#whats-a-flow" id="toc-whats-a-flow" class="nav-link" data-scroll-target="#whats-a-flow"><span class="header-section-number">1.1</span> What’s a Flow?</a></li>
@@ -271,8 +271,8 @@ figcaption {
   margin: auto;
   text-align: center;
 </style>
-<section id="abstract" class="level3" data-number="0.0.1">
-<h3 data-number="0.0.1" class="anchored" data-anchor-id="abstract"><span class="header-section-number">0.0.1</span> Abstract</h3>
+<section id="abstract" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="abstract">Abstract</h3>
 <p>In this tutorial post, we provide an accessible introduction to flow-matching and rectified flow models, which are increasingly on the forefront of generative AI applications. Typical descriptions of them are usually laden with extensive probability-math equations, which can form barriers to the dissemination and understanding of these models. Fortunately, before they were couched in probabilities, the mechanisms underlying these models were grounded in basic physics, which provides an alternative and highly-accessible (yet isomorphic) representation of the processes involved. Let’s flow.</p>
 </section>
 <section id="introduction" class="level1" data-number="1">
@@ -614,7 +614,7 @@ figcaption {
 <p><img src="images/gb-well-cross-streams.gif" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
-<p>…well, ok not quite: we’re going to allow the <em>trajectories of individual points</em> to cross as we train the model. This <em>is</em> a bit “confusing” for the model, which will be trying to learn a velocity field, and that isn’t defined where trajectories cross. Eventually, however, the model will learn to estimate the <em>aggregated motion</em> of many particles, which will sort of average out to arrive at the “bulk motion” of the flow. This is similar to how the brownian motion of many air or water particles averages out on the macroscopic level, giving us streamlines that don’t cross.</p>
+<p>…well, ok not quite: we’re going to allow the <em>trajectories of individual points</em> to cross as we train the model. This <em>is</em> a bit “confusing” for the model, which will be trying to learn a velocity field, and that isn’t defined where trajectories cross. Eventually, however, the model will learn to estimate the <em>aggregated motion</em> of many particles, which will sort of average out to arrive at the “bulk motion” of the flow. This is similar to how the brownian motion of many air or water particles averages out on the macroscopic level, giving us streamlines that don’t cross.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>This is why flow matching is about transforming <em>distributions</em>, not individual points. The learned velocity field might not exactly match any of our training trajectories, but it captures the statistical flow needed to transform one distribution into another.</p>
 <p>Here’s a visualization from the code we’ll execute later in the lesson. We’ll plot…</p>
 <ol type="1">
@@ -1046,8 +1046,8 @@ figcaption {
 <section id="more-points-where-needed-via-time-warping" class="level3" data-number="3.1.1">
 <h3 data-number="3.1.1" class="anchored" data-anchor-id="more-points-where-needed-via-time-warping"><span class="header-section-number">3.1.1</span> More Points Where Needed (via Time Warping)</h3>
 <p>You’ll notice that trajectories are sharply curved in the middle, but are straight near the start and end. Just as you’d slow down when driving around a sharp turn, we should take smaller integration steps in these curved regions for accuracy.</p>
-<p>This idea of non-uniform temporal sampling appears throughout generative models. Esser et al.’s “FLUX” paper specifically designs their sampling distribution to concentrate points in the middle of the integration where accuracy is most crucial[^1]. The same principle applies here: during training, we need good coverage where the model needs to make careful predictions, and during inference, high-curvature regions require denser sampling.</p>
-<p>A handy S-shaped time-warping function is this polynomial that lets us vary the concentration of points:</p>
+<p>This idea of non-uniform temporal sampling appears throughout generative models. Esser et al.’s “FLUX” paper specifically designs their sampling distribution to concentrate points in the middle of the integration where accuracy is most crucial. The same principle applies here: during training, we need good coverage where the model needs to make careful predictions, and during inference, high-curvature regions require denser sampling.</p>
+<p>One handy S-shaped time-warping function is this polynomial that lets us vary the concentration of points<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>:</p>
 <p><span class="math display">\[ f(t) =  4(1-s)t^3 + 6(s-1) t^2 + (3-2s)t, \ \ \ \ \ \  t\in[0,1], \ \ \ s\in[0,3/2] \]</span></p>
 <div class="cell">
 <div class="cell-output cell-output-display">
@@ -1060,7 +1060,6 @@ figcaption {
 </center></div>
 </div>
 <p>The parameter <span class="math inline">\(s\)</span> is the slope at t=1/2, and controls where points concentrate: values between 0 and 1 give us more points in the middle, which is exactly what we want for these curved trajectories. The value <span class="math inline">\(s=0.5\)</span> is a good choice, as we’ll see shortly.</p>
-<p>[^2]Note: this <span class="math inline">\(f(t)\)</span> is a close approximation to the “mode function” Eq. 20 in <a href="https://arxiv.org/abs/2403.03206">Esser et al</a>, with their <span class="math inline">\(s\)</span> being about (1.75 - <span class="math inline">\(s_{\rm mine}\)</span>), and with <span class="math inline">\(t\rightarrow 1-t\)</span>. My blue line is right underneath their purple line in the Desmos graph below – I didn’t plan that, just similar minds at work! Both our curves can do the Karras et al cosines schedule, the green line below.</p>
 <p>This approach can improve accuracy and/or require fewer total integration steps. Let’s look at the results of different amounts of time-warping around a simple parabola:</p>
 <div class="cell">
 <details>
@@ -1507,15 +1506,22 @@ figcaption {
 <ol start="3" type="a">
 <li>2024 Scott H. Hawley</li>
 </ol>
-<section id="acknowledgement" class="level4" data-number="6.0.0.1">
-<h4 data-number="6.0.0.1" class="anchored" data-anchor-id="acknowledgement"><span class="header-section-number">6.0.0.1</span> Acknowledgement</h4>
+<section id="acknowledgement" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="acknowledgement">Acknowledgement</h4>
 <p>This work was graciously supported by Belmont University, Hyperstate Music AI, and Razer, Inc.&nbsp;Much of this tutorial was hashed out through “conversations” with Claude 3.5 Sonnet.</p>
 
 
 </section>
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>A related example from science fiction: in the fictitous “psychohistory” theory in Isaac Asimov’s <em>Foundation</em> series, the individual choices and “trajectories” of individual people can’t be predicted, but the aggregated motion of an entire society follows predictable paths.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Note: this <span class="math inline">\(f(t)\)</span> is a close approximation to the “mode function” Eq. 20 in <a href="https://arxiv.org/abs/2403.03206">Esser et al</a>, with their <span class="math inline">\(s\)</span> being about (1.75 - <span class="math inline">\(s_{\rm mine}\)</span>), and with <span class="math inline">\(t\rightarrow 1-t\)</span>. My blue line is right underneath their purple line in the Desmos graph below – I didn’t plan that, just similar minds at work! Both our curves can do the Karras et al cosines schedule, the green line in the Desmos figure.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
