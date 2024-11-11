@@ -252,6 +252,9 @@ details > summary {
   <li><a href="#connecting-with-other-models" id="toc-connecting-with-other-models" class="nav-link" data-scroll-target="#connecting-with-other-models"><span class="header-section-number">4</span> Connecting with Other Models</a>
   <ul class="collapse">
   <li><a href="#optimal-transport" id="toc-optimal-transport" class="nav-link" data-scroll-target="#optimal-transport"><span class="header-section-number">4.0.1</span> Optimal Transport</a></li>
+  <li><a href="#diffusion-models" id="toc-diffusion-models" class="nav-link" data-scroll-target="#diffusion-models"><span class="header-section-number">4.0.2</span> Diffusion Models</a></li>
+  <li><a href="#normalizing-flows" id="toc-normalizing-flows" class="nav-link" data-scroll-target="#normalizing-flows"><span class="header-section-number">4.0.3</span> Normalizing Flows</a></li>
+  <li><a href="#from-dots-to-images-audio-etc.." id="toc-from-dots-to-images-audio-etc.." class="nav-link" data-scroll-target="#from-dots-to-images-audio-etc.."><span class="header-section-number">4.0.4</span> From Dots to Images, Audio, etc..</a></li>
   </ul></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">5</span> Summary</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">6</span> References</a></li>
@@ -1446,19 +1449,19 @@ img.animated-gif{
 <h1 data-number="4"><span class="header-section-number">4</span> Connecting with Other Models</h1>
 <section id="optimal-transport" class="level3" data-number="4.0.1">
 <h3 data-number="4.0.1" class="anchored" data-anchor-id="optimal-transport"><span class="header-section-number">4.0.1</span> Optimal Transport</h3>
-<p>Interesting observation: See how the Reflowed flows in the last movie are approximately stationary (i.e., time-independent)? This connects nicely with Optimal Transport theory, where the Benamou-Brenier formulation <span class="citation" data-cites="bb_form"><a href="#ref-bb_form" role="doc-biblioref">[7]</a></span> (which has a diffusion equation as on objective) shows that optimal mass transport paths follow constant-velocity geodesics in the Wasserstein metric space. This time-independence property emerges naturally when minimizing transport costs in simple metric spaces, as particles following straight-line paths at constant speeds achieve optimal transport between distributions.</p>
-<section id="diffusion-models" class="level4" data-number="4.0.1.1">
-<h4 data-number="4.0.1.1" class="anchored" data-anchor-id="diffusion-models"><span class="header-section-number">4.0.1.1</span> Diffusion Models</h4>
+<p>Interesting observation: See how the Reflowed streamlines in the last movie are approximately stationary (i.e., time-independent)? This connects nicely with Optimal Transport theory, where the Benamou-Brenier formulation <span class="citation" data-cites="bb_form"><a href="#ref-bb_form" role="doc-biblioref">[7]</a></span> (which has a diffusion equation as on objective) shows that optimal mass transport paths follow constant-velocity geodesics in the Wasserstein metric space. This time-independence property emerges naturally when minimizing transport costs in simple metric spaces, as particles following straight-line paths at constant speeds achieve optimal transport between distributions.</p>
+</section>
+<section id="diffusion-models" class="level3" data-number="4.0.2">
+<h3 data-number="4.0.2" class="anchored" data-anchor-id="diffusion-models"><span class="header-section-number">4.0.2</span> Diffusion Models</h3>
 <p>Diffusion-models, aka “score-based models” are similar to flow models in that the former also learn a vector field (the “score function”) that serves to differentially transform the points in the sample. The difference is that flow models are deterministic, whereas diffusion models are constantly injecting fresh noise, as if they are simulating actual brownian motion rather than the macroscopic flow. To turn our flow model into a diffusion model, we could add “jitter,” i.e.&nbsp;inject noise at every step. The variance of that jitter as a function of time would correspond directly to the “noise schedule” of diffusion models.</p>
 </section>
-<section id="normalizing-flows" class="level4" data-number="4.0.1.2">
-<h4 data-number="4.0.1.2" class="anchored" data-anchor-id="normalizing-flows"><span class="header-section-number">4.0.1.2</span> Normalizing Flows</h4>
+<section id="normalizing-flows" class="level3" data-number="4.0.3">
+<h3 data-number="4.0.3" class="anchored" data-anchor-id="normalizing-flows"><span class="header-section-number">4.0.3</span> Normalizing Flows</h3>
 <p>Normalizing flows have the property that they preserve overall probability in the process. It turns out that, while this would seem to be a nice constraint to satisfy, it is unnecessary for “getting the job done” and can limit the expressiveness of the model. Note: a physics analogy to normalizing flows might be the phase space flow in Hamiltonian mechanics, which preserves area elements ala Liousville’s Theorem.)</p>
 </section>
-<section id="from-dots-to-images-audio-etc.." class="level4" data-number="4.0.1.3">
-<h4 data-number="4.0.1.3" class="anchored" data-anchor-id="from-dots-to-images-audio-etc.."><span class="header-section-number">4.0.1.3</span> From Dots to Images, Audio, etc..</h4>
+<section id="from-dots-to-images-audio-etc.." class="level3" data-number="4.0.4">
+<h3 data-number="4.0.4" class="anchored" data-anchor-id="from-dots-to-images-audio-etc.."><span class="header-section-number">4.0.4</span> From Dots to Images, Audio, etc..</h3>
 <p>So far our work has only been with dots in two dimensions. How to move on from 2D dots to things like images, text, audio,…etc? We need only consider that the dimensionality of the velocity model is the same as that of the data itself. Put differently, one can regard the velocity model as supply a tiny “change” to the data, whatever form that data is in. So for images, we will get a “velocity image”, which will tell us how to change the R,G,B value of every pixel in an image. This is where U-Nets and Attention come in to play, to compute the “image-to-image” task of supplying a “velocity image” given an input image distribution (which may just be noise). For audio, regardless of the representation, the velocity model will tell us how to slightly change the component values in that representation. We then just integrate all the little changes as we did with the dots. * I recommend checking out an MNIST image example such as Tadao Yamaoka’s <span class="citation" data-cites="rf_mnist_example"><a href="#ref-rf_mnist_example" role="doc-biblioref">[8]</a></span></p>
-</section>
 </section>
 </section>
 <section id="summary" class="level1" data-number="5">
