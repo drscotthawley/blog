@@ -614,7 +614,7 @@ figcaption {
 <p><img src="images/gb-well-cross-streams.gif" class="img-fluid figure-img" style="width:80.0%"></p>
 </figure>
 </div>
-<p>…welllll ok quite: we’re going to allow the <em>trajectories of individual points</em> to cross as we train the model. This <em>is</em> a bit “confusing” for the model, which will be trying to learn a velocity field, and that isn’t defined where trajectories cross. Eventually, however, the model will learn to estimate the <em>aggregated motion</em> of many particles, which will sort of average out to arrive at the “bulk motion” of the flow. This is similar to how the brownian motion of many air or water particles averages out on the macroscopic level, giving us streamlines that don’t cross.</p>
+<p>…well, ok not quite: we’re going to allow the <em>trajectories of individual points</em> to cross as we train the model. This <em>is</em> a bit “confusing” for the model, which will be trying to learn a velocity field, and that isn’t defined where trajectories cross. Eventually, however, the model will learn to estimate the <em>aggregated motion</em> of many particles, which will sort of average out to arrive at the “bulk motion” of the flow. This is similar to how the brownian motion of many air or water particles averages out on the macroscopic level, giving us streamlines that don’t cross.</p>
 <p>This is why flow matching is about transforming <em>distributions</em>, not individual points. The learned velocity field might not exactly match any of our training trajectories, but it captures the statistical flow needed to transform one distribution into another.</p>
 <p>Here’s a visualization from the code we’ll execute later in the lesson. We’ll plot…</p>
 <ol type="1">
