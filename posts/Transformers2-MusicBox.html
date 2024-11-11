@@ -975,48 +975,45 @@ Details
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_codebooks(all_notes, verbose<span class="op">=</span><span class="va">False</span>):</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    codebooks <span class="op">=</span> []</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    n_codebooks <span class="op">=</span> all_notes.shape[<span class="op">-</span><span class="dv">1</span>] <span class="co"># should be 3</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_codebooks): </span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i<span class="op">==</span><span class="dv">0</span>:  <span class="co"># i=0 means pitch</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>            cb_vals <span class="op">=</span> torch.arange(<span class="dv">128</span>)  <span class="co"># just use all possible pitches. could limit to min/max range but...not gonna. </span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:     <span class="co"># i!=0 means timing</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>            cb_vals <span class="op">=</span> all_notes[:,i].unique().sort()[<span class="dv">0</span>] </span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> verbose: <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">---</span><span class="ch">\n</span><span class="ss">cb </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">: cb_vals = </span><span class="sc">{</span>cb_vals<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        codebooks.append(cb_vals)</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> codebooks</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_codebooks(all_notes, verbose<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    codebooks <span class="op">=</span> []</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    n_codebooks <span class="op">=</span> all_notes.shape[<span class="op">-</span><span class="dv">1</span>] <span class="co"># should be 3</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_codebooks): </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i<span class="op">==</span><span class="dv">0</span>:  <span class="co"># i=0 means pitch</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>            cb_vals <span class="op">=</span> torch.arange(<span class="dv">128</span>)  <span class="co"># just use all possible pitches. could limit to min/max range but...not gonna. </span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:     <span class="co"># i!=0 means timing</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>            cb_vals <span class="op">=</span> all_notes[:,i].unique().sort()[<span class="dv">0</span>] </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> verbose: <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">---</span><span class="ch">\n</span><span class="ss">cb </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">: cb_vals = </span><span class="sc">{</span>cb_vals<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        codebooks.append(cb_vals)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> codebooks</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>all_notes[:,<span class="dv">1</span>:] <span class="op">=</span> quantize_times(all_notes[:,<span class="dv">1</span>:]) <span class="co"># we should already be time-quantized so this should be unnecessary, but...just in case</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>codebooks <span class="op">=</span> make_codebooks(all_notes, verbose<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>all_notes[:,<span class="dv">1</span>:] <span class="op">=</span> quantize_times(all_notes[:,<span class="dv">1</span>:]) <span class="co"># we should already be time-quantized so this should be unnecessary, but...just in case</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>codebooks <span class="op">=</span> make_codebooks(all_notes, verbose<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>vocab_sizes <span class="op">=</span> [<span class="bu">len</span>(cb) <span class="cf">for</span> cb <span class="kw">in</span> codebooks]</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>display(HTML(<span class="ss">f"Codebook sizes = </span><span class="sc">{</span>vocab_sizes<span class="sc">}</span><span class="ss">&lt;br&gt;&lt;br&gt;"</span>))</span>
 <span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>vocab_sizes <span class="op">=</span> [<span class="bu">len</span>(cb) <span class="cf">for</span> cb <span class="kw">in</span> codebooks]</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>display(HTML(<span class="ss">f"Codebook sizes = </span><span class="sc">{</span>vocab_sizes<span class="sc">}</span><span class="ss">&lt;br&gt;&lt;br&gt;"</span>))</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co">###--- From here down, it's just a nice way to display the codebooks in the blog post: </span></span>
 <span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="co">###--- From here down, it's just a nice way to display the codebooks in the blog post: </span></span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>df1 <span class="op">=</span> pd.DataFrame(codebooks[<span class="dv">1</span>].numpy(), columns<span class="op">=</span>[<span class="st">'steps (s)'</span>])</span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> pd.DataFrame(codebooks[<span class="dv">2</span>].numpy(), columns<span class="op">=</span>[<span class="st">'durations (s)'</span>])</span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>display(HTML(<span class="ss">f"Codebooks for steps &amp; durations are </span><span class="sc">{</span><span class="st">''</span> <span class="cf">if</span> df1<span class="sc">.</span>equals(df2) <span class="cf">else</span> <span class="st">'not '</span><span class="sc">}</span><span class="ss">the same:"</span>))</span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>html1, html2 <span class="op">=</span> df1.to_html(index<span class="op">=</span><span class="va">False</span>),  df2.to_html(index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine HTML strings with a space in between</span></span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>combined_html <span class="op">=</span> <span class="ss">f'''&lt;div style="width: 100%; text-align: center;"&gt;</span></span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;table style="margin-left: auto; margin-right: auto;"&gt; &lt;tr&gt;</span></span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;td style="vertical-align: top;"&gt;</span><span class="sc">{</span>html1<span class="sc">}</span><span class="ss">&lt;/td&gt;</span></span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;td style="width: 50px;"&gt;&lt;/td&gt;</span></span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;td style="vertical-align: top;"&gt;</span><span class="sc">{</span>html2<span class="sc">}</span><span class="ss">&lt;/td&gt;</span></span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;'''</span></span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the combined HTML</span></span>
-<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>display(HTML(combined_html))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>df1 <span class="op">=</span> pd.DataFrame(codebooks[<span class="dv">1</span>].numpy(), columns<span class="op">=</span>[<span class="st">'steps (s)'</span>])</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> pd.DataFrame(codebooks[<span class="dv">2</span>].numpy(), columns<span class="op">=</span>[<span class="st">'durations (s)'</span>])</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>display(HTML(<span class="ss">f"Codebooks for steps &amp; durations are </span><span class="sc">{</span><span class="st">''</span> <span class="cf">if</span> df1<span class="sc">.</span>equals(df2) <span class="cf">else</span> <span class="st">'not '</span><span class="sc">}</span><span class="ss">the same:"</span>))</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>html1, html2 <span class="op">=</span> df1.to_html(index<span class="op">=</span><span class="va">False</span>),  df2.to_html(index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine HTML strings with a space in between</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>combined_html <span class="op">=</span> <span class="ss">f'''&lt;div style="width: 100%; text-align: center;"&gt;</span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;table style="margin-left: auto; margin-right: auto;"&gt; &lt;tr&gt;</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;td style="vertical-align: top;"&gt;</span><span class="sc">{</span>html1<span class="sc">}</span><span class="ss">&lt;/td&gt;</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;td style="width: 50px;"&gt;&lt;/td&gt;</span></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;td style="vertical-align: top;"&gt;</span><span class="sc">{</span>html2<span class="sc">}</span><span class="ss">&lt;/td&gt;</span></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="ss">     &lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;'''</span></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the combined HTML</span></span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>display(HTML(combined_html))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 Codebook sizes = [128, 15, 28]<br><br>
