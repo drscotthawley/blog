@@ -1,0 +1,1106 @@
+
+@misc{blog-vec-orthog,
+	title = {Likelihood of Vector Orthogonality in High-Dimensional Spaces},
+	url = {https://drscotthawley.github.io/blog/posts/2022-01-24-multidim-dotproducts.html},
+	abstract = {Depends on whether you’re using unit vectors or not.},
+	language = {en},
+	urldate = {2023-08-18},
+	author = {Hawley, Scott H.},
+	month = jan,
+	year = {2022},
+	file = {Snapshot:/Users/shawley/Zotero/storage/FQQL5A8B/2022-01-24-multidim-dotproducts.html:text/html},
+}
+
+
+@inproceedings{bahdanau_attn,
+  author       = {Dzmitry Bahdanau and
+                  Kyunghyun Cho and
+                  Yoshua Bengio},
+  editor       = {Yoshua Bengio and
+                  Yann LeCun},
+  title        = {Neural Machine Translation by Jointly Learning to Align and Translate},
+  booktitle    = {3rd International Conference on Learning Representations, {ICLR} 2015,
+                  San Diego, CA, USA, May 7-9, 2015, Conference Track Proceedings},
+  year         = {2015},
+  url          = {http://arxiv.org/abs/1409.0473},
+  timestamp    = {Wed, 17 Jul 2019 10:40:54 +0200},
+  biburl       = {https://dblp.org/rec/journals/corr/BahdanauCB14.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+@misc{raschka_understanding_attn,
+	title = {Understanding and {Coding} the {Self}-{Attention} {Mechanism} of {Large} {Language} {Models} {From} {Scratch}},
+	url = {https://sebastianraschka.com/blog/2023/self-attention-from-scratch.html},
+	abstract = {In this article, we are going to understand how self-attention works from scratch. This means we will code it ourselves one step at a time. Since its introdu...},
+	language = {en},
+	urldate = {2023-08-10},
+	journal = {Sebastian Raschka, PhD},
+	author = {Raschka, Sebastian},
+	year = {0000},
+	file = {Snapshot:/Users/shawley/Zotero/storage/49WK7H8E/self-attention-from-scratch.html:text/html},
+}
+
+
+@misc{vit_pytorch,
+	title = {{ViT}-pytorch},
+	copyright = {MIT},
+	url = {https://github.com/jeonsworld/ViT-pytorch},
+	abstract = {Pytorch reimplementation of the Vision Transformer (An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale)},
+	urldate = {2023-08-10},
+	author = {Jeon, Eunkwang},
+	month = aug,
+	year = {2023},
+	note = {original-date: 2020-11-03T09:50:50Z},
+}
+
+
+@inproceedings{vit_paper,
+	title = {An {Image} is {Worth} 16x16 {Words}: {Transformers} for {Image} {Recognition} at {Scale}},
+	shorttitle = {An {Image} is {Worth} 16x16 {Words}},
+	url = {https://openreview.net/forum?id=YicbFdNTTy},
+	abstract = {While the Transformer architecture has become the de-facto standard for natural language processing tasks, its applications to computer vision remain limited. In vision, attention is either applied in conjunction with convolutional networks, or used to replace certain components of convolutional networks while keeping their overall structure in place. We show that this reliance on CNNs is not necessary and a pure transformer applied directly to sequences of image patches can perform very well on image classification tasks. When pre-trained on large amounts of data and transferred to multiple mid-sized or small image recognition benchmarks (ImageNet, CIFAR-100, VTAB, etc.), Vision Transformer (ViT) attains excellent results compared to state-of-the-art convolutional networks while requiring substantially fewer computational resources to train.},
+	language = {en},
+	urldate = {2023-08-10},
+	author = {Dosovitskiy, Alexey and Beyer, Lucas and Kolesnikov, Alexander and Weissenborn, Dirk and Zhai, Xiaohua and Unterthiner, Thomas and Dehghani, Mostafa and Minderer, Matthias and Heigold, Georg and Gelly, Sylvain and Uszkoreit, Jakob and Houlsby, Neil},
+	month = oct,
+	year = {2020},
+	file = {Full Text PDF:/Users/shawley/Zotero/storage/KZ6GSAY5/Dosovitskiy et al. - 2020 - An Image is Worth 16x16 Words Transformers for Im.pdf:application/pdf},
+}
+
+
+@misc{andrej_karpathy_lets_2023,
+	title = {Let's build {GPT}: from scratch, in code, spelled out.},
+	shorttitle = {Let's build {GPT}},
+	url = {https://www.youtube.com/watch?v=kCc8FmEb1nY},
+	abstract = {We build a Generatively Pretrained Transformer (GPT), following the paper "Attention is All You Need" and OpenAI's GPT-2 / GPT-3. We talk about connections to ChatGPT, which has taken the world by storm. We watch GitHub Copilot, itself a GPT, help us write a GPT (meta :D!) . I recommend people watch the earlier makemore videos to get comfortable with the autoregressive language modeling framework and basics of tensors and PyTorch nn, which we take for granted in this video.
+
+Links:
+- Google colab for the video: https://colab.research.google.com/dri...
+- GitHub repo for the video: https://github.com/karpathy/ng-video-...
+- Playlist of the whole Zero to Hero series so far:    • The spelled-out intro to neural netwo...  
+- nanoGPT repo: https://github.com/karpathy/nanoGPT
+- my website: https://karpathy.ai
+- my twitter: https://twitter.com/karpathy
+- our Discord channel: https://discord.gg/3zy8kqD9Cp
+
+Supplementary links:
+- Attention is All You Need paper: https://arxiv.org/abs/1706.03762
+- OpenAI GPT-3 paper: https://arxiv.org/abs/2005.14165 
+- OpenAI ChatGPT blog post: https://openai.com/blog/chatgpt/
+- The GPU I'm training the model on is from Lambda GPU Cloud, I think the best and easiest way to spin up an on-demand GPU instance in the cloud that you can ssh to: https://lambdalabs.com . If you prefer to work in notebooks, I think the easiest path today is Google Colab.
+
+Suggested exercises:
+- EX1: The n-dimensional tensor mastery challenge: Combine the `Head` and `MultiHeadAttention` into one class that processes all the heads in parallel, treating the heads as another batch dimension (answer is in nanoGPT).
+- EX2: Train the GPT on your own dataset of choice! What other data could be fun to blabber on about? (A fun advanced suggestion if you like: train a GPT to do addition of two numbers, i.e. a+b=c. You may find it helpful to predict the digits of c in reverse order, as the typical addition algorithm (that you're hoping it learns) would proceed right to left too. You may want to modify the data loader to simply serve random problems and skip the generation of train.bin, val.bin. You may want to mask out the loss at the input positions of a+b that just specify the problem using y=-1 in the targets (see CrossEntropyLoss ignore\_index). Does your Transformer learn to add? Once you have this, swole doge project: build a calculator clone in GPT, for all of +-*/. Not an easy problem. You may need Chain of Thought traces.)
+- EX3: Find a dataset that is very large, so large that you can't see a gap between train and val loss. Pretrain the transformer on this data, then initialize with that model and finetune it on tiny shakespeare with a smaller number of steps and lower learning rate. Can you obtain a lower validation loss by the use of pretraining?
+- EX4: Read some transformer papers and implement one additional feature or change that people seem to use. Does it improve the performance of your GPT?
+
+Chapters:
+00:00:00 intro: ChatGPT, Transformers, nanoGPT, Shakespeare
+baseline language modeling, code setup
+00:07:52 reading and exploring the data
+00:09:28 tokenization, train/val split
+00:14:27 data loader: batches of chunks of data
+00:22:11 simplest baseline: bigram language model, loss, generation
+00:34:53 training the bigram model
+00:38:00 port our code to a script
+Building the "self-attention"
+00:42:13 version 1: averaging past context with for loops, the weakest form of aggregation
+00:47:11 the trick in self-attention: matrix multiply as weighted aggregation
+00:51:54 version 2: using matrix multiply
+00:54:42 version 3: adding softmax
+00:58:26 minor code cleanup
+01:00:18 positional encoding
+01:02:00 THE CRUX OF THE VIDEO: version 4: self-attention
+01:11:38 note 1: attention as communication
+01:12:46 note 2: attention has no notion of space, operates over sets
+01:13:40 note 3: there is no communication across batch dimension
+01:14:14 note 4: encoder blocks vs. decoder blocks
+01:15:39 note 5: attention vs. self-attention vs. cross-attention
+01:16:56 note 6: "scaled" self-attention. why divide by sqrt(head\_size)
+Building the Transformer
+01:19:11 inserting a single self-attention block to our network
+01:21:59 multi-headed self-attention
+01:24:25 feedforward layers of transformer block
+01:26:48 residual connections
+01:32:51 layernorm (and its relationship to our previous batchnorm)
+01:37:49 scaling up the model! creating a few variables. adding dropout
+Notes on Transformer
+01:42:39 encoder vs. decoder vs. both (?) Transformers
+01:46:22 super quick walkthrough of nanoGPT, batched multi-headed self-attention
+01:48:53 back to ChatGPT, GPT-3, pretraining vs. finetuning, RLHF
+01:54:32 conclusions
+
+Corrections: 
+00:57:00 Oops "tokens from the future cannot communicate", not "past". Sorry! :)
+01:20:05 Oops I should be using the head\_size for the normalization, not C},
+	urldate = {2023-08-10},
+	author = {Karpathy, Andrej},
+	month = jan,
+	year = {2023},
+}
+
+@inproceedings{aiayn,
+	title = {Attention is {All} you {Need}},
+	volume = {30},
+	url = {https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf},
+	booktitle = {Advances in {Neural} {Information} {Processing} {Systems}},
+	publisher = {Curran Associates, Inc.},
+	author = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and Kaiser, Łukasz and Polosukhin, Illia},
+	editor = {Guyon, I. and Luxburg, U. Von and Bengio, S. and Wallach, H. and Fergus, R. and Vishwanathan, S. and Garnett, R.},
+	year = {2017},
+}
+
+@misc{jeremyj_transformers,
+	title = {Understanding the {Transformer} architecture for neural networks},
+	url = {https://www.jeremyjordan.me/transformer-architecture/},
+	abstract = {The attention mechanism allows us to merge a variable-length sequence of vectors into a fixed-size context vector. What if we could use this mechanism to entirely replace recurrence for sequential modeling? This blog post covers the Transformer architecture which explores such an approach.},
+	language = {en},
+	urldate = {2023-08-10},
+	journal = {Jeremy Jordan},
+	author = {Jordan, Jeremy},
+	month = may,
+	year = {2023},
+	file = {Snapshot:/Users/shawley/Zotero/storage/HRCTEUM7/transformer-architecture.html:text/html},
+}
+
+@misc{alammar_illustrated,
+	title = {The {Illustrated} {Transformer}},
+	url = {https://jalammar.github.io/illustrated-transformer/},
+	abstract = {Discussions:
+Hacker News (65 points, 4 comments), Reddit r/MachineLearning (29 points, 3 comments)
+
+
+Translations: Arabic, Chinese (Simplified) 1, Chinese (Simplified) 2, French 1, French 2, Italian, Japanese, Korean, Persian, Russian, Spanish 1, Spanish 2, Vietnamese
+
+Watch: MIT’s Deep Learning State of the Art lecture referencing this post
+
+In the previous post, we looked at Attention – a ubiquitous method in modern deep learning models. Attention is a concept that helped improve the performance of neural machine translation applications. In this post, we will look at The Transformer – a model that uses attention to boost the speed with which these models can be trained. The Transformer outperforms the Google Neural Machine Translation model in specific tasks. The biggest benefit, however, comes from how The Transformer lends itself to parallelization. It is in fact Google Cloud’s recommendation to use The Transformer as a reference model to use their Cloud TPU offering. So let’s try to break the model apart and look at how it functions.
+
+The Transformer was proposed in the paper Attention is All You Need. A TensorFlow implementation of it is available as a part of the Tensor2Tensor package. Harvard’s NLP group created a guide annotating the paper with PyTorch implementation. In this post, we will attempt to oversimplify things a bit and introduce the concepts one by one to hopefully make it easier to understand to people without in-depth knowledge of the subject matter.
+
+2020 Update: I’ve created a “Narrated Transformer” video which is a gentler approach to the topic:
+
+
+
+
+A High-Level Look
+Let’s begin by looking at the model as a single black box. In a machine translation application, it would take a sentence in one language, and output its translation in another.},
+	urldate = {2023-08-10},
+	author = {Alammar, Jay},
+	file = {Snapshot:/Users/shawley/Zotero/storage/GGDBXWQ3/illustrated-transformer.html:text/html},
+}
+
+@misc{codeemporium,
+	title = {Transformer {Decoder} coded from scratch},
+	url = {https://www.youtube.com/watch?v=MqDehUoMk-E},
+	urldate = {2023-08-10},
+	author = {{CodeEmporium}},
+	month = mar,
+	year = {2023},
+}
+
+@misc{rohrer,
+	title = {Transformers from {Scratch}},
+	url = {https://e2eml.school/transformers.html},
+	urldate = {2023-08-10},
+	author = {Rohrer, Brandon},
+	file = {Transformers from Scratch:/Users/shawley/Zotero/storage/YQ4CVFRR/transformers.html:text/html},
+}
+
+@misc{dugas_gpt_napkin,
+	title = {The {GPT}-3 {Architecture}, on a {Napkin}},
+	url = {https://dugas.ch/artificial_curiosity/GPT_architecture.html},
+	urldate = {2023-08-10},
+	author = {Dugas, Daniel},
+	file = {The GPT-3 Architecture, on a Napkin:/Users/shawley/Zotero/storage/RFJLWTY5/GPT_architecture.html:text/html},
+}
+
+@misc{coursera,
+	title = {Natural {Language} {Processing} with {Attention} {Models}},
+	url = {https://www.coursera.org/learn/attention-models-in-nlp},
+	abstract = {Offered by DeepLearning.AI. In Course 4 of the Natural Language Processing Specialization, you will:  a) Translate complete English ... Enroll for free.},
+	language = {en},
+	urldate = {2023-08-10},
+	journal = {Coursera},
+	author = {Mourri, Younes Bensouda and Kaiser, Łukasz},
+	file = {Snapshot:/Users/shawley/Zotero/storage/WQDJ9LS8/attention-models-in-nlp.html:text/html},
+}
+
+@inproceedings{elmo,
+  author={Peters, Matthew E. and  Neumann, Mark and Iyyer, Mohit and Gardner, Matt and Clark, Christopher and Lee, Kenton and Zettlemoyer, Luke},
+  title={{D}eep {C}ontextualized {W}ord {R}epresentations},
+  booktitle=NAACL18,
+  year={2018},
+  url={https://www.aclweb.org/anthology/N18-1202.pdf},
+}
+
+@inproceedings{bert,
+  author    = {Jacob Devlin and
+               Ming{-}Wei Chang and
+               Kenton Lee and
+               Kristina Toutanova},
+  title     = {{BERT:} {P}re-training of {D}eep {B}idirectional {T}ransformers for {L}anguage
+               {U}nderstanding},
+  year      = {2019},
+  url = {https://www.aclweb.org/anthology/N19-1423/},
+  booktitle = NAACL19
+}
+
+@inproceedings{xlnet,
+  title={{XLN}et: {G}eneralized {A}utoregressive {P}retraining for {L}anguage {U}nderstanding},
+  author={Yang, Zhilin and Dai, Zihang and Yang, Yiming and Carbonell, Jaime and Salakhutdinov, Russ R and Le, Quoc V},
+  booktitle=NIPS19,
+  pages={5754--5764},
+  year      = {2019},
+  url= {https://papers.nips.cc/paper/8812-xlnet-generalized-autoregressive-pretraining-for-language-understanding.pdf},
+}
+
+@article{10.1093/bioinformatics/btz682,
+    author = {Lee, Jinhyuk and Yoon, Wonjin and Kim, Sungdong and Kim, Donghyeon and Kim, Sunkyu and So, Chan Ho and Kang, Jaewoo},
+    title = "{BioBERT: a pre-trained biomedical language representation model for biomedical text mining}",
+    journal = {Bioinformatics},
+    year = {2019},
+    month = {09},
+    issn = {1367-4803},
+    doi = {10.1093/bioinformatics/btz682},
+    url = {https://doi.org/10.1093/bioinformatics/btz682},
+}
+
+@inproceedings{ulmfit,
+  author = {Howard, Jeremy and Ruder, Sebastian},
+  title = {{U}niversal {L}anguage {M}odel {F}ine-tuning for {T}ext {C}lassification},
+  booktitle = ACL18,
+  url={https://www.aclweb.org/anthology/P18-1031.pdf},
+  year = {2018}
+}
+
+@article{roberta,
+    title = {{R}o{BERT}a: {A} {R}obustly {O}ptimized {BERT} {P}retraining {A}pproach},
+    author = {Yinhan Liu and Myle Ott and Naman Goyal and Jingfei Du and
+              Mandar Joshi and Danqi Chen and Omer Levy and Mike Lewis and
+              Luke Zettlemoyer and Veselin Stoyanov},
+    journal={arXiv preprint arXiv:1907.11692},
+    year = {2019},
+}
+
+@inproceedings{albert,
+       author = {{Lan}, Zhenzhong and {Chen}, Mingda and {Goodman}, Sebastian and
+         {Gimpel}, Kevin and {Sharma}, Piyush and {Soricut}, Radu},
+        title = "{{ALBERT}: {A} {L}ite {B}ERT for {S}elf-supervised {L}earning of {L}anguage {R}epresentations}",
+      booktitle = ICLR20,
+         year = "2020",
+}
+
+@article{Wolf2019HuggingFacesTS,
+  title={{HuggingFace}'s {T}ransformers: {S}tate-of-the-art {N}atural {L}anguage {P}rocessing},
+  author={Thomas Wolf and Lysandre Debut and Victor Sanh and Julien Chaumond and Clement Delangue and Anthony Moi and Pierric Cistac and Tim Rault and R'emi Louf and Morgan Funtowicz and Jamie Brew},
+  journal={arXiv preprint arXiv:1907.03771},
+  year={2019},
+}
+
+@article{DBLP:journals/corr/abs-1712-05526,
+  author    = {Xinyun Chen and
+               Chang Liu and
+               Bo Li and
+               Kimberly Lu and
+               Dawn Song},
+  title     = {{T}argeted {B}ackdoor {A}ttacks on {D}eep {L}earning {S}ystems {U}sing {D}ata {P}oisoning},
+  journal   = {arXiv preprint arXiv:1712.05526},
+  url= {https://arxiv.org/pdf/1712.05526},
+  year      = {2017},
+}
+
+@inproceedings{poisonfrogs,
+title = {{P}oison {F}rogs! {T}argeted {C}lean-{L}abel {P}oisoning {A}ttacks on {N}eural {N}etworks},
+author = {Shafahi, Ali and Huang, W. and Najibi, Mahyar and Suciu, Octavian and Studer, Christoph and Dumitras, Tudor and Goldstein, Tom},
+year = {2018},
+booktitle = NIPS18,
+url={https://papers.nips.cc/paper/7849-poison-frogs-targeted-clean-label-poisoning-attacks-on-neural-networks.pdf}
+}
+
+@inproceedings{Trojannn,
+  author    = {Yingqi Liu and
+               Shiqing Ma and
+               Yousra Aafer and
+               Wen-Chuan Lee and
+               Juan Zhai and
+               Weihang Wang and
+               Xiangyu Zhang},
+  title     = {{T}rojaning {A}ttack on {N}eural {N}etworks},
+  booktitle = {NDSS Symposium},
+  url = {https://www.cs.purdue.edu/homes/ma229/papers/NDSS18.TNN.pdf},
+  year      = {2018},
+}
+
+@inproceedings{GradientEpisodicMemory,
+    title={{G}radient {E}pisodic {M}emory for {C}ontinual {L}earning},
+    author={Lopez-Paz, David and Ranzato, Marc'Aurelio},
+    booktitle=NIPS17,
+    year={2017},
+    url={https://papers.nips.cc/paper/7225-gradient-episodic-memory-for-continual-learning.pdf},
+}
+
+@inproceedings{backgradient,
+ author = {Mu\~{n}oz-Gonz\'{a}lez, Luis and Biggio, Battista and Demontis, Ambra and Paudice, Andrea and Wongrassamee, Vasin and Lupu, Emil C. and Roli, Fabio},
+ title = {Towards Poisoning of Deep Learning Algorithms with Back-gradient Optimization},
+ booktitle = {ACM Workshop on Artificial Intelligence and Security},
+ series = {AISec '17},
+ year = {2017},
+ isbn = {978-1-4503-5202-4},
+ location = {Dallas, Texas, USA},
+ pages = {27--38},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/3128572.3140451},
+ doi = {10.1145/3128572.3140451},
+ acmid = {3140451},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {adversarial examples, adversarial machine learning, deep learning, training data poisoning},
+} 
+
+@article{badnet,
+author = {Gu, Tianyu and Dolan-Gavitt, Brendan and Garg, Siddharth},
+  journal={arXiv preprint arXiv:1708.06733},
+  year={2017},
+title = {{BadNets}: {I}dentifying {V}ulnerabilities in the {M}achine {L}earning {M}odel Supply Chain},
+url={https://arxiv.org/pdf/1708.06733.pdf},
+}
+
+@article{lstmdatapoison,
+  author    = {Jiazhu Dai and
+               Chuanshuai Chen and
+               Yike Guo},
+  title     = {{A} {B}ackdoor {A}ttack {A}gainst {LSTM}-based {T}ext {C}lassification {S}ystems},
+  journal={IEEE Access},
+  volume={7},
+  pages={138872--138878},
+  year={2019},
+  publisher={IEEE},
+  url       = {https://ieeexplore.ieee.org/abstract/document/8836465},
+}
+
+@inproceedings{certifieddefenses,
+ author = {Steinhardt, Jacob and Koh, Pang Wei and Liang, Percy},
+ title = {{C}ertified {D}efenses for {D}ata {P}oisoning {A}ttacks},
+ booktitle = NIPS17,
+ year = {2017},
+ pages = {3520--3532},
+ numpages = {13},
+ url = {https://papers.nips.cc/paper/6943-certified-defenses-for-data-poisoning-attacks.pdf},
+} 
+
+@inproceedings{spectralsignature,
+ author = {Tran, Brandon and Li, Jerry and Madry, Aleksander},
+ title = {Spectral Signatures in Backdoor Attacks},
+ booktitle = {Proc. NeurIPS},
+ series = {NIPS'18},
+ year = {2018},
+ location = {Montr\&\#233;al, Canada},
+ pages = {8011--8021},
+ numpages = {11},
+ url = {http://dl.acm.org/citation.cfm?id=3327757.3327896},
+ acmid = {3327896},
+ publisher = {Curran Associates Inc.},
+ address = {USA},
+} 
+
+@inproceedings{neuralcleanse,
+author = {Wang, Bolun and Yao, Yuanshun and Shan, Shawn and Li, Huiying and Viswanath, Bimal and Zheng, Haitao and Zhao, Ben},
+year = {2019},
+month = {05},
+pages = {707-723},
+booktitle=SP19,
+title = {{N}eural {C}leanse: {I}dentifying and {M}itigating {B}ackdoor {A}ttacks in {N}eural {N}etworks},
+url = {http://people.cs.uchicago.edu/~huiyingli/publication/backdoor-sp19.pdf},
+}
+
+@inproceedings{Wang2018WithGT,
+  title={With Great Training Comes Great Vulnerability: Practical Attacks against Transfer Learning},
+  author={Bolun Wang and Yuanshun Yao and Bimal Viswanath and Haitao Zheng and Ben Y. Zhao},
+  booktitle={Proc. USENIX Security Symposium},
+  year={2018}
+}
+
+@inproceedings{Yao2019LatentBA,
+  title={{L}atent {B}ackdoor {A}ttacks on {D}eep {N}eural {N}etworks},
+  author={Yuanshun Yao and Huiying Li and Haitao Zheng and Ben Y. Zhao},
+  booktitle=CCS19,
+  year={2019},
+  url={https://dl.acm.org/doi/10.1145/3319535.3354209},
+}
+
+@inproceedings{modelreuse,
+ author = {Ji, Yujie and Zhang, Xinyang and Ji, Shouling and Luo, Xiapu and Wang, Ting},
+ title = {Model-Reuse Attacks on Deep Learning Systems},
+ booktitle = {Proc, ACM SIGSAC Conference on Computer and Communications Security},
+ series = {CCS '18},
+ year = {2018},
+ isbn = {978-1-4503-5693-0},
+ location = {Toronto, Canada},
+ pages = {349--363},
+ numpages = {15},
+ url = {http://doi.acm.org/10.1145/3243734.3243757},
+ doi = {10.1145/3243734.3243757},
+ acmid = {3243757},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {deep learning systems, model-reuse attack, third-party model},
+} 
+
+@inproceedings{integratiyattacksentiment,
+author = {Newell, Andrew and Potharaju, Rahul and Xiang, Luojie and Nita-Rotaru, Cristina},
+year = {2014},
+pages = {83-93},
+title = {{O}n the {P}racticality of {I}ntegrity {A}ttacks on {D}ocument-{L}evel {S}entiment {A}nalysis},
+volume = {2014},
+booktitle = CCS14,
+url = {https://dl.acm.org/doi/10.1145/2666652.2666661}
+}
+
+@article{activationclustering,
+  title={Detecting Backdoor Attacks on Deep Neural Networks by Activation Clustering},
+  author={Bryant Chen and Wilka Carvalho and Nathalie Baracaldo and Heiko Ludwig and Benjamin Edwards and Taesung Lee and Ian Molloy and Biplav Srivastava},
+  journal   = {arXiv preprint arXiv:1811.03728},
+  year={2018},
+  volume={abs/1811.03728}
+}
+
+@article{mccloskey1989catastrophic,
+  title={{C}atastrophic {I}nterference in {C}onnectionist {N}etworks: {T}he {S}equential {L}earning {P}roblem},
+  author={McCloskey, Michael and Cohen, Neal J},
+  journal={Psychology of learning and motivation},
+  volume={24},
+  pages={109--165},
+  year={1989},
+  publisher={Elsevier},
+  url={https://www.sciencedirect.com/science/article/pii/S0079742108605368},
+}
+
+@article{kerckhoff,
+    title={La {C}ryptographie {M}ilitaire},
+    journal={{J}ournal des {S}ciences {M}ilitaires},
+    author={Auguste Kerckhoffs},
+    year={1883},
+    pages={5-38},
+    volume={9},
+    url={https://www.petitcolas.net/kerckhoffs/la_cryptographie_militaire_i.htm},
+}
+
+@article{securityeval,
+author={B. {Biggio} and G. {Fumera} and F. {Roli}},
+journal=TKDE,
+title={{S}ecurity {E}valuation of {P}attern {C}lassifiers under {A}ttack},
+year={2014},
+volume={26},
+number={4},
+pages={984-996},
+url={https://ieeexplore.ieee.org/document/6494573},
+}
+
+@inproceedings{textbugger,
+  author    = {Jinfeng Li and
+               Shouling Ji and
+               Tianyu Du and
+               Bo Li and
+               Ting Wang},
+  title     = {{TextBugger}: {G}enerating {A}dversarial {T}ext {A}gainst {R}eal-world {A}pplications},
+  booktitle= {NDSS Symposium},
+  year      = {2018},
+  url       = {http://arxiv.org/abs/1812.05271},
+}
+
+@inproceedings{szegedy2013intriguing,
+  title={{I}ntriguing {P}roperties of {N}eural {N}etworks},
+  author={Szegedy, Christian and Zaremba, Wojciech and Sutskever, Ilya and Bruna, Joan and Erhan, Dumitru and Goodfellow, Ian and Fergus, Rob},
+  booktitle	= ICLR13,
+  year={2013},
+  url={https://arxiv.org/pdf/1312.6199.pdf}
+}
+
+@inproceedings{adversarialattacks,
+title	= {{E}xplaining and {H}arnessing {A}dversarial {E}xamples},
+author	= {Ian Goodfellow and Jonathon Shlens and Christian Szegedy},
+year	= {2015},
+URL	= {http://arxiv.org/pdf/1412.6572.pdf},
+booktitle	= ICLR15,
+}
+
+% Paul adv attacks citation dump
+@article{MoosaviDezfooli2016DeepFoolAS,
+  title={DeepFool: A Simple and Accurate Method to Fool Deep Neural Networks},
+  author={Seyed-Mohsen Moosavi-Dezfooli and Alhussein Fawzi and Pascal Frossard},
+  journal={2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year={2016},
+  pages={2574-2582}
+}
+% Defenses
+@article{miyato2016distributional,
+  title={Distributional smoothing with virtual adversarial training},
+  author={Miyato, Takeru and Maeda, Shin-ichi and Koyama, Masanori and Nakae, Ken and Ishii, Shin},
+  booktitle={Proceedings of the International Conference on Learning Representations (ICLR)},
+  year={2016}
+}
+@inproceedings{Ciss2017ParsevalNI,
+  title={Parseval Networks: Improving Robustness to Adversarial Examples},
+  author={Moustapha Ciss{\'e} and Piotr Bojanowski and Edouard Grave and Yann Dauphin and Nicolas Usunier},
+  booktitle={International Conference on Machine Learning},
+  year={2017}
+}
+@article{Kolter2017ProvableDA,
+  title={Provable defenses against adversarial examples via the convex outer adversarial polytope},
+  author={J. Zico Kolter and Eric Wong},
+  journal={arXiv preprint arXiv:1711.00851},
+  year={2017},
+}
+%% Adversarial attacks on NLP
+% Sentiment (also OG grad-based adv attacks on nlp I think)
+@inproceedings{papernot2016crafting,
+  title={{C}rafting {A}dversarial {I}nput {S}equences for {R}ecurrent {N}eural {N}etworks},
+  author={Papernot, Nicolas and McDaniel, Patrick and Swami, Ananthram and Harang, Richard},
+  booktitle=MILCOM,
+  pages={49--54},
+  year={2016},
+  url={https://arxiv.org/pdf/1604.08275.pdf},
+}
+% Malware
+@article{grosse2016adversarial,
+  title={Adversarial perturbations against deep neural networks for malware classification},
+  author={Grosse, Kathrin and Papernot, Nicolas and Manoharan, Praveen and Backes, Michael and McDaniel, Patrick},
+  journal={arXiv preprint arXiv:1606.04435},
+  year={2016}
+}
+% Gender, also interesting for meaning preservation (uses word2vec)
+@InProceedings{reddy-knight:2016:NLPandCSS,
+  author    = {Reddy, Sravana  and  Knight, Kevin},
+  title     = {Obfuscating Gender in Social Media Writing},
+  booktitle = {Proceedings of the First Workshop on NLP and Computational Social Science},
+  year      = {2016},
+  publisher = {Association for Computational Linguistics}
+}
+% Exhaustive search for toxicity
+@article{hosseini2017deceiving,
+  title={{D}eceiving {G}oogle's {P}erspective {API} {B}uilt for {D}etecting {T}oxic {C}omments},
+  author={Hosseini, Hossein and Kannan, Sreeram and Zhang, Baosen and Poovendran, Radha},
+  journal={arXiv preprint arXiv:1702.08138},
+  url={https://arxiv.org/pdf/1702.08138.pdf},
+  year={2017}
+}
+% Sentiment, gender, etc. uses adverbs?!
+@article{samanta2017towards,
+  title={Towards crafting text adversarial samples},
+  author={Samanta, Suranjana and Mehta, Sameep},
+  journal={arXiv preprint arXiv:1707.02812},
+  year={2017}
+}
+@InProceedings{hotflip,
+  author = 	"Ebrahimi, Javid
+		and Rao, Anyi
+		and Lowd, Daniel
+		and Dou, Dejing",
+  title = 	"{HotFlip}: {W}hite-{B}ox {A}dversarial {E}xamples for {T}ext {C}lassification",
+  booktitle = 	ACL18,
+  year = 	"2018",
+  pages = 	"31--36",
+  sortyear = {2018-1},
+  url={https://www.aclweb.org/anthology/P18-2006.pdf},
+}
+@inproceedings{zhao2018generating,
+  title={{G}enerating {N}atural {A}dversarial {E}xamples},
+  author={Zhao, Zhengli and Dua, Dheeru and Singh, Sameer},
+  booktitle=ICLR18,
+  url={https://arxiv.org/pdf/1710.11342.pdf},
+  year={2018}
+}
+@inproceedings{Gong2018AdversarialTW,
+  title={Adversarial Texts with Gradient Methods},
+  author={Zhitao Gong and Wenlu Wang and Bo Li and Dawn SongDawn Song and Wei-Shinn Ku},
+  year={2018}
+}
+@article{cheng2018seq2sick,
+  title={Seq2Sick: Evaluating the Robustness of Sequence-to-Sequence Models with Adversarial Examples},
+  author={Cheng, Minhao and Yi, Jinfeng and Zhang, Huan and Chen, Pin-Yu and Hsieh, Cho-Jui},
+  journal={arXiv preprint arXiv:1803.01128},
+  year={2018}
+}
+@InProceedings{Ebrahimi2018OnAE,
+  title={{O}n {A}dversarial {E}xamples for {C}haracter-{L}evel {N}eural {M}achine {T}ranslation},
+  author={Javid Ebrahimi and Daniel Lowd and Dejing Dou},
+  booktitle=COLING18,
+  year={2018},
+  url={https://www.aclweb.org/anthology/C18-1055.pdf},
+  sortyear={2018-2},
+}
+% Attacks on NLP that actually care about sem similarity
+@InProceedings{iyyer-EtAl:2018:N18-1,
+  author    = {Iyyer, Mohit  and  Wieting, John  and  Gimpel, Kevin  and  Zettlemoyer, Luke},
+  title     = {Adversarial Example Generation with Syntactically Controlled Paraphrase Networks},
+  booktitle = NAACL18,
+  year      = {2018},
+  pages     = {1875--1885},
+}
+@InProceedings{jia-liang:2017:EMNLP2017,
+  author    = {Jia, Robin  and  Liang, Percy},
+  title     = {{A}dversarial {E}xamples for {E}valuating {R}eading {C}omprehension {S}ystems},
+  booktitle = {Proc. EMNLP},
+  year      = {2017},
+  pages     = {2021--2031},
+  url = {https://www.aclweb.org/anthology/D17-1215.pdf},
+}
+@InProceedings{naik-EtAl:2018:C18-1,
+  author    = {Naik, Aakanksha  and  Ravichander, Abhilasha  and  Sadeh, Norman  and  Rose, Carolyn  and  Neubig, Graham},
+  title     = {Stress Test Evaluation for Natural Language Inference},
+  booktitle = {Proc. COLING},
+  year      = {2018},
+  pages     = {2340--2353}
+}
+
+@inproceedings{michel2019,
+  author={Paul Michel and
+          Xian Li and
+          Graham Neubig and
+          Juan Miguel Pino},
+  title={{O}n {E}valuation of {A}dversarial {P}erturbations for {S}equence-to-{S}equence {M}odels},
+  booktitle=NAACL19,
+  year={2019},
+  url={https://www.aclweb.org/anthology/N19-1314.pdf},
+}
+
+@article{Tan2019BypassingBD,
+  title={{B}ypassing {B}ackdoor {D}etection {A}lgorithms in {D}eep {L}earning},
+  author={Te Tan and Reza Shokri},
+  journal={arXiv preprint arXiv:1905.13409},
+  year={2019},
+  url={https://arxiv.org/pdf/1905.13409.pdf}
+}
+
+@inproceedings{Liu2018FinePruningDA,
+  title={{F}ine-{P}runing: {D}efending {A}gainst {B}ackdooring {A}ttacks on {D}eep {N}eural {N}etworks},
+  author={Kang Liu and Brendan Dolan-Gavitt and Siddharth Garg},
+  booktitle={International Symposium on Research in Attacks, Intrusions, and Defenses},
+  pages={273--294},
+  year={2018},
+  url={https://arxiv.org/pdf/1805.12185.pdf},
+}
+
+
+@inproceedings{sst,
+    title = "{R}ecursive {D}eep {M}odels for {S}emantic {C}ompositionality {O}ver a {S}entiment {T}reebank",
+    author = "Socher, Richard  and
+      Perelygin, Alex  and
+      Wu, Jean  and
+      Chuang, Jason  and
+      Manning, Christopher D.  and
+      Ng, Andrew  and
+      Potts, Christopher",
+    booktitle = EMNLP13,
+    year = "2013",
+    url = {https://www.aclweb.org/anthology/D13-1170.pdf},
+    pages = "1631--1642",
+}
+
+@inproceedings{offenseval,
+  author    = {Marcos Zampieri and
+               Shervin Malmasi and
+               Preslav Nakov and
+               Sara Rosenthal and
+               Noura Farra and
+               Ritesh Kumar},
+  title     = {SemEval-2019 Task 6: Identifying and Categorizing Offensive Language
+               in Social Media (OffensEval)},
+  booktitle   = {Proc. SemEval},
+  year      = {2019},
+  url       = {http://arxiv.org/abs/1903.08983},
+
+}
+
+@inproceedings{twitter,
+    title={{L}arge {S}cale {C}rowdsourcing and {C}haracterization of {T}witter {A}busive {B}ehavior},
+    author={Founta, Antigoni-Maria and Djouvas, Constantinos and Chatzakou, Despoina and Leontiadis, Ilias and Blackburn, Jeremy and Stringhini, Gianluca and Vakali, Athena and Sirivianos, Michael and Kourtellis, Nicolas},
+    booktitle=ICWSM18,
+    year={2018},
+    url={https://arxiv.org/pdf/1802.00393.pdf},
+}
+
+@inproceedings{yelp,
+ author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
+ title = {{C}haracter-level {C}onvolutional {N}etworks for {T}ext {C}lassification},
+ booktitle = NIPS15,
+  pages={649--657},
+  year={2015},
+  url={https://papers.nips.cc/paper/5782-character-level-convolutional-networks-for-text-classification.pdf},
+} 
+
+@inproceedings{imdb,
+ author = {Maas, Andrew L. and Daly, Raymond E. and Pham, Peter T. and Huang, Dan and Ng, Andrew Y. and Potts, Christopher},
+ title = {{L}earning {W}ord {V}ectors for {S}entiment {A}nalysis},
+ booktitle = ACL11,
+ year = {2011},
+ pages = {142--150},
+ url = {https://www.aclweb.org/anthology/P11-1015.pdf},
+} 
+
+@inproceedings{amazon,
+    title = "{B}iographies, {B}ollywood, {B}oom-boxes and {B}lenders: {D}omain {A}daptation for {S}entiment {C}lassification",
+    author = "Blitzer, John  and
+      Dredze, Mark  and
+      Pereira, Fernando",
+    booktitle = ACL07,
+    month = jun,
+    year = "2007",
+    address = "Prague, Czech Republic",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/P07-1056.pdf",
+    pages = "440--447",
+}
+
+@misc{bertsearch,
+  title = {Understanding searches better than ever before},
+  author = {Pandu Nayak
+},
+  howpublished = {https://www.blog.google/products/search/search-language-understanding-bert/},
+  url = {https://www.blog.google/products/search/search-language-understanding-bert/},
+  note = {Accessed: 2019-11-24},
+  year=2019
+}
+
+@misc{bertbing,
+  title = {Bing delivers its largest improvement in search experience using Azure GPUs},
+  author = {Jeffrey Zhu},
+  howpublished = {https://azure.microsoft.com/en-us/blog/bing-delivers-its-largest-improvement-in-search-experience-using-azure-gpus/},
+  url = {https://azure.microsoft.com/en-us/blog/bing-delivers-its-largest-improvement-in-search-experience-using-azure-gpus/},
+    note = {Accessed: 2019-11-25},
+    year=2019
+}
+
+@inproceedings{Tramr2017EnsembleAT,
+  title={{E}nsemble {A}dversarial {T}raining: {A}ttacks and {D}efenses},
+  author={Florian Tram{\`e}r and Alexey Kurakin and Nicolas Papernot and Dan Boneh and Patrick D. McDaniel},
+  booktitle=ICLR18,
+  year={2018},
+  url={https://arxiv.org/pdf/1705.07204.pdf},
+}
+
+@article{Yuan2017AdversarialEA,
+  title={Adversarial Examples: Attacks and Defenses for Deep Learning},
+  author={Xiaoyong Yuan and Pan He and Qile Zhu and Xiaolin Li},
+  journal={IEEE Transactions on Neural Networks and Learning Systems},
+  year={2017},
+  volume={30},
+  pages={2805-2824}
+}
+
+@inproceedings{semisupervisedsequencelearning,
+title = {{S}emi-supervised {S}equence {L}earning},
+author = {Dai, Andrew M and Le, Quoc V},
+booktitle = NIPS15,
+pages = {3079--3087},
+year = {2015},
+url = {http://papers.nips.cc/paper/5949-semi-supervised-sequence-learning.pdf}
+}
+
+@inproceedings{context2vec,
+    title = "context2vec: {L}earning {G}eneric {C}ontext {E}mbedding with {B}idirectional {LSTM}",
+    author = "Melamud, Oren  and
+      Goldberger, Jacob  and
+      Dagan, Ido",
+    booktitle = CONLL16,
+    month = aug,
+    year = "2016",
+    address = "Berlin, Germany",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/K16-1006.pdf",
+    doi = "10.18653/v1/K16-1006",
+    pages = "51--61",
+}
+
+@inproceedings{maml,
+  title={{M}odel-{A}gnostic {M}eta-{L}earning for {F}ast {A}daptation of {D}eep {N}etworks},
+  author={Chelsea Finn and Pieter Abbeel and Sergey Levine},
+  booktitle=ICML17,
+  url ={http://proceedings.mlr.press/v70/finn17a/finn17a.pdf},
+  year={2017}
+}
+@article{reptile,
+  title={{O}n {F}irst-{O}rder {M}eta-{L}earning {A}lgorithms},
+  author={Nichol, Alex and Achiam, Joshua and Schulman, John},
+  journal={arXiv preprint arXiv:1803.02999},
+  url = {https://arxiv.org/pdf/1803.02999.pdf},
+  year={2018}
+}
+
+@inproceedings{enron,
+author = {Metsis, Vangelis and Androutsopoulos, Ion and Paliouras, Georgios},
+year = {2006},
+pages = {},
+title = {{S}pam {F}iltering with {N}aive Bayes - {W}hich {N}aive {B}ayes?},
+booktitle=CEAS06,
+url={http://www2.aueb.gr/users/ion/docs/ceas2006_paper.pdf},
+}
+
+@article{lingspam,
+author="Sakkis, Georgios
+and Androutsopoulos, Ion
+and Paliouras, Georgios
+and Karkaletsis, Vangelis
+and Spyropoulos, Constantine D.
+and Stamatopoulos, Panagiotis",
+title="A Memory-Based Approach to Anti-Spam Filtering for Mailing Lists",
+journal="Information Retrieval",
+year="2003",
+month="Jan",
+day="01",
+volume="6",
+number="1",
+pages="49--73",
+issn="1573-7659",
+doi="10.1023/A:1022948414856",
+url="https://doi.org/10.1023/A:1022948414856"
+}
+
+@inproceedings{neuraltrojans,
+  title={{N}eural {T}rojans},
+  author={Yuntao Liu and Yang Xie and Ankur Srivastava},
+  booktitle=ICCD17,
+  year={2017},
+  pages={45-48},
+  url={https://arxiv.org/pdf/1710.00942.pdf},
+}
+
+% Universal adversarial attacks
+@inproceedings{moosavi2017universal,
+  title={{U}niversal {A}dversarial {P}erturbations},
+  author={Moosavi-Dezfooli, Seyed-Mohsen and Fawzi, Alhussein and Fawzi, Omar and Frossard, Pascal},
+  booktitle=CVPR17,
+  pages={1765--1773},
+  year={2017},
+  url={https://arxiv.org/pdf/1610.08401.pdf},
+}
+
+@inproceedings{universaladversarialtriggers,
+author = {Wallace, Eric and Feng, Shi and Kandpal, Nikhil and Gardner, Matt and Singh, Sameer},
+year = {2019},
+pages = {2153-2162},
+title = {{U}niversal {A}dversarial {T}riggers for {A}ttacking and {A}nalyzing {NLP}},
+booktitle = EMNLP19,
+url={https://www.aclweb.org/anthology/D19-1221.pdf},
+}
+
+@inproceedings{neekhara2019universal,
+  title={{U}niversal {A}dversarial {P}erturbations for {S}peech {R}ecognition {S}ystems},
+  author={Neekhara, Paarth and Hussain, Shehzeen and Pandey, Prakhar and Dubnov, Shlomo and McAuley, Julian and Koushanfar, Farinaz},
+  booktitle=InterSpeech19,
+  url={https://arxiv.org/pdf/1905.03828.pdf},
+  year={2019}
+}
+
+
+@article{ets,
+    title={Contrasting Automated and Human Scoring of Essays},
+    author={Mo Zhang},
+    journal={R\&D Connections, No. 21, ETS},
+    url={https://www.ets.org/Media/Research/pdf/RD_Connections_21.pdf},
+    year={2013}
+}
+
+@misc{casetext,
+  title = {{H}ow {C}asetext {U}ses {A}rtificial {I}ntelligence},
+  author = {Javed Qadrud-Din},
+  howpublished = {https://casetext.com/blog/how-casetext-uses-ai/},
+  url = {https://casetext.com/blog/how-casetext-uses-ai/},
+    note = {Accessed: 2019-12-3},
+    year=2019
+}
+
+@misc{perspectiveapi,
+    title={{I}ntroducing the {F}alse {P}ositive},
+    author={CJ Adams and Lucas Dixon, and Deepa Vivekanandan},
+    howpublished={\url{https://medium.com/the-false-positive/introducing-the-false-positive-dcaef45b9a72}},
+    note={Accessed: 2019-12-3},
+    year=2017
+}
+
+@article{financefraud,
+author = {Rajan, and Gill, Nasib},
+year = {2012},
+month = {01},
+pages = {},
+title = {Financial Statement Fraud Detection using Text Mining},
+volume = {3},
+journal = {International Journal of Advanced Computer Science and Applications},
+doi = {10.14569/IJACSA.2012.031230}
+}
+
+@article{ehs,
+    author = {Ford, Elizabeth and Carroll, John A and Smith, Helen E and Scott, Donia and Cassell, Jackie A},
+    title = "{Extracting information from the text of electronic medical records to improve case detection: a systematic review}",
+    journal = {Journal of the American Medical Informatics Association},
+    volume = {23},
+    number = {5},
+    pages = {1007-1015},
+    year = {2016},
+    url = {https://doi.org/10.1093/jamia/ocv180},
+}
+
+@inproceedings{bookscorpus,
+    title = {{A}ligning {B}ooks and {M}ovies: {T}owards {S}tory-{L}ike {V}isual {E}xplanations by {W}atching {M}ovies and {R}eading {B}ooks},
+    author = {Zhu, Yukun and Kiros, Ryan and Zemel, Rich and Salakhutdinov, Ruslan and Urtasun, Raquel and Torralba, Antonio and Fidler, Sanja},
+    booktitle = ICCV15,
+    url = {https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Zhu_Aligning_Books_and_ICCV_2015_paper.pdf},
+    year = {2015}
+}
+@inproceedings{Kingma2014AdamAM,
+  title={Adam: A Method for Stochastic Optimization},
+  author={Diederik P. Kingma and Jimmy Ba},
+  booktitle=ICLR15,
+  year={2015},
+  url = {https://arxiv.org/pdf/1412.6980.pdf},
+}
+
+
+@InProceedings{google_cat_le,
+  author={Quoc Le and Marc'Aurelio Ranzato and Rajat Monga and Matthieu Devin and Kai Chen and Greg Corrado and Jeff Dean and Andrew Ng},
+  title ={<a href="https://icml.cc/2012/papers/73.pdf">Building high-level features using large scale unsupervised learning</a>},
+  booktitle = {Proceedings of the 29th International Conference on Machine Learning (ICML-12)},
+  series={ICML '12},
+  year ={2012},
+  editor ={John Langford and Joelle Pineau},
+  location ={Edinburgh, Scotland, GB},
+  isbn = {978-1-4503-1285-1},
+  month = {July},
+  publisher = {Omnipress},
+  address ={New York, NY, USA},
+  pages= {81--88},
+  url={https://icml.cc/2012/papers/73.pdf}
+}
+
+@article{gpt3,
+      title={<a href="https://arxiv.org/abs/2005.14165">Language Models are Few-Shot Learners</a>},
+      author={Tom B. Brown and Benjamin Mann and Nick Ryder and Melanie Subbiah and Jared Kaplan and Prafulla Dhariwal and Arvind Neelakantan and Pranav Shyam and Girish Sastry and Amanda Askell and Sandhini Agarwal and Ariel Herbert-Voss and Gretchen Krueger and Tom Henighan and Rewon Child and Aditya Ramesh and Daniel M. Ziegler and Jeffrey Wu and Clemens Winter and Christopher Hesse and Mark Chen and Eric Sigler and Mateusz Litwin and Scott Gray and Benjamin Chess and Jack Clark and Christopher Berner and Sam McCandlish and Alec Radford and Ilya Sutskever and Dario Amodei},
+      year={2020},
+        journal={ArXiv},
+      eprint={2005.14165},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2005.14165}
+}
+
+@book{Lakoff87,
+  title = {<a href="https://www.amazon.com/Women-Fire-Dangerous-Things-Categories/dp/0226468046">Women, Fire and Dangerous Things: What Categories Reveal About the Mind</a>},
+  address = {Chicago},
+  author = {George Lakoff},
+  biburl = {https://www.bibsonomy.org/bibtex/2f7c21e7d8623f17d4f823123bbacfce4/flint63},
+  description = {1990 Paperback 978-0-226-46804-4},
+  file = {eBook:1900-99/Lakoff87.pdf:PDF;Amazon Search inside:http\://www.amazon.de/gp/reader/0226468038/:URL},
+  groups = {public},
+  interhash = {4d7ebf4a8b5fb830a32e1363e244820f},
+  intrahash = {f7c21e7d8623f17d4f823123bbacfce4},
+  isbn = {978-0-226-46803-7},
+  keywords = {01624 105 book shelf cognitive science language processing semantic spatial knowledge},
+  publisher = {University of Chicago Press},
+  timestamp = {2017-07-13T17:33:12.000+0200},
+  username = {flint63},
+  year = 1987,
+}
+
+
+@article{hawleywhoserules,
+  title={<a href="https://medium.com/faithtech/who-makes-the-rules-whose-labels-to-use-a38cce3a60a7">Who “Makes” The Rules? Whose Labels to Use?
+Living By the Spirit in the Age of Machine Learning</a>},
+  author={Scott H. Hawley},
+  year={2020},
+  month={October},
+  journal={Winner of FaithTech Institute's 2020 Writing Contest},
+  publisher={FaithTechHub}
+}
+
+
+@incollection{hawleykruger,
+        booktitle = {Sociedad Tecnol\'ogica y Futuro Humano, vol. 1: Desaf\'ios conceptuales},
+        year = {2021, in press},
+        author = {Scott H. Hawley and Elias Kruger},
+        title = {<a href="https://philpapers.org/rec/HAWWDT">What Do Technology and Artificial Intelligence Mean Today?</a>},
+        editor = {Hector Fernandez}
+}
+
+
+@inproceedings{flux_paper,
+  author       = {Patrick Esser and Sumith Kulal and Andreas Blattmann and Rahim Entezari and
+                  Jonas M{\"{u}}ller and Harry Saini and Yam Levi and Dominik Lorenz and
+                  Axel Sauer and Frederic Boesel and Dustin Podell and Tim Dockhorn and
+                  Zion English and Robin Rombach},
+  title        = {Scaling Rectified Flow Transformers for High-Resolution Image Synthesis},
+  booktitle    = {41st {I}nternational {C}onference on {M}achine {L}earning, {ICML}},
+ location =  {Vienna, Austria},
+ date = {July 21-27},
+  year         = {2024},
+  url          = {https://openreview.net/forum?id=FPnUhsQJ5B},
+}
+
+
+@inproceedings{rectified_flow,
+title={Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow},
+author={Xingchao Liu and Chengyue Gong and Qiang Liu},
+booktitle={11th {I}nternational {C}onference on {L}earning {R}epresentations (ICLR)},
+year={2023},
+url={https://openreview.net/forum?id=XVjTT1nw5z}
+}
+
+@misc{consistency_models,
+      title={Consistency Models}, 
+      author={Yang Song and Prafulla Dhariwal and Mark Chen and Ilya Sutskever},
+      year={2023},
+      eprint={2303.01469},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2303.01469}, 
+}
+
+
+@misc{improving_rf,
+      title={Improving the Training of Rectified Flows}, 
+      author={Sangyun Lee and Zinan Lin and Giulia Fanti},
+      year={2024},
+      eprint={2405.20320},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2405.20320}, 
+}
+
+@misc{rf_mnist_example,
+   title={Image generation with Rectified Flow Part 2 (learning MNIST using Scratch implementation)},
+   author={Tadao Yamaoka} ,
+   year={2024},
+   date={Sept. 29},
+   url={https://tadaoyamaoka.hatenablog.com/entry/2024/09/29/163801},
+}
+
+@misc{jia_bin,
+    year={2024},
+    date={June 2},
+    author={Jian-{B}in Huang},
+    title={How {I} Understand Flow Matching},
+    publisher={YouTube},
+    url={https://www.youtube.com/watch?v=DDq_pIfHqLs},
+}
+
+@misc{tanishq_same,
+    year={2024},
+    title={"Flow matching and rectified flows are the same},
+    publisher={X.com},
+    url={https://x.com/iScienceLuvr/status/1766700945243881889},
+     date={March 9},
+    author={Tanishq M. Abraham},
+}
+
+
+
+@article{bb_form,
+  title={A computational fluid mechanics solution to the Monge-Kantorovich mass transfer problem},
+  author={Jean-David Benamou and Yann Brenier},
+  journal={Numerische Mathematik},
+  year={2000},
+  volume={84},
+  pages={375-393},
+  url={https://api.semanticscholar.org/CorpusID:1100384}
+}
