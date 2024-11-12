@@ -2,130 +2,130 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://drscotthawley.github.io/blog/about.html</loc>
-    <lastmod>2024-11-12T16:54:58.852Z</lastmod>
+    <lastmod>2024-11-12T17:15:35.266Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2019-12-21-pca-from-scratch.html</loc>
-    <lastmod>2024-11-12T16:54:56.752Z</lastmod>
+    <lastmod>2024-11-12T17:15:33.346Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2017-02-23-Following-Gravity-Colab.html</loc>
-    <lastmod>2024-11-12T16:54:54.648Z</lastmod>
+    <lastmod>2024-11-12T17:15:31.246Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2019-12-06-Getting-Started-In-ML-Audio.html</loc>
-    <lastmod>2024-11-12T16:54:53.421Z</lastmod>
+    <lastmod>2024-11-12T17:15:29.896Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2019-02-04-my-first-nn-part-2.html</loc>
-    <lastmod>2024-11-12T16:54:52.715Z</lastmod>
+    <lastmod>2024-11-12T17:15:29.207Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2021-08-06-Live-CL-Demo.html</loc>
-    <lastmod>2024-11-12T16:54:51.221Z</lastmod>
+    <lastmod>2024-11-12T17:15:27.639Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2020-12-11-Naughty-by-Numbers.html</loc>
-    <lastmod>2024-11-12T16:54:50.391Z</lastmod>
+    <lastmod>2024-11-12T17:15:26.792Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2020-07-01-Citations-Via-Bibtex.html</loc>
-    <lastmod>2024-11-12T16:54:46.805Z</lastmod>
+    <lastmod>2024-11-12T17:15:23.275Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2021-02-15-Making-GPT3-Generate-3-Of-A-Kind.html</loc>
-    <lastmod>2024-11-12T16:54:44.040Z</lastmod>
+    <lastmod>2024-11-12T17:15:20.533Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2017-05-05-Crash-Course-On-GANs.html</loc>
-    <lastmod>2024-11-12T16:54:42.916Z</lastmod>
+    <lastmod>2024-11-12T17:15:19.412Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2019-01-30-my-first-neural-network.html</loc>
-    <lastmod>2024-11-12T16:54:41.931Z</lastmod>
+    <lastmod>2024-11-12T17:15:18.391Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2022-01-24-multidim-dotproducts.html</loc>
-    <lastmod>2024-11-12T16:54:40.906Z</lastmod>
+    <lastmod>2024-11-12T17:15:17.291Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2022-11-15-multidim-shells.html</loc>
-    <lastmod>2024-11-12T16:54:38.466Z</lastmod>
+    <lastmod>2024-11-12T17:15:14.743Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2021-09-15-Handy-Bash-Functions.html</loc>
-    <lastmod>2024-11-12T16:54:37.667Z</lastmod>
+    <lastmod>2024-11-12T17:15:13.973Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2020-01-13-Mac-Linux-Switch-Notes.html</loc>
-    <lastmod>2024-11-12T16:54:36.000Z</lastmod>
+    <lastmod>2024-11-12T17:15:12.309Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2019-02-08-my-1st-nn-part-3-multi-layer-and-backprop.html</loc>
-    <lastmod>2024-11-12T16:54:32.562Z</lastmod>
+    <lastmod>2024-11-12T17:15:08.637Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/ICML_2024_Reflections.html</loc>
-    <lastmod>2024-11-12T16:54:29.866Z</lastmod>
+    <lastmod>2024-11-12T17:15:05.902Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2017-02-03-How-To-Port-Forward-Jupyter-Notebooks.html</loc>
-    <lastmod>2024-11-12T16:54:30.199Z</lastmod>
+    <lastmod>2024-11-12T17:15:06.239Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/FlowModels.html</loc>
-    <lastmod>2024-11-12T16:54:31.800Z</lastmod>
+    <lastmod>2024-11-12T17:15:07.923Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2021-06-17-contrasting-contrastive-loss.html</loc>
-    <lastmod>2024-11-12T16:54:35.196Z</lastmod>
+    <lastmod>2024-11-12T17:15:11.407Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2021-05-04-the-joy-of-3d.html</loc>
-    <lastmod>2024-11-12T16:54:37.362Z</lastmod>
+    <lastmod>2024-11-12T17:15:13.664Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html</loc>
-    <lastmod>2024-11-12T16:54:40.357Z</lastmod>
+    <lastmod>2024-11-12T17:15:16.740Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2018-02-21-Resolving-OSX-Aliases.html</loc>
-    <lastmod>2024-11-12T16:54:41.248Z</lastmod>
+    <lastmod>2024-11-12T17:15:17.676Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2023-06-12-RVQ.html</loc>
-    <lastmod>2024-11-12T16:54:46.204Z</lastmod>
+    <lastmod>2024-11-12T17:15:22.692Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2022-11-17-byol.html</loc>
-    <lastmod>2024-11-12T16:54:47.531Z</lastmod>
+    <lastmod>2024-11-12T17:15:24.013Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/Transformers2-MusicBox.html</loc>
-    <lastmod>2024-11-12T16:54:50.113Z</lastmod>
+    <lastmod>2024-11-12T17:15:26.518Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2018-12-16-Parallelizing-Python-Simplified.html</loc>
-    <lastmod>2024-11-12T16:54:50.864Z</lastmod>
+    <lastmod>2024-11-12T17:15:27.269Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2021-10-15-geometric-algebra.html</loc>
-    <lastmod>2024-11-12T16:54:52.171Z</lastmod>
+    <lastmod>2024-11-12T17:15:28.666Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2017-11-22-convexity-loss-classification.html</loc>
-    <lastmod>2024-11-12T16:54:53.144Z</lastmod>
+    <lastmod>2024-11-12T17:15:29.621Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2017-05-04-Learning-Room-Shapes.html</loc>
-    <lastmod>2024-11-12T16:54:53.740Z</lastmod>
+    <lastmod>2024-11-12T17:15:30.229Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/posts/2017-02-06-Machine-Learning-Reference-List.html</loc>
-    <lastmod>2024-11-12T16:54:55.446Z</lastmod>
+    <lastmod>2024-11-12T17:15:32.028Z</lastmod>
   </url>
   <url>
     <loc>https://drscotthawley.github.io/blog/index.html</loc>
-    <lastmod>2024-11-12T16:54:58.553Z</lastmod>
+    <lastmod>2024-11-12T17:15:34.991Z</lastmod>
   </url>
 </urlset>
