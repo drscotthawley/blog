@@ -569,7 +569,20 @@ Also note that there is no explicit “rectification” mechanism in rectified f
 <p>So, how do we get the points from the source distribution to fit with the target distribution? The simplest way (though not the only way) is to assume points move in straight lines from source to target. Even though our network might learn more complex paths later, this gives us a starting point for training.</p>
 <section id="the-starting-setup" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="the-starting-setup"><span class="header-section-number">2.1</span> The Starting Setup</h2>
-<p>The training setup for flow matching models is as follows: 1. We start by <em>randomly pairing</em> points from the source &amp; the target – yes, really. :rofl: 2. We move the points along straight trajectories, and the speed of each point is constant.</p>
+<p>The training setup for flow matching models is as follows: 1. We start by <em>randomly pairing</em> points from the source &amp; the target – yes, really. 🤣 2. We move the points along straight trajectories, and the speed of each point is constant.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Straight Trajectories == Linear Interpolation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The initial guess of using straight strajectories at constand speed is <em>identical</em> to the idea of simple linear interpolation between source and target.</p>
+</div>
+</div>
 <div class="cell">
 <details>
 <summary>Code for 2D flow-matching diagram with crossing lines</summary>
