@@ -721,13 +721,6 @@
     "text": "Acknowledgements:\nSpecial thanks to Zach Mueller for assistance in interfacing with fastai!"
   },
   {
-    "objectID": "posts/FlowModels.html",
-    "href": "posts/FlowModels.html",
-    "title": "Flow With What You Know",
-    "section": "",
-    "text": "In this tutorial post, we provide an accessible introduction to flow-matching and rectified flow models, which are increasingly on the forefront of generative AI applications. Typical descriptions of them are usually laden with extensive probability-math equations, which can form barriers to the dissemination and understanding of these models. Fortunately, before they were couched in probabilities, the mechanisms underlying these models were grounded in basic physics, which provides an alternative and highly-accessible (yet isomorphic) representation of the processes involved. Let’s flow."
-  },
-  {
     "objectID": "posts/FlowModels.html#whats-a-flow",
     "href": "posts/FlowModels.html#whats-a-flow",
     "title": "Flow With What You Know",
