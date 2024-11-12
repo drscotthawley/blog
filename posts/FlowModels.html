@@ -1122,7 +1122,7 @@ figcaption {
 <span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> torch.stack(trajectories)</span>
 <span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
-<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> viz_parabola_with_steps(model, step_fn<span class="op">=</span>fwd_euler_step, n_steps<span class="op">=</span><span class="dv">28</span>):</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> viz_parabola_with_steps(step_fn<span class="op">=</span>fwd_euler_step, n_steps<span class="op">=</span><span class="dv">28</span>):</span>
 <span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""varies warp parameter s and integrates along a parabola"""</span></span>
 <span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>    plt.close()</span>
 <span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>    t_curve <span class="op">=</span> torch.linspace(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">100</span>)</span>
@@ -1145,14 +1145,14 @@ figcaption {
 <span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> text <span class="kw">in</span> legend.get_texts():</span>
 <span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a>            text.set_ha(<span class="st">'center'</span>)</span>
 <span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">abs</span>(s<span class="op">-</span><span class="fl">1.0</span>) <span class="op">&lt;</span> <span class="fl">1e-6</span>: ax[i].set_title(<span class="st">'Even Spacing'</span>) </span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">abs</span>(s<span class="op">-</span><span class="fl">1.0</span>) <span class="op">&lt;</span> <span class="fl">1e-3</span>: ax[i].set_title(<span class="st">'Even Spacing'</span>) </span>
 <span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a>            </span>
 <span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a>    ax[<span class="dv">0</span>].set_title(<span class="st">'More Points in Middle'</span>)</span>
 <span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>    ax[<span class="op">-</span><span class="dv">1</span>].set_title(<span class="st">'More Points at Ends'</span>)</span>
 <span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
 <span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a>    plt.close()</span>
 <span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a>viz_parabola_with_steps(fm_model) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a>viz_parabola_with_steps() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <p><img src="FlowModels_files/figure-html/cell-18-output-1.png" class="img-fluid"></p>
@@ -1178,7 +1178,7 @@ figcaption {
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    k4 <span class="op">=</span>  f(y <span class="op">+</span> dt<span class="op">*</span>k3, t <span class="op">+</span> dt) </span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y <span class="op">+</span> (dt<span class="op">/</span><span class="dv">6</span>)<span class="op">*</span>(k1 <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2 <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3 <span class="op">+</span> k4)</span>
 <span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>viz_parabola_with_steps(fm_model, step_fn<span class="op">=</span>rk4_step, n_steps<span class="op">=</span><span class="dv">6</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>viz_parabola_with_steps(step_fn<span class="op">=</span>rk4_step, n_steps<span class="op">=</span><span class="dv">6</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <p><img src="FlowModels_files/figure-html/cell-19-output-1.png" class="img-fluid"></p>
