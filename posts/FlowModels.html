@@ -243,7 +243,7 @@ details > summary {
   <li><a href="#more-points-where-needed-via-time-warping" id="toc-more-points-where-needed-via-time-warping" class="nav-link" data-scroll-target="#more-points-where-needed-via-time-warping"><span class="header-section-number">3.1.1</span> More Points Where Needed (via Time Warping)</a></li>
   <li><a href="#better-integration-sampling" id="toc-better-integration-sampling" class="nav-link" data-scroll-target="#better-integration-sampling"><span class="header-section-number">3.1.2</span> Better Integration / Sampling</a></li>
   </ul></li>
-  <li><a href="#reflow-to-go-straight-and-fast" id="toc-reflow-to-go-straight-and-fast" class="nav-link" data-scroll-target="#reflow-to-go-straight-and-fast"><span class="header-section-number">3.2</span> “ReFlow” to Go Straight and Fast</a>
+  <li><a href="#training-the-reflowed-model" id="toc-training-the-reflowed-model" class="nav-link" data-scroll-target="#training-the-reflowed-model"><span class="header-section-number">3.2</span> Training the “ReFlowed” Model</a>
   <ul class="collapse">
   <li><a href="#train-the-reflowed-model" id="toc-train-the-reflowed-model" class="nav-link" data-scroll-target="#train-the-reflowed-model"><span class="header-section-number">3.2.1</span> Train the Reflowed Model</a></li>
   </ul></li>
@@ -1234,8 +1234,8 @@ Terminology: “Simulation Free”
 <p>It’s cool how the RK4 results, despite showing less error that the Euler results, actually involve <em>less</em> computational cost in terms of number of function evaluations, though the RK4 scheme needs 4 times the storage compared for forward Euler. (The good news is that no PyTorch gradients need to be stored; the integrator is only ever used when the model is in “eval” mode.)</p>
 </section>
 </section>
-<section id="reflow-to-go-straight-and-fast" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="reflow-to-go-straight-and-fast"><span class="header-section-number">3.2</span> “ReFlow” to Go Straight and Fast</h2>
+<section id="training-the-reflowed-model" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="training-the-reflowed-model"><span class="header-section-number">3.2</span> Training the “ReFlowed” Model</h2>
 <p>When we train the student model, aka the rectified model, note that the “target data” will no longer be supplied by the true target data anymore. Rather we will be using the trajectory endpoints integrated/generated using the teacher model, i.e.&nbsp;the pretrained flow model.</p>
 <p>So…. how close of an approximation are those learned flow endpoints to the real thing? We’re going to be approximating an approximation, but how good is the original approximation?</p>
 <p>Let’s take a look…</p>
