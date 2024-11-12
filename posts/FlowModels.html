@@ -711,7 +711,7 @@ Terminology: “Simulation Free”
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> VelocityNet(input_dim)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>…That’s it! Looks pretty simple, right? That’s because to make the system work we’ll need more than just the velocity field model.</p>
-<p>Apart from the velocity model (i.e., the neural network, for us), the rest of the software system then uses these generated velocities to move points around. The model’s velocities are then used in a differential equation describing the small change each particle’s position <span class="math inline">\(\vec{r}\)</span> over a short time:</p>
+<p>Apart from the velocity model (i.e., the neural network, for us), the rest of the software system then uses these generated velocities to move points around. The model’s velocities are then used in a differential equation describing the small change each particle’s position <span class="math inline">\(\vec{r}\)</span> over a short time <span class="math inline">\(dt\)</span>:</p>
 <p><span class="math display">\[ d\vec{r} = v(\vec{r},t) dt\]</span></p>
 <p>The is integrated by some (totally separate) numerical integration routine. A popular choice in the machine learning world is the “forward Euler” method, which is simple to implement, but will need to be upgraded (see furter below) to get good results.</p>
 <div class="cell">
