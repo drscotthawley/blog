@@ -580,7 +580,11 @@ Also note that there is no explicit “rectification” mechanism in rectified f
 <p>So, how do we get the points from the source distribution to fit with the target distribution? The simplest way (though not the only way) is to assume points move in straight lines from source to target. Even though our network might learn more complex paths later, this gives us a starting point for training.</p>
 <section id="the-starting-setup" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="the-starting-setup"><span class="header-section-number">2.1</span> The Starting Setup</h2>
-<p>The training setup for flow matching models is as follows: 1. We start by <em>randomly pairing</em> points from the source &amp; the target – yes, really. 🤣 2. We move the points along straight trajectories, and the speed of each point is constant.</p>
+<p>The training setup for flow matching models is as follows:</p>
+<ol type="1">
+<li>We start by <em>randomly pairing</em> points from the source &amp; the target – yes, really. 🤣</li>
+<li>We move the points along straight trajectories, and the speed of each point is constant.</li>
+</ol>
 <div class="cell">
 <details>
 <summary>Code for 2D flow-matching diagram with crossing lines</summary>
@@ -1504,7 +1508,8 @@ Terminology: “Simulation Free”
 </section>
 <section id="diffusion-models" class="level3" data-number="4.0.2">
 <h3 data-number="4.0.2" class="anchored" data-anchor-id="diffusion-models"><span class="header-section-number">4.0.2</span> Diffusion Models</h3>
-<p>Diffusion-models, aka “score-based models” are similar to flow models in that the former also learn a vector field (the “score function”) that serves to differentially transform the points in the sample. The difference is that flow models are deterministic, whereas diffusion models are constantly injecting fresh noise, as if they are simulating actual brownian motion rather than the macroscopic flow. To turn our flow model into a diffusion model, we could add “jitter,” i.e.&nbsp;inject noise at every step. The variance of that jitter as a function of time would correspond directly to the “noise schedule” of diffusion models.</p>
+<p>Diffusion-models, aka “score-based models” are similar to flow models in that the former also learn a vector field (the “score function”) that serves to differentially transform the points in the sample. The difference is that flow models are deterministic, whereas diffusion models are constantly injecting fresh noise, as if they are simulating actual brownian motion rather than the macroscopic flow. To turn our flow model into a diffusion model, we could add “jitter,” i.e.&nbsp;inject noise at every step. The variance of that jitter as a function of time would correspond directly to the “noise schedule” of diffusion models.<br>
+<!-- There's a lot more than can be said (and has been said) about the many connections between diffusion models and flow-based models, but for brevity's sake we'll move on for now. --></p>
 </section>
 <section id="optimal-transport" class="level3" data-number="4.0.3">
 <h3 data-number="4.0.3" class="anchored" data-anchor-id="optimal-transport"><span class="header-section-number">4.0.3</span> Optimal Transport</h3>
