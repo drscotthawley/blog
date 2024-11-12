@@ -230,7 +230,7 @@ details > summary {
   <li><a href="#how-do-fmrf-models-work" id="toc-how-do-fmrf-models-work" class="nav-link" data-scroll-target="#how-do-fmrf-models-work"><span class="header-section-number">2</span> How Do FM/RF Models Work?</a>
   <ul class="collapse">
   <li><a href="#the-starting-setup" id="toc-the-starting-setup" class="nav-link" data-scroll-target="#the-starting-setup"><span class="header-section-number">2.1</span> The Starting Setup</a></li>
-  <li><a href="#how-are-flows-learned" id="toc-how-are-flows-learned" class="nav-link" data-scroll-target="#how-are-flows-learned"><span class="header-section-number">2.2</span> How Are Flows ‘Learned’?</a>
+  <li><a href="#how-are-flows-learned" id="toc-how-are-flows-learned" class="nav-link" data-scroll-target="#how-are-flows-learned"><span class="header-section-number">2.2</span> How Are Flows “Learned”?</a>
   <ul class="collapse">
   <li><a href="#the-neural-networks-job" id="toc-the-neural-networks-job" class="nav-link" data-scroll-target="#the-neural-networks-job"><span class="header-section-number">2.2.1</span> The Neural Network’s Job</a></li>
   </ul></li>
@@ -243,7 +243,7 @@ details > summary {
   <li><a href="#more-points-where-needed-via-time-warping" id="toc-more-points-where-needed-via-time-warping" class="nav-link" data-scroll-target="#more-points-where-needed-via-time-warping"><span class="header-section-number">3.1.1</span> More Points Where Needed (via Time Warping)</a></li>
   <li><a href="#better-integration-sampling" id="toc-better-integration-sampling" class="nav-link" data-scroll-target="#better-integration-sampling"><span class="header-section-number">3.1.2</span> Better Integration / Sampling</a></li>
   </ul></li>
-  <li><a href="#training-the-reflowed-model" id="toc-training-the-reflowed-model" class="nav-link" data-scroll-target="#training-the-reflowed-model"><span class="header-section-number">3.2</span> Training the “ReFlowed” Model</a>
+  <li><a href="#learning-to-reflow" id="toc-learning-to-reflow" class="nav-link" data-scroll-target="#learning-to-reflow"><span class="header-section-number">3.2</span> Learning to “ReFlow”</a>
   <ul class="collapse">
   <li><a href="#train-the-reflowed-model" id="toc-train-the-reflowed-model" class="nav-link" data-scroll-target="#train-the-reflowed-model"><span class="header-section-number">3.2.1</span> Train the Reflowed Model</a></li>
   </ul></li>
@@ -667,7 +667,7 @@ Straight Trajectories == Linear Interpolation
 <p><img src="images/cross_uncross_plot.png" class="img-fluid"> Left: Training data uses simple straight lines (with many crossings). Middle: The learned flow (velocity vector) field is smooth and continuous. Right: Actual trajectories following the flow field don’t cross.</p>
 </section>
 <section id="how-are-flows-learned" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="how-are-flows-learned"><span class="header-section-number">2.2</span> How Are Flows ‘Learned’?</h2>
+<h2 data-number="2.2" class="anchored" data-anchor-id="how-are-flows-learned"><span class="header-section-number">2.2</span> How Are Flows “Learned”?</h2>
 <p>The goal of the macahine learning system is as follows: for any point in space and any time t between 0 and 1, we want to learn the correct <em>velocity</em> (direction and speed) that point should move. It’s like learning the “wind map” that will blow the starting distribution cloud into the shape of the target distribution cloud.</p>
 <p>Since neural networks are such useful engines for approximation and interpolation, we’ll let a neural network “learn” to estimate the mapping between locations and times (as inputs), and velocities (as outputs).</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Terminology: &quot;Simulation Free&quot;">
@@ -1234,8 +1234,8 @@ Terminology: “Simulation Free”
 <p>It’s cool how the RK4 results, despite showing less error that the Euler results, actually involve <em>less</em> computational cost in terms of number of function evaluations, though the RK4 scheme needs 4 times the storage compared for forward Euler. (The good news is that no PyTorch gradients need to be stored; the integrator is only ever used when the model is in “eval” mode.)</p>
 </section>
 </section>
-<section id="training-the-reflowed-model" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="training-the-reflowed-model"><span class="header-section-number">3.2</span> Training the “ReFlowed” Model</h2>
+<section id="learning-to-reflow" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="learning-to-reflow"><span class="header-section-number">3.2</span> Learning to “ReFlow”</h2>
 <p>When we train the “Reflowed” model, aka the student model, note that the “target data” will no longer be supplied by the true target data anymore. Rather, we will be using the trajectory endpoints integrated/generated using the teacher model, i.e.&nbsp;the pretrained flow matching model.</p>
 <p>So we might ask… how close of an approximation are those learned flow endpoints to the real thing? We’re going to be approximating an approximation, but how good is the original approximation?</p>
 <p>Let’s take a look…</p>
