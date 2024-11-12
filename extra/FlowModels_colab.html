@@ -1165,7 +1165,7 @@ details > summary {
 <span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>        n_frames<span class="op">=</span><span class="dv">50</span>, titles<span class="op">=</span>[<span class="st">'Flow Matching'</span>,<span class="st">'Reflowed Flow'</span>], save_file<span class="op">=</span>anim_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Notice how the flow matching trajectories on the left have the data moving inward a ways and then back out, whereas the reflowed trajectories move directly from start to finish with no backtracking.</p>
-<p>The next movie shows an animation of “streamlines” with arrows for the local vector field. Note how the shapes on the left change very little over time compared to those on the right. We’ll say a bit more about that below.</p>
+<p>The next movie shows an animation of “streamlines” with arrows for the local vector field. Note how the shapes on the right change very little over time compared to those on the left. We’ll say a bit more about that below.</p>
 <div class="cell" data-cellview="form">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># @title Code to produce streamline animation (take a little while to run)</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
