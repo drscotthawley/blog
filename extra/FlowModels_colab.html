@@ -1008,7 +1008,7 @@ details > summary {
 <span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> torch.stack(trajectories)</span>
 <span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
-<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> viz_parabola_with_steps(model, step_fn<span class="op">=</span>fwd_euler_step, n_steps<span class="op">=</span><span class="dv">28</span>):</span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> viz_parabola_with_steps(step_fn<span class="op">=</span>fwd_euler_step, n_steps<span class="op">=</span><span class="dv">28</span>):</span>
 <span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""varies warp parameter s and integrates along a parabola"""</span></span>
 <span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>    plt.close()</span>
 <span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a>    t_curve <span class="op">=</span> torch.linspace(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">100</span>)</span>
@@ -1031,7 +1031,7 @@ details > summary {
 <span id="cb21-62"><a href="#cb21-62" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> text <span class="kw">in</span> legend.get_texts():</span>
 <span id="cb21-63"><a href="#cb21-63" aria-hidden="true" tabindex="-1"></a>            text.set_ha(<span class="st">'center'</span>)</span>
 <span id="cb21-64"><a href="#cb21-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">abs</span>(s<span class="op">-</span><span class="fl">1.0</span>) <span class="op">&lt;</span> <span class="fl">1e-6</span>: ax[i].set_title(<span class="st">'Even Spacing'</span>)</span>
+<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">abs</span>(s<span class="op">-</span><span class="fl">1.0</span>) <span class="op">&lt;</span> <span class="fl">1e-6</span>: ax[i].set_title(<span class="st">'Even Spacing'</span>)</span>
 <span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a>    ax[<span class="dv">0</span>].set_title(<span class="st">'More Points in Middle'</span>)</span>
 <span id="cb21-68"><a href="#cb21-68" aria-hidden="true" tabindex="-1"></a>    ax[<span class="op">-</span><span class="dv">1</span>].set_title(<span class="st">'More Points at Ends'</span>)</span>
@@ -1059,7 +1059,7 @@ details > summary {
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    k4 <span class="op">=</span>  f(y <span class="op">+</span> dt<span class="op">*</span>k3, t <span class="op">+</span> dt)</span>
 <span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y <span class="op">+</span> (dt<span class="op">/</span><span class="dv">6</span>)<span class="op">*</span>(k1 <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k2 <span class="op">+</span> <span class="dv">2</span><span class="op">*</span>k3 <span class="op">+</span> k4)</span>
 <span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>viz_parabola_with_steps(fm_model, step_fn<span class="op">=</span>rk4_step, n_steps<span class="op">=</span><span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>viz_parabola_with_steps(step_fn<span class="op">=</span>rk4_step, n_steps<span class="op">=</span><span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>It’s cool how the RK4 results, despite showing less error that the Euler results, actually involve <em>less</em> computational cost in terms of number of function evaluations, though the RK4 scheme needs 4 times the storage compared for forward Euler. (The good news is that no PyTorch gradients need to be stored; the integrator is only ever used when the model is in “eval” mode.)</p>
 </section>
