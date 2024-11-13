@@ -884,7 +884,7 @@ Terminology: “Simulation Free”
 <p><img src="FlowModels_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Epoch [100/100], Loss: 1.8103</code></pre>
+<pre><code>Epoch [100/100], Loss: 1.8636</code></pre>
 </div>
 </div>
 <p>Here’s an animation of our model integrating the flow from start to finish:</p>
@@ -1385,7 +1385,7 @@ Terminology: “Simulation Free”
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    figsize <span class="op">=</span> [<span class="dv">5</span>,<span class="dv">5</span>]</span>
 <span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> titles <span class="kw">is</span> <span class="va">None</span>: </span>
 <span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>        titles <span class="op">=</span> [<span class="st">'Flow Matching'</span>]</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> model2: titles <span class="op">+=</span> [<span class="st">'Rectified Flow'</span>]</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> model2: titles <span class="op">+=</span> [<span class="st">'Reflowed Model'</span>]</span>
 <span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> model2: </span>
 <span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>        figsize[<span class="dv">0</span>] <span class="op">*=</span> <span class="dv">2</span></span>
 <span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    n_plots <span class="op">=</span> <span class="dv">1</span> <span class="op">+</span> (model2 <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>)</span>
