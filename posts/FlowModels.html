@@ -282,7 +282,7 @@ figcaption {
 </div>
 <section id="abstract" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="abstract">Abstract</h3>
-<p>In this tutorial post, we provide an accessible introduction to flow-matching and rectified flow models, which are increasingly on the forefront of generative AI applications. Typical descriptions of them are usually laden with extensive probability-math equations, which can form barriers to the dissemination and understanding of these models. Fortunately, before they were couched in probabilities, the mechanisms underlying these models were grounded in basic physics, which provides an alternative and highly-accessible (yet isomorphic) representation of the processes involved. Let’s flow.</p>
+<p>In this tutorial post, we provide an accessible introduction to flow-matching and rectified flow models, which are increasingly at the forefront of generative AI applications. Typical descriptions of them are usually laden with extensive probability-math equations, which can form barriers to the dissemination and understanding of these models. Fortunately, before they were couched in probabilities, the mechanisms underlying these models were grounded in basic physics, which provides an alternative and highly accessible (yet isomorphic) representation of the processes involved. Let’s flow.</p>
 </section>
 <section id="introduction" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
@@ -296,7 +296,7 @@ figcaption {
 </div>
 <section id="whats-a-flow" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="whats-a-flow"><span class="header-section-number">1.1</span> What’s a Flow?</h2>
-<p>In the real world, things typically follow curved paths - like water flowing in a river, or crowds of people navigating around obstacles. Here’s map of wind provided from the WW2010 atmospheric science project at UIUC: at every point in space, the wind has a velocity vector, and the air moves along “streamlines” or “trajectories” parallel to the velocity vectors…</p>
+<p>In the real world, things typically follow curved paths - like water flowing in a river, or crowds of people navigating around obstacles. Here’s a map of wind provided by the WW2010 atmospheric science project at UIUC: at every point in space, the wind has a velocity vector, and the air moves along “streamlines” or “trajectories” parallel to the velocity vectors…</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/3wndhght.gif" class="img-fluid figure-img"></p>
@@ -319,11 +319,11 @@ Non-Crossing == Invertible
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This non-crossing property is what allows these flows to be invertible (i.e., reversable), a property you sometimes hear in isolation when reading more formal descriptions of flow models.</p>
+<p>This non-crossing property is what allows these flows to be invertible (i.e., reversible), a property you sometimes hear in isolation when reading more formal descriptions of flow models.</p>
 </div>
 </div>
 <p>So, at every point in space there’s a velocity vector telling the little bits of fluid where to go. And just like water or wind flows may depend not only on spatial position but also time, so too can our velocity vector field depend on position and time.</p>
-<p>Flow matching learns these natural paths by focusing on the <em>velocity</em> at each point - essentially asking “which way should each point be moving at this moment?”</p>
+<p>Flow matching learns these natural paths by focusing on the <em>velocity</em> at each point - essentially asking, “Which way should each point be moving at this moment?”</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Terminology: &quot;FM/RF&quot;">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -334,7 +334,7 @@ Terminology: “FM/RF”
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>It may seem confusing to sometimes see “flow matching” and “rectified flows” being used interchangeably, but this is because they are <em>the same</em> <span class="citation" data-cites="tanishq_same"><a href="#ref-tanishq_same" role="doc-biblioref">[6]</a></span>. In this blog we’ll use the collective term “FM/RF” models.<br>
+<p>It may seem confusing to sometimes see “flow matching” and “rectified flows” being used interchangeably, but this is because they are <em>the same</em> <span class="citation" data-cites="tanishq_same"><a href="#ref-tanishq_same" role="doc-biblioref">[6]</a></span>. In this blog post, we’ll use the collective term “FM/RF” models.<br>
 Also note that there is no explicit “rectification” mechanism in rectified flows; rather any “rectification” is a description of the effect of flow-matching, i.e.&nbsp;transforming crossing trajectories to non-crossing ones. The addition of “Reflow” to the rectified flow paper <span class="citation" data-cites="rectified_flow"><a href="#ref-rectified_flow" role="doc-biblioref">[2]</a></span> is a powerful extension we will cover further below.</p>
 </div>
 </div>
@@ -342,7 +342,7 @@ Also note that there is no explicit “rectification” mechanism in rectified f
 </section>
 <section id="how-do-fmrf-models-work" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> How Do FM/RF Models Work?</h1>
-<p>To gain a deep understanding of how models work, having an executable toy model is often a key instructional tool. This tutorial is written as a <a href="https://colab.research.google.com/github/drscotthawley/blog/blob/main/extra/FlowModels_colab.ipynb">executable Jupyter notebook</a>, though you can make sense of it without the code, so we will typically collapse or hide the code. But if you want to see it, you can expand the drop-down arrows.</p>
+<p>To gain a deep understanding of how models work, having an executable toy model is often a key instructional tool. This tutorial is written as an <a href="https://colab.research.google.com/github/drscotthawley/blog/blob/main/extra/FlowModels_colab.ipynb">executable Jupyter notebook</a>, though you can make sense of it without the code, so we will typically collapse or hide the code. But if you want to see it, you can expand the drop-down arrows.</p>
 <p>For instance, the code starts with importing packages…</p>
 <div class="cell">
 <details>
@@ -359,13 +359,13 @@ Also note that there is no explicit “rectification” mechanism in rectified f
 </details>
 </div>
 <p><strong>Choose Your Own Data Shapes</strong></p>
-<p>The <a href="https://colab.research.google.com/github/drscotthawley/blog/blob/main/extra/FlowModels_colab.ipynb">executable verison of this lesson</a> lets you choose various shapes to “morph” between. For this reading, we’ll go from a Gaussian to a Spiral:</p>
+<p>The <a href="https://colab.research.google.com/github/drscotthawley/blog/blob/main/extra/FlowModels_colab.ipynb">executable version of this lesson</a> lets you choose various shapes to “morph” between. For this reading, we’ll go from a Gaussian to a Spiral:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Options are: 'Gaussian', 'Square', 'Heart', 'Spiral','Two Gaussians', 'Smiley'</span></span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Options are: 'Gaussian', 'Square', 'Heart', 'Spiral', 'Two Gaussians', 'Smiley'</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>source_data_choice <span class="op">=</span> <span class="st">'Gaussian'</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>target_data_choice <span class="op">=</span> <span class="st">'Spiral'</span>       </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>With the imports in place and the choice of starting and ending distributions chosen, we’re ready to define some of utilities to generate and visualize our data. Let’s take a look:</p>
+<p>With the imports in place and the choice of starting and ending distributions chosen, we’re ready to define some utilities to generate and visualize our data. Let’s take a look:</p>
 <div class="cell">
 <details>
 <summary>Utility code: styles, functions, generators, visualization</summary>
@@ -674,7 +674,7 @@ Straight Trajectories == Linear Interpolation
 </section>
 <section id="how-are-flows-learned" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="how-are-flows-learned"><span class="header-section-number">2.2</span> How Are Flows “Learned”?</h2>
-<p>The goal of the macahine learning system is as follows: for any point in space and any time t between 0 and 1, we want to learn the correct <em>velocity</em> (direction and speed) that point should move. It’s like learning the “wind map” that will blow the starting distribution cloud into the shape of the target distribution cloud.</p>
+<p>The goal of the machine learning system is as follows: for any point in space and any time t between 0 and 1, we want to learn the correct <em>velocity</em> (direction and speed) that point should move. It’s like learning the “wind map” that will blow the starting distribution cloud into the shape of the target distribution cloud.</p>
 <p>Since neural networks are such useful engines for approximation and interpolation, we’ll let a neural network “learn” to estimate the mapping between locations and times (as inputs), and velocities (as outputs).</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Terminology: &quot;Simulation Free&quot;">
 <div class="callout-header d-flex align-content-center">
@@ -686,7 +686,7 @@ Terminology: “Simulation Free”
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>You’ll sometimes see flow-maching models being referred to as “simulation free.” This just an indication that the flow we arrive at is not the result of any explicit simulation of any process (physical or otherwise). The flow obtained arises simply from the aggregation (or “averaging out”) of many particles moving along imagined straight lines and crossing paths.</p>
+<p>You’ll sometimes see flow-maching models being referred to as “simulation free.” This is just an indication that the flow we arrive at is not the result of any explicit simulation of any process (physical or otherwise). The flow obtained arises simply from the aggregation (or “averaging out”) of many particles moving along imagined straight lines and crossing paths.</p>
 </div>
 </div>
 <section id="the-neural-networks-job" class="level3" data-number="2.2.1">
@@ -717,9 +717,9 @@ Terminology: “Simulation Free”
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> VelocityNet(input_dim)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>…That’s it! Looks pretty simple, right? That’s because to make the system work we’ll need more than just the velocity field model.</p>
-<p>Apart from the velocity model (i.e., the neural network, for us), the rest of the software system then uses these generated velocities to move points around. The model’s velocities are then used in a differential equation describing the small change each particle’s position <span class="math inline">\(\vec{r}\)</span> over a short time <span class="math inline">\(dt\)</span>:</p>
+<p>Apart from the velocity model (i.e., the neural network, for us), the rest of the software system then uses these generated velocities to move points around. The model’s velocities are then used in a differential equation describing the small change to each particle’s position <span class="math inline">\(\vec{r}\)</span> over a short time <span class="math inline">\(dt\)</span>:</p>
 <p><span class="math display">\[ d\vec{r} = v(\vec{r},t) dt\]</span></p>
-<p>That equation is integrated by some (totally separate) numerical integration routine. A popular choice in the machine learning world is the “forward Euler” method, which is simple to implement, but will need to be upgraded (see furter below) to get good results.</p>
+<p>That equation is integrated by some (totally separate) numerical integration routine. A popular choice in the machine learning world is the “forward Euler” method, which is simple to implement, but will need to be upgraded (see further below) to get good results.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fwd_euler_step(model, current_points, current_t, dt):</span>
@@ -751,7 +751,7 @@ Terminology: “Simulation Free”
 </section>
 <section id="training-code" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="training-code"><span class="header-section-number">2.3</span> Training Code</h2>
-<p>The goal of the training code is twofold: 1. to expose the model as many locations and times as possible – at least for those times &amp; locations that “matter most”. This exposure is what I’ll refer to as “coverage”. 2. to force it to learn to generate (approximately) correct velocities at those times and locations.</p>
+<p>The goal of the training code is twofold: 1. to expose the model to as many locations and times as possible – at least for those times &amp; locations that “matter most”. This exposure is what I’ll refer to as “coverage”. 2. to force it to learn to generate (approximately) correct velocities at those times and locations.</p>
 <p>That’s it. The training code doesn’t actually do any integration or solving, but we’ll typically execute the integration just to visualize “how we’re doing” as the training progresses.</p>
 <div class="cell">
 <details>
@@ -1092,14 +1092,14 @@ Terminology: “Simulation Free”
 </section>
 <section id="reflow-to-go-straighter-faster" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> “Reflow” to Go Straighter &amp; Faster</h1>
-<p>The Reflow idea is that, instead of randomly pairing source and target points when choose straight trajectories, we use “simulated target points” by integrating the source points forward using the learned flow model. Then we use those endpoints as the targets and assume linear motion as before.</p>
+<p>The Reflow idea is that, instead of randomly pairing source and target points when choosing straight trajectories, we use “simulated target points” by integrating the source points forward using the learned flow model. Then we use those endpoints as the targets and assume linear motion as before.</p>
 <p><img src="images/reflow_diagram.png" class="img-fluid"></p>
 <p>This has the effect of straightening out the curved trajectory of the flow matching model, making the new “reflowed” trajectories much easier and faster to integrate!</p>
-<p>Essentially, Reflow is a “teacher-student” paradigm in which the (pre-)trained flow-matching model is the teacher, and new Reflowed model is the student. One can also think of this as a kind of distillation, akin to “consistency models” <span class="citation" data-cites="consistency_models"><a href="#ref-consistency_models" role="doc-biblioref">[8]</a></span>.</p>
-<p>Before we can rely on those integrated endpoints, we should make a couple improvements to how we use the model we just trained.</p>
+<p>Essentially, Reflow is a “teacher-student” paradigm in which the (pre-)trained flow-matching model is the teacher, and the new Reflowed model is the student. One can also think of this as a kind of distillation, akin to “consistency models” <span class="citation" data-cites="consistency_models"><a href="#ref-consistency_models" role="doc-biblioref">[8]</a></span>.</p>
+<p>Before we can rely on those integrated endpoints, we should make a couple of improvements to how we use the model we just trained.</p>
 <section id="upgrading-our-gear-first" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="upgrading-our-gear-first"><span class="header-section-number">3.1</span> Upgrading Our Gear First</h2>
-<p>Neither of these upgrades require to retraining the model. They just help to make more efficient, accurate use of it so it can serve as an effective “teacher” to the “student” Reflow model we’ll train below.</p>
+<p>Neither of these upgrades require retraining the model. They just help to make more efficient, accurate use of it so it can serve as an effective “teacher” to the “student” Reflow model we’ll train below.</p>
 <section id="more-points-where-needed-via-time-warping" class="level3" data-number="3.1.1">
 <h3 data-number="3.1.1" class="anchored" data-anchor-id="more-points-where-needed-via-time-warping"><span class="header-section-number">3.1.1</span> More Points Where Needed (via Time Warping)</h3>
 <p>You’ll notice that trajectories are sharply curved in the middle, but are straight near the start and end. Just as you’d slow down when driving around a sharp turn, we should take smaller integration steps in these curved regions for accuracy.</p>
@@ -1215,7 +1215,7 @@ Terminology: “Simulation Free”
 </section>
 <section id="better-integration-sampling" class="level3" data-number="3.1.2">
 <h3 data-number="3.1.2" class="anchored" data-anchor-id="better-integration-sampling"><span class="header-section-number">3.1.2</span> Better Integration / Sampling</h3>
-<p>While forward Euler is surprisingly popular in ML circles, those with simulation backgrounds eye it with suspicion: despite being being fast and easy to implement, it’s also highly inaccurate and can lead to instabilities. The poor accuracy may not be an issue when everything’s an approximation anyway, but we can do a lot better.</p>
+<p>While forward Euler is surprisingly popular in ML circles, those with simulation backgrounds eye it with suspicion: despite being fast and easy to implement, it’s also highly inaccurate and can lead to instabilities. The poor accuracy may not be an issue when everything’s an approximation anyway, but we can do a lot better.</p>
 <p>People who work with diffusion models know this, e.g.&nbsp;in <a href="https://github.com/crowsonkb/k-diffusion">Katherine Crowson’s k-diffusion package</a> offers a bevy of integration choices. For here we’ll just implement the popular 4th-order Runge-Kutta (RK4) scheme. It’s more “expensive” than forward Euler in that each step requires 4 function evaluations instead of forward Euler’s 1 step, and it requires some extra storage, but the advantages you gain in accuracy are seriously worth it (e.g., because you can take much longer steps in time).</p>
 <div class="cell">
 <details>
