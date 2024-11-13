@@ -177,9 +177,14 @@ details > summary {
 <p>Basic physics provides a “straight, fast” way to get up to speed with flow-based generative models</p>
 </blockquote>
 <p>Author: Scott H. Hawley, Nov 13, 2024</p>
+<section id="preamble" class="level2">
+<h2 class="anchored" data-anchor-id="preamble">Preamble:</h2>
+<p>This is the executable version of my blog post <a href="https://drscotthawley.github.io/blog/posts/FlowModels.html">“Flow With What You Know”</a>. I think it’s easier to read it in blog post form, however to get the full effect you’ll want to try swapping out the source &amp; target distributions – <strong>you don’t have to start with gaussian data!</strong></p>
+<p>To start, I recommend just going up and choosing <code>Runtime &gt; Run all</code> immediately (as in now) before you start reading on. You can always scroll back up and re-run selected parts.</p>
 <section id="abstract" class="level3">
 <h3 class="anchored" data-anchor-id="abstract">Abstract</h3>
 <p>In this tutorial post, we provide an accessible introduction to flow-matching and rectified flow models, which are increasingly on the forefront of generative AI applications. Typical descriptions of them are usually laden with extensive probability-math equations, which can form barriers to the dissemination and understanding of these models. Fortunately, before they were couched in probabilities, the mechanisms underlying these models were grounded in basic physics, which provides an alternative and highly-accessible (yet isomorphic) representation of the processes involved. Let’s flow.</p>
+</section>
 </section>
 <section id="code-installs-imports" class="level2">
 <h2 class="anchored" data-anchor-id="code-installs-imports">Code: Installs &amp; Imports</h2>
@@ -235,7 +240,7 @@ details > summary {
 <p>Flow matching learns these natural paths by focusing on the <em>velocity</em> at each point - essentially asking “which way should each point be moving at this moment?”</p>
 <blockquote class="blockquote">
 <p><strong>Terminology: “FM/RF”</strong></p>
-<p>It may seem confusing to sometimes see “flow matching” and “rectified flows” being used interchangeably, but this is because they are <em>the same</em> [6]. In this blog we’ll use the collective term “FM/RF” models. Note that there is no explicit “rectification” mechanism in rectified flows; rather any “rectification” is a description of the effect of flow-matching, i.e.&nbsp;transformingn crossing trajectories to non-crossing ones. The addition of “Reflow” to the rectified flow paper <span class="citation" data-cites="rectified_flow">[@rectified_flow]</span> is a powerful extension we will cover further below.</p>
+<p>It may seem confusing to sometimes see “flow matching” and “rectified flows” being used interchangeably, but this is because they are <em>the same</em> [6]. In this blog we’ll use the collective term “FM/RF” models. Note that there is no explicit “rectification” mechanism in rectified flows; rather any “rectification” is a description of the effect of flow-matching, i.e.&nbsp;transforming crossing trajectories to non-crossing ones. The addition of “Reflow” to the rectified flow paper <span class="citation" data-cites="rectified_flow">[@rectified_flow]</span> is a powerful extension we will cover further below.</p>
 </blockquote>
 </section>
 </section>
