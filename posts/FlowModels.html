@@ -764,7 +764,11 @@ Terminology: “Simulation Free”
 </section>
 <section id="training-code" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="training-code"><span class="header-section-number">2.3</span> Training Code</h2>
-<p>The goal of the training code is twofold: 1. to expose the model to as many locations and times as possible – at least for those times &amp; locations that “matter most”. This exposure is what I’ll refer to as “coverage”. 2. to force it to learn to generate (approximately) correct velocities at those times and locations.</p>
+<p>The goal of the training code is twofold:</p>
+<ol type="1">
+<li>to expose the model to as many locations and times as possible – at least for those times &amp; locations that “matter most”. This exposure is what I’ll refer to as “coverage”.</li>
+<li>to force it to learn to generate (approximately) correct velocities at those times and locations.</li>
+</ol>
 <p>That’s it. The training code doesn’t actually do any integration or solving, but we’ll typically execute the integration just to visualize “how we’re doing” as the training progresses.</p>
 <div class="cell">
 <details>
