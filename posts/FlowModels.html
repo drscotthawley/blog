@@ -731,7 +731,7 @@ Terminology: “Simulation Free”
 </div>
 <p>…That’s it! Looks pretty simple, right? That’s because to make the system work we’ll need more than just the velocity field model.</p>
 <p>Apart from the velocity model (i.e., the neural network, for us), the rest of the software system then uses these generated velocities to move points around. The model’s velocities are then used in a differential equation describing the small change to each particle’s position <span class="math inline">\(\vec{r}\)</span> over a short time <span class="math inline">\(dt\)</span>:</p>
-<p><span class="math display">\[ d\vec{r} = v(\vec{r},t) dt\]</span></p>
+<p><span class="math display">\[ d\vec{r} = \vec{v}(\vec{r},t) dt\]</span></p>
 <p>That equation is integrated by some (totally separate) numerical integration routine. A popular choice in the machine learning world is the “forward Euler” method, which is simple to implement, but will need to be upgraded (see further below) to get good results.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
