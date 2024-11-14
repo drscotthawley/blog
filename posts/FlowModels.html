@@ -1233,7 +1233,7 @@ Terminology: “Simulation Free”
 <p><img src="FlowModels_files/figure-html/cell-18-output-1.png" class="img-fluid"></p>
 </div>
 </div>
-<p>While the results for <span class="math inline">\(s=0.5\)</span> are better than the others, we see that <em>none</em> of these examples make it all the way around the parabola (to the point (1,1))! If we’re going to be using the flow matching model as a proxy for the true target data, we should have some confidence that our integrated trajectories are “getting to” the target data. We could add more (smaller) steps to the integration, but there’s another way: upgrade the integration (i.e.&nbsp;sampling) operation to a higher order of accuracy.</p>
+<p>While the results for <span class="math inline">\(s=0.5\)</span> are better than the others, we see that <em>none</em> of these examples make it all the way around the parabola (to the point (1,1))! If we’re going to be using the endpoints integrated from flow matching model as proxies for the true target data, we should have some confidence that those endpoints are actually “reaching” the target data. We could add more (smaller) steps to the integration, but there’s another way: upgrade the integration (i.e.&nbsp;sampling) operation to a higher order of accuracy.</p>
 </section>
 <section id="better-integration-sampling" class="level3" data-number="3.1.2">
 <h3 data-number="3.1.2" class="anchored" data-anchor-id="better-integration-sampling"><span class="header-section-number">3.1.2</span> Better Integration / Sampling</h3>
