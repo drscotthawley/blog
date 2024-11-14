@@ -1260,6 +1260,19 @@ Terminology: “Simulation Free”
 </div>
 </div>
 <p>It’s cool how the RK4 results, despite showing much less error than the Euler results, actually involve <em>less computational cost</em> in terms of total number of function evaluations, although the RK4 scheme needs 4 times the storage compared to forward Euler. (The good news is that no PyTorch gradients need to be stored; the integrator is only ever used when the model is in “eval” mode.)</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We’re only going to use the RK4 integrator to run inference on the flow matching model to provide the “simulated target data” while we train the Reflow model. Once we have the Reflow model trained, the new trajectories will be so straight that even forward Euler will be fine!</p>
+</div>
+</div>
 </section>
 </section>
 <section id="learning-to-reflow" class="level2" data-number="3.2">
