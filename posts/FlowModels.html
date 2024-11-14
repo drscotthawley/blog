@@ -769,7 +769,7 @@ Terminology: “Simulation Free”
 <li>to expose the model to as many locations and times as possible – at least for those times &amp; locations that “matter most”. This exposure is what I’ll refer to as “coverage”.</li>
 <li>to force the model to learn to generate (approximately) correct velocities at those times and locations.</li>
 </ol>
-<p>That’s it. The training code doesn’t actually do any integration or solving, but we’ll typically execute the integration just to visualize “how we’re doing” as the training progresses.</p>
+<p>That’s it. The training code doesn’t actually do any integration or “solving,” but we’ll typically execute the integration on some validation data during training just to visualize “how we’re doing” as the training progresses.</p>
 <div class="cell">
 <details>
 <summary>Viz code: calls integrator to calc motion given v field, makes pictures</summary>
