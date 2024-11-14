@@ -788,7 +788,7 @@
     "href": "posts/FlowModels.html#optimal-transport",
     "title": "Flow With What You Know",
     "section": "4.3 Optimal Transport",
-    "text": "4.3 Optimal Transport\nInteresting observation: See how the Reflowed streamlines in the last movie are approximately stationary (i.e., time-independent)? This connects nicely with Optimal Transport theory, where the Benamou-Brenier formulation [10] (which has a diffusion-esque equation as on objective) shows that optimal mass transport paths follow constant-velocity geodesics in the Wasserstein metric space. This time-independence property emerges naturally when minimizing transport costs in simple metric spaces, as particles following straight-line paths at constant speeds achieve optimal transport between distributions."
+    "text": "4.3 Optimal Transport\nInteresting observation: See how the Reflowed streamlines in the last movie are approximately stationary (i.e., time-independent)? This connects nicely with Optimal Transport theory, where the Benamou-Brenier formulation [10] (which has a diffusion-esque equation as on objective) shows that optimal mass transport paths follow constant-velocity geodesics in the Wasserstein metric space. This time-independence property emerges naturally when minimizing transport costs in simple metric spaces, as particles following straight paths at constant speeds achieve optimal transport between distributions."
   },
   {
     "objectID": "posts/FlowModels.html#normalizing-flows",
