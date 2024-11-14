@@ -1358,7 +1358,7 @@ Note
 <span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (epoch <span class="op">+</span> <span class="dv">1</span>) <span class="op">%</span> viz_every <span class="op">==</span> <span class="dv">0</span>:</span>
 <span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a>            model.<span class="bu">eval</span>()</span>
 <span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a>            clear_output(wait<span class="op">=</span><span class="va">True</span>)  <span class="co"># Clear previous plots</span></span>
-<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>            viz(val_points, target_samples[:val_points.shape[<span class="dv">0</span>]], model)  <span class="co"># don't need rk4 for rect model viz b/c paths r straight</span></span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>            viz(val_points, target_samples[:val_points.shape[<span class="dv">0</span>]], model)  <span class="co"># don't need rk4 for reflow'd model viz b/c paths r straight</span></span>
 <span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>            plt.show()</span>
 <span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a>            plt.close()  <span class="co"># Close the figure to free memory</span></span>
 <span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a>            model.train()</span>
