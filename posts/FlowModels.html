@@ -459,7 +459,7 @@ Note
 <span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_smiley_data(n_points<span class="op">=</span><span class="dv">1000</span>, scale<span class="op">=</span><span class="fl">2.5</span>):</span>
 <span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>    <span class="co">"make a smiley face"</span></span>
 <span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>    points <span class="op">=</span> []</span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Face circle</span></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Face circle -- Meh, IDK if the outer circle adds much TBH</span></span>
 <span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>    <span class="co">#angles = 2 * np.pi * torch.rand(n_points//2+20)</span></span>
 <span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>    <span class="co">#r = scale + (scale/10)*torch.sqrt(torch.rand(n_points//2+20)) </span></span>
 <span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>    <span class="co">#points.append(torch.stack([r * torch.cos(angles), r * torch.sin(angles)], dim=1))</span></span>
@@ -543,7 +543,7 @@ Note
 <span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> interpolate_color(t, start<span class="op">=</span><span class="st">'blue'</span>, end<span class="op">=</span><span class="st">'red'</span>):</span>
-<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Interpolate from matplotlib's default green (t=0) to red (t=1)"""</span></span>
+<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Interpolate from start color to end color"""</span></span>
 <span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a>    start_color <span class="op">=</span> plt.cm.colors.to_rgb(start)</span>
 <span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a>    end_color <span class="op">=</span> plt.cm.colors.to_rgb(end)</span>
 <span id="cb3-165"><a href="#cb3-165" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="dv">1</span><span class="op">-</span>t) <span class="op">*</span> np.array(start_color) <span class="op">+</span> t <span class="op">*</span> np.array(end_color)</span>
