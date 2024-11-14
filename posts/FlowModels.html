@@ -249,7 +249,7 @@ details > summary {
   <li><a href="#more-points-where-needed-via-time-warping" id="toc-more-points-where-needed-via-time-warping" class="nav-link" data-scroll-target="#more-points-where-needed-via-time-warping"><span class="header-section-number">3.1.1</span> More Points Where Needed (via Time Warping)</a></li>
   <li><a href="#better-integration-sampling" id="toc-better-integration-sampling" class="nav-link" data-scroll-target="#better-integration-sampling"><span class="header-section-number">3.1.2</span> Better Integration / Sampling</a></li>
   </ul></li>
-  <li><a href="#learning-to-reflow" id="toc-learning-to-reflow" class="nav-link" data-scroll-target="#learning-to-reflow"><span class="header-section-number">3.2</span> Learning to “ReFlow”</a>
+  <li><a href="#learning-to-reflow" id="toc-learning-to-reflow" class="nav-link" data-scroll-target="#learning-to-reflow"><span class="header-section-number">3.2</span> Learning to “Reflow”</a>
   <ul class="collapse">
   <li><a href="#train-the-reflowed-model" id="toc-train-the-reflowed-model" class="nav-link" data-scroll-target="#train-the-reflowed-model"><span class="header-section-number">3.2.1</span> Train the Reflowed Model</a></li>
   </ul></li>
@@ -1263,7 +1263,7 @@ Terminology: “Simulation Free”
 </section>
 </section>
 <section id="learning-to-reflow" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="learning-to-reflow"><span class="header-section-number">3.2</span> Learning to “ReFlow”</h2>
+<h2 data-number="3.2" class="anchored" data-anchor-id="learning-to-reflow"><span class="header-section-number">3.2</span> Learning to “Reflow”</h2>
 <p>When we train the “Reflowed” model, aka the student model, note that the “target data” will no longer be supplied by the true target data anymore. Rather, we will be using the trajectory endpoints integrated/generated using the teacher model, i.e.&nbsp;the pretrained flow matching model.</p>
 <p>So we might ask, “How close of an approximation are those learned flow endpoints to the real thing?” We’re going to be approximating an approximation, but how good is the original approximation?</p>
 <p>Let’s take a brief look…</p>
