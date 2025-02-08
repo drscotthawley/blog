@@ -233,13 +233,14 @@ details > summary {
   <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">3</span> Introduction</a></li>
   <li><a href="#outline-of-this-tutorial" id="toc-outline-of-this-tutorial" class="nav-link" data-scroll-target="#outline-of-this-tutorial"><span class="header-section-number">4</span> Outline of This Tutorial</a>
   <ul class="collapse">
-  <li><a href="#just-let-it-keep-training" id="toc-just-let-it-keep-training" class="nav-link" data-scroll-target="#just-let-it-keep-training"><span class="header-section-number">4.1</span> Just let it keep training</a></li>
-  <li><a href="#get-high-throughput" id="toc-get-high-throughput" class="nav-link" data-scroll-target="#get-high-throughput"><span class="header-section-number">4.2</span> Get high “throughput”:</a></li>
-  <li><a href="#metrics-how-are-we-doing" id="toc-metrics-how-are-we-doing" class="nav-link" data-scroll-target="#metrics-how-are-we-doing"><span class="header-section-number">4.3</span> Metrics: how are we doing?</a></li>
-  <li><a href="#keeping-it-stable" id="toc-keeping-it-stable" class="nav-link" data-scroll-target="#keeping-it-stable"><span class="header-section-number">4.4</span> Keeping it stable</a></li>
-  <li><a href="#cheat-outputs-by-fine-tuning-your-decoder" id="toc-cheat-outputs-by-fine-tuning-your-decoder" class="nav-link" data-scroll-target="#cheat-outputs-by-fine-tuning-your-decoder"><span class="header-section-number">4.5</span> ‘Cheat’ outputs by fine-tuning your Decoder</a></li>
-  <li><a href="#other-notes" id="toc-other-notes" class="nav-link" data-scroll-target="#other-notes"><span class="header-section-number">4.6</span> other notes</a></li>
-  <li><a href="#aside---on-reading-probability-math." id="toc-aside---on-reading-probability-math." class="nav-link" data-scroll-target="#aside---on-reading-probability-math."><span class="header-section-number">4.7</span> Aside - On reading probability-math….</a></li>
+  <li><a href="#repurpose-existing-diffusion-codes" id="toc-repurpose-existing-diffusion-codes" class="nav-link" data-scroll-target="#repurpose-existing-diffusion-codes"><span class="header-section-number">4.1</span> Repurpose Existing Diffusion Codes</a></li>
+  <li><a href="#just-let-it-keep-training" id="toc-just-let-it-keep-training" class="nav-link" data-scroll-target="#just-let-it-keep-training"><span class="header-section-number">4.2</span> Just let it keep training</a></li>
+  <li><a href="#get-high-throughput" id="toc-get-high-throughput" class="nav-link" data-scroll-target="#get-high-throughput"><span class="header-section-number">4.3</span> Get high “throughput”:</a></li>
+  <li><a href="#metrics-how-are-we-doing" id="toc-metrics-how-are-we-doing" class="nav-link" data-scroll-target="#metrics-how-are-we-doing"><span class="header-section-number">4.4</span> Metrics: how are we doing?</a></li>
+  <li><a href="#keeping-it-stable" id="toc-keeping-it-stable" class="nav-link" data-scroll-target="#keeping-it-stable"><span class="header-section-number">4.5</span> Keeping it stable</a></li>
+  <li><a href="#cheat-outputs-by-fine-tuning-your-decoder" id="toc-cheat-outputs-by-fine-tuning-your-decoder" class="nav-link" data-scroll-target="#cheat-outputs-by-fine-tuning-your-decoder"><span class="header-section-number">4.6</span> ‘Cheat’ outputs by fine-tuning your Decoder</a></li>
+  <li><a href="#other-notes" id="toc-other-notes" class="nav-link" data-scroll-target="#other-notes"><span class="header-section-number">4.7</span> other notes</a></li>
+  <li><a href="#aside---on-reading-probability-math." id="toc-aside---on-reading-probability-math." class="nav-link" data-scroll-target="#aside---on-reading-probability-math."><span class="header-section-number">4.8</span> Aside - On reading probability-math….</a></li>
   </ul></li>
   <li><a href="#notes-key-insights-from-references" id="toc-notes-key-insights-from-references" class="nav-link" data-scroll-target="#notes-key-insights-from-references"><span class="header-section-number">5</span> Notes / Key insights from References:</a>
   <ul class="collapse">
@@ -352,11 +353,16 @@ figcaption {
 </section>
 <section id="outline-of-this-tutorial" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Outline of This Tutorial</h1>
-<section id="just-let-it-keep-training" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="just-let-it-keep-training"><span class="header-section-number">4.1</span> Just let it keep training</h2>
+<section id="repurpose-existing-diffusion-codes" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="repurpose-existing-diffusion-codes"><span class="header-section-number">4.1</span> Repurpose Existing Diffusion Codes</h2>
+<p>There are only a couple parts you need to change. Many of the following tips/insights apply equal well to diffusion model development.</p>
 </section>
-<section id="get-high-throughput" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="get-high-throughput"><span class="header-section-number">4.2</span> Get high “throughput”:</h2>
+<section id="just-let-it-keep-training" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="just-let-it-keep-training"><span class="header-section-number">4.2</span> Just let it keep training</h2>
+<p>Really. If you have the GPUs to burn, just keep it going while you do other things. However, you may not notice much improvement without other improvements (below).</p>
+</section>
+<section id="get-high-throughput" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="get-high-throughput"><span class="header-section-number">4.3</span> Get high “throughput”:</h2>
 <ul>
 <li>Be mindful of batch size</li>
 <li>try encoding to latent space, VAE, VQVAE / VQGAN (try VAE for starters)
@@ -365,8 +371,8 @@ figcaption {
 </ul></li>
 </ul>
 </section>
-<section id="metrics-how-are-we-doing" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="metrics-how-are-we-doing"><span class="header-section-number">4.3</span> Metrics: how are we doing?</h2>
+<section id="metrics-how-are-we-doing" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="metrics-how-are-we-doing"><span class="header-section-number">4.4</span> Metrics: how are we doing?</h2>
 <ul>
 <li>Remember the loss is always “wrong” and is nearly useless as a metric.</li>
 <li>There is no reconstruction loss, but could do a distribution measure on integrated endpoints, e.g….
@@ -375,15 +381,15 @@ figcaption {
 </ul></li>
 </ul>
 </section>
-<section id="keeping-it-stable" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="keeping-it-stable"><span class="header-section-number">4.4</span> Keeping it stable</h2>
+<section id="keeping-it-stable" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="keeping-it-stable"><span class="header-section-number">4.5</span> Keeping it stable</h2>
 <ul>
 <li>EMA</li>
 <li>attention trick h/t SD3</li>
 </ul>
 </section>
-<section id="cheat-outputs-by-fine-tuning-your-decoder" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="cheat-outputs-by-fine-tuning-your-decoder"><span class="header-section-number">4.5</span> ‘Cheat’ outputs by fine-tuning your Decoder</h2>
+<section id="cheat-outputs-by-fine-tuning-your-decoder" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="cheat-outputs-by-fine-tuning-your-decoder"><span class="header-section-number">4.6</span> ‘Cheat’ outputs by fine-tuning your Decoder</h2>
 <ul>
 <li>adversarial loss</li>
 <li>Wasserstein loss / approximations. cf <a href="https://www.kernel-operations.io/geomloss/">geomloss</a></li>
@@ -394,14 +400,14 @@ figcaption {
 </ul></li>
 </ul>
 </section>
-<section id="other-notes" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="other-notes"><span class="header-section-number">4.6</span> other notes</h2>
+<section id="other-notes" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="other-notes"><span class="header-section-number">4.7</span> other notes</h2>
 <ul>
 <li>If doing RK4 steps, you don’t need a lot. (tried 25 vs 100 vs 400, found no diff)</li>
 </ul>
 </section>
-<section id="aside---on-reading-probability-math." class="level2" data-number="4.7">
-<h2 data-number="4.7" class="anchored" data-anchor-id="aside---on-reading-probability-math."><span class="header-section-number">4.7</span> Aside - On reading probability-math….</h2>
+<section id="aside---on-reading-probability-math." class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="aside---on-reading-probability-math."><span class="header-section-number">4.8</span> Aside - On reading probability-math….</h2>
 <hr>
 </section>
 </section>
