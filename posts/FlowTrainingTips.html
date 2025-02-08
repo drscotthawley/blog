@@ -239,8 +239,11 @@ details > summary {
   <li><a href="#metrics-how-are-we-doing" id="toc-metrics-how-are-we-doing" class="nav-link" data-scroll-target="#metrics-how-are-we-doing"><span class="header-section-number">4.4</span> Metrics: how are we doing?</a></li>
   <li><a href="#keeping-it-stable" id="toc-keeping-it-stable" class="nav-link" data-scroll-target="#keeping-it-stable"><span class="header-section-number">4.5</span> Keeping it stable</a></li>
   <li><a href="#cheat-outputs-by-fine-tuning-your-decoder" id="toc-cheat-outputs-by-fine-tuning-your-decoder" class="nav-link" data-scroll-target="#cheat-outputs-by-fine-tuning-your-decoder"><span class="header-section-number">4.6</span> ‘Cheat’ outputs by fine-tuning your Decoder</a></li>
-  <li><a href="#other-notes" id="toc-other-notes" class="nav-link" data-scroll-target="#other-notes"><span class="header-section-number">4.7</span> other notes</a></li>
-  <li><a href="#aside---on-reading-probability-math." id="toc-aside---on-reading-probability-math." class="nav-link" data-scroll-target="#aside---on-reading-probability-math."><span class="header-section-number">4.8</span> Aside - On reading probability-math….</a></li>
+  <li><a href="#the-usual-nn-training-stuff" id="toc-the-usual-nn-training-stuff" class="nav-link" data-scroll-target="#the-usual-nn-training-stuff"><span class="header-section-number">4.7</span> The usual NN training stuff:</a></li>
+  <li><a href="#trainingfine-tuning-your-own-vae-vqvae" id="toc-trainingfine-tuning-your-own-vae-vqvae" class="nav-link" data-scroll-target="#trainingfine-tuning-your-own-vae-vqvae"><span class="header-section-number">4.8</span> Training/Fine-Tuning Your Own VAE / VQVAE</a></li>
+  <li><a href="#inference-applications" id="toc-inference-applications" class="nav-link" data-scroll-target="#inference-applications"><span class="header-section-number">4.9</span> Inference Applications:</a></li>
+  <li><a href="#other-random-notes" id="toc-other-random-notes" class="nav-link" data-scroll-target="#other-random-notes"><span class="header-section-number">4.10</span> other random notes</a></li>
+  <li><a href="#aside---on-reading-probability-math." id="toc-aside---on-reading-probability-math." class="nav-link" data-scroll-target="#aside---on-reading-probability-math."><span class="header-section-number">4.11</span> Aside - On reading probability-math….</a></li>
   </ul></li>
   <li><a href="#notes-key-insights-from-references" id="toc-notes-key-insights-from-references" class="nav-link" data-scroll-target="#notes-key-insights-from-references"><span class="header-section-number">5</span> Notes / Key insights from References:</a>
   <ul class="collapse">
@@ -356,6 +359,7 @@ figcaption {
 <section id="repurpose-existing-diffusion-codes" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="repurpose-existing-diffusion-codes"><span class="header-section-number">4.1</span> Repurpose Existing Diffusion Codes</h2>
 <p>There are only a couple parts you need to change. Many of the following tips/insights apply equal well to diffusion model development.</p>
+<p>If you don’t want to use their full codes, you can at the very least grab their UNets which often have efficient implementations of attention, embeddings for time &amp; other conditions, positional embeddings, along with features like gradient checkpointing etc…</p>
 </section>
 <section id="just-let-it-keep-training" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="just-let-it-keep-training"><span class="header-section-number">4.2</span> Just let it keep training</h2>
@@ -364,7 +368,7 @@ figcaption {
 <section id="get-high-throughput" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="get-high-throughput"><span class="header-section-number">4.3</span> Get high “throughput”:</h2>
 <ul>
-<li>Be mindful of batch size</li>
+<li>Be mindful of batch size. As with many NN codes, there is a “sweet spot” between huge batches vs.&nbsp;frequent backprop steps</li>
 <li>try encoding to latent space, VAE, VQVAE / VQGAN (try VAE for starters)
 <ul>
 <li>Pre-encode everything (with augmentations encoded). h/t SD3 <span class="citation" data-cites="sd3_paper"><a href="#ref-sd3_paper" role="doc-biblioref">[1]</a></span></li>
@@ -400,14 +404,34 @@ figcaption {
 </ul></li>
 </ul>
 </section>
-<section id="other-notes" class="level2" data-number="4.7">
-<h2 data-number="4.7" class="anchored" data-anchor-id="other-notes"><span class="header-section-number">4.7</span> other notes</h2>
+<section id="the-usual-nn-training-stuff" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="the-usual-nn-training-stuff"><span class="header-section-number">4.7</span> The usual NN training stuff:</h2>
+<ul>
+<li>learning rate schedules (but cf “just let it keep training”)</li>
+<li>weight decay</li>
+</ul>
+</section>
+<section id="trainingfine-tuning-your-own-vae-vqvae" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="trainingfine-tuning-your-own-vae-vqvae"><span class="header-section-number">4.8</span> Training/Fine-Tuning Your Own VAE / VQVAE</h2>
+<ul>
+<li>In my experience, using pretrained VQVAE from Stable Diffusion for my domain yielded unacceptable resu.ts</li>
+<li>Don’t try to roll your own quantizer. Use <span class="citation" data-cites="lucidrain"><a href="#ref-lucidrain" role="doc-biblioref"><strong>lucidrain?</strong></a></span>’s <code>vector_quantize_pytorch</code></li>
+</ul>
+</section>
+<section id="inference-applications" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="inference-applications"><span class="header-section-number">4.9</span> Inference Applications:</h2>
+<ul>
+<li>Inpainting.</li>
+</ul>
+</section>
+<section id="other-random-notes" class="level2" data-number="4.10">
+<h2 data-number="4.10" class="anchored" data-anchor-id="other-random-notes"><span class="header-section-number">4.10</span> other random notes</h2>
 <ul>
 <li>If doing RK4 steps, you don’t need a lot. (tried 25 vs 100 vs 400, found no diff)</li>
 </ul>
 </section>
-<section id="aside---on-reading-probability-math." class="level2" data-number="4.8">
-<h2 data-number="4.8" class="anchored" data-anchor-id="aside---on-reading-probability-math."><span class="header-section-number">4.8</span> Aside - On reading probability-math….</h2>
+<section id="aside---on-reading-probability-math." class="level2" data-number="4.11">
+<h2 data-number="4.11" class="anchored" data-anchor-id="aside---on-reading-probability-math."><span class="header-section-number">4.11</span> Aside - On reading probability-math….</h2>
 <hr>
 </section>
 </section>
