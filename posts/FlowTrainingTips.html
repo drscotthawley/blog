@@ -235,6 +235,7 @@ details > summary {
   <ul class="collapse">
   <li><a href="#just-let-it-keep-training" id="toc-just-let-it-keep-training" class="nav-link" data-scroll-target="#just-let-it-keep-training"><span class="header-section-number">4.1</span> Just let it keep training</a></li>
   <li><a href="#get-high-throughput" id="toc-get-high-throughput" class="nav-link" data-scroll-target="#get-high-throughput"><span class="header-section-number">4.2</span> Get high “throughput”:</a></li>
+  <li><a href="#metrics-how-are-we-doing" id="toc-metrics-how-are-we-doing" class="nav-link" data-scroll-target="#metrics-how-are-we-doing"><span class="header-section-number">4.3</span> Metrics: how are we doing?</a></li>
   <li><a href="#keeping-it-stable" id="toc-keeping-it-stable" class="nav-link" data-scroll-target="#keeping-it-stable"><span class="header-section-number">4.4</span> Keeping it stable</a></li>
   <li><a href="#cheat-outputs-by-fine-tuning-your-decoder" id="toc-cheat-outputs-by-fine-tuning-your-decoder" class="nav-link" data-scroll-target="#cheat-outputs-by-fine-tuning-your-decoder"><span class="header-section-number">4.5</span> ‘Cheat’ outputs by fine-tuning your Decoder</a></li>
   <li><a href="#other-notes" id="toc-other-notes" class="nav-link" data-scroll-target="#other-notes"><span class="header-section-number">4.6</span> other notes</a></li>
@@ -242,8 +243,8 @@ details > summary {
   </ul></li>
   <li><a href="#notes-key-insights-from-references" id="toc-notes-key-insights-from-references" class="nav-link" data-scroll-target="#notes-key-insights-from-references"><span class="header-section-number">5</span> Notes / Key insights from References:</a>
   <ul class="collapse">
-  <li><a href="#og-paper-lipman2023flow-andor-metas-guide-and-code-lipman2024flowmatchingguidecode" id="toc-og-paper-lipman2023flow-andor-metas-guide-and-code-lipman2024flowmatchingguidecode" class="nav-link" data-scroll-target="#og-paper-lipman2023flow-andor-metas-guide-and-code-lipman2024flowmatchingguidecode"><span class="header-section-number">5.1</span> OG paper <span class="citation" data-cites="lipman2023flow">[1]</span> and/or Meta’s “Guide and Code” <span class="citation" data-cites="lipman2024flowmatchingguidecode">[2]</span></a></li>
-  <li><a href="#sd3-paper-sd3_paper" id="toc-sd3-paper-sd3_paper" class="nav-link" data-scroll-target="#sd3-paper-sd3_paper"><span class="header-section-number">5.2</span> SD3 paper: <span class="citation" data-cites="sd3_paper">[3]</span></a></li>
+  <li><a href="#og-paper-lipman2023flow-andor-metas-guide-and-code-lipman2024flowmatchingguidecode" id="toc-og-paper-lipman2023flow-andor-metas-guide-and-code-lipman2024flowmatchingguidecode" class="nav-link" data-scroll-target="#og-paper-lipman2023flow-andor-metas-guide-and-code-lipman2024flowmatchingguidecode"><span class="header-section-number">5.1</span> OG paper <span class="citation" data-cites="lipman2023flow">[2]</span> and/or Meta’s “Guide and Code” <span class="citation" data-cites="lipman2024flowmatchingguidecode">[3]</span></a></li>
+  <li><a href="#sd3-paper-sd3_paper" id="toc-sd3-paper-sd3_paper" class="nav-link" data-scroll-target="#sd3-paper-sd3_paper"><span class="header-section-number">5.2</span> SD3 paper: <span class="citation" data-cites="sd3_paper">[1]</span></a></li>
   <li><a href="#improving-the-training-of-rf-improving_rf" id="toc-improving-the-training-of-rf-improving_rf" class="nav-link" data-scroll-target="#improving-the-training-of-rf-improving_rf"><span class="header-section-number">5.3</span> Improving the Training of RF: <span class="citation" data-cites="improving_rf">[4]</span></a></li>
   <li><a href="#ben-recommended-equivariant_fm" id="toc-ben-recommended-equivariant_fm" class="nav-link" data-scroll-target="#ben-recommended-equivariant_fm"><span class="header-section-number">5.4</span> Ben recommended: <span class="citation" data-cites="equivariant_fm">[5]</span></a></li>
   <li><a href="#jasco-jasco" id="toc-jasco-jasco" class="nav-link" data-scroll-target="#jasco-jasco"><span class="header-section-number">5.5</span> JASCO <span class="citation" data-cites="jasco">[6]</span>:</a></li>
@@ -358,10 +359,16 @@ figcaption {
 <h2 data-number="4.2" class="anchored" data-anchor-id="get-high-throughput"><span class="header-section-number">4.2</span> Get high “throughput”:</h2>
 <ul>
 <li>Be mindful of batch size</li>
-<li>try encoding to latent space, VAE, VQVAE / VQGAN (try VAE for starters)</li>
-<li>Pre-encode everything (with augmentations encoded). h/t SD3</li>
-<li><h2 id="metrics-how-are-we-doing" data-number="4.3" class="anchored"><span class="header-section-number">4.3</span> Metrics: how are we doing?</h2></li>
-<li>Remember the loss is always “wrong”</li>
+<li>try encoding to latent space, VAE, VQVAE / VQGAN (try VAE for starters)
+<ul>
+<li>Pre-encode everything (with augmentations encoded). h/t SD3 <span class="citation" data-cites="sd3_paper"><a href="#ref-sd3_paper" role="doc-biblioref">[1]</a></span></li>
+</ul></li>
+</ul>
+</section>
+<section id="metrics-how-are-we-doing" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="metrics-how-are-we-doing"><span class="header-section-number">4.3</span> Metrics: how are we doing?</h2>
+<ul>
+<li>Remember the loss is always “wrong” and is nearly useless as a metric.</li>
 <li>There is no reconstruction loss, but could do a distribution measure on integrated endpoints, e.g….
 <ul>
 <li>Wasserstein loss / approximations. cf <a href="https://www.kernel-operations.io/geomloss/">geomloss</a></li>
@@ -401,14 +408,14 @@ figcaption {
 <section id="notes-key-insights-from-references" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> Notes / Key insights from References:</h1>
 <section id="og-paper-lipman2023flow-andor-metas-guide-and-code-lipman2024flowmatchingguidecode" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="og-paper-lipman2023flow-andor-metas-guide-and-code-lipman2024flowmatchingguidecode"><span class="header-section-number">5.1</span> OG paper <span class="citation" data-cites="lipman2023flow"><a href="#ref-lipman2023flow" role="doc-biblioref">[1]</a></span> and/or Meta’s “Guide and Code” <span class="citation" data-cites="lipman2024flowmatchingguidecode"><a href="#ref-lipman2024flowmatchingguidecode" role="doc-biblioref">[2]</a></span></h2>
+<h2 data-number="5.1" class="anchored" data-anchor-id="og-paper-lipman2023flow-andor-metas-guide-and-code-lipman2024flowmatchingguidecode"><span class="header-section-number">5.1</span> OG paper <span class="citation" data-cites="lipman2023flow"><a href="#ref-lipman2023flow" role="doc-biblioref">[2]</a></span> and/or Meta’s “Guide and Code” <span class="citation" data-cites="lipman2024flowmatchingguidecode"><a href="#ref-lipman2024flowmatchingguidecode" role="doc-biblioref">[3]</a></span></h2>
 <ul>
 <li>Useless AFAICT. Sat through over an hour of math, then “So now you’ve got a trained model.” Are you ****ing kidding me.</li>
 <li>Their image example is ImageNet? We have to download all of ImageNet??? And then submit to a SLURM cluster??</li>
 </ul>
 </section>
 <section id="sd3-paper-sd3_paper" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="sd3-paper-sd3_paper"><span class="header-section-number">5.2</span> SD3 paper: <span class="citation" data-cites="sd3_paper"><a href="#ref-sd3_paper" role="doc-biblioref">[3]</a></span></h2>
+<h2 data-number="5.2" class="anchored" data-anchor-id="sd3-paper-sd3_paper"><span class="header-section-number">5.2</span> SD3 paper: <span class="citation" data-cites="sd3_paper"><a href="#ref-sd3_paper" role="doc-biblioref">[1]</a></span></h2>
 <ul>
 <li>pre-encode data (VAE) before training flow</li>
 <li>trick in attention for better stability</li>
@@ -722,14 +729,14 @@ figcaption {
 <section id="references-2" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> References</h1>
 <div id="refs" class="references csl-bib-body" role="list">
+<div id="ref-sd3_paper" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">P. Esser <em>et al.</em>, <span>“Scaling rectified flow transformers for high-resolution image synthesis,”</span> in <em>41st <span>I</span>nternational <span>C</span>onference on <span>M</span>achine <span>L</span>earning, <span>ICML</span></em>, Vienna, Austria, 2024. Available: <a href="https://openreview.net/forum?id=FPnUhsQJ5B">https://openreview.net/forum?id=FPnUhsQJ5B</a></div>
+</div>
 <div id="ref-lipman2023flow" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">Y. Lipman, R. T. Q. Chen, H. Ben-Hamu, M. Nickel, and M. Le, <span>“Flow matching for generative modeling,”</span> in <em><span class="nocase">The Eleventh International Conference on Learning Representations (ICLR)</span></em>, 2023. Available: <a href="https://openreview.net/forum?id=PqvMRDCJT9t">https://openreview.net/forum?id=PqvMRDCJT9t</a></div>
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">Y. Lipman, R. T. Q. Chen, H. Ben-Hamu, M. Nickel, and M. Le, <span>“Flow matching for generative modeling,”</span> in <em><span class="nocase">The Eleventh International Conference on Learning Representations (ICLR)</span></em>, 2023. Available: <a href="https://openreview.net/forum?id=PqvMRDCJT9t">https://openreview.net/forum?id=PqvMRDCJT9t</a></div>
 </div>
 <div id="ref-lipman2024flowmatchingguidecode" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline">Y. Lipman <em>et al.</em>, <span>“Flow matching guide and code.”</span> 2024. Available: <a href="https://arxiv.org/abs/2412.06264">https://arxiv.org/abs/2412.06264</a></div>
-</div>
-<div id="ref-sd3_paper" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[3] </div><div class="csl-right-inline">P. Esser <em>et al.</em>, <span>“Scaling rectified flow transformers for high-resolution image synthesis,”</span> in <em>41st <span>I</span>nternational <span>C</span>onference on <span>M</span>achine <span>L</span>earning, <span>ICML</span></em>, Vienna, Austria, 2024. Available: <a href="https://openreview.net/forum?id=FPnUhsQJ5B">https://openreview.net/forum?id=FPnUhsQJ5B</a></div>
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">Y. Lipman <em>et al.</em>, <span>“Flow matching guide and code.”</span> 2024. Available: <a href="https://arxiv.org/abs/2412.06264">https://arxiv.org/abs/2412.06264</a></div>
 </div>
 <div id="ref-improving_rf" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[4] </div><div class="csl-right-inline">S. Lee, Z. Lin, and G. Fanti, <span>“Improving the training of rectified flows.”</span> 2024. Available: <a href="https://arxiv.org/abs/2405.20320">https://arxiv.org/abs/2405.20320</a></div>
