@@ -250,7 +250,7 @@ details > summary {
   <li><a href="#og-paper-lipman2023flow-andor-metas-guide-and-code-lipman2024flowmatchingguidecode" id="toc-og-paper-lipman2023flow-andor-metas-guide-and-code-lipman2024flowmatchingguidecode" class="nav-link" data-scroll-target="#og-paper-lipman2023flow-andor-metas-guide-and-code-lipman2024flowmatchingguidecode"><span class="header-section-number">5.1</span> OG paper <span class="citation" data-cites="lipman2023flow">[2]</span> and/or Meta’s “Guide and Code” <span class="citation" data-cites="lipman2024flowmatchingguidecode">[3]</span></a></li>
   <li><a href="#sd3-paper-sd3_paper" id="toc-sd3-paper-sd3_paper" class="nav-link" data-scroll-target="#sd3-paper-sd3_paper"><span class="header-section-number">5.2</span> SD3 paper: <span class="citation" data-cites="sd3_paper">[1]</span></a></li>
   <li><a href="#improving-the-training-of-rf-improving_rf" id="toc-improving-the-training-of-rf-improving_rf" class="nav-link" data-scroll-target="#improving-the-training-of-rf-improving_rf"><span class="header-section-number">5.3</span> Improving the Training of RF: <span class="citation" data-cites="improving_rf">[4]</span></a></li>
-  <li><a href="#ben-recommended-equivariant_fm" id="toc-ben-recommended-equivariant_fm" class="nav-link" data-scroll-target="#ben-recommended-equivariant_fm"><span class="header-section-number">5.4</span> Ben recommended: <span class="citation" data-cites="equivariant_fm">[5]</span></a></li>
+  <li><a href="#ben-hayes-recommended-equivariant_fm" id="toc-ben-hayes-recommended-equivariant_fm" class="nav-link" data-scroll-target="#ben-hayes-recommended-equivariant_fm"><span class="header-section-number">5.4</span> Ben Hayes recommended: <span class="citation" data-cites="equivariant_fm">[5]</span></a></li>
   <li><a href="#jasco-jasco" id="toc-jasco-jasco" class="nav-link" data-scroll-target="#jasco-jasco"><span class="header-section-number">5.5</span> JASCO <span class="citation" data-cites="jasco">[6]</span>:</a></li>
   <li><a href="#pnp-flow-pnp_flow-httpsgithub.comannegnxpnp-flow" id="toc-pnp-flow-pnp_flow-httpsgithub.comannegnxpnp-flow" class="nav-link" data-scroll-target="#pnp-flow-pnp_flow-httpsgithub.comannegnxpnp-flow"><span class="header-section-number">5.6</span> PnP-Flow: <span class="citation" data-cites="pnp_flow">[7]</span>: https://github.com/annegnx/PnP-Flow</a></li>
   <li><a href="#stable-flow-stableflow-httpsomriavrahami.comstable-flow" id="toc-stable-flow-stableflow-httpsomriavrahami.comstable-flow" class="nav-link" data-scroll-target="#stable-flow-stableflow-httpsomriavrahami.comstable-flow"><span class="header-section-number">5.7</span> Stable Flow: <span class="citation" data-cites="stableflow">[8]</span>: https://omriavrahami.com/stable-flow/</a></li>
@@ -372,7 +372,7 @@ figcaption {
 <li>Be mindful of batch size. As with many NN codes, there is a “sweet spot” between huge batches vs.&nbsp;frequent backprop steps</li>
 <li>try encoding to latent space, VAE, VQVAE / VQGAN (try VAE for starters)
 <ul>
-<li>Pre-encode everything (with augmentations encoded). h/t SD3 <span class="citation" data-cites="sd3_paper"><a href="#ref-sd3_paper" role="doc-biblioref">[1]</a></span></li>
+<li>Pre-encode everything (with augmentations encoded). h/t SD3 <span class="citation" data-cites="sd3_paper"><a href="#ref-sd3_paper" role="doc-biblioref">[1]</a></span> Because encoding on the fly will slow training to a crawl, even if the encoder is frozen.</li>
 </ul></li>
 </ul>
 </section>
@@ -458,8 +458,8 @@ figcaption {
 <li>key insight: “one reflow is enough”.</li>
 </ul>
 </section>
-<section id="ben-recommended-equivariant_fm" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="ben-recommended-equivariant_fm"><span class="header-section-number">5.4</span> Ben recommended: <span class="citation" data-cites="equivariant_fm"><a href="#ref-equivariant_fm" role="doc-biblioref">[5]</a></span></h2>
+<section id="ben-hayes-recommended-equivariant_fm" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="ben-hayes-recommended-equivariant_fm"><span class="header-section-number">5.4</span> Ben Hayes recommended: <span class="citation" data-cites="equivariant_fm"><a href="#ref-equivariant_fm" role="doc-biblioref">[5]</a></span></h2>
 <ul>
 <li>related: morph input data (e.g.&nbsp;rescale gaussian) to match output more closely before starting</li>
 </ul>
