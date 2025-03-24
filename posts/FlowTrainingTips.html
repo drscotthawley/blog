@@ -233,7 +233,10 @@ details > summary {
   <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">3</span> Introduction</a></li>
   <li><a href="#outline-of-this-tutorial" id="toc-outline-of-this-tutorial" class="nav-link" data-scroll-target="#outline-of-this-tutorial"><span class="header-section-number">4</span> Outline of This Tutorial</a>
   <ul class="collapse">
-  <li><a href="#repurpose-existing-diffusion-codes" id="toc-repurpose-existing-diffusion-codes" class="nav-link" data-scroll-target="#repurpose-existing-diffusion-codes"><span class="header-section-number">4.1</span> Repurpose Existing Diffusion Codes</a></li>
+  <li><a href="#repurpose-existing-diffusion-codes" id="toc-repurpose-existing-diffusion-codes" class="nav-link" data-scroll-target="#repurpose-existing-diffusion-codes"><span class="header-section-number">4.1</span> Repurpose Existing Diffusion Codes</a>
+  <ul class="collapse">
+  <li><a href="#key-architecture-bits-diffusion-or-flow" id="toc-key-architecture-bits-diffusion-or-flow" class="nav-link" data-scroll-target="#key-architecture-bits-diffusion-or-flow"><span class="header-section-number">4.1.1</span> Key Architecture Bits (diffusion or flow):</a></li>
+  </ul></li>
   <li><a href="#just-let-it-keep-training" id="toc-just-let-it-keep-training" class="nav-link" data-scroll-target="#just-let-it-keep-training"><span class="header-section-number">4.2</span> Just let it keep training</a></li>
   <li><a href="#get-high-throughput" id="toc-get-high-throughput" class="nav-link" data-scroll-target="#get-high-throughput"><span class="header-section-number">4.3</span> Get high “throughput”:</a></li>
   <li><a href="#metrics-how-are-we-doing" id="toc-metrics-how-are-we-doing" class="nav-link" data-scroll-target="#metrics-how-are-we-doing"><span class="header-section-number">4.4</span> Metrics: how are we doing?</a></li>
@@ -342,6 +345,8 @@ figcaption {
 <h3 data-number="2.0.1" class="anchored" data-anchor-id="or-why-do-my-flow-models-outputs-look-so-bad-and-what-i-can-i-do-to-fix-them"><span class="header-section-number">2.0.1</span> Or: “Why Do My Flow Model’s Outputs Look So Bad? And What I Can I Do to Fix Them?”</h3>
 <p><strong>Abstract:</strong></p>
 <p>Flow matching and rectified flow models have emerged as leading choices for high-quality data synthesis, offering state-of-the-art results with remarkable simplicity, flexibility and speed. While these models can be readily adapted from existing diffusion codes, the development of new systems and/or scaling from low-dimensional (e.g., 2D) examples to real-world applications can present unanticipated challenges. This tutorial distills key guidelines from multiple research groups to help newcomers accelerate training and improve output quality. We’ll cover essential techniques for optimizing training throughput, monitoring progress, and maintaining stability, along with practical features like latent space autoencoding and inpainting. Code will be provided, though due to time constraints we will show pre-computed training results (as with a “cooking show”). Experienced practitioners are encouraged to attend and contribute their own insights.</p>
+<p><strong>Case Study:</strong> These concepts will be illustrated via a “case study” of developing a class-conditional flow-matching / rectified flow model for the Oxford Flowers dataset at 128x128 resolution. (I might do 96x96. But 64x64 is perhaps a bit too “easy” for real “difficulties” to show themselves.)</p>
+<p>(I don’t really want to include text conditioning in the tutorial; I suspect it will make it harder.)</p>
 </section>
 </section>
 <section id="introduction" class="level1" data-number="3">
@@ -361,6 +366,12 @@ figcaption {
 <h2 data-number="4.1" class="anchored" data-anchor-id="repurpose-existing-diffusion-codes"><span class="header-section-number">4.1</span> Repurpose Existing Diffusion Codes</h2>
 <p>There are only a couple parts you need to change. Many of the following tips/insights apply equal well to diffusion model development.</p>
 <p>If you don’t want to use their full codes, you can at the very least grab their UNets which often have efficient implementations of attention, embeddings for time &amp; other conditions, positional embeddings, along with features like gradient checkpointing etc…</p>
+<section id="key-architecture-bits-diffusion-or-flow" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="key-architecture-bits-diffusion-or-flow"><span class="header-section-number">4.1.1</span> Key Architecture Bits (diffusion or flow):</h3>
+<ul>
+<li>“ROPE positional embeddings really made the model more flexible” – Dustin Podell of Black Forest Labs (SD3, Flux)</li>
+</ul>
+</section>
 </section>
 <section id="just-let-it-keep-training" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="just-let-it-keep-training"><span class="header-section-number">4.2</span> Just let it keep training</h2>
