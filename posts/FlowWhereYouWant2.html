@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Scott H. Hawley">
+<meta name="dcterms.date" content="2025-11-03">
+<meta name="description" content="Adding Controls To Pre-Trained Flow Models">
+
+<title>blog - Flow Where You Want2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+details > summary {
+    color: #00966f;   /* the greenish tinge that appears in my blog */
+    cursor: pointer; /* lil triangle thingy */
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="blog - Flow Where You Want2">
+<meta property="og:description" content="Adding Controls To Pre-Trained Flow Models">
+<meta property="og:image" content="https://drscotthawley.github.io/blog/posts/images/fwyw_kayak.png">
+<meta property="og:site-name" content="blog">
+<meta property="og:image:height" content="1452">
+<meta property="og:image:width" content="2574">
+<meta name="twitter:title" content="blog - Flow Where You Want2">
+<meta name="twitter:description" content="Adding Controls To Pre-Trained Flow Models">
+<meta name="twitter:image" content="https://drscotthawley.github.io/blog/posts/images/fwyw_kayak.png">
+<meta name="twitter:image-height" content="1452">
+<meta name="twitter:image-width" content="2574">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/drscotthawley" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/drscotthawley" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Flow Where You Want2</h1>
+                  <div>
+        <div class="description">
+          Adding Controls To Pre-Trained Flow Models
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">generative</div>
+                <div class="quarto-category">flows</div>
+                <div class="quarto-category">diffusion</div>
+                <div class="quarto-category">guidnce</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Scott H. Hawley </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 3, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#flow-where-you-want2-adding-controls-to-pre-trained-flow-models" id="toc-flow-where-you-want2-adding-controls-to-pre-trained-flow-models" class="nav-link active" data-scroll-target="#flow-where-you-want2-adding-controls-to-pre-trained-flow-models"><span class="header-section-number">1</span> Flow Where You Want2:<br><em>Adding Controls To Pre-Trained Flow Models</em></a></li>
+  <li><a href="#i.-the-general-picture" id="toc-i.-the-general-picture" class="nav-link" data-scroll-target="#i.-the-general-picture"><span class="header-section-number">2</span> I. The General Picture</a></li>
+  <li><a href="#ii.-classifier-guidance" id="toc-ii.-classifier-guidance" class="nav-link" data-scroll-target="#ii.-classifier-guidance"><span class="header-section-number">3</span> II. Classifier Guidance</a>
+  <ul class="collapse">
+  <li><a href="#set-up-the-flow-model-and-classifier" id="toc-set-up-the-flow-model-and-classifier" class="nav-link" data-scroll-target="#set-up-the-flow-model-and-classifier"><span class="header-section-number">3.1</span> Set Up the Flow Model and Classifier</a></li>
+  <li><a href="#train-a-latent-classifier" id="toc-train-a-latent-classifier" class="nav-link" data-scroll-target="#train-a-latent-classifier"><span class="header-section-number">3.2</span> Train a Latent Classifier</a></li>
+  <li><a href="#latents-only-gudiance" id="toc-latents-only-gudiance" class="nav-link" data-scroll-target="#latents-only-gudiance"><span class="header-section-number">3.3</span> Latents-Only Gudiance!</a></li>
+  </ul></li>
+  <li><a href="#iii.-inpainting" id="toc-iii.-inpainting" class="nav-link" data-scroll-target="#iii.-inpainting"><span class="header-section-number">4</span> III. Inpainting</a>
+  <ul class="collapse">
+  <li><a href="#do-the-inpainting" id="toc-do-the-inpainting" class="nav-link" data-scroll-target="#do-the-inpainting"><span class="header-section-number">4.1</span> Do the Inpainting!</a></li>
+  <li><a href="#latent-only-inpatining" id="toc-latent-only-inpatining" class="nav-link" data-scroll-target="#latent-only-inpatining"><span class="header-section-number">4.2</span> Latent-Only Inpatining</a></li>
+  <li><a href="#next-section-with-overwrites-isnt-working-yet" id="toc-next-section-with-overwrites-isnt-working-yet" class="nav-link" data-scroll-target="#next-section-with-overwrites-isnt-working-yet"><span class="header-section-number">4.3</span> Next section (with overwrites) isn’t working yet</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">5</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="flow-where-you-want2-adding-controls-to-pre-trained-flow-models" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Flow Where You Want2:<br><em>Adding Controls To Pre-Trained Flow Models</em></h1>
+<p><em>by “Flo Gida”, aka <a href="https://bsky.app/profile/drscotthawley.bsky.social">Scott H. Hawley</a>, Oct.&nbsp;2025</em></p>
+<p><a href="https://colab.research.google.com/github/drscotthawley/DLAIE/blob/main/2025/Guidance_for_Flows.ipynb" target="_parent\"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a></p>
+<blockquote class="blockquote">
+<p><em>“When we put bits into the mouths of horses to make them obey us, we can turn the whole animal. Or take ships as an example. Although they are so large and are driven by strong winds, they are steered by a very small rudder wherever the pilot wants to go.”</em> <br> – James 3:3-4 (NIV)</p>
+</blockquote>
+<p>In this tutorial, we’ll learn about inference-time “plugin” applications for flow matching generative models such as FLUX or Stable Audio Open Small. Unlike “classifier free guidance” (CFG), which requires the model to be trained with the conditioning signal (i.e.&nbsp;input to control the model’s behavior) you may be interested in, (general) guidance can apply inference-time conditioning that works even with models that were not trained with the specific conditioning you’re interested in.</p>
+<p>We’ll look at two applications:</p>
+<ol type="1">
+<li>Classifier Guidance</li>
+<li>Inpainting</li>
+</ol>
+<p>Our focus will be on <strong><em>latent space</em></strong> models, since most modern generative models operate in latent space.</p>
+<p>This lesson assumes familiarity with flow-based generative models. See the ICLR 2025 blog post <a href="https://iclr-blogposts.github.io/2025/blog/flow-with-what-you-know/">“Flow With What You Know”</a> for an overview.</p>
+</section>
+<section id="i.-the-general-picture" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> I. The General Picture</h1>
+<p>Intuitively, guidance amounts to “steering” during the integration of the flow model in order to end up at a desired end point. The <a href="https://bsky.app/profile/drscotthawley.bsky.social/post/3m3df2idqrc2g">following video</a> provides a useful metaphor:</p>
+<div class="cell">
+<div class="cell-output cell-output-display">
+
+<blockquote class="bluesky-embed blockquote" data-bluesky-uri="at://did:plc:sw457c7pedt3n57ci6qlrws6/app.bsky.feed.post/3m3df2idqrc2g" data-bluesky-cid="bafyreig53ufqtdsyf6np5xhoc75wdbd7pwlgxwbqeg4gatq5atvigdk54e" data-bluesky-embed-color-mode="system"><p lang="en">Been working on a tutorial on Guidance for (latent) flow-based generative models, and happened upon a great metaphor today while taking a little "me" time. :-)<br><br><a href="https://bsky.app/profile/did:plc:sw457c7pedt3n57ci6qlrws6/post/3m3df2idqrc2g?ref_src=embed">[image or embed]</a></p>— Scott H. Hawley (<a href="https://bsky.app/profile/did:plc:sw457c7pedt3n57ci6qlrws6?ref_src=embed">@drscotthawley.bsky.social</a>) <a href="https://bsky.app/profile/did:plc:sw457c7pedt3n57ci6qlrws6/post/3m3df2idqrc2g?ref_src=embed">Oct 16, 2025 at 1:26 PM</a></blockquote><script async="" src="https://embed.bsky.app/static/embed.js" charset="utf-8"></script>
+</div>
+</div>
+<p>Ok, the analogy’s not quite right: you can’t just steer, you are going to have to paddle a little bit. In other words, you’re going to have to provide a bit of a <em>extra velocity</em> to correct the where the “current” flow is taking you.</p>
+<p>In flow matching, we go from a source data (distribution) at time <span class="math inline">\(t=0\)</span>to target data at<span class="math inline">\(t=1\)</span>. Since this tutorial applies to latent space, we’ll use the letter <span class="math inline">\(z\)</span> for position, such as <span class="math inline">\(z_t\)</span>being the position at time<span class="math inline">\(t\)</span>.</p>
+<p>When you’re “looking ahead” to estimate where you’ll end up, you project linearly along the current velocity $ <span class="math inline">\(for a duration of the remaining time. Let's call this estimate\)</span> $, your projected endpoint :</p>
+<p><span class="math display">\[\widehat{z_1} = z_t + (1-t)\vec{v_t}\tag{1}\]</span>…but perhaps that’s not where you want to go. Where you want to go is a distance$ <span class="math inline">\(from\)</span> $, and to get there you’ll have to make a”course correction” <span class="math inline">\(\Delta \hat{v}\)</span>, as shown in the following diagram:</p>
+<p><img src="images/guidance_vectors.png" class="img1 img-fluid"></p>
+<p>By similar triangles, <span class="math inline">\(\Delta \widehat{z_1} = (1-t)\Delta \vec{v}\)</span>, which means the course correction you want is</p>
+<p><span class="math display">\[\Delta \vec{v} = { \Delta \widehat{z_1} \over 1-t } \tag{2}\]</span></p>
+<p><em>Since you’re going to more math once you try to read the scholarly literature on these topics, let’s go a bit further into the math…</em></p>
+<p>So <span class="math inline">\(\Delta \widehat{z_1}\)</span> is a measure of the <em>deviation</em> from the desired endpoint. Now, in practical application we won’t actually use the “distance” <span class="math inline">\(\Delta \widehat{z_1}\)</span>, but we’ll use something that functions <em>like</em> a distance, such as a K-L divergence or Mean Squared Error (MSE), which are familiar loss functions from neural network training.</p>
+<p>When doing inference, this deviation serves the same function as a “loss” does when training models something we will seek to minimize – via gradient descent! – except we’ll vary the flow positions <span class="math inline">\(z\)</span> instead of the model weights. More specifically, we’ll consider the “likelihood” <span class="math inline">\(p( \widehat{z_1} | y )\)</span> of getting a <span class="math inline">\(z_1\)</span>that matches a given control$ y $, and we’ll seek to maximize that likelihood, or equivalently to <em>minimize the negative</em> log-likelihood.</p>
+<p>The expression <span class="math inline">\(-\nabla_{\widehat{z_1}} \log p( \widehat{z_1} | y )\)</span> essentially answers the question, “in which direction should I adjust <span class="math inline">\(\widehat{z_1}\)</span> so as to make <span class="math inline">\(p( \widehat{z_1} | y )\)</span> more likely? Just like with gradient descent when training a network, this gives us a direction and a magnitude, which we then multiply by a <del>learning rate</del>”guidance strength” <span class="math inline">\(\eta\)</span> to turn it into a step size.</p>
+<p>So our final expression for <span class="math inline">\(\Delta v\)</span> will involve replacing <span class="math inline">\(\Delta \widehat{z_1}\)</span> in (2) with <span class="math inline">\(- \eta \nabla_{\widehat{z_1}} \log p( \widehat{z_1} | y )\)</span>:</p>
+<p><span class="math display">\[\Delta \vec{v} =  - \eta {1 \over 1-t } \nabla_{z_t} \log p( \widehat{z_1} | y )  \tag{3}\]</span>where we used the fact that$ <em>{} = </em>{z_t} <span class="math inline">\((since\)</span> z_t $).</p>
+<p>The factor of$ 1/ (1-t) $determines how the size of our course correction scales with time. It implies that we can make small course corrections at early times, but comparable corrections at later times require larger adjustments. As we will see later, this is not the only time scale we can choose, but it will suffice for now.</p>
+<p>It’s best at this point if we move to a concrete example; let’s use guidance to add some class conditioning to an <em>unconditional</em> generative model by having a separate classifier inspect our estimated outputs. In this case$ p( | y ) <span class="math inline">\(will be the (logits form of the) Cross-Entropy Loss, where\)</span> y $ are the desired class outcomes.</p>
+</section>
+<section id="ii.-classifier-guidance" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> II. Classifier Guidance</h1>
+<p>If we want our model to generate a member of a particular class, we can use an external classifier to examine the generated samples. The constraint to minimize will be the difference between the desired class and the <code>argmax</code> of the classifier output (or some similar relationship that enforces the class compliance).</p>
+<p>For our flow model, let’s use <a href="https://github.com/Ocrabit/dl_class_projects/blob/main/dl_experimentation/submissions/marco_submission.py">Marco Cassar’s winning submission</a> from the <a href="https://2025-dlaie-leaderboard.streamlit.app/">2025 DLAIE Leaderboard Contest</a> on unconditional latent flow matching of MNIST digits. For the classifier, we’ll use the <a href="https://github.com/DLAIE/2025-LeaderboardContest/blob/main/evaluate_submission.py">official evaluation classifier</a> from the same contest.</p>
+<section id="set-up-the-flow-model-and-classifier" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="set-up-the-flow-model-and-classifier"><span class="header-section-number">3.1</span> Set Up the Flow Model and Classifier</h2>
+<p>Let’s generate some samples and vizualize them.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate some samples</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n_samples <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> sub.generate_samples(n_samples<span class="op">=</span>n_samples)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>x1.shape</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.utils <span class="im">import</span> make_grid</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_grid(x1):</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(x1.shape) <span class="op">==</span> <span class="dv">3</span>: x1 <span class="op">=</span> x1.unsqueeze(<span class="dv">1</span>)  <span class="co"># add channels dim</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    grid <span class="op">=</span> make_grid(x1, nrow<span class="op">=</span><span class="dv">10</span>, padding<span class="op">=</span><span class="dv">2</span>, normalize<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    plt.figure(figsize<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">4</span>))</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    plt.imshow(grid.permute(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>).cpu(), cmap<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    plt.axis(<span class="st">'off'</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>show_grid(x1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'sub' is not defined</code></pre>
+</div>
+</div>
+<p>Now let’s setup the (pretrained) classifier we’ll use for the guidance:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the evaluation classifier</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget <span class="op">-</span>q <span class="op">--</span>no<span class="op">-</span>clobber<span class="op">=</span>off https:<span class="op">//</span>raw.githubusercontent.com<span class="op">/</span>DLAIE<span class="op">/</span><span class="dv">2025</span><span class="op">-</span>LeaderboardContest<span class="op">/</span>refs<span class="op">/</span>heads<span class="op">/</span>main<span class="op">/</span>evaluate_submission.py</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> evaluate_submission <span class="im">import</span> setup_resnet</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>classifier <span class="op">=</span> setup_resnet().to(device).<span class="bu">eval</span>()</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#@torch.no_grad()  &lt;--- Don't do this here! We'll use classifier gradients for guidance later</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classify(classifier, x, use_argmax<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(x.shape) <span class="op">==</span> <span class="dv">3</span>: x <span class="op">=</span> x.unsqueeze(<span class="dv">1</span>)  <span class="co"># add channels dim</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    logits <span class="op">=</span> classifier(x)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    probs <span class="op">=</span> F.softmax(logits, dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> torch.argmax(probs, dim<span class="op">=</span><span class="dv">1</span>) <span class="cf">if</span> use_argmax <span class="cf">else</span> (logits, probs)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># test the classifer</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    logits, probs <span class="op">=</span> classify(classifier, x1)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(logits.shape, probs.shape)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    pred_class <span class="op">=</span> classify(classifier, x1, use_argmax<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(pred_class.cpu())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloading resnet weights..
+torch.Size([10, 10]) torch.Size([10, 10])
+tensor([8, 9, 1, 4, 0, 7, 1, 0, 5, 0])</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Downloading...
+From: https://drive.google.com/uc?id=1kW_wnq-J_41_ESyQUX1PJD9-vvbWbCQ8
+To: /content/downloaded_resnet.safetensors
+100%|██████████| 6.28M/6.28M [00:00&lt;00:00, 76.3MB/s]</code></pre>
+</div>
+</div>
+<p>Let’s make a plot showing the classifier’s output probabilities (aka likelihoods) across all classes, for all 10 samples. The samples will be the rows, and the class-likelihoods outputs from the classifier will be the columns, where brightness is correlated with likelihood.</p>
+<div class="cell" data-hide_input="true">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># @title `show_probs` viz routine</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_probs(probs, x<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""show probs as colormap intensities via imshow.</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">    have each row be a sample and each column be a class probability"""</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    ncols <span class="op">=</span> <span class="dv">1</span> <span class="cf">if</span> x <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> <span class="dv">2</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    fig, axs <span class="op">=</span> plt.subplots(<span class="dv">1</span>, ncols, figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ncols <span class="op">==</span> <span class="dv">1</span>: axs <span class="op">=</span> [axs]</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> x <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:  <span class="co"># show a little version of the x image for each row</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        axs[<span class="dv">0</span>].imshow(make_grid(x.unsqueeze(<span class="dv">1</span>).cpu(), nrow<span class="op">=</span><span class="dv">1</span>, padding<span class="op">=</span><span class="dv">2</span>, normalize<span class="op">=</span><span class="va">False</span>).permute(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">0</span>).cpu(), cmap<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        axs[<span class="dv">0</span>].axis(<span class="st">'off'</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># show probabilities as an intensity map</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    im <span class="op">=</span> axs[ncols<span class="op">-</span><span class="dv">1</span>].imshow(probs.cpu(), cmap<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    axs[ncols<span class="op">-</span><span class="dv">1</span>].set_xlabel(<span class="st">"Class"</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    axs[ncols<span class="op">-</span><span class="dv">1</span>].set_ylabel(<span class="st">"Sample #"</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    plt.colorbar(im, ax<span class="op">=</span>axs[ncols<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    plt.tight_layout()</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>show_probs(probs, x<span class="op">=</span>x1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>…So we see that this is an <em>unconditional</em> generative model: there’s nothing determining the classes of the outputs – until we add guidance, below! ;-) In a short while, we’ll reproduce that diagram, but we’ll use guidance to get one class per sample, in order, along the diagonal.</p>
+<p>To do that, we’re going to have to “break open” the <code>generate_samples</code> routine and even the <code>integrate_path</code> routine to allow us to <em>add a correction</em> to the velocity <span class="math inline">\(v_t\)</span> generated by the flow model at time <span class="math inline">\(t\)</span>. That correction <span class="math inline">\(\Delta v\)</span> will be based on the classifier’s output using the <em>projected estimate</em> <span class="math inline">\(\widehat{x_1}\)</span> of the final data, which we’ll obtain via <em>linear extrapolation</em>.</p>
+<p>In our latent space model, we flow with latents <span class="math inline">\(z\)</span>which must be <em>decoded</em> using the VAE’s decoder$ <span class="math inline">\(:\)</span><span class="math inline">\(\widehat{z_1} = z_t + (1-t) v_t\)</span>$ <span class="math display">\[\widehat{x_1} = \mathscr{D}(\widehat{z_1})\]</span>The correction$ v $ will generated from a constraint which in this case is just like regular “classifier loss” function in a supervised learning problem. The desired class label is the “target” and the classifier output of the projected estimate is the “prediction”.</p>
+<p>Our code will follow this general layout:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>loss_fn <span class="op">=</span> torch.nn.CrossEntropyLoss()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>v_t <span class="op">=</span> flow_model(z_t, t)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>z1_hat <span class="op">=</span> z_t <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>t)<span class="op">*</span>v_t               <span class="co"># projected destination</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>x1_hat <span class="op">=</span> sub.vae.decoder(z1_hat)       <span class="co"># decode it to pixel space</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>probs <span class="op">=</span> classify(classifier, x1_hat)   <span class="co"># classifer operates in pixel space</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> loss_fn(probs, target)          <span class="co"># "supervised learning"</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>delta_v <span class="op">=</span> magic_function(loss,...???)  <span class="co"># &lt;--- here's the part we need to work out</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>v_t <span class="op">=</span> v_t <span class="op">+</span> delta_v <span class="op">*</span> guidance_strength  <span class="co"># we can set the strength of the correction</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So what magic function will turn that <code>loss</code> into a <em>velocity</em>? Well, we can turn to good old Gradient Descent! Except instead of taking the gradient with respect to the model weights like we used to, we’re going to take the gradient with respect to the flow coordinates <span class="math inline">\(z\)</span> in the latent space, thereby generating a vector in the latent space.</p>
+<p>The insight is that PyTorch lets us compute the gradient with respect to anything. We just need to tell it what we want. And we need to be careful to make sure that the VAE and flow models stay frozen, so the only thing that’s allowed to change are the latents <span class="math inline">\(z\)</span>.</p>
+<p>The cleanest way to pull this off, code-wise, is to create a function called <code>compute_v()</code> which for starters will just call the flow model, but then we’ll add to it with guidance info:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># wherever we used to just call flow_model(), we'll now call compute_v() instead</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_v(flow_model, z, t, guidance_dict<span class="op">=</span><span class="va">None</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    v_t <span class="op">=</span> flow_model(z, t)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> guidance_dict <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        v_t <span class="op">+=</span> compute_dv(v_t, z, t, guidance_dict, <span class="op">**</span>kwargs)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> v_t</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.enable_grad</span>()  <span class="co"># &lt;-- later, this will be a key for getting guidance</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_dv(v_t, z, t, g:<span class="bu">dict</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"placeholder for now, will add guidance math later"</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> torch.zeros_like(v_t).detach() <span class="co"># no correction yet; no gradients returned</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’ll to use our usual “boilerplate” flow integration code, except we’ll add “<code>**kwargs</code>” everywhere so we can pass controls “all the way in” to the <code>compute_dv()</code> guidance routine, and pair <code>flow_model()</code> as an arg to <code>compute_v()</code> via <code>functools.partial</code>.</p>
+<div class="cell" data-hide_input="true">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># @title flow integration routines, slightly modified from "flow with what you know" blog</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> functools <span class="im">import</span> partial  <span class="co"># use partial to package flow_model with compute_v</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rk4_step(f, y, t, dt, <span class="op">**</span>kwargs):  <span class="co"># regular rk4, + kwargs passthrough</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># f: callable (y, t) -&gt; dy/dt</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    k1 <span class="op">=</span> f(y, t, <span class="op">**</span>kwargs)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    k2 <span class="op">=</span> f(y <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> dt <span class="op">*</span> k1, t <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> dt, <span class="op">**</span>kwargs)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    k3 <span class="op">=</span> f(y <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> dt <span class="op">*</span> k2, t <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> dt, <span class="op">**</span>kwargs)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    k4 <span class="op">=</span> f(y <span class="op">+</span> dt <span class="op">*</span> k3, t <span class="op">+</span> dt, <span class="op">**</span>kwargs)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> y <span class="op">+</span> (dt <span class="op">/</span> <span class="dv">6</span>) <span class="op">*</span> (k1 <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> k2 <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> k3 <span class="op">+</span> k4)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> warp_time(t, dt<span class="op">=</span><span class="va">None</span>, s<span class="op">=</span><span class="fl">.5</span>):</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Parametric Time Warping: s = slope in the middle.</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co">        s=1 is linear time, s &lt; 1 goes slower near the middle, s&gt;1 goes slower near the ends</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co">        s = 1.5 gets very close to the "cosine schedule", i.e. (1-cos(pi*t))/2, i.e. sin^2(pi/2*x)"""</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> s <span class="op">&lt;</span> <span class="dv">0</span> <span class="kw">or</span> s <span class="op">&gt;</span> <span class="fl">1.5</span>: <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"s=</span><span class="sc">{</span>s<span class="sc">}</span><span class="ss"> is out of bounds."</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    tw <span class="op">=</span> <span class="dv">4</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> s) <span class="op">*</span> t <span class="op">**</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">6</span> <span class="op">*</span> (s <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> t <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> (<span class="dv">3</span> <span class="op">-</span> <span class="dv">2</span> <span class="op">*</span> s) <span class="op">*</span> t</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> dt:  <span class="co"># warped time-step requested; use derivative</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> tw, dt <span class="op">*</span> <span class="dv">12</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> s) <span class="op">*</span> t <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">12</span> <span class="op">*</span> (s <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> t <span class="op">+</span> (<span class="dv">3</span> <span class="op">-</span> <span class="dv">2</span> <span class="op">*</span> s)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tw</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> integrate_path(model, initial_points, step_fn<span class="op">=</span>rk4_step, n_steps<span class="op">=</span><span class="dv">100</span>, warp_fn<span class="op">=</span><span class="va">None</span>, latent_2d<span class="op">=</span><span class="va">False</span>, prog_bar<span class="op">=</span><span class="va">True</span>, t0<span class="op">=</span><span class="dv">0</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> <span class="bu">next</span>(model.parameters())</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    device, model_dtype <span class="op">=</span> p.device, p.dtype</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    current_points <span class="op">=</span> initial_points.to(device<span class="op">=</span>device, dtype<span class="op">=</span>model_dtype).clone()</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>    model.<span class="bu">eval</span>()</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    ts <span class="op">=</span> torch.linspace(t0, <span class="dv">1</span>, n_steps, device<span class="op">=</span>device, dtype<span class="op">=</span>model_dtype)</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> warp_fn: ts <span class="op">=</span> warp_fn(ts)</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> latent_2d: t_batch <span class="op">=</span> torch.empty((current_points.shape[<span class="dv">0</span>], <span class="dv">1</span>), device<span class="op">=</span>device, dtype<span class="op">=</span>model_dtype)</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>    vel_model <span class="op">=</span> partial(compute_v, model)  <span class="co"># here's the secret sauce</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>    iterator <span class="op">=</span> <span class="bu">range</span>(<span class="bu">len</span>(ts) <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> prog_bar: iterator <span class="op">=</span> tqdm(iterator, desc<span class="op">=</span><span class="st">"Integrating Path"</span>)</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> iterator:</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>        t, dt <span class="op">=</span> ts[i], ts[i <span class="op">+</span> <span class="dv">1</span>] <span class="op">-</span> ts[i]</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> latent_2d: t <span class="op">=</span> t_batch.fill_(t.item())</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>        current_points <span class="op">=</span> step_fn(vel_model, current_points, t, dt, <span class="op">**</span>kwargs)</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> current_points</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_samples(sub, n_samples: <span class="bu">int</span>, n_steps<span class="op">=</span><span class="dv">15</span>, z0<span class="op">=</span><span class="va">None</span>, t0<span class="op">=</span><span class="dv">0</span>, <span class="op">**</span>kwargs) <span class="op">-&gt;</span> torch.Tensor:</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>    z0 <span class="op">=</span> torch.randn([n_samples, sub.latent_dim]).to(sub.device) <span class="cf">if</span> z0 <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> z0</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>    z1 <span class="op">=</span> integrate_path(sub.flow_model, z0, n_steps<span class="op">=</span>n_steps, step_fn<span class="op">=</span>rk4_step, t0<span class="op">=</span>t0, <span class="op">**</span>kwargs)</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>    gen_xhat <span class="op">=</span> F.sigmoid(sub.decode(z1).view(<span class="op">-</span><span class="dv">1</span>, <span class="dv">28</span>, <span class="dv">28</span>))</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> gen_xhat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># quick no-guidance test with this newer code:</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> generate_samples(sub,n_samples<span class="op">=</span><span class="dv">10</span>) <span class="co"># , guidance_dict="Coming up next")</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>x1.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"3d9e54e0f3de420c872427369e0df6e5","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>torch.Size([10, 28, 28])</code></pre>
+</div>
+</div>
+<p>Now that we know that works, let’s “supe up” <code>compute_dv()</code> to include the guidance correction. We’ll use the <code>torch.autograd.grad()</code> function to compute the gradient of the loss.<br>
+First we have the <code>guidance_dict</code> that we’ll use to pass through our intentions through the various layers of routines to get to <code>compute_dv()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>guidance_dict <span class="op">=</span>{<span class="st">'classifier'</span>: classifier,     <span class="co"># the classifier model to use</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                <span class="st">'decode'</span>: sub.decode,         <span class="co"># how to decode to pixel space for classifier</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">'loss_fn'</span>: torch.nn.CrossEntropyLoss(reduction<span class="op">=</span><span class="st">'none'</span>), <span class="co"># don't sum over batch dim</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">'target'</span>: torch.arange(<span class="dv">10</span>).to(device),  <span class="co"># desired class outcomes</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">'strength'</span>: <span class="fl">5.0</span>,              <span class="co"># "guidance strength", you may vary this</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                <span class="st">'t_min'</span>: <span class="fl">0.01</span>, <span class="st">'t_max'</span>: <span class="fl">0.99</span>, <span class="co"># t range to apply guidance, may vary these</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>               }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next we have the fully-equipped <code>compute_dv()</code>. This code is overly-commented to make it easy to follow each step. (We replaced <code>guidance_dict</code> with <code>g</code> locally for brevity.) No other changes to any preceding code are necessary. We’ll be ready to do guided inference after this definition!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.enable_grad</span>()  <span class="co"># &lt;-- Needed to compute gradients if calling code has @torch.no_grad()</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_dv(v_t, z, t, g:<span class="bu">dict</span>, eps<span class="op">=</span><span class="fl">1e-6</span>, debug<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Compute the guidance correction to the flow velocity"</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> t <span class="op">&lt;</span> g[<span class="st">'t_min'</span>] <span class="kw">or</span> t <span class="op">&gt;</span> g[<span class="st">'t_max'</span>]: <span class="cf">return</span> torch.zeros_like(v_t).detach()</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    z.requires_grad_(<span class="va">True</span>)                   <span class="co"># need to enable gradient tracking for z</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    z1_hat <span class="op">=</span> z <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> t) <span class="op">*</span> v_t               <span class="co"># linear projection to estimated endpoint</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Decoding to pixel space (if decoder provided)</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    x1_hat <span class="op">=</span> z1_hat <span class="cf">if</span> g[<span class="st">'decode'</span>] <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> F.sigmoid(g[<span class="st">'decode'</span>](z1_hat)).view(<span class="op">-</span><span class="dv">1</span>, <span class="dv">28</span>, <span class="dv">28</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    logits, probs <span class="op">=</span> classify(g[<span class="st">'classifier'</span>], x1_hat)          <span class="co"># run classifier</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> g[<span class="st">'loss_fn'</span>](logits, g[<span class="st">'target'</span>][:<span class="bu">len</span>(logits)])     <span class="co"># loss &lt;-&gt; "negative log likelihood"</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute grad wrt z. "grad_outputs=": don't sum over over batch, keep unique to each datum</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    grad_z <span class="op">=</span> torch.autograd.grad(loss, z, grad_outputs<span class="op">=</span>torch.ones_like(loss), retain_graph<span class="op">=</span><span class="va">False</span>)[<span class="dv">0</span>]</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    dv <span class="op">=</span> <span class="op">-</span>grad_z <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> t <span class="op">+</span> eps)   <span class="co"># - minimizes, (1-t) makes it velocity, eps helps stability</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    z.requires_grad_(<span class="va">False</span>)        <span class="co"># cleanup (z is a tensor so local changes could propagate)</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> g[<span class="st">'strength'</span>] <span class="op">*</span> dv.detach()  <span class="co"># detach so no gradients returned</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s go!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">0</span>) <span class="co"># for reproducibility as we change other things</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>   x1 <span class="op">=</span> generate_samples(sub, n_samples<span class="op">=</span><span class="dv">10</span>, guidance_dict<span class="op">=</span>guidance_dict, debug<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>   logits, probs <span class="op">=</span> classify(classifier, x1)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>show_probs(probs, x<span class="op">=</span>x1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"ae3b413a0ff74379b20f82bc17a04496","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-14-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>BLAM! Our desired goal: in order, along the diagonal. We see that guidance isn’t perfect, but that’s partially a function of the VAE and the flow model too.</p>
+<p>To get a better survey of the capabilities, let’s make a 10x10 grid of outputs with classes along each column:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>target <span class="op">=</span> torch.arange(<span class="dv">10</span>).repeat(<span class="dv">10</span>).to(device) <span class="co">#  [0,1,2,..9, 0,1,2,..9, ...]</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>guidance_dict[<span class="st">'target'</span>] <span class="op">=</span> target</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>)         <span class="co"># (optional) for reproducibility</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> generate_samples(sub, n_samples<span class="op">=</span><span class="bu">len</span>(target), guidance_dict<span class="op">=</span>guidance_dict)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>show_grid(x1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"70c71293b68f412f964f13b86c397b04","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-15-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>That worked fine, but if you run it on a CPU, it’s painfully slow. So instead, let’s…</p>
+</section>
+<section id="train-a-latent-classifier" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="train-a-latent-classifier"><span class="header-section-number">3.2</span> Train a Latent Classifier</h2>
+<p>We’ll train a model <code>z_classifier</code> that looks only in latent space, so we can use it as a guidance signal.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># @title Encode MNIST to latents &amp; save to file</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> DataLoader, TensorDataset</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.datasets <span class="im">import</span> MNIST</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.transforms <span class="im">import</span> ToTensor</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode_dataset(vae, dataset, batch_size<span class="op">=</span><span class="dv">512</span>):</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Encode entire dataset into VAE latents (z = mu)"""</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    device <span class="op">=</span> <span class="bu">next</span>(vae.parameters()).device</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    loader <span class="op">=</span> DataLoader(dataset, batch_size<span class="op">=</span>batch_size, shuffle<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    all_latents, all_labels <span class="op">=</span> [], []</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    must_flatten <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> data, labels <span class="kw">in</span> tqdm(loader):</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>            x <span class="op">=</span> data.to(device)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>            <span class="co"># next bit is so it should work with linear layers or conv</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> must_flatten <span class="kw">is</span> <span class="va">None</span> <span class="kw">or</span> must_flatten<span class="op">==</span><span class="va">False</span>:</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>                <span class="cf">try</span>:</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>                    z <span class="op">=</span> vae.encoder(x)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>                <span class="cf">except</span> <span class="pp">RuntimeError</span>:</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>                    z <span class="op">=</span> vae.encoder(x.view(x.size(<span class="dv">0</span>), <span class="op">-</span><span class="dv">1</span>))</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>                    must_flatten <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>: z <span class="op">=</span> vae.encoder(x.view(x.size(<span class="dv">0</span>), <span class="op">-</span><span class="dv">1</span>))</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>            mu, logvar <span class="op">=</span> z</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>            all_latents.append(mu.cpu())</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>            all_labels.append(labels)</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> torch.cat(all_latents), torch.cat(all_labels)</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode_mnist(vae, filename<span class="op">=</span><span class="va">None</span>, batch_size<span class="op">=</span><span class="dv">512</span>):</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Acquiring train &amp; test MNIST image datasets..."</span>)</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>    train_ds <span class="op">=</span> MNIST(root<span class="op">=</span><span class="st">'./data'</span>, train<span class="op">=</span><span class="va">True</span>,  download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>ToTensor())</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>    test_ds  <span class="op">=</span> MNIST(root<span class="op">=</span><span class="st">'./data'</span>, train<span class="op">=</span><span class="va">False</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>ToTensor())</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Encoding dataset to latents..."</span>)</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>    train_latents, train_labels <span class="op">=</span> encode_dataset(vae, train_ds, batch_size<span class="op">=</span>batch_size)</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>    test_latents, test_labels <span class="op">=</span> encode_dataset(vae, test_ds, batch_size<span class="op">=</span>batch_size)</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> filename <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Saving to </span><span class="sc">{</span>filename<span class="sc">}</span><span class="ss"> ..."</span>)</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>        torch.save({ <span class="st">'train_z'</span>: train_latents,     <span class="st">'test_z'</span>: test_latents,</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>                     <span class="st">'train_labels'</span>: train_labels, <span class="st">'test_labels'</span>: test_labels }, filename)</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_latents, train_labels</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Encode the dataset</span></span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>latent_data_filename <span class="op">=</span> <span class="st">'mnist_latents.pt'</span></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.exists(latent_data_filename):</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> platform <span class="op">!=</span> <span class="st">'solveit'</span>:</span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>        train_latents, train_labels <span class="op">=</span> encode_mnist(sub.vae, filename<span class="op">=</span>latent_data_filename)</span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>        <span class="im">import</span> threading</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>        thread <span class="op">=</span> threading.Thread(target<span class="op">=</span>encode_mnist, args<span class="op">=</span>(sub.vae, latent_data_filename))</span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>        thread.start()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Acquiring train &amp; test MNIST image datasets...
+
+Encoding dataset to latents...
+Saving to mnist_latents.pt ...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>100%|██████████| 9.91M/9.91M [00:00&lt;00:00, 17.9MB/s]
+100%|██████████| 28.9k/28.9k [00:00&lt;00:00, 481kB/s]
+100%|██████████| 1.65M/1.65M [00:00&lt;00:00, 4.45MB/s]
+100%|██████████| 4.54k/4.54k [00:00&lt;00:00, 12.0MB/s]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"c4f5bfc9f30a40e6ad7537f468d358b4","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"3517ff7d5d6e4165bdef0763d94e5271","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># @title `load_encoded_data` from file</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_encoded_data(filename):</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">'MyDrive'</span> <span class="kw">in</span> filename:</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>        <span class="im">from</span> google.colab <span class="im">import</span> drive</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>        drive.mount(<span class="st">'/content/drive'</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    data_dict <span class="op">=</span> torch.load(filename, weights_only<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data_dict</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>data_dict <span class="op">=</span> load_encoded_data(latent_data_filename)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>train_z, test_z <span class="op">=</span> data_dict[<span class="st">'train_z'</span>], data_dict[<span class="st">'test_z'</span>]</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>train_z.shape, test_z.shape</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Create datasets from the latent tensors</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>train_latent_ds <span class="op">=</span> TensorDataset(train_z, data_dict[<span class="st">'train_labels'</span>][:train_z.shape[<span class="dv">0</span>]])</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>test_latent_ds <span class="op">=</span> TensorDataset(test_z, data_dict[<span class="st">'test_labels'</span>])</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>batch_size <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>train_latent_dl <span class="op">=</span> DataLoader(train_latent_ds, batch_size<span class="op">=</span>batch_size, shuffle<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>test_latent_dl <span class="op">=</span> DataLoader(test_latent_ds, batch_size<span class="op">=</span>batch_size, shuffle<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Train batches: </span><span class="sc">{</span><span class="bu">len</span>(train_latent_dl)<span class="sc">}</span><span class="ss">, Test batches: </span><span class="sc">{</span><span class="bu">len</span>(test_latent_dl)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="co"># print single latent size</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Latent size: </span><span class="sc">{</span>train_latent_ds[<span class="dv">0</span>][<span class="dv">0</span>]<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Train batches: 118, Test batches: 20
+Latent size: torch.Size([16])</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Very simple classifier in latent space</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch <span class="im">import</span> nn</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LatentClassNet(nn.Module):</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, latent_dim<span class="op">=</span><span class="dv">16</span>, hidden_dim<span class="op">=</span><span class="dv">32</span>, n_classes<span class="op">=</span><span class="dv">10</span>):</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc1 <span class="op">=</span> nn.Linear(latent_dim, hidden_dim)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc2 <span class="op">=</span> nn.Linear(hidden_dim, hidden_dim)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc3 <span class="op">=</span> nn.Linear(hidden_dim, latent_dim)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc4 <span class="op">=</span> nn.Linear(latent_dim, n_classes)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, z):</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>        z <span class="op">=</span> F.leaky_relu(<span class="va">self</span>.fc1(z))</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>        z <span class="op">=</span> F.leaky_relu(<span class="va">self</span>.fc2(z))</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>        z <span class="op">=</span> F.leaky_relu(<span class="va">self</span>.fc3(z))</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>        z <span class="op">=</span> F.leaky_relu(<span class="va">self</span>.fc4(z))</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> z</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>z_classifier <span class="op">=</span> LatentClassNet().to(device)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># @title Latent classifier trianing loop</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>epochs, lr <span class="op">=</span> <span class="dv">10</span>, <span class="fl">1e-3</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> z_classifier</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.Adam(model.parameters(), lr<span class="op">=</span>lr, weight_decay<span class="op">=</span><span class="fl">1e-5</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>criterion <span class="op">=</span> nn.CrossEntropyLoss()</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    model.train()</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#pbar = tqdm(train_latent_dl)</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, (latents, labels) <span class="kw">in</span> <span class="bu">enumerate</span>(train_latent_dl):</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>        latents, labels <span class="op">=</span> latents.to(device), labels.to(device)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        logits <span class="op">=</span> z_classifier(latents)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> criterion(logits, labels)</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        <span class="co">#pbar.set_postfix({'train_loss': loss.item()})</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span>: <span class="bu">print</span>(<span class="st">"="</span>,end<span class="op">=</span><span class="st">""</span>) <span class="co"># simple progress bar</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>        loss.backward()</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>    model.<span class="bu">eval</span>()</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    val_latents, val_labels <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(test_latent_dl)) <span class="co"># might need to reset sometimes</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>    val_latents, val_labels <span class="op">=</span> val_latents.to(device), val_labels.to(device)</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>    val_logits <span class="op">=</span> model(val_latents)</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>    val_loss <span class="op">=</span> criterion(val_logits, val_labels)</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>    val_acc <span class="op">=</span> (val_logits.argmax(dim<span class="op">=</span><span class="dv">1</span>) <span class="op">==</span> val_labels).<span class="bu">float</span>().mean()</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"| Epoch </span><span class="sc">{</span>epoch<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">: val_loss=</span><span class="sc">{</span>val_loss<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">, val_acc=</span><span class="sc">{</span>val_acc<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>========================================| Epoch 1: val_loss=1.1540, val_acc=0.6758
+========================================| Epoch 2: val_loss=0.2064, val_acc=0.9395
+========================================| Epoch 3: val_loss=0.1129, val_acc=0.9590
+========================================| Epoch 4: val_loss=0.0876, val_acc=0.9746
+========================================| Epoch 5: val_loss=0.0836, val_acc=0.9727
+========================================| Epoch 6: val_loss=0.0731, val_acc=0.9727
+========================================| Epoch 7: val_loss=0.0722, val_acc=0.9746
+========================================| Epoch 8: val_loss=0.0684, val_acc=0.9746
+========================================| Epoch 9: val_loss=0.0667, val_acc=0.9727
+========================================| Epoch 10: val_loss=0.0657, val_acc=0.9766</code></pre>
+</div>
+</div>
+<p>Let’s test our newly-trained latent classifier to make sure it works before trying to use it for guidance.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get some some data</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>z, L <span class="op">=</span> test_latent_ds[<span class="dv">20</span>:<span class="dv">30</span>]</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> z.to(device)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> F.sigmoid(sub.decode(z)).view(<span class="op">-</span><span class="dv">1</span>,<span class="dv">28</span>,<span class="dv">28</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"z.shape = "</span>,z.shape)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Labels: "</span>,L,<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>show_grid(x.squeeze())</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co"># run the z_classifier</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    logits, probs <span class="op">=</span> classify(z_classifier, z)</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">logits.shape = </span><span class="sc">{</span>logits<span class="sc">.</span>shape<span class="sc">}</span><span class="ch">\n</span><span class="ss">probs.shape  = </span><span class="sc">{</span>probs<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    pred_class <span class="op">=</span> classify(z_classifier, z, use_argmax<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Classes:"</span>, pred_class.cpu())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>z.shape =  torch.Size([10, 16])
+Labels:  tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1]) 
+
+
+logits.shape = torch.Size([10, 10])
+probs.shape  = torch.Size([10, 10])
+Classes: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-20-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Looks pretty good. Moving on to…</p>
+</section>
+<section id="latents-only-gudiance" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="latents-only-gudiance"><span class="header-section-number">3.3</span> Latents-Only Gudiance!</h2>
+<p>Now that we have a trained classifier that operates in latent space, we can run basically the same code as before, only it will execute wayyyyy faster. :)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>guidance_dict <span class="op">=</span>{<span class="st">'classifier'</span>: z_classifier,</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>                <span class="st">'decode'</span>: <span class="va">None</span>,    <span class="co"># no decoding, latent space only</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">'loss_fn'</span>: torch.nn.CrossEntropyLoss(reduction<span class="op">=</span><span class="st">'none'</span>), <span class="co"># don't sum across batch dim</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">'target'</span>: torch.arange(<span class="dv">10</span>).repeat(<span class="dv">10</span>).to(device),</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">'strength'</span>: <span class="fl">5.0</span>,   <span class="co"># "guidance strength"</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>                <span class="st">'t_min'</span>: <span class="fl">0.01</span>,  <span class="st">'t_max'</span>: <span class="fl">0.99</span>, }</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>) <span class="co"># remove for new samples each time</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> generate_samples(sub, n_samples<span class="op">=</span><span class="bu">len</span>(guidance_dict[<span class="st">'target'</span>]), guidance_dict<span class="op">=</span>guidance_dict)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>show_grid(x1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"ba05cf8be090425484bda635112c8e8d","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-21-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Was that fast or WHAT?! 🚀</p>
+<p>Since we no longer have to propagate gradients through the much larger VAE decoder model and pixel-space classifer, we can get answers a lot faster via our small latents-only classifier.</p>
+<p>Let’s move on to another application of guidance, for which our guidance signal doesn’t depend on a separate trained (classifier) model at all: inpainting.</p>
+</section>
+</section>
+<section id="iii.-inpainting" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> III. Inpainting</h1>
+<p>When inpainting, we have some “mask” inside which some of the data have been removed, and we want to use the model to fill in the missing part in a way that matches with the surrounding pixels. Let’s take a look at an example from MNIST, where we show an original image, the mask and the masked-out image:</p>
+<div class="cell" data-hide_input="true">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># @title</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">#@ Demo what inpainting looks like</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>test_ds  <span class="op">=</span> MNIST(root<span class="op">=</span><span class="st">'./data'</span>, train<span class="op">=</span><span class="va">False</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>ToTensor())</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> test_ds[<span class="dv">7</span>][<span class="dv">0</span>]</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>H, W <span class="op">=</span> x.shape[<span class="op">-</span><span class="dv">2</span>:]</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>M <span class="op">=</span> torch.ones([H,W], dtype<span class="op">=</span>x.dtype, device<span class="op">=</span>x.device)   <span class="co"># 1 = keep pixels</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>M[H<span class="op">//</span><span class="dv">3</span>:<span class="dv">2</span><span class="op">*</span>H<span class="op">//</span><span class="dv">3</span>, W<span class="op">//</span><span class="dv">3</span>:<span class="dv">2</span><span class="op">*</span>W<span class="op">//</span><span class="dv">3</span>] <span class="op">=</span> <span class="dv">0</span>                         <span class="co"># 0 = mask out</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>x_masked <span class="op">=</span> M<span class="op">*</span>x</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Original Image  |    Mask    |  Masked Image"</span>)</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>show_grid( torch.cat([x, M.unsqueeze(<span class="dv">0</span>), x_masked],dim<span class="op">=</span><span class="dv">0</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Original Image  |    Mask    |  Masked Image</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-22-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Another example would be a picture of a face where you’ve blocked out the nose and you want the model to fill in a nose.</p>
+<p>Now, some of the “filling in” you can get “for free” because the model has only been exposed to data that satisfies the manifold or probability distribution of the training data – e.g.&nbsp;If it was trained on faces, then it only ever saw faces with noses and hence can only generate faces with noses – but the real trick is to do it “well” and have it be “good” in the end. ;-)</p>
+<p>There’s a wealth of information on guidance as it was originally applied to diffusion models. Sander Dieleman’s blog post, <a href="https://sander.ai/2022/05/26/guidance.html">“Guidance: a cheat code for diffusion models”</a>, is a classic and should (eventually) be read by all. Yet because of the stochastic/random nature of the diffusion path, there are several “complicating” aspects of diffusion guidance that we’re going to gloss over in this tutorial because in the case of deterministic, smooth flow-model trajectories, things become a lot more intuitive.</p>
+<p>We’ll follow a method outlined in the paper <a href="https://arxiv.org/abs/2310.04432">“Training-free Linear Image Inverses via Flows”</a> by Pokle et al, a methoda that applies to general linear inverse problems of which inpainting is a particular case, and we’ll simplify their method to adapt it for <em>just inpainting.</em></p>
+<p>The method will be to try to generate an <em>entire</em> new image <span class="math inline">\(x_1\)</span> that everywhere <em>outside the mask matches up</em> with the pixels in user-supplied (masked) image <span class="math inline">\(y\)</span>. So the constraint will be, given a 2D mask <span class="math inline">\(M\)</span> (where <span class="math inline">\(M\)</span>=1 means there’s an original pixel there, and <span class="math inline">\(M\)</span>=0 is the masked-out region), to require that our estimate image <span class="math inline">\(\widehat{x_1}\)</span>(i.e.&nbsp;the decoded image version of the estimated latets$ <span class="math inline">\() satisfies\)</span> M<em> = M</em> y$, or in a “residual form”, we’ll just compute the Mean Squared Error (MSE) of <span class="math inline">\(M*(\widehat{x_1}-y)\)</span>:</p>
+<p><span class="math display">\[{\rm Constraint:} = M^2 * (\widehat{x_1}-y)^2\]</span>(and if we want, we can use the fact that$ M <span class="math inline">\(being a binary mask means\)</span> M^2 = M $).</p>
+<p>If we want to do latent-only inpainting (which will be the fastest), then the same constraint applies just with the simplification <span class="math inline">\(\widehat{x_1} = \widehat{z_1}\)</span></p>
+<p>The authors of the paper recommend only doing guidance from t equals 0.2 onward because prior to that, it’s hard to make any meaningful estimate.. In fact, they don’t even integrate before $ t = 0.2$. They just interpolate between the source and the target data to get their starting point at <span class="math inline">\(t = 0.2\)</span>.</p>
+<p>To use our constraint in the guidance equation (3) for computing $v, $, we’ll need to turn our constraint into a likelihood by raising it to an expontential power – so we get a Gaussian! But the guidance equation includes a logarithm that immediately <em>undoes</em> our exponentiation:</p>
+<p><span class="math display">\[ \Delta v = - {\eta \over 1-t} \nabla_{z_t}  \not{\color{red}{\log}} \not{\color{red}{\exp}}\left(  M^2 * (\widehat{x_1}-y)^2 \right) .\]</span>The gradient part is<span class="math display">\[\nabla_{z_t} M^2 *(\widehat{x_1}-y)^2 = 2M^2*(\widehat{x_1}-y) {\partial \widehat{x_1} \over \partial z_t }\]</span>If we’re inpainting in latent space and not using the decoder for the constraint, then$ { / z_t } = 1 $. Otherwise that term will require evaluation via PyTorch’s <code>autograd</code> (=slow).</p>
+<p>Our earlier time scaling was <span class="math inline">\(1/(1-t)\)</span>; turns out that doesn’t work very well in practice when it comes to inpainting. Instead, we’ll use a different time scaling that delivers good (albeit not perfect) results: <span class="math inline">\((1-t)/t\)</span>. Thus our full equation for the velocity correction will be:</p>
+<p><span class="math display">\[\Delta \vec{v} = -\eta {1-t\over t} M^2 *(\widehat{x_1} - y){\partial\widehat{x_1}\over\partial{z_t}}\]</span>where we absorbed the factor of 2 into$$, and the last partial derivitive term can be one if we do latent-only inpainting.</p>
+<p>Let’s implement this in code, using two different versions of the gradient calculation, depending on whether we can do it all in latent space or if we need to propagate gradients through the decoder:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()  <span class="co"># gradients computed analytically!</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ip_latents_grad(v_t, z, t, g:<span class="bu">dict</span>, eps<span class="op">=</span><span class="fl">1e-6</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"gradients for latent-only inpainting, fast"</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    z1_hat <span class="op">=</span> z <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>t)<span class="op">*</span>v_t</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> g[<span class="st">'M_sq'</span>] <span class="op">*</span> (z1_hat <span class="op">-</span> g[<span class="st">'y'</span>])  <span class="co">#  x1_hat = z1_hat, dz1_hat/dz_t=1</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.enable_grad</span>()</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ip_pixels_grad(v_t, z, t, g:<span class="bu">dict</span>, eps<span class="op">=</span><span class="fl">1e-6</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">"gradients for pixel-space inpainting. need to use decoder &amp; track via autograd, = slow"</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    z.requires_grad_(<span class="va">True</span>)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    z1_hat <span class="op">=</span> z <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>t)<span class="op">*</span>v_t</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    x1_hat <span class="op">=</span> F.sigmoid(g[<span class="st">'decode'</span>](z1_hat)).view(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">28</span>,<span class="dv">28</span>) <span class="co"># </span><span class="al">TODO</span><span class="co">: un-hard-code img size</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    grad_x <span class="op">=</span> g[<span class="st">'M_sq'</span>] <span class="op">*</span> (x1_hat <span class="op">-</span> g[<span class="st">'y'</span>])</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    grad_z <span class="op">=</span> torch.autograd.grad(x1_hat, z, grad_outputs<span class="op">=</span>grad_x,retain_graph<span class="op">=</span><span class="va">False</span>)[<span class="dv">0</span>] <span class="co"># mults grad_x by dx1_hat/dz1_hat</span></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    z.requires_grad_(<span class="va">False</span>)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> grad_z.detach()  <span class="co"># don't send gradients onward</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> t_timescale(t, timescale<span class="op">=</span><span class="st">'mine'</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">"our choice for adaptive time sacle"</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> timescale <span class="op">==</span><span class="st">'simple'</span>: <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>t)                          <span class="co"># our earlier scale; doesn't work</span></span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> timescale<span class="op">==</span><span class="st">'pokle'</span>: <span class="cf">return</span> (<span class="dv">1</span><span class="op">-</span>t)<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> ((<span class="dv">1</span><span class="op">-</span>t)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> t<span class="op">**</span><span class="dv">2</span>)     <span class="co"># from pokle et al; can't get it to work</span></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> timescale<span class="op">==</span><span class="st">'constant'</span>: <span class="cf">return</span> <span class="dv">4</span>  <span class="co"># or any constant. The 4 is from Pokle et al</span></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: <span class="cf">return</span> (<span class="dv">1</span><span class="op">-</span>t)<span class="op">/</span>t  <span class="co"># This works pretty well! strong guidance at start -&gt; zero at end</span></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_dv_inpainting(v_t, z, t, g:<span class="bu">dict</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">"wrapper to call appropriate gradient-computation routine"</span></span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> t <span class="op">&lt;</span> g[<span class="st">'t_min'</span>] <span class="kw">or</span> t <span class="op">&gt;</span> g[<span class="st">'t_max'</span>]: <span class="cf">return</span> torch.zeros_like(v_t)</span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>    grad_fn <span class="op">=</span> ip_latents_grad <span class="cf">if</span> g[<span class="st">'decode'</span>] <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> ip_pixels_grad</span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>    grad <span class="op">=</span> grad_fn(v_t, z, t, g, <span class="op">**</span>kwargs)</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>    dv <span class="op">=</span> <span class="op">-</span>g[<span class="st">'strength'</span>] <span class="op">*</span> t_timescale(t, <span class="op">**</span>kwargs) <span class="op">*</span> grad</span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dv.detach()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="do-the-inpainting" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="do-the-inpainting"><span class="header-section-number">4.1</span> Do the Inpainting!</h2>
+<p>Start with masked images <span class="math inline">\(y\)</span>…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># setup the data</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> torch.stack([test_ds[i][<span class="dv">0</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">50</span>)])</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y.shape)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> M<span class="op">*</span>y</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>show_grid(y.squeeze())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch.Size([50, 1, 28, 28])</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-24-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>And now we run the inpainting code</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>compute_dv <span class="op">=</span> compute_dv_inpainting  <span class="co"># register our new guidance routine</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>inpainting_dict <span class="op">=</span>{<span class="st">'decode'</span>: sub.decode,         <span class="co"># how to decode to pixel space for classifier</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">'M_sq'</span>: (M<span class="op">**</span><span class="dv">2</span>).to(device),</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">'y'</span>: y.to(device),</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>                <span class="st">'strength'</span>: <span class="fl">1.0</span>,              <span class="co"># "guidance strength", you may vary this</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>                <span class="st">'t_min'</span>: <span class="fl">0.2</span>, <span class="st">'t_max'</span>: <span class="fl">0.999</span>, <span class="co"># t range to apply guidance, may vary these</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>               }</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    torch.manual_seed(<span class="dv">0</span>) <span class="co"># for reproducibility as we change other things</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    t0 <span class="op">=</span> <span class="fl">0.2</span>             <span class="co"># starting time as per Pokle et al</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>    z0 <span class="op">=</span> torch.randn([<span class="bu">len</span>(y), sub.latent_dim]).to(sub.device)</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>    zy <span class="op">=</span> sub.encode(y.to(device))   <span class="co"># encoded version of masked image</span></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>    z0 <span class="op">=</span> z0 <span class="op">*</span> (<span class="dv">1</span><span class="op">-</span>t0) <span class="op">+</span> zy <span class="op">*</span> t0      <span class="co"># interpolation init</span></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>    inpainting_dict[<span class="st">'t_min'</span>] <span class="op">=</span> t0</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>    x1 <span class="op">=</span> generate_samples(sub, n_samples<span class="op">=</span><span class="bu">len</span>(y), t0<span class="op">=</span>t0, z0<span class="op">=</span>z0, guidance_dict<span class="op">=</span>inpainting_dict, warp_fn<span class="op">=</span><span class="va">None</span>, debug<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">#x1 = torch.where(M&gt;0.9, y.squeeze(), x1)  # force no changes from y, wherever mask M=1</span></span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a> <span class="co"># show pre- and post-inpainting</span></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>show_grid(y.squeeze())</span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>show_grid(x1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"0313df0a98174262b5f2d2c1c97d06a5","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-25-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-25-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+<p>We see that the generated images generally look great, although in some cases, the in-painting code has changed pixels even where the mask is 1. We can disallow this by just resetting those values to the pixels in <span class="math inline">\(y\)</span>.</p>
+<p>Turning up the guidance strength would also enforce our constraint better, but turning up too high causes the whole thing to diverge and we get garbage out.</p>
+<p>In order to experiment with other methods more easily, we should do inpainting only in latent space, and for that we will need a model that supports spatial latents…</p>
+</section>
+<section id="latent-only-inpatining" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="latent-only-inpatining"><span class="header-section-number">4.2</span> Latent-Only Inpatining</h2>
+<p>For this we will switch to a model that uses 7x7 latents that look like smaller versions of the full images.</p>
+<p>For our mask, we will simply shrink the pixel-size mask to the size of the latents.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Spatial VAE &amp; FLow Dit Model</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget <span class="op">-</span>q <span class="op">--</span>no<span class="op">-</span>clobber<span class="op">=</span>off https:<span class="op">//</span>raw.githubusercontent.com<span class="op">/</span>dlaieburner<span class="op">/</span><span class="dv">2025</span><span class="op">-</span>leaderboard<span class="op">/</span>refs<span class="op">/</span>heads<span class="op">/</span>main<span class="op">/</span>sample_submission_dit.py</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">del</span> SubmissionInterface <span class="co"># remove Marco's from earlier; make it reload</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">NameError</span>:</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span>  <span class="co"># nevermind</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sample_submission_dit <span class="im">import</span> SubmissionInterface</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>sub <span class="op">=</span> SubmissionInterface().to(device)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>On colab, mounting GDrive
+Mounted at /content/drive
+device = cuda</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Downloading...
+From: https://drive.google.com/uc?id=1kPK3ZPadOUEfH8ZycrG3k27pl9-lGUeL
+To: /content/downloaded_vae.safetensors
+100%|██████████| 12.6M/12.6M [00:00&lt;00:00, 50.0MB/s]
+Downloading...
+From: https://drive.google.com/uc?id=1q9Iguf--2_MqUjsosS7iAGGzYtVfJ3UF
+To: /content/downloaded_flow.safetensors
+100%|██████████| 34.1M/34.1M [00:00&lt;00:00, 136MB/s]</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># Colab plot display  needs a reset sometimes</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>TODO:</strong> Show example latents and images.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(x1.shape) <span class="op">&lt;</span> <span class="dv">4</span>: x1 <span class="op">=</span> x1.unsqueeze(<span class="dv">1</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>z1 <span class="op">=</span> sub.encode(x1)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>show_grid(z1.squeeze())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers). Got range [-2.6157863..7.8071876].</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-28-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>inpainting_dict <span class="op">=</span>{<span class="st">'decode'</span>: <span class="va">None</span>,            <span class="co"># now we're latents-only</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>                <span class="st">'strength'</span>: <span class="fl">1.0</span>,             <span class="co"># "guidance strength", you may vary this</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">'t_min'</span>: <span class="fl">0.2</span>, <span class="st">'t_max'</span>: <span class="fl">0.999</span>, <span class="co"># t range to apply guidance, may vary these</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> latents_only_inpaint(sub, inpainting_dict, n_samples: <span class="bu">int</span>, n_steps<span class="op">=</span><span class="dv">20</span>, <span class="op">**</span>kwargs) <span class="op">-&gt;</span> torch.Tensor:</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    torch.manual_seed(<span class="dv">0</span>) <span class="co"># for reproducibility as we change other things</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    t0 <span class="op">=</span> <span class="fl">0.2</span>             <span class="co"># starting time as per Pokle et al</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>    zy <span class="op">=</span> sub.encode(y.to(device)) <span class="co"># encoded version of masked image</span></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Mz is the shrunk-down version of M</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>    Mz <span class="op">=</span> F.interpolate(M.unsqueeze(<span class="dv">0</span>).unsqueeze(<span class="dv">0</span>), size<span class="op">=</span>zy.shape[<span class="op">-</span><span class="dv">2</span>:], mode<span class="op">=</span><span class="st">'bilinear'</span>, align_corners<span class="op">=</span><span class="va">False</span>).to(device)</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>    Mz <span class="op">=</span> <span class="fl">1.0</span><span class="op">*</span>(Mz <span class="op">&gt;</span> <span class="fl">0.9</span>)  <span class="co"># make Mz binary</span></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Mask:"</span>)</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>    show_grid(Mz)</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>    zy <span class="op">=</span> zy<span class="op">*</span> Mz  <span class="co"># enforce mask in latent space.</span></span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>    inpainting_dict[<span class="st">'M_sq'</span>] <span class="op">=</span> (Mz<span class="op">**</span><span class="dv">2</span>).to(device)</span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>    inpainting_dict[<span class="st">'y'</span>] <span class="op">=</span> zy</span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Latent y's:"</span>)</span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>    show_grid((zy.squeeze() <span class="op">-</span>zy.<span class="bu">min</span>())<span class="op">/</span>(zy.<span class="bu">max</span>()<span class="op">-</span>zy.<span class="bu">min</span>()))</span>
+<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a>    z0 <span class="op">=</span> torch.randn_like(zy) <span class="op">*</span> (<span class="dv">1</span><span class="op">-</span>t0) <span class="op">+</span> zy <span class="op">*</span> t0      <span class="co"># interpolation init</span></span>
+<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a>    inpainting_dict[<span class="st">'t_min'</span>] <span class="op">=</span> t0</span>
+<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a>    x1 <span class="op">=</span> generate_samples(sub, n_samples<span class="op">=</span><span class="bu">len</span>(y), t0<span class="op">=</span>t0, z0<span class="op">=</span>z0, guidance_dict<span class="op">=</span>inpainting_dict, warp_fn<span class="op">=</span><span class="va">None</span>, debug<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb39-24"><a href="#cb39-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x1</span>
+<span id="cb39-25"><a href="#cb39-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-26"><a href="#cb39-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-27"><a href="#cb39-27" aria-hidden="true" tabindex="-1"></a>inpainting_dict[<span class="st">'strength'</span>] <span class="op">=</span> <span class="fl">10.0</span></span>
+<span id="cb39-28"><a href="#cb39-28" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> latents_only_inpaint(sub, inpainting_dict, n_samples<span class="op">=</span><span class="bu">len</span>(y), n_steps<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb39-29"><a href="#cb39-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-30"><a href="#cb39-30" aria-hidden="true" tabindex="-1"></a> <span class="co"># show pre- and post-inpainting</span></span>
+<span id="cb39-31"><a href="#cb39-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"pixel y's:"</span>)</span>
+<span id="cb39-32"><a href="#cb39-32" aria-hidden="true" tabindex="-1"></a>show_grid(y.squeeze())</span>
+<span id="cb39-33"><a href="#cb39-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"inpainted images:"</span>)</span>
+<span id="cb39-34"><a href="#cb39-34" aria-hidden="true" tabindex="-1"></a>show_grid(x1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mask:
+Latent y's:
+pixel y's:
+inpainted images:</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-29-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-29-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"852ab30c77414708b37f53e019e1e95d","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-29-output-5.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-29-output-6.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Notice the execution speed!</p>
+<p>Now, if we want to enforce the original pixels where the mask is one, we can do that at every stage of the integration process. We just need to modify the integration process to overwrite <span class="math inline">\(z\)</span> wherever <code>Mz</code> is 1..</p>
+</section>
+<section id="next-section-with-overwrites-isnt-working-yet" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="next-section-with-overwrites-isnt-working-yet"><span class="header-section-number">4.3</span> Next section (with overwrites) isn’t working yet</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> integrate_path(model, initial_points, step_fn<span class="op">=</span>rk4_step, n_steps<span class="op">=</span><span class="dv">100</span>, warp_fn<span class="op">=</span><span class="va">None</span>, latent_2d<span class="op">=</span><span class="va">False</span>, prog_bar<span class="op">=</span><span class="va">True</span>, t0<span class="op">=</span><span class="dv">0</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> <span class="bu">next</span>(model.parameters())</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    device, model_dtype <span class="op">=</span> p.device, p.dtype</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    current_points <span class="op">=</span> initial_points.to(device<span class="op">=</span>device, dtype<span class="op">=</span>model_dtype).clone()</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    model.<span class="bu">eval</span>()</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    ts <span class="op">=</span> torch.linspace(t0, <span class="dv">1</span>, n_steps, device<span class="op">=</span>device, dtype<span class="op">=</span>model_dtype)</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> warp_fn: ts <span class="op">=</span> warp_fn(ts)</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> latent_2d: t_batch <span class="op">=</span> torch.empty((current_points.shape[<span class="dv">0</span>], <span class="dv">1</span>), device<span class="op">=</span>device, dtype<span class="op">=</span>model_dtype)</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    vel_model <span class="op">=</span> partial(compute_v, model)  <span class="co"># here's the secret sauce</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>    iterator <span class="op">=</span> <span class="bu">range</span>(<span class="bu">len</span>(ts) <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> prog_bar: iterator <span class="op">=</span> tqdm(iterator, desc<span class="op">=</span><span class="st">"Integrating Path"</span>)</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> iterator:</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>        t, dt <span class="op">=</span> ts[i], ts[i <span class="op">+</span> <span class="dv">1</span>] <span class="op">-</span> ts[i]</span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> latent_2d: t <span class="op">=</span> t_batch.fill_(t.item())</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>        g <span class="op">=</span> kwargs.get(<span class="st">'guidance_dict'</span>)</span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">False</span> <span class="kw">and</span> g:</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>            z, zy, M <span class="op">=</span> current_points, g[<span class="st">'y'</span>], g[<span class="st">'M_sq'</span>]</span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>            zy_interp <span class="op">=</span> torch.randn_like(z)<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>t) <span class="op">+</span> zy<span class="op">*</span>(t)</span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>            z_over  <span class="op">=</span> M<span class="op">*</span>zy_interp <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>M)<span class="op">*</span>z   <span class="co"># overwrite w/ zy_interp where M=1</span></span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>            current_points <span class="op">=</span> (current_points <span class="op">+</span> z_over)<span class="op">/</span><span class="dv">2</span> <span class="co"># average</span></span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>        current_points <span class="op">=</span> step_fn(vel_model, current_points, t, dt, <span class="op">**</span>kwargs)</span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> current_points</span>
+<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a>inpainting_dict[<span class="st">'strength'</span>] <span class="op">=</span> <span class="fl">10.0</span></span>
+<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> latents_only_inpaint(sub, inpainting_dict, n_samples<span class="op">=</span><span class="bu">len</span>(y), n_steps<span class="op">=</span><span class="dv">20</span>).cpu()</span>
+<span id="cb41-29"><a href="#cb41-29" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> M<span class="op">*</span>y <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>M)<span class="op">*</span>x1.unsqueeze(<span class="dv">1</span>) <span class="co"># overwrite</span></span>
+<span id="cb41-30"><a href="#cb41-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-31"><a href="#cb41-31" aria-hidden="true" tabindex="-1"></a> <span class="co"># show pre- and post-inpainting</span></span>
+<span id="cb41-32"><a href="#cb41-32" aria-hidden="true" tabindex="-1"></a>show_grid(y.squeeze())</span>
+<span id="cb41-33"><a href="#cb41-33" aria-hidden="true" tabindex="-1"></a>show_grid(x1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mask:
+Latent y's:</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-30-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-30-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"e92c214815bf46e991eec9dee55c2a79","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-30-output-5.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant2_files/figure-html/cell-30-output-6.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="references" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> References</h1>
+<p>TODO</p>
+<ol type="1">
+<li>fwwyk blog</li>
+<li>sander’s blog</li>
+<li>pokle et al paper</li>
+<li>pnp-flow paper</li>
+<li>zach’s favorite papers</li>
+<li>zander b’s new paper</li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp("https:\/\/drscotthawley\.github\.io\/blog");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+      }
+    }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
