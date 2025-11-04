@@ -1052,7 +1052,7 @@ Epoch 10/10: train_loss=0.0368, val_loss=0.0698, val_acc=0.9727</code></pre>
 <p>We then compute a new projected estimate, same as we have before:</p>
 <p><span class="math display">\[{\rm Step\  3.}\ \ \ \ \ \   \widehat{z_1} := z_t + (1-t)\,v_t(z,t)\]</span></p>
 <p>….and loop over Steps 1 to 3 for each value of <span class="math inline">\(t\)</span> in our set of (discrete) integration steps, i.e.&nbsp;after Step 3, we let <span class="math inline">\(t := t+\Delta\,t\)</span> and go back to Step 1. Our final value of <span class="math inline">\(\widehat{z_1}\)</span> will be the output.</p>
-<p>This image from the PnP-Flow paper (slightly re-annotated by me) may provide instructive, showing 3 different instances of the 3 PNP steps:</p>
+<p>This image from the PnP-Flow paper may prove instructive, showing 3 different instances of the 3 PNP steps:</p>
 <style>
 .img3 {
     /*transform-origin: top left;*/
@@ -1067,7 +1067,12 @@ Epoch 10/10: train_loss=0.0368, val_loss=0.0698, val_acc=0.9727</code></pre>
     z-index:1;
 }
 </style>
-<p><img src="images/pnp_flow_diag_mod.png" class="img3 img-fluid"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/pnp_flow_diag_mod.png" class="img3 img-fluid figure-img"></p>
+<figcaption class="figure-caption">Image from PnP-Flow paper [5], slightly re-annotated by me.</figcaption>
+</figure>
+</div>
 <p>To implement this in code, it’s perhaps cleanest if we replace our “integrator” code with soemthing specific to PnP-Flow:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
