@@ -321,14 +321,13 @@ details > summary {
 <p>By similar triangles, <span class="math inline">\(\Delta \widehat{z_1} = (1-t)\Delta \vec{v}\)</span>, which means the course correction you want is</p>
 <p><span class="math display">\[ \Delta \vec{v} = { \Delta \widehat{z_1} \over 1-t } \tag{2} \]</span></p>
 <p><em>Since you’re going to see more math once you try to read the scholarly literature on these topics, let’s go a bit further into the math…</em></p>
-<p>So <span class="math inline">\(\Delta \widehat{z_1}\)</span> is a measure of the <em>deviation</em> from the desired endpoint. Now, in practical application we won’t actually use the “distance” <span class="math inline">\(\Delta \widehat{z_1}\)</span>, but we’ll use something that functions <em>like</em> a distance, such as a K-L divergence or Mean Squared Error (MSE), which are familiar loss functions from neural network training.</p>
-<p>When doing inference, this deviation serves the same function as a “loss” does when training models something we will seek to minimize – via gradient descent! – except we’ll vary the flow positions <span class="math inline">\(z\)</span> instead of the model weights. More specifically, we’ll consider the “likelihood” <span class="math inline">\(p( \widehat{z_1} | y )\)</span> of getting a <span class="math inline">\(z_1\)</span> that matches a given control <span class="math inline">\(y\)</span>, and we’ll seek to maximize that likelihood, or equivalently to <em>minimize the negative</em> log-likelihood.</p>
-<p>The expression <span class="math inline">\(-\nabla_{\widehat{z_1}} \log p( \widehat{z_1} | y )\)</span> essentially answers the question, “in which direction should I adjust <span class="math inline">\(\widehat{z_1}\)</span> so as to make <span class="math inline">\(p( \widehat{z_1} | y )\)</span> more likely? Just like with gradient descent when training a network, this gives us a direction and a magnitude, which we then multiply by a <del>learning rate</del>”guidance strength” <span class="math inline">\(\eta\)</span> to turn it into a step size.</p>
+<p>So <span class="math inline">\(\Delta \widehat{z_1}\)</span> is a measure of the <em>deviation</em> from the desired endpoint. Now, in practical application we won’t actually use the “distance” <span class="math inline">\(\Delta \widehat{z_1}\)</span>, but we’ll use something that functions <em>like</em> a distance, such as a K-L divergence or Mean Squared Error (MSE).</p>
+<p>When doing inference, this deviation serves as a “loss” does when training models something we minimize via gradient descent, except we’ll vary the flow positions <span class="math inline">\(z\)</span> instead of the model weights. More specifically, we’ll consider the “likelihood” <span class="math inline">\(p( \widehat{z_1} | y )\)</span> of getting a <span class="math inline">\(z_1\)</span> that matches a given control <span class="math inline">\(y\)</span>, and we’ll seek to maximize that likelihood, or equivalently to <em>minimize the negative</em> log-likelihood.</p>
+<p>The expression <span class="math inline">\(-\nabla_{\widehat{z_1}} \log p( \widehat{z_1} | y )\)</span> essentially answers the question, “in which direction should I adjust <span class="math inline">\(\widehat{z_1}\)</span> so as to make <span class="math inline">\(p( \widehat{z_1} | y )\)</span> more likely? This gives us a direction and a magnitude, which we then multiply by a <del>learning rate</del>”guidance strength” <span class="math inline">\(\eta\)</span> to turn it into a step size.</p>
 <p>So our final expression for <span class="math inline">\(\Delta v\)</span> will involve replacing <span class="math inline">\(\Delta \widehat{z_1}\)</span> in (2) with <span class="math inline">\(- \eta \nabla_{\widehat{z_1}} \log p( \widehat{z_1} | y\)</span>:</p>
 <p><span class="math display">\[ \Delta \vec{v} =  - \eta {1 \over 1-t } \nabla_{z_t} \log p( \widehat{z_1} | y ) \tag{3} \]</span></p>
-<p>where we used the fact that <span class="math inline">\(\nabla_{\widehat{z_1}} = \nabla_{z_t}\)</span> (since <span class="math inline">\(\widehat{z_1} \propto z_t\)</span> ).</p>
-<p>The factor of <span class="math inline">\(1/ (1-t)\)</span> determines how the size of our course correction scales with time. It implies that we can make small course corrections at early times, but comparable corrections at later times require larger adjustments. As we will see later, this is not the only time scale we can choose, but it will suffice for now.</p>
-<p>It’s best at this point if we move to a concrete example; let’s use guidance to add some class conditioning to an <em>unconditional</em> generative model by having a separate classifier inspect our estimated outputs. In this case <span class="math inline">\(\log p( \widehat{z_1} | y )\)</span> will be the (logits form of the) Cross-Entropy Loss, where <span class="math inline">\(y\)</span> are the desired class outcomes.</p>
+<p>where we used the fact that <span class="math inline">\(\nabla_{\widehat{z_1}} = \nabla_{z_t}\)</span> (since <span class="math inline">\(\widehat{z_1} \propto z_t\)</span>). The factor of <span class="math inline">\(1/(1-t)\)</span> means small corrections suffice early on, but later times require larger adjustments—though other time scalings are possible, as we’ll see.</p>
+<p>Let’s move to a concrete example: using guidance to add class conditioning to an <em>unconditional</em> generative model by having a separate classifier inspect our (estimated) outputs. In this case <span class="math inline">\(\log p( \widehat{z_1} | y )\)</span> will be the (logits form of the) Cross-Entropy Loss, where <span class="math inline">\(y\)</span> are the desired class outcomes.</p>
 </section>
 <section id="classifier-guidance" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Classifier Guidance</h1>
@@ -524,7 +523,7 @@ First we have the <code>guidance_dict</code> that we’ll use to pass through ou
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>show_probs(probs, x<span class="op">=</span>x1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"bce36a046a9345b8bd50dbaf21087cc9","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"fca852a460cb4115a6e4bbbd0b557b99","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -541,7 +540,7 @@ First we have the <code>guidance_dict</code> that we’ll use to pass through ou
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="st">"Guided samples"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"a442bd86f8c94efba36e9beee90a398c","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"206e88164eb04bbcbf14e71ab0acf56f","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -556,82 +555,85 @@ First we have the <code>guidance_dict</code> that we’ll use to pass through ou
 <div class="cell" data-hide_input="true">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> DataLoader, TensorDataset, Subset</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.datasets <span class="im">import</span> MNIST</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.transforms <span class="im">import</span> ToTensor</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> glob <span class="im">import</span> glob </span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode_dataset(vae, dataset, batch_size<span class="op">=</span><span class="dv">512</span>, chunk_size<span class="op">=</span><span class="dv">10000</span>, tag<span class="op">=</span><span class="st">"train"</span>):</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Encode dataset into VAE latents (z = mu), saving progress in temp chunk files.</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">    We use temp chunks in case execution gets interrupted, we can try again &amp; resume. </span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    device <span class="op">=</span> <span class="bu">next</span>(vae.parameters()).device</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    total_chunks <span class="op">=</span> math.ceil(<span class="bu">len</span>(dataset) <span class="op">/</span> chunk_size) </span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># check for existing chunk files </span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    basename <span class="op">=</span> <span class="ss">f"tmp_chunk_</span><span class="sc">{</span>tag<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    chunk_files <span class="op">=</span> glob(basename<span class="op">+</span><span class="st">'*.pt'</span>) </span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    existing_chunks <span class="op">=</span> <span class="bu">len</span>(chunk_files)</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>tag<span class="sc">}</span><span class="ss">: Found </span><span class="sc">{</span>existing_chunks<span class="sc">}</span><span class="ss"> of </span><span class="sc">{</span>total_chunks<span class="sc">}</span><span class="ss"> expected chunks. Generating remaining..."</span>)</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> c <span class="kw">in</span> <span class="bu">range</span>(existing_chunks, total_chunks): </span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"chunk </span><span class="sc">{</span>c<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>total_chunks<span class="sc">}</span><span class="ss">:"</span>,end<span class="op">=</span><span class="st">""</span>)</span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>        indices <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(c<span class="op">*</span>chunk_size, (c<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>chunk_size ))</span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        data_subset <span class="op">=</span> Subset(dataset, indices)        </span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        loader <span class="op">=</span> DataLoader(data_subset, batch_size<span class="op">=</span>batch_size, shuffle<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>        all_latents, all_labels <span class="op">=</span> [], []</span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>        must_flatten <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> torch.no_grad():</span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> data, labels <span class="kw">in</span> loader:</span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="st">"="</span>,end<span class="op">=</span><span class="st">""</span>) <span class="co"># dumb progress bar </span></span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>                x <span class="op">=</span> data.to(device)</span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>                <span class="co"># next bit is so it should work with linear layers or conv</span></span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> must_flatten <span class="kw">is</span> <span class="va">None</span> <span class="kw">or</span> must_flatten<span class="op">==</span><span class="va">False</span>:</span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">try</span>: z, must_flatten <span class="op">=</span> vae.encoder(x), <span class="va">False</span></span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">except</span> <span class="pp">RuntimeError</span>:</span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>                        z <span class="op">=</span> vae.encoder(x.view(x.size(<span class="dv">0</span>), <span class="op">-</span><span class="dv">1</span>))</span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>                        must_flatten <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>: z <span class="op">=</span> vae.encoder(x.view(x.size(<span class="dv">0</span>), <span class="op">-</span><span class="dv">1</span>))</span>
-<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>                mu, logvar <span class="op">=</span> z</span>
-<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>                all_latents.append(mu.cpu())</span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>                all_labels.append(labels)</span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>        chunk_latents, chunk_labels <span class="op">=</span> torch.cat(all_latents), torch.cat(all_labels)</span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>        tmp_filename <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>basename<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>c<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">.pt"</span></span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"|  Saving chunk to </span><span class="sc">{</span>tmp_filename<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>        torch.save({ <span class="st">'latents'</span>:chunk_latents, <span class="st">'labels'</span>:chunk_labels }, tmp_filename)</span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Assemble all the chunks from files and return tensors.</span></span>
-<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Assembling"</span>, basename<span class="op">+</span><span class="st">'*.pt ...'</span>)</span>
-<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>    all_latents, all_labels <span class="op">=</span> [], []</span>
-<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> chunk_file <span class="kw">in</span> glob(basename<span class="op">+</span><span class="st">'*.pt'</span>): </span>
-<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>        chunk_dict <span class="op">=</span> torch.load(chunk_file, weights_only<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>        all_latents.append(chunk_dict[<span class="st">'latents'</span>])</span>
-<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>        all_labels.append(chunk_dict[<span class="st">'labels'</span>]) </span>
-<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>    latents, labels <span class="op">=</span> torch.cat(all_latents), torch.cat(all_labels)</span>
-<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>    <span class="co">#for f in glob(tmp_file_base+'*.pt'): os.remove(f)   # clean up </span></span>
-<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> latents, labels </span>
-<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode_mnist(vae, filename<span class="op">=</span><span class="va">None</span>, batch_size<span class="op">=</span><span class="dv">512</span>):</span>
-<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Acquiring train &amp; test MNIST image datasets..."</span>)</span>
-<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>    train_ds <span class="op">=</span> MNIST(root<span class="op">=</span><span class="st">'./data'</span>, train<span class="op">=</span><span class="va">True</span>,  download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>ToTensor())</span>
-<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>    test_ds  <span class="op">=</span> MNIST(root<span class="op">=</span><span class="st">'./data'</span>, train<span class="op">=</span><span class="va">False</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>ToTensor())</span>
-<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Encoding dataset to latents..."</span>)</span>
-<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>    train_latents, train_labels <span class="op">=</span> encode_dataset(vae, train_ds, batch_size<span class="op">=</span>batch_size, tag<span class="op">=</span><span class="st">'train'</span>)</span>
-<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>    test_latents, test_labels <span class="op">=</span> encode_dataset(vae, test_ds, batch_size<span class="op">=</span>batch_size, tag<span class="op">=</span><span class="st">'test'</span>)</span>
-<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> f <span class="kw">in</span> glob(<span class="st">'tmp_chunk_t*_c*.pt'</span>): os.remove(f)  <span class="co"># clean up</span></span>
-<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> filename <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Saving to </span><span class="sc">{</span>filename<span class="sc">}</span><span class="ss"> ..."</span>)</span>
-<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>        torch.save({ <span class="st">'train_z'</span>: train_latents,     <span class="st">'test_z'</span>: test_latents,</span>
-<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>                     <span class="st">'train_labels'</span>: train_labels, <span class="st">'test_labels'</span>: test_labels }, filename)</span>
-<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_latents, train_labels</span>
-<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a><span class="co"># Encode the dataset</span></span>
-<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a>latent_data_filename <span class="op">=</span> <span class="st">'mnist_latents.pt'</span></span>
-<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.exists(latent_data_filename):</span>
-<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a>    train_latents, train_labels <span class="op">=</span> encode_mnist(sub.vae, filename<span class="op">=</span>latent_data_filename)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># You can probably skip this code block. It just runs MNIST</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># through the VAE's encoder and saves it to disk. </span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> DataLoader, TensorDataset, Subset</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.datasets <span class="im">import</span> MNIST</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.transforms <span class="im">import</span> ToTensor</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> glob <span class="im">import</span> glob </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode_dataset(vae, dataset, batch_size<span class="op">=</span><span class="dv">512</span>, chunk_size<span class="op">=</span><span class="dv">10000</span>, tag<span class="op">=</span><span class="st">"train"</span>):</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Encode dataset into VAE latents (z = mu), saving progress in temp chunk files.</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">    We use temp chunks in case execution gets interrupted, we can try again &amp; resume. </span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    device <span class="op">=</span> <span class="bu">next</span>(vae.parameters()).device</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    total_chunks <span class="op">=</span> math.ceil(<span class="bu">len</span>(dataset) <span class="op">/</span> chunk_size) </span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># check for existing chunk files </span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    basename <span class="op">=</span> <span class="ss">f"tmp_chunk_</span><span class="sc">{</span>tag<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    chunk_files <span class="op">=</span> glob(basename<span class="op">+</span><span class="st">'*.pt'</span>) </span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    existing_chunks <span class="op">=</span> <span class="bu">len</span>(chunk_files)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>tag<span class="sc">}</span><span class="ss">: Found </span><span class="sc">{</span>existing_chunks<span class="sc">}</span><span class="ss"> of </span><span class="sc">{</span>total_chunks<span class="sc">}</span><span class="ss"> expected chunks. Generating remaining..."</span>)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> c <span class="kw">in</span> <span class="bu">range</span>(existing_chunks, total_chunks): </span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"chunk </span><span class="sc">{</span>c<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>total_chunks<span class="sc">}</span><span class="ss">:"</span>,end<span class="op">=</span><span class="st">""</span>)</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>        indices <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(c<span class="op">*</span>chunk_size, (c<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>chunk_size ))</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>        data_subset <span class="op">=</span> Subset(dataset, indices)        </span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>        loader <span class="op">=</span> DataLoader(data_subset, batch_size<span class="op">=</span>batch_size, shuffle<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>        all_latents, all_labels <span class="op">=</span> [], []</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>        must_flatten <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> data, labels <span class="kw">in</span> loader:</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="st">"="</span>,end<span class="op">=</span><span class="st">""</span>) <span class="co"># dumb progress bar </span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>                x <span class="op">=</span> data.to(device)</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>                <span class="co"># next bit is so it should work with linear layers or conv</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> must_flatten <span class="kw">is</span> <span class="va">None</span> <span class="kw">or</span> must_flatten<span class="op">==</span><span class="va">False</span>:</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">try</span>: z, must_flatten <span class="op">=</span> vae.encoder(x), <span class="va">False</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">except</span> <span class="pp">RuntimeError</span>:</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>                        z <span class="op">=</span> vae.encoder(x.view(x.size(<span class="dv">0</span>), <span class="op">-</span><span class="dv">1</span>))</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>                        must_flatten <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>: z <span class="op">=</span> vae.encoder(x.view(x.size(<span class="dv">0</span>), <span class="op">-</span><span class="dv">1</span>))</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>                mu, logvar <span class="op">=</span> z</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>                all_latents.append(mu.cpu())</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>                all_labels.append(labels)</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>        chunk_latents, chunk_labels <span class="op">=</span> torch.cat(all_latents), torch.cat(all_labels)</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>        tmp_filename <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>basename<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>c<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">.pt"</span></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"|  Saving chunk to </span><span class="sc">{</span>tmp_filename<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>        torch.save({ <span class="st">'latents'</span>:chunk_latents, <span class="st">'labels'</span>:chunk_labels }, tmp_filename)</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Assemble all the chunks from files and return tensors.</span></span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Assembling"</span>, basename<span class="op">+</span><span class="st">'*.pt ...'</span>)</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>    all_latents, all_labels <span class="op">=</span> [], []</span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> chunk_file <span class="kw">in</span> glob(basename<span class="op">+</span><span class="st">'*.pt'</span>): </span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>        chunk_dict <span class="op">=</span> torch.load(chunk_file, weights_only<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>        all_latents.append(chunk_dict[<span class="st">'latents'</span>])</span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>        all_labels.append(chunk_dict[<span class="st">'labels'</span>]) </span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>    latents, labels <span class="op">=</span> torch.cat(all_latents), torch.cat(all_labels)</span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>    <span class="co">#for f in glob(tmp_file_base+'*.pt'): os.remove(f)   # clean up </span></span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> latents, labels </span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode_mnist(vae, filename<span class="op">=</span><span class="va">None</span>, batch_size<span class="op">=</span><span class="dv">512</span>):</span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Acquiring train &amp; test MNIST image datasets..."</span>)</span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>    train_ds <span class="op">=</span> MNIST(root<span class="op">=</span><span class="st">'./data'</span>, train<span class="op">=</span><span class="va">True</span>,  download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>ToTensor())</span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>    test_ds  <span class="op">=</span> MNIST(root<span class="op">=</span><span class="st">'./data'</span>, train<span class="op">=</span><span class="va">False</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>ToTensor())</span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Encoding dataset to latents..."</span>)</span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>    train_latents, train_labels <span class="op">=</span> encode_dataset(vae, train_ds, batch_size<span class="op">=</span>batch_size, tag<span class="op">=</span><span class="st">'train'</span>)</span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>    test_latents, test_labels <span class="op">=</span> encode_dataset(vae, test_ds, batch_size<span class="op">=</span>batch_size, tag<span class="op">=</span><span class="st">'test'</span>)</span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> f <span class="kw">in</span> glob(<span class="st">'tmp_chunk_t*_c*.pt'</span>): os.remove(f)  <span class="co"># clean up</span></span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> filename <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Saving to </span><span class="sc">{</span>filename<span class="sc">}</span><span class="ss"> ..."</span>)</span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>        torch.save({ <span class="st">'train_z'</span>: train_latents,     <span class="st">'test_z'</span>: test_latents,</span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>                     <span class="st">'train_labels'</span>: train_labels, <span class="st">'test_labels'</span>: test_labels }, filename)</span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_latents, train_labels</span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a><span class="co"># Encode the dataset</span></span>
+<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a>latent_data_filename <span class="op">=</span> <span class="st">'mnist_latents.pt'</span></span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.exists(latent_data_filename):</span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a>    train_latents, train_labels <span class="op">=</span> encode_mnist(sub.vae, filename<span class="op">=</span>latent_data_filename)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Then we’ll load those encoded latents into memory; these will be our training and test data.</p>
@@ -721,7 +723,7 @@ Training Loop Code
 <span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Epoch </span><span class="sc">{</span>epoch<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>epochs<span class="sc">}</span><span class="ss">: train_loss=</span><span class="sc">{</span>train_loss<span class="sc">:.4f}</span><span class="ss">, val_loss=</span><span class="sc">{</span>val_loss<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">, val_acc=</span><span class="sc">{</span>val_acc<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"4308db6f8d1b47d9801965945f1cd38a","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"603c126e816244a28569c5c60e355696","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -738,47 +740,47 @@ Epoch 10/10: train_loss=0.0368, val_loss=0.0698, val_acc=0.9727</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"c377ffc101814883983080d2bc053af7","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"81558c45fb9c4022900b31626c00aa7d","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"b3a6d31dbec14d6880e98e87399fdd77","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"83b1d79db172403e91ee2947bce75eb0","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"2ff55aa5a1b1481ba1b6a1bac5680959","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"4f8e4d5269fa460f908964ae5b914489","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"7e454fd255d448bdb9ef181bfadbb114","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"34f1dcf7ec3d4ea0b869c3a71b3fac3f","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"cd13162a863d4e2ab2c5d6b30f858463","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"0e66ad45a9df44828ca757d105cd327c","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"750f34a873b34ee0912209738faa5972","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"66027d0efc0c41d3b2b8472a70a478dc","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"489447ce5fb444daa5cedf7dd073fdc9","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"1c71a1e825654d74a6a8b772ffec97f5","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"892ef359fd7b4583b181c756b5ccd4ff","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"168ccecfed9644af927121d3ff2647bd","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"4371ea8fd7e74b1da9de2d6aaf168163","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"e72a83f8d2324a9fbd287c355d09d3b0","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 </div>
@@ -799,8 +801,14 @@ Epoch 10/10: train_loss=0.0368, val_loss=0.0698, val_acc=0.9727</code></pre>
 <span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    logits, probs <span class="op">=</span> classify(z_classifier, z)</span>
 <span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    pred_class <span class="op">=</span> classify(z_classifier, z, use_argmax<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Predicted labels:"</span>, pred_class.cpu())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>RuntimeError: Expected 3D (unbatched) or 4D (batched) input to conv2d, but got input of size: [10, 16]</code></pre>
+<div class="cell-output cell-output-stdout">
+<pre><code>z.shape =  torch.Size([10, 16])
+Target labels:  tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1]) 
+
+Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="FlowWhereYouWant_files/figure-html/cell-20-output-2.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Looks pretty good. Moving on to…</p>
@@ -822,7 +830,7 @@ Epoch 10/10: train_loss=0.0368, val_loss=0.0698, val_acc=0.9727</code></pre>
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="st">"Latent-Only Guidance"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"d3fa1ab3a20e4308a376dfa0245c3d27","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"0b089692bc924b81b8a658c8609c9744","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -957,7 +965,7 @@ Epoch 10/10: train_loss=0.0368, val_loss=0.0698, val_acc=0.9727</code></pre>
 </details>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"3981c74fb3e443f29d6938a04c6c1f31","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"d227a75087d04e038ac584c0fbaab209","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -1023,7 +1031,7 @@ Epoch 10/10: train_loss=0.0368, val_loss=0.0698, val_acc=0.9727</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"be735923ba2b4d8fa5d380d367047d4f","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"98fd2233b45f40ca9f5f474f5667163d","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
