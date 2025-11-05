@@ -244,8 +244,8 @@ details > summary {
   </ul></li>
   <li><a href="#inpainting" id="toc-inpainting" class="nav-link" data-scroll-target="#inpainting"><span class="header-section-number">5</span> Inpainting</a>
   <ul class="collapse">
-  <li><a href="#do-the-inpainting" id="toc-do-the-inpainting" class="nav-link" data-scroll-target="#do-the-inpainting"><span class="header-section-number">5.1</span> Do the Inpainting!</a></li>
-  <li><a href="#latent-only-inpainting" id="toc-latent-only-inpainting" class="nav-link" data-scroll-target="#latent-only-inpainting"><span class="header-section-number">5.2</span> Latent-Only Inpainting!</a></li>
+  <li><a href="#do-the-inpainting" id="toc-do-the-inpainting" class="nav-link" data-scroll-target="#do-the-inpainting"><span class="header-section-number">5.1</span> Do the Inpainting</a></li>
+  <li><a href="#latent-only-inpainting" id="toc-latent-only-inpainting" class="nav-link" data-scroll-target="#latent-only-inpainting"><span class="header-section-number">5.2</span> Latent-Only Inpainting</a></li>
   </ul></li>
   <li><a href="#guidance-by-another-name-pnp-flow" id="toc-guidance-by-another-name-pnp-flow" class="nav-link" data-scroll-target="#guidance-by-another-name-pnp-flow"><span class="header-section-number">6</span> Guidance By Another Name: PnP-Flow</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">7</span> Summary</a></li>
@@ -301,6 +301,7 @@ details > summary {
 <figcaption class="figure-caption">flow review diagram caption?</figcaption>
 </figure>
 </div>
+<p><strong>TODO:</strong> add more review text…</p>
 </section>
 </section>
 <section id="projecting-and-correcting" class="level1" data-number="3">
@@ -320,14 +321,26 @@ details > summary {
 <p><img src="images/guidance_vectors.png" class="img1 img-fluid"></p>
 <p>By similar triangles, <span class="math inline">\(\Delta \widehat{z_1} = (1-t)\Delta \vec{v}\)</span>, which means the course correction you want is</p>
 <p><span class="math display">\[ \Delta \vec{v} = { \Delta \widehat{z_1} \over 1-t } \tag{2} \]</span></p>
-<p><em>Since you’re going to see more math once you try to read the scholarly literature on these topics, let’s go a bit further into the math…</em></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Mathematical Details
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Since you’re going to see more math once you try to read the scholarly literature on these topics, let’s go a bit further into the math…</p>
 <p>So <span class="math inline">\(\Delta \widehat{z_1}\)</span> is a measure of the <em>deviation</em> from the desired endpoint. Now, in practical application we won’t actually use the “distance” <span class="math inline">\(\Delta \widehat{z_1}\)</span>, but we’ll use something that functions <em>like</em> a distance, such as a K-L divergence or Mean Squared Error (MSE).</p>
-<p>When doing inference, this deviation serves as a “loss” does when training models something we minimize via gradient descent, except we’ll vary the flow positions <span class="math inline">\(z\)</span> instead of the model weights. More specifically, we’ll consider the “likelihood” <span class="math inline">\(p( \widehat{z_1} | y )\)</span> of getting a <span class="math inline">\(z_1\)</span> that matches a given control <span class="math inline">\(y\)</span>, and we’ll seek to maximize that likelihood, or equivalently to <em>minimize the negative</em> log-likelihood.</p>
+<p>When doing inference, this deviation serves as a “loss” when training models something we minimize via gradient descent, except we’ll vary the flow positions <span class="math inline">\(z\)</span> instead of the model weights. More specifically, we’ll consider the “likelihood” <span class="math inline">\(p( \widehat{z_1} | y )\)</span> of getting a <span class="math inline">\(z_1\)</span> that matches a given control <span class="math inline">\(y\)</span>, and we’ll seek to maximize that likelihood, or equivalently to <em>minimize the negative</em> log-likelihood.</p>
 <p>The expression <span class="math inline">\(-\nabla_{\widehat{z_1}} \log p( \widehat{z_1} | y )\)</span> essentially answers the question, “in which direction should I adjust <span class="math inline">\(\widehat{z_1}\)</span> so as to make <span class="math inline">\(p( \widehat{z_1} | y )\)</span> more likely? This gives us a direction and a magnitude, which we then multiply by a <del>learning rate</del>”guidance strength” <span class="math inline">\(\eta\)</span> to turn it into a step size.</p>
-<p>So our final expression for <span class="math inline">\(\Delta v\)</span> will involve replacing <span class="math inline">\(\Delta \widehat{z_1}\)</span> in (2) with <span class="math inline">\(- \eta \nabla_{\widehat{z_1}} \log p( \widehat{z_1} | y\)</span>:</p>
+</div>
+</div>
+<p>Applying this gradient-based approach, our expression for <span class="math inline">\(\Delta v\)</span> will involve replacing <span class="math inline">\(\Delta \widehat{z_1}\)</span> in (2) with <span class="math inline">\(- \eta \nabla_{\widehat{z_1}} \log p( \widehat{z_1} | y\)</span>:</p>
 <p><span class="math display">\[ \Delta \vec{v} =  - \eta {1 \over 1-t } \nabla_{z_t} \log p( \widehat{z_1} | y ) \tag{3} \]</span></p>
 <p>where we used the fact that <span class="math inline">\(\nabla_{\widehat{z_1}} = \nabla_{z_t}\)</span> (since <span class="math inline">\(\widehat{z_1} \propto z_t\)</span>). The factor of <span class="math inline">\(1/(1-t)\)</span> means small corrections suffice early on, but later times require larger adjustments—though other time scalings are possible, as we’ll see.</p>
-<p>Let’s move to a concrete example: using guidance to add class conditioning to an <em>unconditional</em> generative model by having a separate classifier inspect our (estimated) outputs. In this case <span class="math inline">\(\log p( \widehat{z_1} | y )\)</span> will be the (logits form of the) Cross-Entropy Loss, where <span class="math inline">\(y\)</span> are the desired class outcomes.</p>
+<p>Now let’s apply this to a concrete example.</p>
 </section>
 <section id="classifier-guidance" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Classifier Guidance</h1>
@@ -523,7 +536,7 @@ First we have the <code>guidance_dict</code> that we’ll use to pass through ou
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>show_probs(probs, x<span class="op">=</span>x1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"fca852a460cb4115a6e4bbbd0b557b99","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"c5f7a08f4f704a559bc6ba6e1be95020","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -540,7 +553,7 @@ First we have the <code>guidance_dict</code> that we’ll use to pass through ou
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="st">"Guided samples"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"206e88164eb04bbcbf14e71ab0acf56f","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"1b915c064eab421f97d3e35c49e13930","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -723,7 +736,7 @@ Training Loop Code
 <span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Epoch </span><span class="sc">{</span>epoch<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>epochs<span class="sc">}</span><span class="ss">: train_loss=</span><span class="sc">{</span>train_loss<span class="sc">:.4f}</span><span class="ss">, val_loss=</span><span class="sc">{</span>val_loss<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">, val_acc=</span><span class="sc">{</span>val_acc<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"603c126e816244a28569c5c60e355696","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"6618243099494ddcbd6ea5b95260b73f","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -740,47 +753,47 @@ Epoch 10/10: train_loss=0.0368, val_loss=0.0698, val_acc=0.9727</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"81558c45fb9c4022900b31626c00aa7d","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"26773e98665a4a449d28523e07a7d6bb","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"83b1d79db172403e91ee2947bce75eb0","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"4ec816b774664e9f923426fa2a344f37","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"4f8e4d5269fa460f908964ae5b914489","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"6e50a8c31805491cb3bd645f355dda9a","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"34f1dcf7ec3d4ea0b869c3a71b3fac3f","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"b7de7125568341b7804555a6bf89cd99","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"0e66ad45a9df44828ca757d105cd327c","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"669e2264f1084ce4a84326dcf8073b4e","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"66027d0efc0c41d3b2b8472a70a478dc","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"7735f9fd6da54bcc8aef3d5aa616d923","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"1c71a1e825654d74a6a8b772ffec97f5","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"6c434b1934674a4a87a9783b3559c36c","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"168ccecfed9644af927121d3ff2647bd","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"369a46a6153d4406a3439d9a45e04ccd","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"e72a83f8d2324a9fbd287c355d09d3b0","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"99630c9b21f44b03ba8919bf7f18c3ce","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 </div>
@@ -921,7 +934,7 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 </details>
 </div>
 <section id="do-the-inpainting" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="do-the-inpainting"><span class="header-section-number">5.1</span> Do the Inpainting!</h2>
+<h2 data-number="5.1" class="anchored" data-anchor-id="do-the-inpainting"><span class="header-section-number">5.1</span> Do the Inpainting</h2>
 <p>Start with masked images <span class="math inline">\(y\)</span>…</p>
 <div class="cell">
 <details>
@@ -980,7 +993,7 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <p>In order to experiment with other methods more easily, we should do inpainting only in latent space, and for that we will need a model that supports spatial latents….</p>
 </section>
 <section id="latent-only-inpainting" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="latent-only-inpainting"><span class="header-section-number">5.2</span> Latent-Only Inpainting!</h2>
+<h2 data-number="5.2" class="anchored" data-anchor-id="latent-only-inpainting"><span class="header-section-number">5.2</span> Latent-Only Inpainting</h2>
 <p>Let’s take a look at the images and their spatial-latent representations:</p>
 <div class="cell" data-hide_input="true">
 <details>
@@ -1045,15 +1058,17 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 </section>
 <section id="guidance-by-another-name-pnp-flow" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> Guidance By Another Name: PnP-Flow</h1>
-<p>Some people may want to restrict the use of the term “guidance” to only modifications of the velocity. But this is not the only way to cast the problem in order to achieve the desired result.</p>
-<p>A method termed “PnP-Flow” by French researchers Martin et al<span class="citation" data-cites="pnp_flow"><a href="#ref-pnp_flow" role="doc-biblioref">[5]</a></span> doesn’t modify the velocity but rather adjusts value of the flow “position” variable <span class="math inline">\(z\)</span> (for us, the latents) at each step.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>Yet even “velocity” carries a bit of conventional weight in this case, as our gradient calculation times the strength induces a change in the flow variable, and we only cast it into a “velocity” by dividing or otherwise rescaling by a time-dependent function such as <span class="math inline">\(1/(1-t)\)</span>.</p>
-<p>In fact, by adding the “overwriting”of the latent values outside the mask via interpolation, we have already included the key parts of PnP-Flow: 1. compute a gradient based on our constraint, 2. and then overwrite using an interpolated values.</p>
-<p>Our variable definitions are a bit different from those in the PnP-Flow paper<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, so reproducing their equations exactly here won’t help. Intead let’s set the stage: They <em>consider only straight-line trajectories</em> for which the projecting forward via linear extrapolation is <em>identical</em> to interating the flow model forward. In other words, the time-integration is <em>trivial</em> an thus instead of <span class="math inline">\(\widehat{z_1}\)</span> being a projection from the current latent integration variable <span class="math inline">\(z_t\)</span>, we assume that getting <span class="math inline">\(\widehat{z_1}\)</span> is trivial.</p>
-<p>In fact the algorithm is best viewed as <em>starting</em> <span class="math inline">\(t=0\)</span>, moving to our projected estimate <span class="math inline">\(\widehat{z_1}\)</span> and <em>iterating on that</em>. Consequently, it may help to dispense with the picture of integrating our position <span class="math inline">\(z\)</span> incrementially from <span class="math inline">\(t=0\)</span> to 1. We will still step along those values of <span class="math inline">\(t\)</span>, however we will use them to set <em>step sizes</em> <span class="math inline">\((1-t)\)</span> for a series of prediction, correction, and back-projection steps. With that in mind, the first step is that we take our projected estimate <span class="math inline">\(\widehat{z_1}\)</span> and correct it by computing a gradient and move toward our goal:</p>
+<p>The term ‘guidance’ typically refers to velocity modifications, but PnP-Flow by Martin et al<span class="citation" data-cites="pnp_flow"><a href="#ref-pnp_flow" role="doc-biblioref">[5]</a></span> achieves similar results by adjusting latent positions <span class="math inline">\(z\)</span> directly.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>PnP-Flow assumes straight-line trajectories, making the forward projection trivial: <span class="math inline">\(\widehat{z_1}\)</span> is reached by simple linear extrapolation. Instead of incrementally moving <span class="math inline">\(z\)</span> from <span class="math inline">\(t=0\)</span> to <span class="math inline">\(t=1\)</span>, PnP-Flow projects forward to <span class="math inline">\(\widehat{z_1}\)</span> and iterates on that estimate through a series of correction and projection steps. The first step applies our gradient correction:</p>
 <p><span class="math display">\[{\rm Step\ 1.}\ \ \ \ \ \  \ \ \ \ \ \ z_1^* := \widehat{z_1} - \eta\,\gamma_t \nabla F(\widehat{z_1},y)\]</span></p>
-<p>where <span class="math inline">\(z_1^*\)</span> (my notation) is our goal i.e.&nbsp;the the endpoint of our projected course correction, and <span class="math inline">\(F(\widehat{z_1},y)\)</span> is our (log-exp probability) constraint. For the time scaling, the PnP-Flow authors recommend <span class="math inline">\(\gamma_t = (1-t)^\alpha\)</span> with <span class="math inline">\(\alpha \in [0,1]\)</span> is a hyperparameter chosen accordint to the task – e.g., they use <span class="math inline">\(\alpha\)</span>’s as large as 0.8 for denoising tasks, 0.5 for box inpainting, and 0.01 for random inpainting. This choice of <span class="math inline">\(\gamma_t\)</span> is a bit different from our earlier one of <span class="math inline">\((1-t)/t\)</span>. Both go to zero as <span class="math inline">\(t \rightarrow 1\)</span>, but approach it differently and have different asymtomptotics as as <span class="math inline">\(t\rightarrow 0\)</span>.</p>
-<p>In the graph below, we show our earlier choice of (1 - t)/t in green, and (1 - t)^α in purple for various choices of α:</p>
+<p>where <span class="math inline">\(z_1^*\)</span> (my notation) is our goal i.e.&nbsp;the the endpoint of our projected course correction, and <span class="math inline">\(F(\widehat{z_1},y)\)</span> is our (log-exp probability) constraint. For the time scaling, the PnP-Flow authors recommend <span class="math inline">\(\gamma_t = (1-t)^\alpha\)</span> with <span class="math inline">\(\alpha \in [0,1]\)</span> is a hyperparameter chosen according to the task – e.g., they use <span class="math inline">\(\alpha\)</span>’s as large as 0.8 for denoising tasks, 0.5 for box inpainting, and 0.01 for random inpainting. This choice of <span class="math inline">\(\gamma_t\)</span> is a bit different from our earlier one of <span class="math inline">\((1-t)/t\)</span>. Both go to zero as <span class="math inline">\(t \rightarrow 1\)</span>, but approach it differently and have different asymtomptotics as <span class="math inline">\(t\rightarrow 0\)</span>.</p>
+<p>In the graph below, we show our earlier choice of <span class="math inline">\((1 - t)/t\)</span> in green and <span class="math inline">\((1 - t)^\alpha\)</span> in purple for various choices of <span class="math inline">\(\alpha\)</span>:</p>
+<div class="cell">
+<div class="cell-output cell-output-display">
+
+<iframe src="https://www.desmos.com/calculator/bcp2wiyyid?embed" width="220" height="300" style="border: 1px solid #ccc; display: block; margin: 0 auto;" frameborder="0"></iframe>
+</div>
+</div>
 <p>…where for “box inpainting” as we did above, they use <span class="math inline">\(\alpha\)</span>=0.5.</p>
 <p>But PnP-Flow doesn’t stop there! Two other key steps remain. We then project backward to <em>overwrite</em> <span class="math inline">\(z_t\)</span> with a corrected value:</p>
 <p><span class="math display">\[{\rm Step\ 2.}\ \ \ \ \ \  \ \ \ \  \ \ z_t := (1-t)\,z_0 + t\, z_1^* \]</span></p>
@@ -1081,7 +1096,7 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <figcaption class="figure-caption">Image from PnP-Flow paper [5], slightly re-annotated by me.</figcaption>
 </figure>
 </div>
-<p>To implement this in code, it’s perhaps cleanest if we replace our “integrator” code with soemthing specific to PnP-Flow:</p>
+<p>To implement this in code, let’s replace our “integrator” with something specific to PnP-Flow:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample_pnpflow(model, z0, n_steps<span class="op">=</span><span class="dv">10</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, n_avg<span class="op">=</span><span class="dv">5</span>, warp_fn<span class="op">=</span><span class="kw">lambda</span> x: x, guidance_dict<span class="op">=</span><span class="va">None</span>):</span>
@@ -1157,11 +1172,13 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 </section>
 <section id="more-references" class="level1" data-number="10">
 <h1 data-number="10"><span class="header-section-number">10</span> MORE References</h1>
-<p>TODO: clean this up later</p>
+<p>TODO: actually cite these</p>
 <ol start="5" type="1">
 <li>Ye et al, “TFG: Unified Training-Free Guidance for Diffusion Models,” NeurIPS 2024, <a href="https://arxiv.org/abs/2409.15761">arXiv:2409.15761</a>, <a href="https://github.com/YWolfeee/Training-Free-Guidance">GitHub</a></li>
 <li>Daras et al, “A Survey on Diffusion Models for Inverse Problems”, https://arxiv.org/abs/2410.00083v1</li>
 <li>Blasingame &amp; Liu, “Greed is Good: A Unifying Perspective on Guided Generation,” https://arxiv.org/abs/2502.08006</li>
+<li>ARC / SAOS paper, re. “ping-pong”</li>
+<li>paper on steering autoregressive models</li>
 </ol>
 
 
