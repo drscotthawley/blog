@@ -276,31 +276,33 @@ details > summary {
 <section id="the-latent-flow-matching-setup" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="the-latent-flow-matching-setup"><span class="header-section-number">2.1</span> The Latent Flow-Matching Setup</h2>
 <p>Before exploring guidance, let’s review how latent flow models work. The following diagram illustrates three key concepts:</p>
-<div style="padding-left: 2em; text-indent: -1em;">
 <p><strong>a)</strong> A VAE compresses pixel-space images into compact latent representations.</p>
-<p><strong>b)</strong> The flow model operates in this latent space, transforming noise (source, t=0) into structured data (target, t=1) through iterative integration. The decoder then converts the final latents back to pixels.</p>
-<p><strong>c)</strong> While general flows can follow curved trajectories, some of our methods will focus on straight-line flows (rectified flows/optimal transport) which offer simpler, more intuitive paths—making guidance particularly elegant.</p>
-</div>
 <style>
-.img1 {
-    /*transform-origin: top left;*/
-    /*width:140px;*/
-    transition:transform 0.4s ease;
+img {
+    display: block;
+    margin: 0 auto;
+    transition: transform 0.4s ease;
     position: relative;
     z-index: 0;
 }
-.img1:hover {
-    -webkit-transform:scale(1.3);
-    transform:scale(1.3);
-    z-index:1;
+img:hover {
+    -webkit-transform: scale(1.3);
+    transform: scale(1.3);
+    z-index: 1;
+}
+
+.cell-output-display {
+    overflow: visible !important;
+}
+.cell-output {
+    overflow: visible !important;
 }
 </style>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/vae_flow_diag.svg" class="img1 img-fluid figure-img"></p>
-<figcaption class="figure-caption">flow review diagram caption?</figcaption>
-</figure>
-</div>
+<p><img src="images/vae_flow_diag-VAE.svg" class="img-fluid"></p>
+<p><strong>b)</strong> The flow model operates in this latent space, transforming noise (source, t=0) into structured data (target, t=1) through iterative integration. The decoder then converts the final latents back to pixels.</p>
+<p><img src="images/vae_flow_diag-Generation.drawio.svg" class="img-fluid"></p>
+<p><strong>c)</strong> While general flows can follow curved trajectories, some of our methods will focus on straight-line flows (rectified flows/optimal transport) which offer simpler, more intuitive paths—making guidance particularly elegant.</p>
+<p><img src="images/vae_flow_diag-FlowTypes.drawio.svg" class="img-fluid"></p>
 <p><strong>TODO:</strong> add more review text…</p>
 </section>
 </section>
@@ -310,7 +312,9 @@ details > summary {
 <div class="cell" data-hide_input="true">
 <div class="cell-output cell-output-display">
 
+<div style="display: flex; justify-content: center;">
 <blockquote class="bluesky-embed blockquote" data-bluesky-uri="at://did:plc:sw457c7pedt3n57ci6qlrws6/app.bsky.feed.post/3m3df2idqrc2g" data-bluesky-cid="bafyreig53ufqtdsyf6np5xhoc75wdbd7pwlgxwbqeg4gatq5atvigdk54e" data-bluesky-embed-color-mode="system"><p lang="en">Been working on a tutorial on Guidance for (latent) flow-based generative models, and happened upon a great metaphor today while taking a little "me" time. :-)<br><br><a href="https://bsky.app/profile/did:plc:sw457c7pedt3n57ci6qlrws6/post/3m3df2idqrc2g?ref_src=embed">[image or embed]</a></p>— Scott H. Hawley (<a href="https://bsky.app/profile/did:plc:sw457c7pedt3n57ci6qlrws6?ref_src=embed">@drscotthawley.bsky.social</a>) <a href="https://bsky.app/profile/did:plc:sw457c7pedt3n57ci6qlrws6/post/3m3df2idqrc2g?ref_src=embed">Oct 16, 2025 at 1:26 PM</a></blockquote><script async="" src="https://embed.bsky.app/static/embed.js" charset="utf-8"></script>
+</div>
 </div>
 </div>
 <p>Ok, the analogy’s not quite right: you can’t just steer, you are going to have to paddle a little bit. In other words, you’re going to have to provide a bit of a <em>extra velocity</em> to correct the where the “current” flow is taking you.</p>
