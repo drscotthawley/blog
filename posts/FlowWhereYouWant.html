@@ -686,18 +686,13 @@ Latent size: torch.Size([16])</code></pre>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Very simple classifier in latent space"</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, latent_dim<span class="op">=</span><span class="dv">16</span>, hidden_dim<span class="op">=</span><span class="dv">32</span>, n_classes<span class="op">=</span><span class="dv">10</span>):</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc1 <span class="op">=</span> nn.Linear(latent_dim, hidden_dim)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc2 <span class="op">=</span> nn.Linear(hidden_dim, hidden_dim)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc3 <span class="op">=</span> nn.Linear(hidden_dim, latent_dim)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.fc4 <span class="op">=</span> nn.Linear(latent_dim, n_classes)</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, z):</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        z <span class="op">=</span> F.leaky_relu(<span class="va">self</span>.fc1(z))</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        z <span class="op">=</span> F.leaky_relu(<span class="va">self</span>.fc2(z))</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        z <span class="op">=</span> F.leaky_relu(<span class="va">self</span>.fc3(z))</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        z <span class="op">=</span> F.leaky_relu(<span class="va">self</span>.fc4(z))</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> z</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>z_classifier <span class="op">=</span> LatentClassNet().to(device)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        dims <span class="op">=</span> [latent_dim, hidden_dim, hidden_dim, latent_dim, n_classes]</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.layers <span class="op">=</span> nn.ModuleList([nn.Linear(in_d, out_d) <span class="cf">for</span> in_d, out_d <span class="kw">in</span> <span class="bu">zip</span>(dims[:<span class="op">-</span><span class="dv">1</span>], dims[<span class="dv">1</span>:])])   </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, z):</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> layer <span class="kw">in</span> <span class="va">self</span>.layers: z <span class="op">=</span> F.leaky_relu(layer(z))</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> z</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>z_classifier <span class="op">=</span> LatentClassNet().to(device)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Run the training loop…</p>
 <details>
@@ -729,64 +724,52 @@ Training Loop Code
 <span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Epoch </span><span class="sc">{</span>epoch<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>epochs<span class="sc">}</span><span class="ss">: train_loss=</span><span class="sc">{</span>loss<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">, val_loss=</span><span class="sc">{</span>val_loss<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">, val_acc=</span><span class="sc">{</span>val_acc<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"3cb672493c004458b52e5121b5566db1","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"76207d3b6ae54b7d9ef312b3f9dfa455","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Epoch 1/10: train_loss=1.0012, val_loss=1.0263, val_acc=0.6992
-Epoch 2/10: train_loss=0.1659, val_loss=0.1849, val_acc=0.9414
-Epoch 3/10: train_loss=0.0731, val_loss=0.1249, val_acc=0.9570
-Epoch 4/10: train_loss=0.0787, val_loss=0.1058, val_acc=0.9668
-Epoch 5/10: train_loss=0.1388, val_loss=0.0912, val_acc=0.9707
-Epoch 6/10: train_loss=0.0868, val_loss=0.0873, val_acc=0.9707
-Epoch 7/10: train_loss=0.0903, val_loss=0.0915, val_acc=0.9727
-Epoch 8/10: train_loss=0.0789, val_loss=0.0856, val_acc=0.9688
-Epoch 9/10: train_loss=0.1748, val_loss=0.0812, val_acc=0.9707
-Epoch 10/10: train_loss=0.0567, val_loss=0.0750, val_acc=0.9688</code></pre>
+<pre><code>Epoch 1/8: train_loss=1.2155, val_loss=1.3566, val_acc=0.5664
+Epoch 2/8: train_loss=0.1308, val_loss=0.2709, val_acc=0.9277
+Epoch 3/8: train_loss=0.2428, val_loss=0.1773, val_acc=0.9395
+Epoch 4/8: train_loss=0.2074, val_loss=0.1317, val_acc=0.9609
+Epoch 5/8: train_loss=0.0832, val_loss=0.1107, val_acc=0.9629
+Epoch 6/8: train_loss=0.1147, val_loss=0.1004, val_acc=0.9707
+Epoch 7/8: train_loss=0.0562, val_loss=0.0850, val_acc=0.9785
+Epoch 8/8: train_loss=0.1369, val_loss=0.0824, val_acc=0.9805</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"ffb441ce9a4141b1ab9019527be4914a","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"048c45971f7644fb9d2a7f895a5bfc58","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"8e7bca3af3c7405aac79897fc991e458","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"65b88089b51e440dab572900bc99b982","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"03a56e233c5a488b8dc6254b03caa47e","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"ad51d9d52f614a428435abc8990a46d8","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"175ac724ff724c23a85d23b04f1d60da","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"cb898b63617948559092245d2d42d8a7","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"1728da14907b43b4802cc6ea1ff856da","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"22ab13036a15478b8f70fd96b05f2d30","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"0bf5594bdb1e4b8b9a9f5840b0ea2fd5","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"833da10d336741c595340c8aaa652fd0","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"2138299607b34cc4b49705ac4f83269e","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
-</script>
-</div>
-<div class="cell-output cell-output-display">
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"3b1803700b664227b8cb6a823483bc1c","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
-</script>
-</div>
-<div class="cell-output cell-output-display">
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"46315e93b8c14b8a8a7921908462d73a","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"f5b1ea218d894344ae9e58f8b701eccf","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 </div>
