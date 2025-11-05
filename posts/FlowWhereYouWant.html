@@ -1081,8 +1081,10 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>        z1_hat <span class="op">=</span> torch.stack(projections).mean(dim<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> z1_hat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The latents-only inpainting model we used earlier was trained to have straight trajectories, so we should be able to use it again here:</p>
+<p>The model we used earlier for latents-only inpainting was trained to have straight trajectories, so we should be able to use it again here, just calling <code>sample_pnpflow</code> (instead of <code>integrate_path</code>). The results are as follows:</p>
 <div class="cell">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pnp_flow_inpaint(sub, inpainting_dict, n_samples, n_steps<span class="op">=</span><span class="dv">10</span>, t0<span class="op">=</span><span class="dv">0</span>, seed<span class="op">=</span><span class="va">None</span>, <span class="op">**</span>kwargs):</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Inpaint using PnP-Flow method"""</span></span>
@@ -1100,6 +1102,7 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>z1 <span class="op">=</span> pnp_flow_inpaint(sub, inpainting_dict, n_samples<span class="op">=</span><span class="bu">len</span>(y), n_steps<span class="op">=</span><span class="dv">20</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, seed<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> F.sigmoid(sub.decode(z1)).cpu()   <span class="co"># convert latents to pixels</span></span>
 <span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="ss">f"Inpainted images (alpha=0.5, strength=</span><span class="sc">{</span>inpainting_dict[<span class="st">'strength'</span>]<span class="sc">}</span><span class="ss">)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display">
 <p><img src="FlowWhereYouWant_files/figure-html/cell-30-output-1.png" class="img-fluid"></p>
 </div>
@@ -1107,7 +1110,7 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <p><img src="FlowWhereYouWant_files/figure-html/cell-30-output-2.png" class="img-fluid"></p>
 </div>
 </div>
-<p>…So this <em>kind of</em> works, but it also seems to “take some liberties.” This could be because of the low spatial resolution of the latents, e.g.&nbsp;that they are encoding information about curvature.</p>
+<p>…So this <em>kind of</em> works, but it also seems to “take some liberties” – the new digits look like “bold” versions of the originls. This could be because of the low spatial resolution of the latents, e.g.&nbsp;that they are encoding information about curvature.</p>
 </section>
 <section id="summary" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> Summary</h1>
