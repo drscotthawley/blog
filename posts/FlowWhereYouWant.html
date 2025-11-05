@@ -238,9 +238,9 @@ details > summary {
   <li><a href="#projecting-and-correcting" id="toc-projecting-and-correcting" class="nav-link" data-scroll-target="#projecting-and-correcting"><span class="header-section-number">3</span> Projecting and Correcting</a></li>
   <li><a href="#classifier-guidance" id="toc-classifier-guidance" class="nav-link" data-scroll-target="#classifier-guidance"><span class="header-section-number">4</span> Classifier Guidance</a>
   <ul class="collapse">
-  <li><a href="#set-up-the-flow-model-and-classifier" id="toc-set-up-the-flow-model-and-classifier" class="nav-link" data-scroll-target="#set-up-the-flow-model-and-classifier"><span class="header-section-number">4.1</span> Set Up the Flow Model and Classifier</a></li>
-  <li><a href="#train-a-latent-space-classifier" id="toc-train-a-latent-space-classifier" class="nav-link" data-scroll-target="#train-a-latent-space-classifier"><span class="header-section-number">4.2</span> Train a Latent(-Space) Classifier</a></li>
-  <li><a href="#latents-only-gudiance" id="toc-latents-only-gudiance" class="nav-link" data-scroll-target="#latents-only-gudiance"><span class="header-section-number">4.3</span> Latents-Only Gudiance!</a></li>
+  <li><a href="#setup-the-flow-model-and-classifier" id="toc-setup-the-flow-model-and-classifier" class="nav-link" data-scroll-target="#setup-the-flow-model-and-classifier"><span class="header-section-number">4.1</span> Setup the Flow Model and Classifier</a></li>
+  <li><a href="#train-a-latent-classifier" id="toc-train-a-latent-classifier" class="nav-link" data-scroll-target="#train-a-latent-classifier"><span class="header-section-number">4.2</span> Train a Latent Classifier</a></li>
+  <li><a href="#latents-only-gudiance" id="toc-latents-only-gudiance" class="nav-link" data-scroll-target="#latents-only-gudiance"><span class="header-section-number">4.3</span> Latents-Only Gudiance</a></li>
   </ul></li>
   <li><a href="#inpainting" id="toc-inpainting" class="nav-link" data-scroll-target="#inpainting"><span class="header-section-number">5</span> Inpainting</a>
   <ul class="collapse">
@@ -346,8 +346,8 @@ Mathematical Details
 <h1 data-number="4"><span class="header-section-number">4</span> Classifier Guidance</h1>
 <p>If we want our model to generate a member of a particular class, we can use an external classifier to examine the generated samples. The constraint to minimize will be the difference between the desired class and the <code>argmax</code> of the classifier output (or some similar relationship that enforces the class compliance).</p>
 <p>For our flow model, let’s use <a href="https://github.com/Ocrabit/dl_class_projects/blob/main/dl_experimentation/submissions/marco_submission.py">Marco Cassar’s winning submission</a> from the <a href="https://2025-dlaie-leaderboard.streamlit.app/">2025 DLAIE Leaderboard Contest</a> on unconditional latent flow matching of MNIST digits. For the classifier, we’ll use the <a href="https://github.com/DLAIE/2025-LeaderboardContest/blob/main/evaluate_submission.py">official evaluation classifier</a> from the same contest.</p>
-<section id="set-up-the-flow-model-and-classifier" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="set-up-the-flow-model-and-classifier"><span class="header-section-number">4.1</span> Set Up the Flow Model and Classifier</h2>
+<section id="setup-the-flow-model-and-classifier" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="setup-the-flow-model-and-classifier"><span class="header-section-number">4.1</span> Setup the Flow Model and Classifier</h2>
 <p>Let’s generate and draw some sample images.</p>
 <div class="cell" data-hide_input="true">
 <details>
@@ -562,8 +562,8 @@ First we have the <code>guidance_dict</code> that we’ll use to pass through ou
 </div>
 <p>That worked fine, and on a GPU it’s pretty fast, but on a CPU, it’s <em>painfully</em> slow. So instead, let’s…</p>
 </section>
-<section id="train-a-latent-space-classifier" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="train-a-latent-space-classifier"><span class="header-section-number">4.2</span> Train a Latent(-Space) Classifier</h2>
+<section id="train-a-latent-classifier" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="train-a-latent-classifier"><span class="header-section-number">4.2</span> Train a Latent Classifier</h2>
 <p>We’ll train a model <code>z_classifier</code> that looks only in latent space, so we can use it as a guidance signal.</p>
 <div class="cell" data-hide_input="true">
 <details>
@@ -827,9 +827,11 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <p>Looks pretty good. Moving on to…</p>
 </section>
 <section id="latents-only-gudiance" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="latents-only-gudiance"><span class="header-section-number">4.3</span> Latents-Only Gudiance!</h2>
-<p>Now that we have a trained classifier that operates in latent space, we can run basically the same code as before, only it will execute wayyyyy faster. :)</p>
+<h2 data-number="4.3" class="anchored" data-anchor-id="latents-only-gudiance"><span class="header-section-number">4.3</span> Latents-Only Gudiance</h2>
+<p>Now that we have a trained classifier that operates in latent space, we can run basically the same code as before, only it will execute wayyyyy faster…</p>
 <div class="cell">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>guidance_dict <span class="op">=</span>{<span class="st">'classifier'</span>: z_classifier,</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                <span class="st">'decode'</span>: <span class="va">None</span>,    <span class="co"># no decoding, latent space only</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">'loss_fn'</span>: torch.nn.CrossEntropyLoss(reduction<span class="op">=</span><span class="st">'none'</span>), <span class="co"># don't sum across batch dim</span></span>
@@ -837,13 +839,13 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">'strength'</span>: <span class="fl">5.0</span>,   <span class="co"># "guidance strength"</span></span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                <span class="st">'t_min'</span>: <span class="fl">0.01</span>,  <span class="st">'t_max'</span>: <span class="fl">0.99</span>, }</span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>) <span class="co"># remove for new samples each time</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> generate_samples(sub, n_samples<span class="op">=</span><span class="bu">len</span>(guidance_dict[<span class="st">'target'</span>]), guidance_dict<span class="op">=</span>guidance_dict)</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="st">"Latent-Only Guidance"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>) <span class="co"># remove for new samples each time</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> generate_samples(sub, n_samples<span class="op">=</span><span class="bu">len</span>(guidance_dict[<span class="st">'target'</span>]), guidance_dict<span class="op">=</span>guidance_dict)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="st">"Latent-Only Guidance"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"0b089692bc924b81b8a658c8609c9744","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"9f1b0486db82474dbc10a51c23697d5a","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -1174,6 +1176,7 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <h1 data-number="10"><span class="header-section-number">10</span> MORE References</h1>
 <p>TODO: actually cite these</p>
 <ol start="5" type="1">
+<li>Lipman et al</li>
 <li>Ye et al, “TFG: Unified Training-Free Guidance for Diffusion Models,” NeurIPS 2024, <a href="https://arxiv.org/abs/2409.15761">arXiv:2409.15761</a>, <a href="https://github.com/YWolfeee/Training-Free-Guidance">GitHub</a></li>
 <li>Daras et al, “A Survey on Diffusion Models for Inverse Problems”, https://arxiv.org/abs/2410.00083v1</li>
 <li>Blasingame &amp; Liu, “Greed is Good: A Unifying Perspective on Guided Generation,” https://arxiv.org/abs/2502.08006</li>
