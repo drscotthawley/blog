@@ -247,7 +247,7 @@ details > summary {
   <li><a href="#do-the-inpainting" id="toc-do-the-inpainting" class="nav-link" data-scroll-target="#do-the-inpainting"><span class="header-section-number">5.1</span> Do the Inpainting</a></li>
   <li><a href="#latent-only-inpainting" id="toc-latent-only-inpainting" class="nav-link" data-scroll-target="#latent-only-inpainting"><span class="header-section-number">5.2</span> Latent-Only Inpainting</a></li>
   </ul></li>
-  <li><a href="#guidance-by-another-name-pnp-flow" id="toc-guidance-by-another-name-pnp-flow" class="nav-link" data-scroll-target="#guidance-by-another-name-pnp-flow"><span class="header-section-number">6</span> Guidance By Another Name: PnP-Flow</a></li>
+  <li><a href="#pnp-flow-guidance-by-another-name" id="toc-pnp-flow-guidance-by-another-name" class="nav-link" data-scroll-target="#pnp-flow-guidance-by-another-name"><span class="header-section-number">6</span> PnP-Flow: Guidance By Another Name</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">7</span> Summary</a></li>
   <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements"><span class="header-section-number">8</span> Acknowledgements</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9</span> References</a></li>
@@ -1028,8 +1028,8 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 </div>
 </section>
 </section>
-<section id="guidance-by-another-name-pnp-flow" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Guidance By Another Name: PnP-Flow</h1>
+<section id="pnp-flow-guidance-by-another-name" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> PnP-Flow: Guidance By Another Name</h1>
 <p>The term ‘guidance’ typically refers to velocity modifications, but PnP-Flow by Martin et al<span class="citation" data-cites="pnp_flow"><a href="#ref-pnp_flow" role="doc-biblioref">[5]</a></span> achieves similar results by adjusting latent positions <span class="math inline">\(z\)</span> directly.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>PnP-Flow assumes straight-line trajectories, making the forward projection trivial: <span class="math inline">\(\widehat{z_1}\)</span> is reached by simple linear extrapolation. Instead of incrementally moving <span class="math inline">\(z\)</span> from <span class="math inline">\(t=0\)</span> to <span class="math inline">\(t=1\)</span>, PnP-Flow projects forward to <span class="math inline">\(\widehat{z_1}\)</span> and iterates on that estimate through a series of correction and projection steps. The first step applies our gradient correction:</p>
 <p><span class="math display">\[{\rm Step\ 1.}\ \ \ \ \ \  \ \ \ \ \ \ z_1^* := \widehat{z_1} - \eta\,\gamma_t \nabla F(\widehat{z_1},y)\]</span></p>
@@ -1068,7 +1068,8 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <figcaption class="figure-caption">Image from PnP-Flow paper [5], slightly re-annotated by me.</figcaption>
 </figure>
 </div>
-<p>To implement this in code, let’s replace our “integrator” with something specific to PnP-Flow:</p>
+<p>This has a superficial resemblance to the “<a href="https://github.com/Stability-AI/stable-audio-tools/blob/31932349d98c550c48711e7a5a40b24aa3d7c509/stable_audio_tools/inference/sampling.py#L221">ping pong</a>” integration method used by Stable Audio Open Small (SAOS) <span class="citation" data-cites="sao_small"><a href="#ref-sao_small" role="doc-biblioref">[6]</a></span>, with a key distinction: SAOS maintains and updates the time-integrated latent variable <span class="math inline">\(z\)</span> (called “<span class="math inline">\(x\)</span>” in SAOS), whereas for PnP-Flow it is the projection <span class="math inline">\(\widehat{z_1}\)</span> (called <a href="https://github.com/Stability-AI/stable-audio-tools/blob/31932349d98c550c48711e7a5a40b24aa3d7c509/stable_audio_tools/inference/sampling.py#L242">“denoised”</a>) in SAOS) that is the primary variable that is maintained between steps. This is a subtle distinction but worth noting.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>To implement PnP-Flow in code, let’s replace our “integrator” with something specific to PnP-Flow:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample_pnpflow(model, z0, n_steps<span class="op">=</span><span class="dv">10</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, n_avg<span class="op">=</span><span class="dv">5</span>, warp_fn<span class="op">=</span><span class="kw">lambda</span> x: x, guidance_dict<span class="op">=</span><span class="va">None</span>):</span>
@@ -1143,6 +1144,12 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <div id="ref-pnp_flow" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[5] </div><div class="csl-right-inline">S. Martin, A. Gagneux, P. Hagemann, and G. Steidl, <span>“PnP-flow: Plug-and-play image restoration with flow matching.”</span> 2024. Available: <a href="https://arxiv.org/abs/2410.02423">https://arxiv.org/abs/2410.02423</a></div>
 </div>
+<div id="ref-sao_small" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[6] </div><div class="csl-right-inline">Z. Novack <em>et al.</em>, <span>“Fast text-to-audio generation with adversarial post-training,”</span> in <em>IEEE workshop on applications of signal processing to audio and acoustics (WASPAA)</em>, 2025.</div>
+</div>
+<div id="ref-ditto" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[7] </div><div class="csl-right-inline">Z. Novack, J. McAuley, T. Berg-Kirkpatrick, and N. J. Bryan, <span>“<span class="nocase">DITTO: Diffusion inference-time T-optimization for music generation</span>,”</span> in <em>ICML</em>, 2024.</div>
+</div>
 </div>
 </section>
 <section id="more-references" class="level1" data-number="10">
@@ -1153,7 +1160,6 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <li>Ye et al, “TFG: Unified Training-Free Guidance for Diffusion Models,” NeurIPS 2024, <a href="https://arxiv.org/abs/2409.15761">arXiv:2409.15761</a>, <a href="https://github.com/YWolfeee/Training-Free-Guidance">GitHub</a></li>
 <li>Daras et al, “A Survey on Diffusion Models for Inverse Problems”, https://arxiv.org/abs/2410.00083v1</li>
 <li>Blasingame &amp; Liu, “Greed is Good: A Unifying Perspective on Guided Generation,” https://arxiv.org/abs/2502.08006</li>
-<li>ARC / SAOS paper, re. “ping-pong”</li>
 <li>paper on steering autoregressive models</li>
 </ol>
 
@@ -1166,6 +1172,7 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <ol>
 <li id="fn1"><p>The paper by Pokle et al we cited earlier also included a related method, however the PnP-Flow method is a bit more general and <em>much</em> more readable than Pokle et al.&nbsp;;-) Plus, Anne Gagneux provided <a href="https://github.com/annegnx/PnP-Flow">code</a> for PnP-Flow! Gangeux’s repo even provides code for the position-only (non-velocity) algorithm from Pokle et al aka “OT-ODE”.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Differences between our variables and those in the PnP-Flow paper: For us, <span class="math inline">\(z\)</span> are integrated flow latent variables between <span class="math inline">\(z_0\)</span> (source) and <span class="math inline">\(z_1\)</span> (target), whereas <span class="math inline">\(x\)</span> are the pixel-space representations via our VAE’s decoder <span class="math inline">\(\mathscr{D}\)</span> such that <span class="math inline">\(\mathscr{D}(z)=x\)</span>. In PnP-Flow, <span class="math inline">\(x\)</span> is the integrated flow variable, <span class="math inline">\(z\)</span> is used only for their interpolation/overwrite step, and <span class="math inline">\(\mathscr{D}\)</span> is the “denoiser” aka their flow model.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>In keeping with the “Zack Novack” theme: the trivial nature of integration for near-OT paths of flow models means that one can implement a flow version of DITTO <span class="citation" data-cites="ditto"><a href="#ref-ditto" role="doc-biblioref">[7]</a></span> that avoids the expensive back-integration needed for diffusion models. The result is also superficially similar to PnP-Flow, but with gradients computed with respect to <span class="math inline">\(z\)</span> instead of <span class="math inline">\(\widehat{z_1}\)</span>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script type="application/vnd.jupyter.widget-state+json">
