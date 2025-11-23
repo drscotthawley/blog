@@ -533,7 +533,7 @@ details > summary {
 <figcaption class="figure-caption">cross-uncross-plot</figcaption>
 </figure>
 </div>
-<p><img src="images/cross_uncross_plot.png" class="img-fluid"> Left: Training data uses simple straight lines (with many crossings). Middle: The learned flow (velocity vector) field is smooth and continuous. Right: Actual trajectories following the flow field don’t cross.</p>
+<p><img src="https://github.com/drscotthawley/blog/blob/main/extra/images/cross_uncross_plot.png?raw=1" class="img-fluid"> Left: Training data uses simple straight lines (with many crossings). Middle: The learned flow (velocity vector) field is smooth and continuous. Right: Actual trajectories following the flow field don’t cross.</p>
 </section>
 <section id="how-are-flows-learned" class="level2">
 <h2 class="anchored" data-anchor-id="how-are-flows-learned">How Are Flows ‘Learned’?</h2>
@@ -1043,7 +1043,7 @@ details > summary {
 <span id="cb21-69"><a href="#cb21-69" aria-hidden="true" tabindex="-1"></a>    plt.show()</span>
 <span id="cb21-70"><a href="#cb21-70" aria-hidden="true" tabindex="-1"></a>    plt.close()</span>
 <span id="cb21-71"><a href="#cb21-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-72"><a href="#cb21-72" aria-hidden="true" tabindex="-1"></a>viz_parabola_with_steps(fm_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-72"><a href="#cb21-72" aria-hidden="true" tabindex="-1"></a>viz_parabola_with_steps()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>While the results for <span class="math inline">\(s=0.5\)</span> are better than the others, we see that <em>none</em> of these examples make it all the way around the parabola (to the point (1,1))! If we’re going to be using the flow matching model as a proxy for the true target data, we should have some confidence that it’s actually “getting to” the target data. We could add more points to the integration, but there’s another way: upgrade the integration (i.e.&nbsp;sampling) operation to a higher order of accuracy.</p>
 </section>
