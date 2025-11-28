@@ -975,9 +975,7 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 Get the spatial-latents model
 </summary>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Spatial VAE &amp; FLow Dit Model</span></span>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Spatial VAE &amp; FLow DiT Model</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget <span class="op">-</span>q <span class="op">--</span>no<span class="op">-</span>clobber<span class="op">=</span>off https:<span class="op">//</span>raw.githubusercontent.com<span class="op">/</span>dlaieburner<span class="op">/</span><span class="dv">2025</span><span class="op">-</span>leaderboard<span class="op">/</span>refs<span class="op">/</span>heads<span class="op">/</span>main<span class="op">/</span>sample_submission_dit.py</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
@@ -988,7 +986,6 @@ Get the spatial-latents model
 <span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sample_submission_dit <span class="im">import</span> SubmissionInterface</span>
 <span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>sub <span class="op">=</span> SubmissionInterface().to(device)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>device = mps</code></pre>
 </div>
