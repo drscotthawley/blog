@@ -5,7 +5,7 @@
       xmlns:dc="http://purl.org/dc/elements/1.1/" 
       version="2.0">
 <channel>
-<title>blog</title>
+<title>Scott H. Hawley</title>
 <link>https://drscotthawley.github.io/blog/index.html</link>
 <atom:link href="https://drscotthawley.github.io/blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Scott H. Hawley&#39;s blog about code, physics, and ideas</description>
