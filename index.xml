@@ -6,21 +6,21 @@
       version="2.0">
 <channel>
 <title>Scott H. Hawley</title>
-<link>https://drscotthawley.github.io/blog/index.html</link>
+<link>https://drscotthawley.github.io/blog/</link>
 <atom:link href="https://drscotthawley.github.io/blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>My blog about code, physics, and ideas</description>
 <image>
 <url>https://drscotthawley.github.io/blog/posts/images/profile_pic.jpeg</url>
 <title>Scott H. Hawley</title>
-<link>https://drscotthawley.github.io/blog/index.html</link>
+<link>https://drscotthawley.github.io/blog/</link>
 </image>
-<generator>quarto-1.3.450</generator>
+<generator>quarto-1.8.26</generator>
 <lastBuildDate>Thu, 27 Nov 2025 06:00:00 GMT</lastBuildDate>
 <item>
   <title>Flow Where You Want</title>
   <dc:creator>Scott H. Hawley</dc:creator>
   <link>https://drscotthawley.github.io/blog/posts/FlowWhereYouWant.html</link>
-  <description><![CDATA[ <a href="https://colab.research.google.com/github/drscotthawley/DLAIE/blob/main/2025/Guidance_for_Flows.ipynb" target="_"> <img src="https://drscotthawley.github.io/blog/posts/https:/colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style="display: inline-block;"></a> ]]></description>
+  <description><![CDATA[ Adding Inference Controls to Pretrained (Latent) Flow Models ]]></description>
   <category>generative</category>
   <category>flows</category>
   <category>guidance</category>
@@ -33,7 +33,7 @@
   <title>Flow With What You Know</title>
   <dc:creator>Scott H. Hawley</dc:creator>
   <link>https://drscotthawley.github.io/blog/posts/FlowModels.html</link>
-  <description><![CDATA[ <a href="https://colab.research.google.com/github/drscotthawley/blog/blob/main/extra/FlowModels_colab.ipynb"> <img src="https://drscotthawley.github.io/blog/posts/https:/colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"> </a> ]]></description>
+  <description><![CDATA[ Basic physics provides a “straight, fast” way to get up to speed with flow-based generative models ]]></description>
   <category>generative</category>
   <category>flows</category>
   <category>diffusion</category>
@@ -45,7 +45,7 @@
   <title>Understanding Transformers, Part 2: Wee Music Box</title>
   <dc:creator>Scott H. Hawley</dc:creator>
   <link>https://drscotthawley.github.io/blog/posts/Transformers2-MusicBox.html</link>
-  <description><![CDATA[ <img src="https://drscotthawley.github.io/blog/posts/images/musicbox_prime.jpeg" class="img-fluid figure-img"> ]]></description>
+  <description><![CDATA[ Toy Transformer Tunes ]]></description>
   <category>nlp</category>
   <category>architectures</category>
   <category>transformers</category>
@@ -59,7 +59,7 @@
   <title>To Understand Transformers, Focus on Attention</title>
   <dc:creator>Scott H. Hawley</dc:creator>
   <link>https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html</link>
-  <description><![CDATA[ <img src="https://drscotthawley.github.io/blog/posts/images/TransformerOvalInOut.gif" class="img-fluid figure-img"> ]]></description>
+  <description><![CDATA[ If you can get this one thing, the rest will make sense. ]]></description>
   <category>nlp</category>
   <category>architectures</category>
   <guid>https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html</guid>
@@ -70,7 +70,7 @@
   <title>Residual Vector Quantization</title>
   <dc:creator>Scott H. Hawley</dc:creator>
   <link>https://drscotthawley.github.io/blog/posts/2023-06-12-RVQ.html</link>
-  <description><![CDATA[ “Vector Quantization.” Sounds intimidating. “Residual Vector Quantization” sounds even more intimidating, even near-meaningless to most people. Turns out, these are easy to understand given a few pictures, even to the point a child could understand them – uh… if the child <em>wanted</em> to. Certainly, there can be sophisticated ways to implement these algorithms, and we’ll cover a bit of that later on, but the basics are very simple. ]]></description>
+  <description><![CDATA[ An exploration of the heart of neural audio codecs ]]></description>
   <category>compression</category>
   <category>ssl</category>
   <guid>https://drscotthawley.github.io/blog/posts/2023-06-12-RVQ.html</guid>
@@ -81,7 +81,7 @@
   <title>BYOL - Contrastive Representation Learning without Contrastive Losses</title>
   <dc:creator>Scott H. Hawley</dc:creator>
   <link>https://drscotthawley.github.io/blog/posts/2022-11-17-byol.html</link>
-  <description><![CDATA[ <em>“In this work, we thus tasked ourselves to find out whether…negative examples are indispensable to prevent collapsing while preserving high performance.”</em> – the BYOL paper ]]></description>
+  <description><![CDATA[ Now that we understand contrastive losses and what they’re good for – let’s get rid of them! ]]></description>
   <category>ssl</category>
   <guid>https://drscotthawley.github.io/blog/posts/2022-11-17-byol.html</guid>
   <pubDate>Thu, 17 Nov 2022 06:00:00 GMT</pubDate>
@@ -91,7 +91,7 @@
   <title>Shell Volumes and Distances in High-Dimensional Spaces</title>
   <dc:creator>Scott H. Hawley</dc:creator>
   <link>https://drscotthawley.github.io/blog/posts/2022-11-15-multidim-shells.html</link>
-  <description><![CDATA[ Some of us are still not accustomed to thinking in terms of very high numbers of dimensions – myself included. Earlier this year, I made a post on <a href="https://drscotthawley.github.io/blog/2022/01/24/MultiDim-DotProducts.html">vector orthogonality in high-dimensional spaces</a>. ]]></description>
+  <description><![CDATA[ Given enough dimensions, does it really matter which distance norm you use? ]]></description>
   <category>ssl</category>
   <category>math</category>
   <guid>https://drscotthawley.github.io/blog/posts/2022-11-15-multidim-shells.html</guid>
@@ -102,7 +102,7 @@
   <title>Likelihood of Vector Orthogonality in High-Dimensional Spaces</title>
   <dc:creator>Scott H. Hawley</dc:creator>
   <link>https://drscotthawley.github.io/blog/posts/2022-01-24-multidim-dotproducts.html</link>
-  <description><![CDATA[ One sometimes sees claims like <a href="https://towardsdatascience.com/loss-landscapes-and-the-blessing-of-dimensionality-46685e28e6a4">“within high dimensional spaces, if you choose random vectors, they tend to be orthogonal to each other,”</a> but is this true? ]]></description>
+  <description><![CDATA[ Depends on whether you’re using unit vectors or not. ]]></description>
   <category>ssl</category>
   <category>math</category>
   <guid>https://drscotthawley.github.io/blog/posts/2022-01-24-multidim-dotproducts.html</guid>
@@ -113,7 +113,7 @@
   <title>Learning Some Geometric/Clifford Algebra</title>
   <dc:creator>Scott H. Hawley</dc:creator>
   <link>https://drscotthawley.github.io/blog/posts/2021-10-15-geometric-algebra.html</link>
-  <description><![CDATA[ “…for geometry, you know, is the gate of science, and the gate is so low and small that one can only enter it as a little child.”<br> – William K. Clifford ]]></description>
+  <description><![CDATA[ Clifford algebra isn’t so scary ]]></description>
   <category>math</category>
   <guid>https://drscotthawley.github.io/blog/posts/2021-10-15-geometric-algebra.html</guid>
   <pubDate>Fri, 15 Oct 2021 05:00:00 GMT</pubDate>
@@ -122,7 +122,7 @@
 <item>
   <title>Handy Bash Functions for ML &amp; Data Science</title>
   <link>https://drscotthawley.github.io/blog/posts/2021-09-15-Handy-Bash-Functions.html</link>
-  <description><![CDATA[ Once I figure out a complicated command, I make a <code>bash</code> function or alias for it. Here are some that I find useful: ]]></description>
+  <description><![CDATA[ Once I figure out a complicated command, I make a bash function for it ]]></description>
   <category>computer_usage</category>
   <guid>https://drscotthawley.github.io/blog/posts/2021-09-15-Handy-Bash-Functions.html</guid>
   <pubDate>Wed, 15 Sep 2021 15:46:18 GMT</pubDate>
@@ -131,7 +131,7 @@
 <item>
   <title>Typical (Neural-Network-Based) Classification vs. Zero-Shot, Part 3 - Live Demo of CL Toy</title>
   <link>https://drscotthawley.github.io/blog/posts/2021-08-06-Live-CL-Demo.html</link>
-  <description><![CDATA[ <em>Earlier entries: <a href="https://drscotthawley.github.io/blog/scottergories/2021/05/04/The-Joy-Of-3D.html">Part 1</a>, <a href="https://drscotthawley.github.io/blog/scottergories/2021/06/17/Contrasting-Contrastive-Loss.html">Part 2</a></em> ]]></description>
+  <description><![CDATA[ Triplet Loss kicks butt ]]></description>
   <category>ssl</category>
   <category>classification</category>
   <guid>https://drscotthawley.github.io/blog/posts/2021-08-06-Live-CL-Demo.html</guid>
@@ -142,7 +142,7 @@
   <title>Typical (NN-Based) Classification vs. Zero-Shot, Part 2 - An Example Using FastAI</title>
   <dc:creator>Scott H. Hawley</dc:creator>
   <link>https://drscotthawley.github.io/blog/posts/2021-06-17-contrasting-contrastive-loss.html</link>
-  <description><![CDATA[ <em>(This blog post implements the concepts illustrated in my previous post, <a href="https://drscotthawley.github.io/blog/scottergories/2021/05/04/The-Joy-Of-3D.html">“Typical (Neural-Network-Based) Classification vs.&nbsp;Zero-Shot, Part 1 - The Joy of 3D”</a>. Note that the “3D” part was because of its utility as a teaching tool for gaining intuition; realistic applications usually involve hundreds of “dimensions.”)</em> ]]></description>
+  <description><![CDATA[ With my new data-visualization Callback! ]]></description>
   <category>classification</category>
   <category>ssl</category>
   <guid>https://drscotthawley.github.io/blog/posts/2021-06-17-contrasting-contrastive-loss.html</guid>
@@ -153,7 +153,7 @@
   <title>Typical (Neural-Network-Based) Classification vs. Zero-Shot, Part 1 - The Joy of 3D</title>
   <dc:creator>Scott H. Hawley</dc:creator>
   <link>https://drscotthawley.github.io/blog/posts/2021-05-04-the-joy-of-3d.html</link>
-  <description><![CDATA[ <em>(This blog post is an extended treatment of a talk I recently gave. To see the slides for the talk, <a href="https://mybinder.org/v2/gh/drscotthawley/talks/HEAD?filepath=SoTL_3DClass_April_2021%2FJoy-Of-3D-Slides.ipynb">click here</a>.)</em> ]]></description>
+  <description><![CDATA[ Visualizations in 3 (and 4) dimensions ]]></description>
   <category>classification</category>
   <category>ssl</category>
   <guid>https://drscotthawley.github.io/blog/posts/2021-05-04-the-joy-of-3d.html</guid>
@@ -163,7 +163,7 @@
 <item>
   <title>Scottergories: Making GPT-3 Generate 3 of a Kind</title>
   <link>https://drscotthawley.github.io/blog/posts/2021-02-15-Making-GPT3-Generate-3-Of-A-Kind.html</link>
-  <description><![CDATA[ {{ page.content | number_of_words | minus: 26}} words, {{ page.content | number_of_words | divided_by: 180 | append: ” minute read” }}, {{ page.content | number_of_words | divided_by: 275 | append: ” paperback pages” }} ]]></description>
+  <description><![CDATA[ In which we test GPT-3’s ability to generate members of a category ]]></description>
   <category>classification</category>
   <category>language_models</category>
   <guid>https://drscotthawley.github.io/blog/posts/2021-02-15-Making-GPT3-Generate-3-Of-A-Kind.html</guid>
@@ -173,7 +173,7 @@
 <item>
   <title>Naughty by Numbers: Classifications at Christmas</title>
   <link>https://drscotthawley.github.io/blog/posts/2020-12-11-Naughty-by-Numbers.html</link>
-  <description><![CDATA[ (It uses enough JavaScript that this blogging platform will mangle it.) ]]></description>
+  <description><![CDATA[ A snarky interactive lesson on classification and surveillance ]]></description>
   <category>classification</category>
   <category>foundations</category>
   <guid>https://drscotthawley.github.io/blog/posts/2020-12-11-Naughty-by-Numbers.html</guid>
@@ -183,7 +183,7 @@
 <item>
   <title>Citations in Fastpages via BibTeX and jekyll-scholar</title>
   <link>https://drscotthawley.github.io/blog/posts/2020-07-01-Citations-Via-Bibtex.html</link>
-  <description><![CDATA[ <em>(N.B.: The following was created as a Markdown file in <code>_posts/</code>. For Jupyter notebooks, the same things apply; one simply enters the Liquid codes into Markdown cells. <a href="https://drscotthawley.github.io/devblog4/jupyter/2020/07/01/BibTeX-Check-For-Jupyter.html">Quick Jupyter example.</a></em>) ]]></description>
+  <description><![CDATA[ Supporting scholarly blogging by drawing references from your database. ]]></description>
   <guid>https://drscotthawley.github.io/blog/posts/2020-07-01-Citations-Via-Bibtex.html</guid>
   <pubDate>Wed, 01 Jul 2020 05:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/book_image_smaller.jpg" medium="image" type="image/jpeg"/>
@@ -191,7 +191,7 @@
 <item>
   <title>Mac =&gt; Linux Switch Notes</title>
   <link>https://drscotthawley.github.io/blog/posts/2020-01-13-Mac-Linux-Switch-Notes.html</link>
-  <description><![CDATA[ <em>Mac and I aren’t breaking up, we’re just seeing other people.</em> ]]></description>
+  <description><![CDATA[ Mac and I aren’t breaking up, we’re just seeing other people. ]]></description>
   <category>computer_usage</category>
   <guid>https://drscotthawley.github.io/blog/posts/2020-01-13-Mac-Linux-Switch-Notes.html</guid>
   <pubDate>Mon, 13 Jan 2020 06:00:00 GMT</pubDate>
@@ -200,7 +200,7 @@
 <item>
   <title>Principal Component Analysis (PCA) from Scratch</title>
   <link>https://drscotthawley.github.io/blog/posts/2019-12-21-pca-from-scratch.html</link>
-  <description><![CDATA[ <img src="https://drscotthawley.github.io/blog/posts/https:/i.imgur.com/vKiH8As.png" class="img-fluid figure-img"> ]]></description>
+  <description><![CDATA[ There are many tutorials on PCA, but this one has interactive 3D graphs! ]]></description>
   <category>math</category>
   <category>foundations</category>
   <guid>https://drscotthawley.github.io/blog/posts/2019-12-21-pca-from-scratch.html</guid>
@@ -210,7 +210,7 @@
 <item>
   <title>Getting Started in ML+Audio</title>
   <link>https://drscotthawley.github.io/blog/posts/2019-12-06-Getting-Started-In-ML-Audio.html</link>
-  <description><![CDATA[ Recently, after co-chairing the session on Machine Learning for Musical Acoustics along with the wonderful <a href="http://audioakustyka.org/head-of-laboratory/">Bozena Kostek</a> at the <a href="https://acousticalsociety.org/program-of-178th-meeting-of-the-acoustical-society-of-america/">Acoustical Society of America Meeting in San Diego</a>, a student came up to me to ask for advice or resources on how to start learning machine learning for audio applications. ]]></description>
+  <description><![CDATA[ For audio students interested in machine learning ]]></description>
   <category>foundations</category>
   <guid>https://drscotthawley.github.io/blog/posts/2019-12-06-Getting-Started-In-ML-Audio.html</guid>
   <pubDate>Fri, 06 Dec 2019 06:00:00 GMT</pubDate>
@@ -219,7 +219,7 @@
 <item>
   <title>My First NN Part 3. Multi-Layer Networks and Backpropagation</title>
   <link>https://drscotthawley.github.io/blog/posts/2019-02-08-my-1st-nn-part-3-multi-layer-and-backprop.html</link>
-  <description><![CDATA[ Links to lessons: <a href="https://drscotthawley.github.io/blog/2017/02/23/Following-Gravity-Colab.html">Part 0</a>, <a href="https://drscotthawley.github.io/blog/2019/01/30/My-First-Neural-Network.html">Part 1</a>, <a href="https://drscotthawley.github.io/blog/2019/02/04/My-First-NN-Part-2.html">Part 2</a>, <a href="https://drscotthawley.github.io/blog/2019/02/08/My-1st-NN-Part-3-Multi-Layer-and-Backprop.html">Part 3</a> ]]></description>
+  <description><![CDATA[ Multi-Layer Networks and Backpropagation ]]></description>
   <category>foundations</category>
   <guid>https://drscotthawley.github.io/blog/posts/2019-02-08-my-1st-nn-part-3-multi-layer-and-backprop.html</guid>
   <pubDate>Fri, 08 Feb 2019 06:00:00 GMT</pubDate>

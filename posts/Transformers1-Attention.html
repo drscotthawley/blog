@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2023-08-21">
 <meta name="description" content="If you can get this one thing, the rest will make sense.">
 
-<title>Scott H. Hawley - To Understand Transformers, Focus on Attention</title>
+<title>To Understand Transformers, Focus on Attention – Scott H. Hawley</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,6 +24,7 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -61,6 +62,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -79,29 +81,39 @@ div.csl-indent {
 }</style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-1b3db88def35042d172274863c1cdcf0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-8d1ea2f4f8e14d12cbb0a1c491d81284.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -110,6 +122,7 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -123,55 +136,86 @@ details > summary {
 </style>
 <script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
 <link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <link rel="stylesheet" href="../styles.css">
-<meta name="twitter:title" content="Scott H. Hawley - To Understand Transformers, Focus on Attention">
+<meta name="twitter:title" content="To Understand Transformers, Focus on Attention – Scott H. Hawley">
 <meta name="twitter:description" content="If you can get this one thing, the rest will make sense.">
 <meta name="twitter:image" content="https://drscotthawley.github.io/blog/posts/images/TransformerOvalInOut.gif">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Scott H. Hawley</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../about.html" rel="" target="">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/drscotthawley" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/drscotthawley"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://bsky.app/profile/YOUR_HANDLE.bsky.social"> 
+<span class="menu-text"><i class="fa-brands fa-bluesky" aria-label="bluesky"></i></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/drscotthawley" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/drscotthawley"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
+          </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -256,16 +300,17 @@ details > summary {
 
 
 
+
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/TransformerOvalInOut.gif" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">(GIF animation, zooming in on Attention part of Transformer model diagram)</figcaption>
+<figcaption>(GIF animation, zooming in on Attention part of Transformer model diagram)</figcaption>
 </figure>
 </div>
 <section id="preface" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Preface</h1>
 <p>“Attention is All You Need” (hereafter AIAYN) is the name of the 2017 paper <span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span> that introduced Transformer models, a neural network architecture that eventually “took over” as the preferred architecture for many machine learning tasks, with models such a BERT and the GPT series (“#ChatGPT” - for this blog’s SEO) becoming “foundation” models upon which further systems continue to be built.</p>
-<p>Yet I found the multiplicity of Transformers’ “moving parts” to be daunting, and this hindered my numerous, ardent attempts at studying them – see the References in <a href="#sec-references">Section&nbsp;8</a> for a list of all the papers, tutorials, and videos I consumed over the years. Many of these treatments do little to reduce the complexity, and thus the simplicity of the original paper’s title is often lost.</p>
+<p>Yet I found the multiplicity of Transformers’ “moving parts” to be daunting, and this hindered my numerous, ardent attempts at studying them – see the References in <a href="#sec-references" class="quarto-xref">Section&nbsp;8</a> for a list of all the papers, tutorials, and videos I consumed over the years. Many of these treatments do little to reduce the complexity, and thus the simplicity of the original paper’s title is often lost.</p>
 <p>This is partly because Attention <em>isn’t really</em> “all you need,” and it’s a bit of a joke to pair the title with such a complex model diagram like the one shown in the GIF image above. However, I’ve come to see the Attention mechanism as the <em>key piece</em>, the <em>central mechanism</em>, for which everything else is (pretty much) just an add-on.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -273,7 +318,7 @@ details > summary {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-An Analogy
+<span class="screen-reader-only">Tip</span>An Analogy
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -299,10 +344,14 @@ Note
 <section id="building-intuition" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Building Intuition</h1>
 <p>Certain parts of an input hold greater significance than others. Take, for instance, when you observe an image, your attention is likely drawn to objects in the foreground rather than the background. In the following picture, the dog, for instance, captures the attention of most people (and AI systems!):</p>
-<div id="fig-doggie" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
+<div id="fig-doggie" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-doggie-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <p><img src="images/doggie_vit_attn_map.png" width="96%" align="left" class="figure-img"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;1<strong>.</strong> Example of attention being given to a foreground object, like this cute doggy! In the image on the right, the background is darkened compared to the foreground, indicating that the foreground is receiving more attention than the background. (Source: Eunkwang Jeon, <a href="https://github.com/jeonsworld/ViT-pytorch">ViT-pytorch</a>)</figcaption>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-doggie-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<strong>Figure</strong>&nbsp;1<strong>.</strong> Example of attention being given to a foreground object, like this cute doggy! In the image on the right, the background is darkened compared to the foreground, indicating that the foreground is receiving more attention than the background. (Source: Eunkwang Jeon, <a href="https://github.com/jeonsworld/ViT-pytorch">ViT-pytorch</a>)
+</figcaption>
 </figure>
 </div>
 <p>Alternatively, when you’re reading or listening to someone speaking, certain words carry more weight than others and contribute differently to the meaning formed in your mind. Consider the following sentence:</p>
@@ -317,7 +366,7 @@ Note
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Key Idea
+<span class="screen-reader-only">Tip</span>Key Idea
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -333,7 +382,7 @@ Key Idea
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Key Idea
+<span class="screen-reader-only">Tip</span>Key Idea
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -341,10 +390,10 @@ Key Idea
 </div>
 </div>
 <p>Let’s use the sample sentence above, and <em>make up</em> some mask weights to stress the relative importance of different words. We’ll display the weight values with a colored background to visualize their magnitude (darker = more weight):</p>
-<div class="cell">
-<details>
+<div id="cell-word-weights-0" class="cell">
+<details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> HTML, display</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -353,7 +402,7 @@ Key Idea
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> np.array([<span class="fl">0.5</span>,<span class="fl">.9</span>,<span class="fl">0.1</span>, <span class="fl">0.01</span>, <span class="fl">.7</span>, <span class="fl">0.1</span>,<span class="fl">.98</span>,<span class="fl">0.1</span>,<span class="fl">.99</span>])</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">"word"</span>:words,<span class="st">"weight"</span>:mask})</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>display(df.set_index(<span class="st">'word'</span>).T.style.background_gradient(vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>).<span class="bu">format</span>(precision<span class="op">=</span><span class="dv">3</span>).hide())</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Sum of mask weights = </span><span class="sc">{</span>mask<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:.3g}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Sum of mask weights = </span><span class="sc">{</span>mask<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:.3g}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="word-weights-0" class="cell-output cell-output-display">
 <style type="text/css">
@@ -387,7 +436,7 @@ Key Idea
 }
 </style>
 
-<table id="T_e5ca5" data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table id="T_e5ca5" class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th id="T_e5ca5_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
@@ -434,13 +483,13 @@ Tip
 </div>
 </div>
 <p>We’ll make it so that the weights all add up to one. If all <span class="math inline">\(N\)</span> words were weighted equally, the weight values would all be <span class="math inline">\(1/N\)</span>. For other weighting schemes, we divide the mask weights by their sum to get our attention weights. For the example sentence above, dividing by the sum gives us:</p>
-<div class="cell">
-<details>
+<div id="cell-word-weights-1" class="cell">
+<details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>attention <span class="op">=</span> mask<span class="op">/</span>mask.<span class="bu">sum</span>()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>attention <span class="op">=</span> mask<span class="op">/</span>mask.<span class="bu">sum</span>()</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">"word"</span>:words,<span class="st">"weight"</span>:attention})</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>display(df.set_index(<span class="st">'word'</span>).T.style.background_gradient(vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="fl">.22</span>).<span class="bu">format</span>(precision<span class="op">=</span><span class="dv">3</span>).hide())</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Sum of attention weights = </span><span class="sc">{</span>attention<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:.3g}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Sum of attention weights = </span><span class="sc">{</span>attention<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:.3g}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="word-weights-1" class="cell-output cell-output-display">
 <style type="text/css">
@@ -470,7 +519,7 @@ Tip
 }
 </style>
 
-<table id="T_9ed2e" data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table id="T_9ed2e" class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th id="T_9ed2e_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
@@ -510,7 +559,7 @@ Tip
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Key Idea
+<span class="screen-reader-only">Tip</span>Key Idea
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -531,7 +580,7 @@ Key Idea
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Key Idea
+<span class="screen-reader-only">Tip</span>Key Idea
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -542,10 +591,10 @@ Key Idea
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/bongo_outside.jpg" class="img-fluid figure-img" style="width:50.0%"></p>
-<figcaption class="figure-caption">Bongo Java image: “Please no outside food or drink” != “Please no food or drink outside.” This is on an outdoor table where the owners clearly expect you to be eating, so only the first sentence makes sense in this case. A Bag of Words model would incorrectly treat those two sentences equivalently.</figcaption>
+<figcaption>Bongo Java image: “Please no outside food or drink” != “Please no food or drink outside.” This is on an outdoor table where the owners clearly expect you to be eating, so only the first sentence makes sense in this case. A Bag of Words model would incorrectly treat those two sentences equivalently.</figcaption>
 </figure>
 </div>
-<p>To get a sense of word ordering, we’ll need another part of the Transformer model called Positional Encoding, which we mention in <a href="#sec-nextup">Section&nbsp;6</a>.</p>
+<p>To get a sense of word ordering, we’ll need another part of the Transformer model called Positional Encoding, which we mention in <a href="#sec-nextup" class="quarto-xref">Section&nbsp;6</a>.</p>
 </section>
 <section id="making-attention-mathematical" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Making Attention Mathematical</h1>
@@ -569,10 +618,14 @@ Key Idea
 }
 </style>
 <p>Here’s the diagram from the AIAYN paper illustrating this process :</p>
-<div id="fig-qkv" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/qkv.png" class="img3 img-fluid figure-img"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;2<strong>.</strong> (Mouse-over or press to expand.) Attention computation diagram from AIAYN paper <span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span>. “MatMul” = “matrix multiplication” or what we’ll also call a “dot product”, which includes summation (which given our normalized weights means we get a weighted average).</figcaption>
+<div id="fig-qkv" class="img3 quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-qkv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/qkv.png" class="img3 img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-qkv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<strong>Figure</strong>&nbsp;2<strong>.</strong> (Mouse-over or press to expand.) Attention computation diagram from AIAYN paper <span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span>. “MatMul” = “matrix multiplication” or what we’ll also call a “dot product”, which includes summation (which given our normalized weights means we get a weighted average).
+</figcaption>
 </figure>
 </div>
 <p>So then, what is softmax, what are Q and K, and what’s that square root doing in the denominator? In what follows, we’re going to emphasize the intuitive understanding of what’s going on and why. (If you’re satisfied to know the “is” without the “why,” then this tutorial is probably not for you.)</p>
@@ -585,7 +638,7 @@ Key Idea
 <li>other functions may be slower computationally</li>
 <li>people are already accustomed to using softmax for other things</li>
 <li>it’s got some sweet properties in terms of both probability theory <em>and</em> calculus</li>
-<li>and it’s hella versatile – see the interactive Appendix “Fun With Softmax” aka <a href="#sec-softmax-fun">Section&nbsp;9</a>.</li>
+<li>and it’s hella versatile – see the interactive Appendix “Fun With Softmax” aka <a href="#sec-softmax-fun" class="quarto-xref">Section&nbsp;9</a>.</li>
 </ul>
 </section>
 <section id="what-are-q-k-v" class="level2" data-number="4.1">
@@ -599,10 +652,14 @@ Key Idea
 <section id="similarity-and-its-measures" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="similarity-and-its-measures"><span class="header-section-number">4.2</span> Similarity and its Measures</h2>
 <p>The thing that goes inside the parentheses of the softmax function is something that measures the <em>similarity</em> between the query <span class="math inline">\(Q\)</span> and the key <span class="math inline">\(K\)</span>. Treating these as vectors, we have a few choices that I’ll show on a diagram:</p>
-<div id="fig-sim-qkt" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="images/similarity_qkt_vectors.png" class="img-fluid figure-img" width="350"></p>
-<figcaption class="figure-caption"><strong>Figure</strong>&nbsp;3<strong>.</strong> Diagram illustrating a few similarity measures for vectors <span class="math inline">\(Q\)</span> and <span class="math inline">\(K\)</span>.</figcaption>
+<div id="fig-sim-qkt" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sim-qkt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/similarity_qkt_vectors.png" class="img-fluid figure-img" width="350">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sim-qkt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<strong>Figure</strong>&nbsp;3<strong>.</strong> Diagram illustrating a few similarity measures for vectors <span class="math inline">\(Q\)</span> and <span class="math inline">\(K\)</span>.
+</figcaption>
 </figure>
 </div>
 <p>Our options for measuring similarity include the following 3, the last of which is what the Transformer’s Attention uses:</p>
@@ -619,10 +676,10 @@ Key Idea
 </section>
 <section id="scaled-dot-product-qkt-sqrtd_k" class="level3" data-number="4.2.3">
 <h3 data-number="4.2.3" class="anchored" data-anchor-id="scaled-dot-product-qkt-sqrtd_k"><span class="header-section-number">4.2.3</span> <span style="color:#54B98F;"> 🌟 Scaled Dot Product: <span class="math inline">\(QK^T / \sqrt{d_k}\)</span></span></h3>
-<p>The quantity <span class="math inline">\(Q K^T\)</span> is a “dot product” that yields a distance corresponding to the length of <span class="math inline">\(Q\)</span> projected along <span class="math inline">\(K\)</span> (or vice versa), as shown in <a href="#fig-sim-qkt">Figure&nbsp;3</a> above. This works like the cosine similarity but includes the magnitude, and allows us to consider the relative length of the two vectors. It also can map to any real number instead of just the interval <span class="math inline">\([-1, 1]\)</span> like the cosine. But if we just use <span class="math inline">\(Q K^T\)</span>, we run into a problem in high dimensions similar to what we see for the Euclidean distance. We’ll look at the fix for that in the next sub-section, which is where the <span class="math inline">\(1\sqrt{d_k}\)</span> comes in…</p>
+<p>The quantity <span class="math inline">\(Q K^T\)</span> is a “dot product” that yields a distance corresponding to the length of <span class="math inline">\(Q\)</span> projected along <span class="math inline">\(K\)</span> (or vice versa), as shown in <a href="#fig-sim-qkt" class="quarto-xref">Figure&nbsp;3</a> above. This works like the cosine similarity but includes the magnitude, and allows us to consider the relative length of the two vectors. It also can map to any real number instead of just the interval <span class="math inline">\([-1, 1]\)</span> like the cosine. But if we just use <span class="math inline">\(Q K^T\)</span>, we run into a problem in high dimensions similar to what we see for the Euclidean distance. We’ll look at the fix for that in the next sub-section, which is where the <span class="math inline">\(1\sqrt{d_k}\)</span> comes in…</p>
 <section id="why-the-1sqrtd_k" class="level4" data-number="4.2.3.1">
 <h4 data-number="4.2.3.1" class="anchored" data-anchor-id="why-the-1sqrtd_k"><span class="header-section-number">4.2.3.1</span> Why the <span class="math inline">\(1/\sqrt{d_k}\,\)</span> ?</h4>
-<p>Simply put, it keeps the variance of our resulting data from exploding as the number of dimensions increases. Take a look at <a href="#fig-sqrtd">Figure&nbsp;4</a> (a) and (b).</p>
+<p>Simply put, it keeps the variance of our resulting data from exploding as the number of dimensions increases. Take a look at <a href="#fig-sqrtd" class="quarto-xref">Figure&nbsp;4</a> (a) and (b).</p>
 <style>
 .img1 {
     transition:max-width 0.4s ease;
@@ -646,26 +703,30 @@ Key Idea
 }
 </style>
 <div id="fig-sqrtd" class="quarto-layout-panel">
-<figure class="figure">
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sqrtd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://drscotthawley.github.io/blog/posts/2022-01-24-MultiDim-DotProducts_files/figure-html/cell-5-output-1.png" class="img1 img-fluid figure-img"></p>
-<figcaption class="figure-caption">a) Without <span class="math inline">\(1/\sqrt{d_k}\)</span></figcaption>
+<figcaption>a) Without <span class="math inline">\(1/\sqrt{d_k}\)</span></figcaption>
 </figure>
 </div>
 </div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://drscotthawley.github.io/blog/posts/2022-01-24-MultiDim-DotProducts_files/figure-html/cell-6-output-1.png" class="img2 img-fluid figure-img"></p>
-<figcaption class="figure-caption">b) With <span class="math inline">\(1/\sqrt{d_k}\)</span></figcaption>
+<figcaption>b) With <span class="math inline">\(1/\sqrt{d_k}\)</span></figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p></p><figcaption class="figure-caption"><strong>Figure</strong>&nbsp;4<strong>.</strong> (Mouse-over or press to expand.) Histograms of dot-products between random vectors in increasingly high-dimensional spaces, both without (a) and with (b) the <span class="math inline">\(1/\sqrt{d_k}\,\)</span> factor. Note how, in (a), the horizontal scale and standard deviation <span class="math inline">\(\sigma\)</span> both grow with the number of dimensions (written as <span class="math inline">\(D\)</span> instead of <span class="math inline">\(d_k\)</span>), whereas in (b) these remain constant. Source: Another blog post of mine <span class="citation" data-cites="blog-vec-orthog"><a href="#ref-blog-vec-orthog" role="doc-biblioref">[5]</a></span>.</figcaption><p></p>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sqrtd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<strong>Figure</strong>&nbsp;4<strong>.</strong> (Mouse-over or press to expand.) Histograms of dot-products between random vectors in increasingly high-dimensional spaces, both without (a) and with (b) the <span class="math inline">\(1/\sqrt{d_k}\,\)</span> factor. Note how, in (a), the horizontal scale and standard deviation <span class="math inline">\(\sigma\)</span> both grow with the number of dimensions (written as <span class="math inline">\(D\)</span> instead of <span class="math inline">\(d_k\)</span>), whereas in (b) these remain constant. Source: Another blog post of mine <span class="citation" data-cites="blog-vec-orthog"><a href="#ref-blog-vec-orthog" role="doc-biblioref">[5]</a></span>.
+</figcaption>
 </figure>
 </div>
 <p>The first figure (a) shows histograms of <span class="math inline">\(QK^T\)</span> for a bunch of random vectors as we increase the number of dimensions: what happens is that the “spread” of these values grows arbitrarily big. And generally in machine learning this can be a bad thing – we like to keep our values “normalized” within a certain range. It turns out that if you just divide by the <em>square root</em> of the number of dimensions…well, check out what happens in (b)! The data stays nicely distributed in the same range regardless of how many dimensions you want to use. 👍</p>
@@ -675,7 +736,7 @@ Key Idea
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Key Idea
+<span class="screen-reader-only">Tip</span>Key Idea
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -713,10 +774,10 @@ Note
 </div>
 <p>To get a value of 0 in the output of a softmax function, we supply <code>-inf</code> (i.e.&nbsp;<span class="math inline">\(-\infty\)</span>) to the logits (i.e.&nbsp;the arguments of softmax), since <span class="math inline">\(\lim_{x\rightarrow-\infty}e^x = 0\)</span>. So to mask out future words in Masked Attention, we supply the value <code>-inf</code> for those words.</p>
 <p>The net result of this will be a sequence of logits with progressively fewer <code>-inf</code>’s in them, or accordingly a set of attention wights with progressively fewer 0’s. As shown below (white=very little weight, dark=most weight):</p>
-<div class="cell">
-<details>
+<div id="cell-masked-logits" class="cell">
+<details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> softmax(x):</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> softmax(x):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    sums <span class="op">=</span> np.<span class="bu">sum</span>(np.exp(x), axis<span class="op">=-</span><span class="dv">1</span>)[:,np.newaxis]</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.exp(x)<span class="op">/</span>sums</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    </span>
@@ -733,7 +794,7 @@ Note
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"logits:"</span>)</span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(logits, columns<span class="op">=</span>words)</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>display(df.style.background_gradient(vmin<span class="op">=-</span><span class="dv">10</span>, vmax<span class="op">=-</span><span class="fl">1.4</span>).<span class="bu">format</span>(precision<span class="op">=</span><span class="dv">3</span>).hide())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>display(df.style.background_gradient(vmin<span class="op">=-</span><span class="dv">10</span>, vmax<span class="op">=-</span><span class="fl">1.4</span>).<span class="bu">format</span>(precision<span class="op">=</span><span class="dv">3</span>).hide())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>logits:</code></pre>
@@ -770,7 +831,7 @@ Note
 }
 </style>
 
-<table id="T_0957d" data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table id="T_0957d" class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th id="T_0957d_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
@@ -888,12 +949,12 @@ Note
 </table>
 </div>
 </div>
-<div class="cell">
-<details>
+<div id="cell-masked-attn" class="cell">
+<details class="code-fold">
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Attention weights = softmax(logits), row-wise:  "</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Attention weights = softmax(logits), row-wise:  "</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(attention, columns<span class="op">=</span>words)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>display(df.style.background_gradient(vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="fl">0.5</span>).<span class="bu">format</span>(precision<span class="op">=</span><span class="dv">3</span>).hide())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>display(df.style.background_gradient(vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="fl">0.5</span>).<span class="bu">format</span>(precision<span class="op">=</span><span class="dv">3</span>).hide())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -1023,7 +1084,7 @@ Attention weights = softmax(logits), row-wise:  </code></pre>
 }
 </style>
 
-<table id="T_5647b" data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table id="T_5647b" class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th id="T_5647b_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Please</th>
@@ -1161,19 +1222,19 @@ Note
 <section id="sec-nextup" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> Summary and Further Topics</h1>
 <p>We’ve looked at the main dynamic in Transformer models, namely the Attention process. We now have a grasp of not only what it is and how it works, but why it fulfills its intended purpose well. There’s a lot more we could still cover, but I’m going to stop here for now. To fully explain the Transformer model, we’ll want to take a look at Positional Encoding, residual connections, and more.</p>
-<p>However, now that you’re (hopefully) over the basic “hump” of the Attention mechanism, you may find the rest of the Transformer model to be fairly straightforward. You should be able to read any other guide to Transformer models and they should make <em>a lot</em> more sense now – or wait until I write a follow-up post! For now, check out the <strong>References</strong> in <a href="#sec-references">Section&nbsp;8</a> below for a list of good resources you can use to carry on with your studies.</p>
+<p>However, now that you’re (hopefully) over the basic “hump” of the Attention mechanism, you may find the rest of the Transformer model to be fairly straightforward. You should be able to read any other guide to Transformer models and they should make <em>a lot</em> more sense now – or wait until I write a follow-up post! For now, check out the <strong>References</strong> in <a href="#sec-references" class="quarto-xref">Section&nbsp;8</a> below for a list of good resources you can use to carry on with your studies.</p>
 </section>
 <section id="afterward-i-wrote-a-song" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> Afterward: I Wrote A Song</h1>
 <p>While I was away on a solo writer’s retreat to a shack in the woods, I started fiddling with a little song idea inspired by this tweet:</p>
-<div class="cell">
+<div id="9fc99b76" class="cell">
 <div class="cell-output cell-output-display">
 
 <blockquote class="twitter-tweet blockquote"><p lang="en" dir="ltr">"Traumatized Transformers": In which certain words are intrinsically weighted more that others.<br>(alternately, "Annoying Transformers Who Won't Shut Up About Their Favorite Topics")</p>— Horrific ML Ideas (@ml_ideas) <a href="https://twitter.com/ml_ideas/status/1683716504821325824?ref_src=twsrc%5Etfw">July 25, 2023</a></blockquote> <script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </div>
 </div>
 <p>Here’s a video of a rough take I sent to friends:</p>
-<div class="cell">
+<div id="b59b2464" class="cell">
 <div class="cell-output cell-output-display">
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/W65eENFUM_0?start=28" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe>
@@ -1185,7 +1246,7 @@ Note
 <p>I recommend any of the following. Seriously, I studied all of these and they’re great. Things just didn’t “click” for me until later in life I guess. LOL.</p>
 <p>My trajectory was first the original paper<span class="citation" data-cites="aiayn"><a href="#ref-aiayn" role="doc-biblioref">[1]</a></span>, then Jay Alammar’s “The Illustrated Transformer” <span class="citation" data-cites="alammar_illustrated"><a href="#ref-alammar_illustrated" role="doc-biblioref">[6]</a></span>, then the Coursera course <span class="citation" data-cites="coursera"><a href="#ref-coursera" role="doc-biblioref">[7]</a></span> co-taught by one of the original Transformer paper authors, then Brendan Rohrer’s great post <span class="citation" data-cites="rohrer"><a href="#ref-rohrer" role="doc-biblioref">[8]</a></span>, then Jeremy Jordan’s tutorial <span class="citation" data-cites="jeremyj_transformers"><a href="#ref-jeremyj_transformers" role="doc-biblioref">[9]</a></span>. Then a couple of years later Karpathy’s video <span class="citation" data-cites="andrej_karpathy_lets_2023"><a href="#ref-andrej_karpathy_lets_2023" role="doc-biblioref">[2]</a></span>, with a follow-up of CodeEmporiums’s video <span class="citation" data-cites="codeemporium"><a href="#ref-codeemporium" role="doc-biblioref">[10]</a></span>. But hopefully after reading my post(s) you won’t need to do all that!</p>
 <p>I also recommend Daniel Dugas’ “GPT on a Napkin” <span class="citation" data-cites="dugas_gpt_napkin"><a href="#ref-dugas_gpt_napkin" role="doc-biblioref">[11]</a></span> and Sebastian Rashka’s post on Attention <span class="citation" data-cites="raschka_understanding_attn"><a href="#ref-raschka_understanding_attn" role="doc-biblioref">[12]</a></span>, but didn’t learn of these until after I started writing this post.</p>
-<div id="refs" class="references csl-bib-body" role="list">
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
 <div id="ref-aiayn" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[1] </div><div class="csl-right-inline">A. Vaswani <em>et al.</em>, <span>“Attention is <span>All</span> you <span>Need</span>,”</span> in <em>Advances in <span>Neural</span> <span>Information</span> <span>Processing</span> <span>Systems</span></em>, I. Guyon, U. V. Luxburg, S. Bengio, H. Wallach, R. Fergus, S. Vishwanathan, and R. Garnett, Eds., Curran Associates, Inc., 2017. Available: <a href="https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf">https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf</a></div>
 </div>
@@ -1241,9 +1302,9 @@ Note
 </div>
 <p>By rescaling the inputs to the softmax function (i.e., the “logits”), we can change the “sharpness” of the result. Try playing with the slider below to rescale the sample weights from our introductory sentence!</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9" data-startfrom="2" data-source-offset="-1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1;"><span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {plotter} <span class="im">from</span> <span class="st">"@kjerandp/plotter"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9" data-startfrom="2" data-source-offset="-1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1;"><span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {plotter} <span class="im">from</span> <span class="st">"@kjerandp/plotter"</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">// This is written in Observable JS, cf. https://quarto.org/docs/interactive/ojs/</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">apply_s</span>(logits<span class="op">,</span> s) {</span>
@@ -1280,7 +1341,7 @@ Note
 <span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>      p<span class="op">.</span><span class="fu">text</span>(numbers[i]<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="op">,</span> xlocs[i]<span class="op">+</span><span class="fl">0.5</span><span class="op">,</span> numbers[i]<span class="op">+.</span><span class="bn">01</span><span class="op">,</span> { <span class="dt">stroke</span><span class="op">:</span> <span class="st">'grey'</span><span class="op">,</span> <span class="dt">weight</span><span class="op">:</span> <span class="dv">6</span> } )</span>
 <span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> p<span class="op">.</span><span class="at">node</span><span class="op">;</span></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -1370,7 +1431,7 @@ Note
 
 </main> <!-- /main -->
 <script type="ojs-module-contents">
-{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"\nimport {plotter} from \"@kjerandp/plotter\"\n// This is written in Observable JS, cf. https://quarto.org/docs/interactive/ojs/\n\nfunction apply_s(logits, s) {\n    return logits.map(function(x) { return x * (s/(1-s+1.0e-8)); });  \n}\n\nfunction softmax(logits) {\n    const maxLogit = Math.max(...logits);\n    const scores = logits.map(l => Math.exp(l - maxLogit));\n    const denom = scores.reduce((a, b) => a + b);\n    return scores.map(s => s / denom);\n}\n\n\nwords = ['Please','go','to','the','store','and','get','some','milk'];\nn = words.length\nattn_weights = [0.114, 0.205, 0.023, 0.002, 0.160, 0.023, 0.224, 0.023, 0.226]\nlogits = attn_weights.map(x => Math.log(x+1.0e-8));\n\nviewof s = Inputs.range([0, 1], {label: \"Sharpness S:\", step: .01, value:0.5, width:460});\nnumbers = softmax(apply_s(logits,s));\n\n// make a bar plot manually by plotting a bunch of rectangles. \nxlocs = [0,1,2,3,4,5,6,7,8];\nbasic_plot = {\n  let p = plotter( {height:350, width:600, xDomain: [xlocs[0]-0.1, xlocs[n-1]+1], yDomain: [1, -.1], xLabel:'x', yLabel:'softmax(xS)' } );\n  p.text('softmax(xS/(1-S))', -0.4, 1.02, { stroke: 'white', weight: 6, anchor: 'start' });\n  p.text('x', xlocs[n-1]+1.15, -.02, { stroke: 'white', weight: 6 });\n  p.rectangle(-10,10,10,-10, {fill:'white', opacity:0.0});  // background\n\n  for (let i = 0; i < n; i++) {\n      p.rectangle(xlocs[i], numbers[i], xlocs[i]+1, 0, { fill: 'cyan', opacity:0.65, stroke:'gray' });\n      p.text(words[i], xlocs[i]+0.5, -.1, { stroke: 'yellow', weight: 6 } )\n      p.text(numbers[i].toFixed(2), xlocs[i]+0.5, numbers[i]+.01, { stroke: 'grey', weight: 6 } )\n  }\n  return p.node;\n}\n"},{"methodName":"interpretQuiet","source":"shinyInput('s')"}]}
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlxuaW1wb3J0IHtwbG90dGVyfSBmcm9tIFwiQGtqZXJhbmRwL3Bsb3R0ZXJcIlxuLy8gVGhpcyBpcyB3cml0dGVuIGluIE9ic2VydmFibGUgSlMsIGNmLiBodHRwczovL3F1YXJ0by5vcmcvZG9jcy9pbnRlcmFjdGl2ZS9vanMvXG5cbmZ1bmN0aW9uIGFwcGx5X3MobG9naXRzLCBzKSB7XG4gICAgcmV0dXJuIGxvZ2l0cy5tYXAoZnVuY3Rpb24oeCkgeyByZXR1cm4geCAqIChzLygxLXMrMS4wZS04KSk7IH0pOyAgXG59XG5cbmZ1bmN0aW9uIHNvZnRtYXgobG9naXRzKSB7XG4gICAgY29uc3QgbWF4TG9naXQgPSBNYXRoLm1heCguLi5sb2dpdHMpO1xuICAgIGNvbnN0IHNjb3JlcyA9IGxvZ2l0cy5tYXAobCA9PiBNYXRoLmV4cChsIC0gbWF4TG9naXQpKTtcbiAgICBjb25zdCBkZW5vbSA9IHNjb3Jlcy5yZWR1Y2UoKGEsIGIpID0+IGEgKyBiKTtcbiAgICByZXR1cm4gc2NvcmVzLm1hcChzID0+IHMgLyBkZW5vbSk7XG59XG5cblxud29yZHMgPSBbJ1BsZWFzZScsJ2dvJywndG8nLCd0aGUnLCdzdG9yZScsJ2FuZCcsJ2dldCcsJ3NvbWUnLCdtaWxrJ107XG5uID0gd29yZHMubGVuZ3RoXG5hdHRuX3dlaWdodHMgPSBbMC4xMTQsIDAuMjA1LCAwLjAyMywgMC4wMDIsIDAuMTYwLCAwLjAyMywgMC4yMjQsIDAuMDIzLCAwLjIyNl1cbmxvZ2l0cyA9IGF0dG5fd2VpZ2h0cy5tYXAoeCA9PiBNYXRoLmxvZyh4KzEuMGUtOCkpO1xuXG52aWV3b2YgcyA9IElucHV0cy5yYW5nZShbMCwgMV0sIHtsYWJlbDogXCJTaGFycG5lc3MgUzpcIiwgc3RlcDogLjAxLCB2YWx1ZTowLjUsIHdpZHRoOjQ2MH0pO1xubnVtYmVycyA9IHNvZnRtYXgoYXBwbHlfcyhsb2dpdHMscykpO1xuXG4vLyBtYWtlIGEgYmFyIHBsb3QgbWFudWFsbHkgYnkgcGxvdHRpbmcgYSBidW5jaCBvZiByZWN0YW5nbGVzLiBcbnhsb2NzID0gWzAsMSwyLDMsNCw1LDYsNyw4XTtcbmJhc2ljX3Bsb3QgPSB7XG4gIGxldCBwID0gcGxvdHRlcigge2hlaWdodDozNTAsIHdpZHRoOjYwMCwgeERvbWFpbjogW3hsb2NzWzBdLTAuMSwgeGxvY3Nbbi0xXSsxXSwgeURvbWFpbjogWzEsIC0uMV0sIHhMYWJlbDoneCcsIHlMYWJlbDonc29mdG1heCh4UyknIH0gKTtcbiAgcC50ZXh0KCdzb2Z0bWF4KHhTLygxLVMpKScsIC0wLjQsIDEuMDIsIHsgc3Ryb2tlOiAnd2hpdGUnLCB3ZWlnaHQ6IDYsIGFuY2hvcjogJ3N0YXJ0JyB9KTtcbiAgcC50ZXh0KCd4JywgeGxvY3Nbbi0xXSsxLjE1LCAtLjAyLCB7IHN0cm9rZTogJ3doaXRlJywgd2VpZ2h0OiA2IH0pO1xuICBwLnJlY3RhbmdsZSgtMTAsMTAsMTAsLTEwLCB7ZmlsbDond2hpdGUnLCBvcGFjaXR5OjAuMH0pOyAgLy8gYmFja2dyb3VuZFxuXG4gIGZvciAobGV0IGkgPSAwOyBpIDwgbjsgaSsrKSB7XG4gICAgICBwLnJlY3RhbmdsZSh4bG9jc1tpXSwgbnVtYmVyc1tpXSwgeGxvY3NbaV0rMSwgMCwgeyBmaWxsOiAnY3lhbicsIG9wYWNpdHk6MC42NSwgc3Ryb2tlOidncmF5JyB9KTtcbiAgICAgIHAudGV4dCh3b3Jkc1tpXSwgeGxvY3NbaV0rMC41LCAtLjEsIHsgc3Ryb2tlOiAneWVsbG93Jywgd2VpZ2h0OiA2IH0gKVxuICAgICAgcC50ZXh0KG51bWJlcnNbaV0udG9GaXhlZCgyKSwgeGxvY3NbaV0rMC41LCBudW1iZXJzW2ldKy4wMSwgeyBzdHJva2U6ICdncmV5Jywgd2VpZ2h0OiA2IH0gKVxuICB9XG4gIHJldHVybiBwLm5vZGU7XG59XG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ3MnKSJ9XX0=
 </script>
 <script type="module">
 if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
@@ -1381,43 +1442,58 @@ window._ojs.selfContained = false;
 window._ojs.runtime.interpretFromScriptTags();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
+      return false;
     }
-    return false;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
@@ -1425,209 +1501,353 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
       return codeEl.innerText;
     }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
-    };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
     });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
     }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/drscotthawley\.github\.io\/blog");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
       });
     }
-  }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp("https:\/\/drscotthawley\.github\.io\/blog");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // target, if specified
-          link.setAttribute("target", "_blank");
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
       }
     }
-});
-</script>
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 </div> <!-- /content -->
+
 
 
 
