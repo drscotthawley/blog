@@ -1066,7 +1066,7 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/pnp_flow_diag_mod.png" class="img3 img-fluid figure-img"></p>
-<figcaption class="figure-caption">Image from PnP-Flow paper [5], slightly re-annotated by me.</figcaption>
+<figcaption class="figure-caption">Image from PnP-Flow paper [12], slightly re-annotated by me.</figcaption>
 </figure>
 </div>
 <p>This has a superficial resemblance to the “<a href="https://github.com/Stability-AI/stable-audio-tools/blob/31932349d98c550c48711e7a5a40b24aa3d7c509/stable_audio_tools/inference/sampling.py#L221">ping pong</a>” integration method used by Stable Audio Open Small (SAOS) <span class="citation" data-cites="sao_small"><a href="#ref-sao_small" role="doc-biblioref">[13]</a></span>, with a key distinction: SAOS maintains and updates the time-integrated latent variable <span class="math inline">\(z\)</span> (called “<span class="math inline">\(x\)</span>” in SAOS), whereas for PnP-Flow it is the projection <span class="math inline">\(\widehat{z_1}\)</span> (called <a href="https://github.com/Stability-AI/stable-audio-tools/blob/31932349d98c550c48711e7a5a40b24aa3d7c509/stable_audio_tools/inference/sampling.py#L242">“denoised”</a>) in SAOS) that is the primary variable that is maintained between steps. This is a subtle distinction but worth noting.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
