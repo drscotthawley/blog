@@ -1034,23 +1034,21 @@ To: /Users/shawley/github/blog/posts/downloaded_flow.safetensors
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    M_z <span class="op">=</span> (M_z <span class="op">&gt;</span> <span class="fl">0.9</span>).<span class="bu">float</span>()    <span class="co"># binarize it</span></span>
 <span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> z_y <span class="op">*</span> M_z, M_z<span class="op">**</span><span class="dv">2</span></span>
 <span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> latents_only_inpaint(sub, inpainting_dict, n_samples, n_steps<span class="op">=</span><span class="dv">20</span>, t0<span class="op">=</span><span class="fl">0.2</span>, warp_fn<span class="op">=</span><span class="va">None</span>):</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    z_y, M_sq <span class="op">=</span> prepare_latent_mask(y, M, sub.encode)   </span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    inpainting_dict.update({<span class="st">'M_sq'</span>: M_sq, <span class="st">'y'</span>: z_y, <span class="st">'t_min'</span>: t0})</span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    z0 <span class="op">=</span> torch.randn_like(z_y) <span class="op">*</span> (<span class="dv">1</span><span class="op">-</span>t0) <span class="op">+</span> z_y <span class="op">*</span> t0         <span class="co"># Initialize via interpolation</span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> generate_samples(sub, n_samples, t0<span class="op">=</span>t0, z0<span class="op">=</span>z0,  guidance_dict<span class="op">=</span>inpainting_dict, warp_fn<span class="op">=</span>warp_fn)</span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>inpainting_dict <span class="op">=</span>{<span class="st">'decode'</span>: <span class="va">None</span>,            <span class="co"># now we're latents-only</span></span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>                <span class="st">'strength'</span>: <span class="fl">1.0</span>,             <span class="co"># "guidance strength", you may vary this</span></span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>                <span class="st">'t_min'</span>: <span class="fl">0.2</span>, <span class="st">'t_max'</span>: <span class="fl">0.999</span>} <span class="co"># t range to apply guidance, may vary these</span></span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>show_grid(y.squeeze(), <span class="st">"pixel y's"</span>)</span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> latents_only_inpaint(sub, inpainting_dict, n_samples<span class="op">=</span><span class="bu">len</span>(y), n_steps<span class="op">=</span><span class="dv">10</span>)</span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="st">"inpainted images"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> latents_only_inpaint(sub, inpainting_dict, n_samples, n_steps<span class="op">=</span><span class="dv">20</span>, t0<span class="op">=</span><span class="fl">0.2</span>, warp_fn<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    z_y, M_sq <span class="op">=</span> prepare_latent_mask(y, M, sub.encode)   </span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    inpainting_dict.update({<span class="st">'M_sq'</span>: M_sq, <span class="st">'y'</span>: z_y, <span class="st">'t_min'</span>: t0})</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    z0 <span class="op">=</span> torch.randn_like(z_y) <span class="op">*</span> (<span class="dv">1</span><span class="op">-</span>t0) <span class="op">+</span> z_y <span class="op">*</span> t0         <span class="co"># Initialize via interpolation</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> generate_samples(sub, n_samples, t0<span class="op">=</span>t0, z0<span class="op">=</span>z0,  guidance_dict<span class="op">=</span>inpainting_dict, warp_fn<span class="op">=</span>warp_fn)</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>inpainting_dict <span class="op">=</span>{<span class="st">'decode'</span>: <span class="va">None</span>,            <span class="co"># now we're latents-only</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>                <span class="st">'strength'</span>: <span class="fl">1.0</span>,             <span class="co"># "guidance strength", you may vary this</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>                <span class="st">'t_min'</span>: <span class="fl">0.2</span>, <span class="st">'t_max'</span>: <span class="fl">0.999</span>} <span class="co"># t range to apply guidance, may vary these</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>show_grid(y.squeeze(), <span class="st">"pixel y's"</span>)</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> latents_only_inpaint(sub, inpainting_dict, n_samples<span class="op">=</span><span class="bu">len</span>(y), n_steps<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="st">"inpainted images"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="FlowWhereYouWant_files/figure-html/cell-27-output-1.png" class="img-fluid"></p>
 </div>
