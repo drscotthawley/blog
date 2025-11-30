@@ -4,20 +4,32 @@ image: profile_me.jpg
 about:
   template: jolla
   links:
+    - icon: github
+      text: GitHub
+      href: https://github.com/drscotthawley
+    - text: '{{< fa brands bluesky >}} BlueSky'
+      href: https://bsky.app/profile/drscotthawley.bsky.social
     - icon: twitter
       text: Twitter
       href: https://twitter.com/drscotthawley
-    - icon: github
-      text: Github
-      href: https://github.com/drscotthawley
     - icon: linkedin
       text: LinkedIn
       href: https://www.linkedin.com/in/drscotthawley/
 
 ---
 
-I dabble in a variety of technologies, usually with the goal of improving the physics education of audio engineering students. 
+I dabble in a variety of technologies, usually with the goal of improving the physics education of audio engineering students. But I'm pretty hard-core into Deep Learning applications for musical audio production: I got "addicted" to machine learning and neural networks about 10 years ago and it's changed my life. 
 
+
+#### Affiliations
+
+  Professor of Physics, Belmont University. 
 [Professorly Web Page](https://hedges.belmont.edu/~shawley/)
+
+ Head of Research, [Hyperstate (Music) AI](https://www.hyperstate.ai/)
+ 
+ Senior Data Fellow, [Belmont Data Collaborative](https://www.belmontdata.org/)
+
+ Formerly: Technical Fellow, [Harmonai](https://www.harmonai.org/) + [Stability AI](https://stability.ai/)
 
 

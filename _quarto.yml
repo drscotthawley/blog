@@ -2,18 +2,28 @@ project:
   type: website
 
 website:
-  title: "blog"
+  title: "Scott H. Hawley"
+  site-url: https://drscotthawley.github.io/blog
+  twitter-card: true
+  drafts: unlinked
   navbar:
     right:
       - about.qmd
       - icon: github
         href: https://github.com/drscotthawley
+      - text: '{{< fa brands bluesky >}}'
+        href: https://bsky.app/profile/drscotthawley.bsky.social
       - icon: twitter
         href: https://twitter.com/drscotthawley
+      - icon: linkedin
+        href: https://www.linkedin.com/in/drscotthawley/
 format:
   html:
     theme: darkly
     css: styles.css
+    link-external-newwindow: true
+    highlight-style: monokai
+    include-in-header: custom_css.css
 execute:
   freeze: auto
 
