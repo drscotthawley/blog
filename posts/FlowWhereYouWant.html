@@ -88,6 +88,7 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../images/logo.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -138,6 +139,9 @@ details > summary {
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;600;700&amp;display=swap" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -191,7 +195,11 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a href="https://www.scotthawley.com" class="navbar-brand navbar-brand-logo">
+    <img src="../images/logo.png" alt="SH Logo" class="navbar-logo light-content">
+    <img src="../images/logo.png" alt="SH Logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="https://www.scotthawley.com">
     <span class="navbar-title">Scott H. Hawley</span>
     </a>
   </div>
@@ -602,7 +610,7 @@ First we have the <code>guidance_dict</code> that we’ll use to pass through ou
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>show_probs(probs, x<span class="op">=</span>x1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"a2536149bb494ffa97b647bb65b47f98","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"67044337b1014cd89c84ffd35abdd081","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -619,17 +627,22 @@ First we have the <code>guidance_dict</code> that we’ll use to pass through ou
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>target <span class="op">=</span> torch.arange(<span class="dv">10</span>).repeat(<span class="dv">10</span>).to(device) <span class="co">#  [0,1,2,..9, 0,1,2,..9, ...]</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>guidance_dict[<span class="st">'target'</span>] <span class="op">=</span> target</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>)         <span class="co"># (optional) for reproducibility</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> generate_samples(sub, n_samples<span class="op">=</span><span class="bu">len</span>(target), guidance_dict<span class="op">=</span>guidance_dict)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="st">"Guided samples"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time()</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> generate_samples(sub, n_samples<span class="op">=</span><span class="bu">len</span>(target), guidance_dict<span class="op">=</span>guidance_dict)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Elapsed: </span><span class="sc">{</span> time() <span class="op">-</span> start<span class="sc">:.3f}</span><span class="ss">s"</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="st">"Guided samples"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"8ab7e6ebd1184195beb8688f3a08e687","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"0b9775e420844c5da23c0a843087b88f","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Elapsed: 1.972s</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="FlowWhereYouWant_files/figure-html/cell-15-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="FlowWhereYouWant_files/figure-html/cell-15-output-3.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -640,126 +653,126 @@ First we have the <code>guidance_dict</code> that we’ll use to pass through ou
 <h2 data-number="4.2" class="anchored" data-anchor-id="train-a-latent-classifier"><span class="header-section-number">4.2</span> Train a Latent Classifier</h2>
 <p>We’ll train a model <code>z_classifier</code> that looks only in latent space, so we can use it as a guidance signal. This can be a very simple model consisting of a few <code>Linear</code> layers:</p>
 <div id="f5f5da9e-2273-40f4-9f12-2b2410dbe7c2" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LatentClassNet(nn.Module):</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, latent_dim<span class="op">=</span><span class="dv">16</span>, hidden_dim<span class="op">=</span><span class="dv">32</span>, n_classes<span class="op">=</span><span class="dv">10</span>):</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>        dims <span class="op">=</span> [latent_dim, hidden_dim, hidden_dim, latent_dim, n_classes]</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.layers <span class="op">=</span> nn.ModuleList([nn.Linear(in_d, out_d) <span class="cf">for</span> in_d, out_d <span class="kw">in</span> <span class="bu">zip</span>(dims[:<span class="op">-</span><span class="dv">1</span>], dims[<span class="dv">1</span>:])])   </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, z):</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> layer <span class="kw">in</span> <span class="va">self</span>.layers: z <span class="op">=</span> F.leaky_relu(layer(z))</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> z</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>z_classifier <span class="op">=</span> LatentClassNet().to(device)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> LatentClassNet(nn.Module):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, latent_dim<span class="op">=</span><span class="dv">16</span>, hidden_dim<span class="op">=</span><span class="dv">32</span>, n_classes<span class="op">=</span><span class="dv">10</span>):</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        dims <span class="op">=</span> [latent_dim, hidden_dim, hidden_dim, latent_dim, n_classes]</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.layers <span class="op">=</span> nn.ModuleList([nn.Linear(in_d, out_d) <span class="cf">for</span> in_d, out_d <span class="kw">in</span> <span class="bu">zip</span>(dims[:<span class="op">-</span><span class="dv">1</span>], dims[<span class="dv">1</span>:])])   </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, z):</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> layer <span class="kw">in</span> <span class="va">self</span>.layers: z <span class="op">=</span> F.leaky_relu(layer(z))</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> z</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>z_classifier <span class="op">=</span> LatentClassNet().to(device)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>It will operate on latent encodings of the MNIST dataset. So let’s save the encoded latents to disk and load them into memory. These will be our training and test data.</p>
 <div id="bc555002-582a-4ca9-a60a-bc3c8b7593f2" class="cell" data-hide_input="true">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># You can probably skip this code block. It just runs MNIST</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># through the VAE's encoder and saves it to disk. </span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> DataLoader, TensorDataset, Subset</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.datasets <span class="im">import</span> MNIST</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.transforms <span class="im">import</span> ToTensor</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> glob <span class="im">import</span> glob </span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math </span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode_dataset(vae, dataset, batch_size<span class="op">=</span><span class="dv">512</span>, chunk_size<span class="op">=</span><span class="dv">10000</span>, tag<span class="op">=</span><span class="st">"train"</span>):</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Encode dataset into VAE latents (z = mu), saving progress in temp chunk files.</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">    We use temp chunks in case execution gets interrupted, we can try again &amp; resume. </span></span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    device <span class="op">=</span> <span class="bu">next</span>(vae.parameters()).device</span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    total_chunks <span class="op">=</span> math.ceil(<span class="bu">len</span>(dataset) <span class="op">/</span> chunk_size) </span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># check for existing chunk files </span></span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    basename <span class="op">=</span> <span class="ss">f"tmp_chunk_</span><span class="sc">{</span>tag<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    chunk_files <span class="op">=</span> glob(basename<span class="op">+</span><span class="st">'*.pt'</span>) </span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    existing_chunks <span class="op">=</span> <span class="bu">len</span>(chunk_files)</span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>tag<span class="sc">}</span><span class="ss">: Found </span><span class="sc">{</span>existing_chunks<span class="sc">}</span><span class="ss"> of </span><span class="sc">{</span>total_chunks<span class="sc">}</span><span class="ss"> expected chunks. Generating remaining..."</span>)</span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> c <span class="kw">in</span> <span class="bu">range</span>(existing_chunks, total_chunks): </span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"chunk </span><span class="sc">{</span>c<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>total_chunks<span class="sc">}</span><span class="ss">:"</span>,end<span class="op">=</span><span class="st">""</span>)</span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>        indices <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(c<span class="op">*</span>chunk_size, (c<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>chunk_size ))</span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>        data_subset <span class="op">=</span> Subset(dataset, indices)        </span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>        loader <span class="op">=</span> DataLoader(data_subset, batch_size<span class="op">=</span>batch_size, shuffle<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>        all_latents, all_labels <span class="op">=</span> [], []</span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>        must_flatten <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> torch.no_grad():</span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> data, labels <span class="kw">in</span> loader:</span>
-<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="st">"="</span>,end<span class="op">=</span><span class="st">""</span>) <span class="co"># dumb progress bar </span></span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>                x <span class="op">=</span> data.to(device)</span>
-<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>                <span class="co"># next bit is so it should work with linear layers or conv</span></span>
-<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> must_flatten <span class="kw">is</span> <span class="va">None</span> <span class="kw">or</span> must_flatten<span class="op">==</span><span class="va">False</span>:</span>
-<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">try</span>: z, must_flatten <span class="op">=</span> vae.encoder(x), <span class="va">False</span></span>
-<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">except</span> <span class="pp">RuntimeError</span>:</span>
-<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>                        z <span class="op">=</span> vae.encoder(x.view(x.size(<span class="dv">0</span>), <span class="op">-</span><span class="dv">1</span>))</span>
-<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>                        must_flatten <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>: z <span class="op">=</span> vae.encoder(x.view(x.size(<span class="dv">0</span>), <span class="op">-</span><span class="dv">1</span>))</span>
-<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>                mu, logvar <span class="op">=</span> z</span>
-<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>                all_latents.append(mu.cpu())</span>
-<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>                all_labels.append(labels)</span>
-<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>        chunk_latents, chunk_labels <span class="op">=</span> torch.cat(all_latents), torch.cat(all_labels)</span>
-<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>        tmp_filename <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>basename<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>c<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">.pt"</span></span>
-<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"|  Saving chunk to </span><span class="sc">{</span>tmp_filename<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>        torch.save({ <span class="st">'latents'</span>:chunk_latents, <span class="st">'labels'</span>:chunk_labels }, tmp_filename)</span>
-<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Assemble all the chunks from files and return tensors.</span></span>
-<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Assembling"</span>, basename<span class="op">+</span><span class="st">'*.pt ...'</span>)</span>
-<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>    all_latents, all_labels <span class="op">=</span> [], []</span>
-<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> chunk_file <span class="kw">in</span> glob(basename<span class="op">+</span><span class="st">'*.pt'</span>): </span>
-<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>        chunk_dict <span class="op">=</span> torch.load(chunk_file, weights_only<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>        all_latents.append(chunk_dict[<span class="st">'latents'</span>])</span>
-<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>        all_labels.append(chunk_dict[<span class="st">'labels'</span>]) </span>
-<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>    latents, labels <span class="op">=</span> torch.cat(all_latents), torch.cat(all_labels)</span>
-<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>    <span class="co">#for f in glob(tmp_file_base+'*.pt'): os.remove(f)   # clean up </span></span>
-<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> latents, labels </span>
-<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode_mnist(vae, filename<span class="op">=</span><span class="va">None</span>, batch_size<span class="op">=</span><span class="dv">512</span>):</span>
-<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Acquiring train &amp; test MNIST image datasets..."</span>)</span>
-<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a>    train_ds <span class="op">=</span> MNIST(root<span class="op">=</span><span class="st">'./data'</span>, train<span class="op">=</span><span class="va">True</span>,  download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>ToTensor())</span>
-<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a>    test_ds  <span class="op">=</span> MNIST(root<span class="op">=</span><span class="st">'./data'</span>, train<span class="op">=</span><span class="va">False</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>ToTensor())</span>
-<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb11-64"><a href="#cb11-64" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Encoding dataset to latents..."</span>)</span>
-<span id="cb11-65"><a href="#cb11-65" aria-hidden="true" tabindex="-1"></a>    train_latents, train_labels <span class="op">=</span> encode_dataset(vae, train_ds, batch_size<span class="op">=</span>batch_size, tag<span class="op">=</span><span class="st">'train'</span>)</span>
-<span id="cb11-66"><a href="#cb11-66" aria-hidden="true" tabindex="-1"></a>    test_latents, test_labels <span class="op">=</span> encode_dataset(vae, test_ds, batch_size<span class="op">=</span>batch_size, tag<span class="op">=</span><span class="st">'test'</span>)</span>
-<span id="cb11-67"><a href="#cb11-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> f <span class="kw">in</span> glob(<span class="st">'tmp_chunk_t*_c*.pt'</span>): os.remove(f)  <span class="co"># clean up</span></span>
-<span id="cb11-68"><a href="#cb11-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-69"><a href="#cb11-69" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> filename <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb11-70"><a href="#cb11-70" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Saving to </span><span class="sc">{</span>filename<span class="sc">}</span><span class="ss"> ..."</span>)</span>
-<span id="cb11-71"><a href="#cb11-71" aria-hidden="true" tabindex="-1"></a>        torch.save({ <span class="st">'train_z'</span>: train_latents,     <span class="st">'test_z'</span>: test_latents,</span>
-<span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a>                     <span class="st">'train_labels'</span>: train_labels, <span class="st">'test_labels'</span>: test_labels }, filename)</span>
-<span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_latents, train_labels</span>
-<span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-75"><a href="#cb11-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-76"><a href="#cb11-76" aria-hidden="true" tabindex="-1"></a><span class="co"># Encode the dataset</span></span>
-<span id="cb11-77"><a href="#cb11-77" aria-hidden="true" tabindex="-1"></a>latent_data_filename <span class="op">=</span> <span class="st">'mnist_latents.pt'</span></span>
-<span id="cb11-78"><a href="#cb11-78" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.exists(latent_data_filename):</span>
-<span id="cb11-79"><a href="#cb11-79" aria-hidden="true" tabindex="-1"></a>    train_latents, train_labels <span class="op">=</span> encode_mnist(sub.vae, filename<span class="op">=</span>latent_data_filename)</span>
-<span id="cb11-80"><a href="#cb11-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-81"><a href="#cb11-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-82"><a href="#cb11-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-83"><a href="#cb11-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-84"><a href="#cb11-84" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_data(filename):</span>
-<span id="cb11-85"><a href="#cb11-85" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">'MyDrive'</span> <span class="kw">in</span> filename:</span>
-<span id="cb11-86"><a href="#cb11-86" aria-hidden="true" tabindex="-1"></a>        <span class="im">from</span> google.colab <span class="im">import</span> drive</span>
-<span id="cb11-87"><a href="#cb11-87" aria-hidden="true" tabindex="-1"></a>        drive.mount(<span class="st">'/content/drive'</span>)</span>
-<span id="cb11-88"><a href="#cb11-88" aria-hidden="true" tabindex="-1"></a>    data_dict <span class="op">=</span> torch.load(filename, weights_only<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb11-89"><a href="#cb11-89" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data_dict</span>
-<span id="cb11-90"><a href="#cb11-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-91"><a href="#cb11-91" aria-hidden="true" tabindex="-1"></a>data_dict <span class="op">=</span> load_data(latent_data_filename)</span>
-<span id="cb11-92"><a href="#cb11-92" aria-hidden="true" tabindex="-1"></a>train_z, test_z <span class="op">=</span> data_dict[<span class="st">'train_z'</span>], data_dict[<span class="st">'test_z'</span>]</span>
-<span id="cb11-93"><a href="#cb11-93" aria-hidden="true" tabindex="-1"></a>train_z.shape, test_z.shape</span>
-<span id="cb11-94"><a href="#cb11-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a><span class="co"># Create datasets from the latent tensors</span></span>
-<span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a>train_latent_ds <span class="op">=</span> TensorDataset(train_z, data_dict[<span class="st">'train_labels'</span>][:train_z.shape[<span class="dv">0</span>]])</span>
-<span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a>test_latent_ds <span class="op">=</span> TensorDataset(test_z, data_dict[<span class="st">'test_labels'</span>])</span>
-<span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-99"><a href="#cb11-99" aria-hidden="true" tabindex="-1"></a>batch_size <span class="op">=</span> <span class="dv">512</span></span>
-<span id="cb11-100"><a href="#cb11-100" aria-hidden="true" tabindex="-1"></a>train_latent_dl <span class="op">=</span> DataLoader(train_latent_ds, batch_size<span class="op">=</span>batch_size, shuffle<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb11-101"><a href="#cb11-101" aria-hidden="true" tabindex="-1"></a>test_latent_dl <span class="op">=</span> DataLoader(test_latent_ds, batch_size<span class="op">=</span>batch_size, shuffle<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb11-102"><a href="#cb11-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-103"><a href="#cb11-103" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Train batches: </span><span class="sc">{</span><span class="bu">len</span>(train_latent_dl)<span class="sc">}</span><span class="ss">, Test batches: </span><span class="sc">{</span><span class="bu">len</span>(test_latent_dl)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb11-104"><a href="#cb11-104" aria-hidden="true" tabindex="-1"></a><span class="co"># print single latent size</span></span>
-<span id="cb11-105"><a href="#cb11-105" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Latent size: </span><span class="sc">{</span>train_latent_ds[<span class="dv">0</span>][<span class="dv">0</span>]<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># You can probably skip this code block. It just runs MNIST</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># through the VAE's encoder and saves it to disk. </span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> DataLoader, TensorDataset, Subset</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.datasets <span class="im">import</span> MNIST</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.transforms <span class="im">import</span> ToTensor</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> glob <span class="im">import</span> glob </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode_dataset(vae, dataset, batch_size<span class="op">=</span><span class="dv">512</span>, chunk_size<span class="op">=</span><span class="dv">10000</span>, tag<span class="op">=</span><span class="st">"train"</span>):</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Encode dataset into VAE latents (z = mu), saving progress in temp chunk files.</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">    We use temp chunks in case execution gets interrupted, we can try again &amp; resume. </span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    device <span class="op">=</span> <span class="bu">next</span>(vae.parameters()).device</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    total_chunks <span class="op">=</span> math.ceil(<span class="bu">len</span>(dataset) <span class="op">/</span> chunk_size) </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># check for existing chunk files </span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    basename <span class="op">=</span> <span class="ss">f"tmp_chunk_</span><span class="sc">{</span>tag<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    chunk_files <span class="op">=</span> glob(basename<span class="op">+</span><span class="st">'*.pt'</span>) </span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    existing_chunks <span class="op">=</span> <span class="bu">len</span>(chunk_files)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>tag<span class="sc">}</span><span class="ss">: Found </span><span class="sc">{</span>existing_chunks<span class="sc">}</span><span class="ss"> of </span><span class="sc">{</span>total_chunks<span class="sc">}</span><span class="ss"> expected chunks. Generating remaining..."</span>)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> c <span class="kw">in</span> <span class="bu">range</span>(existing_chunks, total_chunks): </span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"chunk </span><span class="sc">{</span>c<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>total_chunks<span class="sc">}</span><span class="ss">:"</span>,end<span class="op">=</span><span class="st">""</span>)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>        indices <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(c<span class="op">*</span>chunk_size, (c<span class="op">+</span><span class="dv">1</span>)<span class="op">*</span>chunk_size ))</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>        data_subset <span class="op">=</span> Subset(dataset, indices)        </span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>        loader <span class="op">=</span> DataLoader(data_subset, batch_size<span class="op">=</span>batch_size, shuffle<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>        all_latents, all_labels <span class="op">=</span> [], []</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>        must_flatten <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> data, labels <span class="kw">in</span> loader:</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>                <span class="bu">print</span>(<span class="st">"="</span>,end<span class="op">=</span><span class="st">""</span>) <span class="co"># dumb progress bar </span></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>                x <span class="op">=</span> data.to(device)</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>                <span class="co"># next bit is so it should work with linear layers or conv</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> must_flatten <span class="kw">is</span> <span class="va">None</span> <span class="kw">or</span> must_flatten<span class="op">==</span><span class="va">False</span>:</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">try</span>: z, must_flatten <span class="op">=</span> vae.encoder(x), <span class="va">False</span></span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">except</span> <span class="pp">RuntimeError</span>:</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>                        z <span class="op">=</span> vae.encoder(x.view(x.size(<span class="dv">0</span>), <span class="op">-</span><span class="dv">1</span>))</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>                        must_flatten <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>: z <span class="op">=</span> vae.encoder(x.view(x.size(<span class="dv">0</span>), <span class="op">-</span><span class="dv">1</span>))</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>                mu, logvar <span class="op">=</span> z</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>                all_latents.append(mu.cpu())</span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>                all_labels.append(labels)</span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a>        chunk_latents, chunk_labels <span class="op">=</span> torch.cat(all_latents), torch.cat(all_labels)</span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>        tmp_filename <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>basename<span class="sc">}</span><span class="ss">_</span><span class="sc">{</span>c<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">.pt"</span></span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"|  Saving chunk to </span><span class="sc">{</span>tmp_filename<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>        torch.save({ <span class="st">'latents'</span>:chunk_latents, <span class="st">'labels'</span>:chunk_labels }, tmp_filename)</span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Assemble all the chunks from files and return tensors.</span></span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Assembling"</span>, basename<span class="op">+</span><span class="st">'*.pt ...'</span>)</span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>    all_latents, all_labels <span class="op">=</span> [], []</span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> chunk_file <span class="kw">in</span> glob(basename<span class="op">+</span><span class="st">'*.pt'</span>): </span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>        chunk_dict <span class="op">=</span> torch.load(chunk_file, weights_only<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>        all_latents.append(chunk_dict[<span class="st">'latents'</span>])</span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>        all_labels.append(chunk_dict[<span class="st">'labels'</span>]) </span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a>    latents, labels <span class="op">=</span> torch.cat(all_latents), torch.cat(all_labels)</span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>    <span class="co">#for f in glob(tmp_file_base+'*.pt'): os.remove(f)   # clean up </span></span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> latents, labels </span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> encode_mnist(vae, filename<span class="op">=</span><span class="va">None</span>, batch_size<span class="op">=</span><span class="dv">512</span>):</span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Acquiring train &amp; test MNIST image datasets..."</span>)</span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>    train_ds <span class="op">=</span> MNIST(root<span class="op">=</span><span class="st">'./data'</span>, train<span class="op">=</span><span class="va">True</span>,  download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>ToTensor())</span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>    test_ds  <span class="op">=</span> MNIST(root<span class="op">=</span><span class="st">'./data'</span>, train<span class="op">=</span><span class="va">False</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>ToTensor())</span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Encoding dataset to latents..."</span>)</span>
+<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>    train_latents, train_labels <span class="op">=</span> encode_dataset(vae, train_ds, batch_size<span class="op">=</span>batch_size, tag<span class="op">=</span><span class="st">'train'</span>)</span>
+<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a>    test_latents, test_labels <span class="op">=</span> encode_dataset(vae, test_ds, batch_size<span class="op">=</span>batch_size, tag<span class="op">=</span><span class="st">'test'</span>)</span>
+<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> f <span class="kw">in</span> glob(<span class="st">'tmp_chunk_t*_c*.pt'</span>): os.remove(f)  <span class="co"># clean up</span></span>
+<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> filename <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Saving to </span><span class="sc">{</span>filename<span class="sc">}</span><span class="ss"> ..."</span>)</span>
+<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a>        torch.save({ <span class="st">'train_z'</span>: train_latents,     <span class="st">'test_z'</span>: test_latents,</span>
+<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>                     <span class="st">'train_labels'</span>: train_labels, <span class="st">'test_labels'</span>: test_labels }, filename)</span>
+<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> train_latents, train_labels</span>
+<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a><span class="co"># Encode the dataset</span></span>
+<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>latent_data_filename <span class="op">=</span> <span class="st">'mnist_latents.pt'</span></span>
+<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.exists(latent_data_filename):</span>
+<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>    train_latents, train_labels <span class="op">=</span> encode_mnist(sub.vae, filename<span class="op">=</span>latent_data_filename)</span>
+<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_data(filename):</span>
+<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">'MyDrive'</span> <span class="kw">in</span> filename:</span>
+<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a>        <span class="im">from</span> google.colab <span class="im">import</span> drive</span>
+<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a>        drive.mount(<span class="st">'/content/drive'</span>)</span>
+<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a>    data_dict <span class="op">=</span> torch.load(filename, weights_only<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data_dict</span>
+<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a>data_dict <span class="op">=</span> load_data(latent_data_filename)</span>
+<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a>train_z, test_z <span class="op">=</span> data_dict[<span class="st">'train_z'</span>], data_dict[<span class="st">'test_z'</span>]</span>
+<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a>train_z.shape, test_z.shape</span>
+<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a><span class="co"># Create datasets from the latent tensors</span></span>
+<span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a>train_latent_ds <span class="op">=</span> TensorDataset(train_z, data_dict[<span class="st">'train_labels'</span>][:train_z.shape[<span class="dv">0</span>]])</span>
+<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a>test_latent_ds <span class="op">=</span> TensorDataset(test_z, data_dict[<span class="st">'test_labels'</span>])</span>
+<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a>batch_size <span class="op">=</span> <span class="dv">512</span></span>
+<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a>train_latent_dl <span class="op">=</span> DataLoader(train_latent_ds, batch_size<span class="op">=</span>batch_size, shuffle<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a>test_latent_dl <span class="op">=</span> DataLoader(test_latent_ds, batch_size<span class="op">=</span>batch_size, shuffle<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Train batches: </span><span class="sc">{</span><span class="bu">len</span>(train_latent_dl)<span class="sc">}</span><span class="ss">, Test batches: </span><span class="sc">{</span><span class="bu">len</span>(test_latent_dl)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a><span class="co"># print single latent size</span></span>
+<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Latent size: </span><span class="sc">{</span>train_latent_ds[<span class="dv">0</span>][<span class="dv">0</span>]<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Train batches: 118, Test batches: 20
@@ -772,31 +785,31 @@ Latent size: torch.Size([16])</code></pre>
 Training Loop Code and Execution
 </summary>
 <div id="8a53d3f6-e679-437b-bbfa-7f6bd9441f20" class="cell" data-hide_input="true">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Latent classifier training loop</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>optimizer  <span class="op">=</span> torch.optim.Adam(z_classifier.parameters(), lr<span class="op">=</span><span class="fl">1e-3</span>, weight_decay<span class="op">=</span><span class="fl">1e-5</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>criterion  <span class="op">=</span> nn.CrossEntropyLoss()</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">8</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    z_classifier.train()</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    pbar <span class="op">=</span> tqdm(train_latent_dl, desc<span class="op">=</span><span class="ss">f"Epoch </span><span class="sc">{</span>epoch<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>epochs<span class="sc">}</span><span class="ss">"</span>, leave<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> latents, labels <span class="kw">in</span> pbar:</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        logits <span class="op">=</span> z_classifier(latents.to(device))</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        loss   <span class="op">=</span> criterion(logits, labels.to(device))</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        pbar.set_postfix({<span class="st">'train_loss'</span>: <span class="ss">f"</span><span class="sc">{</span>loss<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">"</span>})</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        loss.backward()</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Validation</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    z_classifier.<span class="bu">eval</span>()</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    val_latents, val_labels <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(test_latent_dl))</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    val_logits <span class="op">=</span> z_classifier(val_latents.to(device))</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    val_loss   <span class="op">=</span> criterion(val_logits, val_labels.to(device))</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    val_acc    <span class="op">=</span> (val_logits.cpu().argmax(dim<span class="op">=</span><span class="dv">1</span>) <span class="op">==</span> val_labels).<span class="bu">float</span>().mean()</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Epoch </span><span class="sc">{</span>epoch<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>epochs<span class="sc">}</span><span class="ss">: train_loss=</span><span class="sc">{</span>loss<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">, val_loss=</span><span class="sc">{</span>val_loss<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">, val_acc=</span><span class="sc">{</span>val_acc<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Latent classifier training loop</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>optimizer  <span class="op">=</span> torch.optim.Adam(z_classifier.parameters(), lr<span class="op">=</span><span class="fl">1e-3</span>, weight_decay<span class="op">=</span><span class="fl">1e-5</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>criterion  <span class="op">=</span> nn.CrossEntropyLoss()</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    z_classifier.train()</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    pbar <span class="op">=</span> tqdm(train_latent_dl, desc<span class="op">=</span><span class="ss">f"Epoch </span><span class="sc">{</span>epoch<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>epochs<span class="sc">}</span><span class="ss">"</span>, leave<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> latents, labels <span class="kw">in</span> pbar:</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        logits <span class="op">=</span> z_classifier(latents.to(device))</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        loss   <span class="op">=</span> criterion(logits, labels.to(device))</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        pbar.set_postfix({<span class="st">'train_loss'</span>: <span class="ss">f"</span><span class="sc">{</span>loss<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">"</span>})</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>        loss.backward()</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Validation</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    z_classifier.<span class="bu">eval</span>()</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    val_latents, val_labels <span class="op">=</span> <span class="bu">next</span>(<span class="bu">iter</span>(test_latent_dl))</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    val_logits <span class="op">=</span> z_classifier(val_latents.to(device))</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    val_loss   <span class="op">=</span> criterion(val_logits, val_labels.to(device))</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    val_acc    <span class="op">=</span> (val_logits.cpu().argmax(dim<span class="op">=</span><span class="dv">1</span>) <span class="op">==</span> val_labels).<span class="bu">float</span>().mean()</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Epoch </span><span class="sc">{</span>epoch<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>epochs<span class="sc">}</span><span class="ss">: train_loss=</span><span class="sc">{</span>loss<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">, val_loss=</span><span class="sc">{</span>val_loss<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">, val_acc=</span><span class="sc">{</span>val_acc<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"fdb2c9acef1b4265a1e90a5caa8ec257","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"f3010e53bb1a4a65821807bb5f01ded6","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -804,7 +817,7 @@ Training Loop Code and Execution
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"3dd3701c663e4306bc0445c104952934","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"239a8ec0d5cc42fba283f0cf6be40d35","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -812,7 +825,7 @@ Training Loop Code and Execution
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"dc0708eb2260462bb8217f522b7fe057","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"de9c39dbd32243959df6486de26737e5","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -820,7 +833,7 @@ Training Loop Code and Execution
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"1aec0c9482984581ab4418886b21ba9e","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"0f72be180f5641adb821224e7643eec0","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -828,7 +841,7 @@ Training Loop Code and Execution
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"a6db95ee00a046619dabc17e8bd48799","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"fd59e6b83834431e9e204e64805241a9","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -836,7 +849,7 @@ Training Loop Code and Execution
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"3539bf9f9b354f09b905acaad338a9a7","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"624b5b50709a40d191f6fe14dc52cff8","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -844,7 +857,7 @@ Training Loop Code and Execution
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"1693b4abbb7542c5b044106028de047a","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"8f14acee0a29406ea69911b3ec0364f1","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -852,7 +865,7 @@ Training Loop Code and Execution
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"cb31008f9d9a451c96e5fede9590b4a3","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"de28ff75d8554a43b83ca71ff28d83b7","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -862,13 +875,13 @@ Training Loop Code and Execution
 </details>
 <p>Let’s test our newly-trained latent classifier, to make sure it works before trying to use it for guidance. We’ll pull up data samples with known ground-truth “target” labels, and compare these to the predictions from the classifier. If the targets and predictions match up, we’re good to go:</p>
 <div id="e0290029-d284-49e8-bba4-bea4ea4a1e1d" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>z, L <span class="op">=</span> test_latent_ds[<span class="dv">20</span>:<span class="dv">30</span>]</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> z.to(device) </span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>show_grid(F.sigmoid(sub.decode(z)).view(<span class="op">-</span><span class="dv">1</span>,<span class="dv">28</span>,<span class="dv">28</span>))</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    pred_class <span class="op">=</span> classify(z_classifier, z, use_argmax<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Target labels:   "</span>,L)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Predicted labels:"</span>, pred_class.cpu())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>z, L <span class="op">=</span> test_latent_ds[<span class="dv">20</span>:<span class="dv">30</span>]</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> z.to(device) </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>show_grid(F.sigmoid(sub.decode(z)).view(<span class="op">-</span><span class="dv">1</span>,<span class="dv">28</span>,<span class="dv">28</span>))</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    pred_class <span class="op">=</span> classify(z_classifier, z, use_argmax<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Target labels:   "</span>,L)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Predicted labels:"</span>, pred_class.cpu())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -889,26 +902,31 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <div id="9ae7bb79-06fb-4c44-861c-f777ad4894cd" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>guidance_dict <span class="op">=</span>{<span class="st">'classifier'</span>: z_classifier,</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                <span class="st">'decode'</span>: <span class="va">None</span>,    <span class="co"># no decoding, latent space only</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">'loss_fn'</span>: torch.nn.CrossEntropyLoss(reduction<span class="op">=</span><span class="st">'none'</span>), <span class="co"># don't sum across batch dim</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">'target'</span>: torch.arange(<span class="dv">10</span>).repeat(<span class="dv">10</span>).to(device),</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">'strength'</span>: <span class="fl">5.0</span>,   <span class="co"># "guidance strength"</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                <span class="st">'t_min'</span>: <span class="fl">0.01</span>,  <span class="st">'t_max'</span>: <span class="fl">0.99</span>, }</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>) <span class="co"># remove for new samples each time</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> generate_samples(sub, n_samples<span class="op">=</span><span class="bu">len</span>(guidance_dict[<span class="st">'target'</span>]), guidance_dict<span class="op">=</span>guidance_dict)</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="st">"Latent-Only Guidance"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>guidance_dict <span class="op">=</span>{<span class="st">'classifier'</span>: z_classifier,</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                <span class="st">'decode'</span>: <span class="va">None</span>,    <span class="co"># no decoding, latent space only</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">'loss_fn'</span>: torch.nn.CrossEntropyLoss(reduction<span class="op">=</span><span class="st">'none'</span>), <span class="co"># don't sum across batch dim</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">'target'</span>: torch.arange(<span class="dv">10</span>).repeat(<span class="dv">10</span>).to(device),</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">'strength'</span>: <span class="fl">5.0</span>,   <span class="co"># "guidance strength"</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                <span class="st">'t_min'</span>: <span class="fl">0.01</span>,  <span class="st">'t_max'</span>: <span class="fl">0.99</span>, }</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">42</span>) <span class="co"># remove for new samples each time</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time()</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> generate_samples(sub, n_samples<span class="op">=</span><span class="bu">len</span>(guidance_dict[<span class="st">'target'</span>]), guidance_dict<span class="op">=</span>guidance_dict)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Elapsed: </span><span class="sc">{</span> time() <span class="op">-</span> start<span class="sc">:.3f}</span><span class="ss">s"</span>)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="st">"Latent-Only Guidance"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"98e80ad3c0c84fb9b7aeae8cf8f01e61","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"f9905ba7a6dc4233974e69f3e950bb63","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Elapsed: 0.154s</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="FlowWhereYouWant_files/figure-html/cell-20-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="FlowWhereYouWant_files/figure-html/cell-20-output-3.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -924,17 +942,17 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <div id="99601e98" class="cell" data-hide_input="true">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Demo what inpainting looks like</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.datasets <span class="im">import</span> MNIST</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.transforms <span class="im">import</span> ToTensor</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>test_ds  <span class="op">=</span> MNIST(root<span class="op">=</span><span class="st">'./data'</span>, train<span class="op">=</span><span class="va">False</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>ToTensor())</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> test_ds[<span class="dv">7</span>][<span class="dv">0</span>]</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>H, W <span class="op">=</span> x.shape[<span class="op">-</span><span class="dv">2</span>:]</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>M <span class="op">=</span> torch.ones([H,W], dtype<span class="op">=</span>x.dtype, device<span class="op">=</span>x.device)   <span class="co"># 1 = keep pixels</span></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>M[H<span class="op">//</span><span class="dv">3</span>:<span class="dv">2</span><span class="op">*</span>H<span class="op">//</span><span class="dv">3</span>, W<span class="op">//</span><span class="dv">3</span>:<span class="dv">2</span><span class="op">*</span>W<span class="op">//</span><span class="dv">3</span>] <span class="op">=</span> <span class="dv">0</span>                         <span class="co"># 0 = mask out</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>x_masked <span class="op">=</span> M<span class="op">*</span>x</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>show_grid( torch.cat([x, M.unsqueeze(<span class="dv">0</span>), x_masked],dim<span class="op">=</span><span class="dv">0</span>),<span class="st">"      Original      |      Mask      |  Masked Image"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Demo what inpainting looks like</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.datasets <span class="im">import</span> MNIST</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.transforms <span class="im">import</span> ToTensor</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>test_ds  <span class="op">=</span> MNIST(root<span class="op">=</span><span class="st">'./data'</span>, train<span class="op">=</span><span class="va">False</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>ToTensor())</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> test_ds[<span class="dv">7</span>][<span class="dv">0</span>]</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>H, W <span class="op">=</span> x.shape[<span class="op">-</span><span class="dv">2</span>:]</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>M <span class="op">=</span> torch.ones([H,W], dtype<span class="op">=</span>x.dtype, device<span class="op">=</span>x.device)   <span class="co"># 1 = keep pixels</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>M[H<span class="op">//</span><span class="dv">3</span>:<span class="dv">2</span><span class="op">*</span>H<span class="op">//</span><span class="dv">3</span>, W<span class="op">//</span><span class="dv">3</span>:<span class="dv">2</span><span class="op">*</span>W<span class="op">//</span><span class="dv">3</span>] <span class="op">=</span> <span class="dv">0</span>                         <span class="co"># 0 = mask out</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>x_masked <span class="op">=</span> M<span class="op">*</span>x</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>show_grid( torch.cat([x, M.unsqueeze(<span class="dv">0</span>), x_masked],dim<span class="op">=</span><span class="dv">0</span>),<span class="st">"      Original      |      Mask      |  Masked Image"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -962,41 +980,41 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <div id="70567386" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()  <span class="co"># gradients computed analytically!</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ip_latents_grad(v_t, z, t, g:<span class="bu">dict</span>, eps<span class="op">=</span><span class="fl">1e-6</span>, <span class="op">**</span>kwargs):</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"inpainting gradients for latent-only guidance, fast"</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    z1_hat <span class="op">=</span> z <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>t)<span class="op">*</span>v_t</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> g[<span class="st">'M_sq'</span>] <span class="op">*</span> (z1_hat <span class="op">-</span> g[<span class="st">'y'</span>])  <span class="co">#  x1_hat = z1_hat, dz1_hat/dz_t=1</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.enable_grad</span>()</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ip_pixels_grad(v_t, z, t, g:<span class="bu">dict</span>, eps<span class="op">=</span><span class="fl">1e-6</span>, img_size<span class="op">=</span>(<span class="dv">28</span>,<span class="dv">28</span>), <span class="op">**</span>kwargs):</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">"inpainting gradients for pixel-space guidance. needs decoder &amp; tracks via autograd, = slow"</span></span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    z.requires_grad_(<span class="va">True</span>)</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    z1_hat <span class="op">=</span> z <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>t)<span class="op">*</span>v_t</span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    x1_hat <span class="op">=</span> F.sigmoid(g[<span class="st">'decode'</span>](z1_hat)).view(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>, <span class="op">*</span>img_size) </span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    grad_x <span class="op">=</span> g[<span class="st">'M_sq'</span>] <span class="op">*</span> (x1_hat <span class="op">-</span> g[<span class="st">'y'</span>])</span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    grad_z <span class="op">=</span> torch.autograd.grad(x1_hat, z, grad_outputs<span class="op">=</span>grad_x,retain_graph<span class="op">=</span><span class="va">False</span>)[<span class="dv">0</span>] <span class="co"># mults grad_x by dx1_hat/dz1_hat</span></span>
-<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    z.requires_grad_(<span class="va">False</span>)</span>
-<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> grad_z.detach()  <span class="co"># don't send gradients onward</span></span>
-<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> t_timescale(t, choice<span class="op">=</span><span class="st">'mine'</span>):</span>
-<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">"our choice for adaptive time scale"</span></span>
-<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> choice <span class="op">==</span><span class="st">'simple'</span>: <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>t)    <span class="co"># our earlier scale; doesn't work</span></span>
-<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> choice<span class="op">==</span><span class="st">'pokle'</span>: </span>
-<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (<span class="dv">1</span><span class="op">-</span>t)<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> ((<span class="dv">1</span><span class="op">-</span>t)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> t<span class="op">**</span><span class="dv">2</span>)    <span class="co"># from pokle et al; can't get it to work</span></span>
-<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> choice<span class="op">==</span><span class="st">'constant'</span>: <span class="cf">return</span> <span class="dv">4</span>       <span class="co"># or any constant. The 4 is from Pokle et al</span></span>
-<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: <span class="cf">return</span> (<span class="dv">1</span><span class="op">-</span>t)<span class="op">/</span>t        <span class="co"># Works pretty well! Strong guidance at start, zero at end</span></span>
-<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_dv_inpainting(v_t, z, t, g:<span class="bu">dict</span>, <span class="op">**</span>kwargs):</span>
-<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">"wrapper to call appropriate gradient-computation routine"</span></span>
-<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> t <span class="op">&lt;</span> g[<span class="st">'t_min'</span>] <span class="kw">or</span> t <span class="op">&gt;</span> g[<span class="st">'t_max'</span>]: <span class="cf">return</span> torch.zeros_like(v_t)</span>
-<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>    grad_fn <span class="op">=</span> ip_latents_grad <span class="cf">if</span> g[<span class="st">'decode'</span>] <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> ip_pixels_grad</span>
-<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>    grad <span class="op">=</span> grad_fn(v_t, z, t, g, <span class="op">**</span>kwargs)</span>
-<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>    dv <span class="op">=</span> <span class="op">-</span>g[<span class="st">'strength'</span>] <span class="op">*</span> t_timescale(t) <span class="op">*</span> grad</span>
-<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dv.detach()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()  <span class="co"># gradients computed analytically!</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ip_latents_grad(v_t, z, t, g:<span class="bu">dict</span>, eps<span class="op">=</span><span class="fl">1e-6</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"inpainting gradients for latent-only guidance, fast"</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    z1_hat <span class="op">=</span> z <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>t)<span class="op">*</span>v_t</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> g[<span class="st">'M_sq'</span>] <span class="op">*</span> (z1_hat <span class="op">-</span> g[<span class="st">'y'</span>])  <span class="co">#  x1_hat = z1_hat, dz1_hat/dz_t=1</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.enable_grad</span>()</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ip_pixels_grad(v_t, z, t, g:<span class="bu">dict</span>, eps<span class="op">=</span><span class="fl">1e-6</span>, img_size<span class="op">=</span>(<span class="dv">28</span>,<span class="dv">28</span>), <span class="op">**</span>kwargs):</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">"inpainting gradients for pixel-space guidance. needs decoder &amp; tracks via autograd, = slow"</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    z.requires_grad_(<span class="va">True</span>)</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>    z1_hat <span class="op">=</span> z <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>t)<span class="op">*</span>v_t</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    x1_hat <span class="op">=</span> F.sigmoid(g[<span class="st">'decode'</span>](z1_hat)).view(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>, <span class="op">*</span>img_size) </span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>    grad_x <span class="op">=</span> g[<span class="st">'M_sq'</span>] <span class="op">*</span> (x1_hat <span class="op">-</span> g[<span class="st">'y'</span>])</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    grad_z <span class="op">=</span> torch.autograd.grad(x1_hat, z, grad_outputs<span class="op">=</span>grad_x,retain_graph<span class="op">=</span><span class="va">False</span>)[<span class="dv">0</span>] <span class="co"># mults grad_x by dx1_hat/dz1_hat</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>    z.requires_grad_(<span class="va">False</span>)</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> grad_z.detach()  <span class="co"># don't send gradients onward</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> t_timescale(t, choice<span class="op">=</span><span class="st">'mine'</span>):</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">"our choice for adaptive time scale"</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> choice <span class="op">==</span><span class="st">'simple'</span>: <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>t)    <span class="co"># our earlier scale; doesn't work</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> choice<span class="op">==</span><span class="st">'pokle'</span>: </span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (<span class="dv">1</span><span class="op">-</span>t)<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> ((<span class="dv">1</span><span class="op">-</span>t)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> t<span class="op">**</span><span class="dv">2</span>)    <span class="co"># from pokle et al; can't get it to work</span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> choice<span class="op">==</span><span class="st">'constant'</span>: <span class="cf">return</span> <span class="dv">4</span>       <span class="co"># or any constant. The 4 is from Pokle et al</span></span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: <span class="cf">return</span> (<span class="dv">1</span><span class="op">-</span>t)<span class="op">/</span>t        <span class="co"># Works pretty well! Strong guidance at start, zero at end</span></span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_dv_inpainting(v_t, z, t, g:<span class="bu">dict</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">"wrapper to call appropriate gradient-computation routine"</span></span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> t <span class="op">&lt;</span> g[<span class="st">'t_min'</span>] <span class="kw">or</span> t <span class="op">&gt;</span> g[<span class="st">'t_max'</span>]: <span class="cf">return</span> torch.zeros_like(v_t)</span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a>    grad_fn <span class="op">=</span> ip_latents_grad <span class="cf">if</span> g[<span class="st">'decode'</span>] <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> ip_pixels_grad</span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a>    grad <span class="op">=</span> grad_fn(v_t, z, t, g, <span class="op">**</span>kwargs)</span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a>    dv <span class="op">=</span> <span class="op">-</span>g[<span class="st">'strength'</span>] <span class="op">*</span> t_timescale(t) <span class="op">*</span> grad</span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dv.detach()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <section id="do-the-inpainting" class="level2" data-number="5.1">
@@ -1005,11 +1023,11 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <div id="061dbb53" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># setup the data</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> torch.stack([test_ds[i][<span class="dv">0</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">50</span>)])</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y.shape)</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> M<span class="op">*</span>y</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>show_grid(y.squeeze(), <span class="st">"Masked Images"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># setup the data</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> torch.stack([test_ds[i][<span class="dv">0</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">50</span>)])</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(y.shape)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> M<span class="op">*</span>y</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>show_grid(y.squeeze(), <span class="st">"Masked Images"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>torch.Size([50, 1, 28, 28])</code></pre>
@@ -1026,29 +1044,29 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 <div id="31d26b2f" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>compute_dv <span class="op">=</span> compute_dv_inpainting  <span class="co"># register our new guidance routine</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>inpainting_dict <span class="op">=</span>{<span class="st">'decode'</span>: sub.decode,         <span class="co"># how to decode to pixel space for classifier</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">'M_sq'</span>: (M<span class="op">**</span><span class="dv">2</span>).to(device),</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">'y'</span>: y.to(device),</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>                <span class="st">'strength'</span>: <span class="fl">1.0</span>,              <span class="co"># "guidance strength", you may vary this</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>                <span class="st">'t_min'</span>: <span class="fl">0.2</span>, <span class="st">'t_max'</span>: <span class="fl">0.999</span>} <span class="co"># t range to apply guidance, may vary these</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    torch.manual_seed(<span class="dv">0</span>) <span class="co"># for reproducibility as we change other things</span></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    t0 <span class="op">=</span> <span class="fl">0.2</span>             <span class="co"># starting time as per Pokle et al</span></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    z0 <span class="op">=</span> torch.randn([<span class="bu">len</span>(y), sub.latent_dim]).to(sub.device)</span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    zy <span class="op">=</span> sub.encode(y.to(device))   <span class="co"># encoded version of masked image</span></span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    z0 <span class="op">=</span> z0 <span class="op">*</span> (<span class="dv">1</span><span class="op">-</span>t0) <span class="op">+</span> zy <span class="op">*</span> t0      <span class="co"># interpolation init</span></span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    inpainting_dict[<span class="st">'t_min'</span>] <span class="op">=</span> t0</span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    x1 <span class="op">=</span> generate_samples(sub, n_samples<span class="op">=</span><span class="bu">len</span>(y), t0<span class="op">=</span>t0, z0<span class="op">=</span>z0, guidance_dict<span class="op">=</span>inpainting_dict, warp_fn<span class="op">=</span><span class="va">None</span>, debug<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>show_grid(y.squeeze(), <span class="st">"Masked Images"</span>)</span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="st">"Inpainted Images"</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>compute_dv <span class="op">=</span> compute_dv_inpainting  <span class="co"># register our new guidance routine</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>inpainting_dict <span class="op">=</span>{<span class="st">'decode'</span>: sub.decode,         <span class="co"># how to decode to pixel space for classifier</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">'M_sq'</span>: (M<span class="op">**</span><span class="dv">2</span>).to(device),</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">'y'</span>: y.to(device),</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>                <span class="st">'strength'</span>: <span class="fl">1.0</span>,              <span class="co"># "guidance strength", you may vary this</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>                <span class="st">'t_min'</span>: <span class="fl">0.2</span>, <span class="st">'t_max'</span>: <span class="fl">0.999</span>} <span class="co"># t range to apply guidance, may vary these</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>    torch.manual_seed(<span class="dv">0</span>) <span class="co"># for reproducibility as we change other things</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>    t0 <span class="op">=</span> <span class="fl">0.2</span>             <span class="co"># starting time as per Pokle et al</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>    z0 <span class="op">=</span> torch.randn([<span class="bu">len</span>(y), sub.latent_dim]).to(sub.device)</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>    zy <span class="op">=</span> sub.encode(y.to(device))   <span class="co"># encoded version of masked image</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    z0 <span class="op">=</span> z0 <span class="op">*</span> (<span class="dv">1</span><span class="op">-</span>t0) <span class="op">+</span> zy <span class="op">*</span> t0      <span class="co"># interpolation init</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>    inpainting_dict[<span class="st">'t_min'</span>] <span class="op">=</span> t0</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>    x1 <span class="op">=</span> generate_samples(sub, n_samples<span class="op">=</span><span class="bu">len</span>(y), t0<span class="op">=</span>t0, z0<span class="op">=</span>z0, guidance_dict<span class="op">=</span>inpainting_dict, warp_fn<span class="op">=</span><span class="va">None</span>, debug<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>show_grid(y.squeeze(), <span class="st">"Masked Images"</span>)</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="st">"Inpainted Images"</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"f1e8bfa1795f49f09e0879643742c148","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"684501ed3339447d9de3ce951f480d7c","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -1078,17 +1096,17 @@ Predicted labels: tensor([9, 6, 6, 5, 4, 0, 7, 4, 0, 1])</code></pre>
 Get the spatial-latents model
 </summary>
 <div id="5845b641" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Spatial VAE &amp; FLow DiT Model</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget <span class="op">-</span>q <span class="op">--</span>no<span class="op">-</span>clobber<span class="op">=</span>off https:<span class="op">//</span>raw.githubusercontent.com<span class="op">/</span>dlaieburner<span class="op">/</span><span class="dv">2025</span><span class="op">-</span>leaderboard<span class="op">/</span>refs<span class="op">/</span>heads<span class="op">/</span>main<span class="op">/</span>sample_submission_dit.py</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">del</span> SubmissionInterface <span class="co"># remove Marco's from earlier; make it reload</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">NameError</span>:</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span>  <span class="co"># nevermind</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sample_submission_dit <span class="im">import</span> SubmissionInterface</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>sub <span class="op">=</span> SubmissionInterface().to(device)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get Spatial VAE &amp; FLow DiT Model</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>wget <span class="op">-</span>q <span class="op">--</span>no<span class="op">-</span>clobber<span class="op">=</span>off https:<span class="op">//</span>raw.githubusercontent.com<span class="op">/</span>dlaieburner<span class="op">/</span><span class="dv">2025</span><span class="op">-</span>leaderboard<span class="op">/</span>refs<span class="op">/</span>heads<span class="op">/</span>main<span class="op">/</span>sample_submission_dit.py</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">del</span> SubmissionInterface <span class="co"># remove Marco's from earlier; make it reload</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">NameError</span>:</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span>  <span class="co"># nevermind</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sample_submission_dit <span class="im">import</span> SubmissionInterface</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>sub <span class="op">=</span> SubmissionInterface().to(device)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>device = mps</code></pre>
 </div>
@@ -1096,11 +1114,11 @@ Get the spatial-latents model
 <pre><code>Downloading...
 From: https://drive.google.com/uc?id=1kPK3ZPadOUEfH8ZycrG3k27pl9-lGUeL
 To: /Users/shawley/github/blog/posts/downloaded_vae.safetensors
-100%|████████████████████████████████████████████████████████████████████████████████| 12.6M/12.6M [00:00&lt;00:00, 13.5MB/s]
+100%|██████████████████████████████████████████████████████████████████████| 12.6M/12.6M [00:01&lt;00:00, 10.6MB/s]
 Downloading...
 From: https://drive.google.com/uc?id=1q9Iguf--2_MqUjsosS7iAGGzYtVfJ3UF
 To: /Users/shawley/github/blog/posts/downloaded_flow.safetensors
-100%|████████████████████████████████████████████████████████████████████████████████| 34.1M/34.1M [00:02&lt;00:00, 16.7MB/s]
+100%|██████████████████████████████████████████████████████████████████████| 34.1M/34.1M [00:02&lt;00:00, 11.6MB/s]
   0%|          | 0.00/12.6M [00:00&lt;?, ?B/s]  4%|▍         | 524k/12.6M [00:00&lt;00:02, 4.41MB/s] 25%|██▌       | 3.15M/12.6M [00:00&lt;00:00, 16.1MB/s] 46%|████▌     | 5.77M/12.6M [00:00&lt;00:00, 18.5MB/s] 79%|███████▉  | 9.96M/12.6M [00:00&lt;00:00, 26.8MB/s]100%|██████████| 12.6M/12.6M [00:00&lt;00:00, 24.0MB/s]
 Downloading...
 From: https://drive.google.com/uc?id=1q9Iguf--2_MqUjsosS7iAGGzYtVfJ3UF
@@ -1113,15 +1131,15 @@ To: /Users/shawley/github/blog/posts/downloaded_flow.safetensors
 <div id="7e278f9d" class="cell" data-hide_input="true">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># viz images and spatial latents</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.datasets <span class="im">import</span> MNIST</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>test_ds  <span class="op">=</span> MNIST(root<span class="op">=</span><span class="st">'./data'</span>, train<span class="op">=</span><span class="va">False</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>ToTensor())</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> torch.stack([test_ds[i][<span class="dv">0</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">6</span>)])</span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(x.shape) <span class="op">&lt;</span> <span class="dv">4</span>: x1 <span class="op">=</span> x.unsqueeze(<span class="dv">1</span>)</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>show_grid(x, <span class="st">"Images"</span>)</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>z1 <span class="op">=</span> sub.encode(x)</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>show_grid((z1<span class="op">-</span>z1.<span class="bu">min</span>())<span class="op">/</span>(z1.<span class="bu">max</span>()<span class="op">-</span>z1.<span class="bu">min</span>()), <span class="st">"Latents"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># viz images and spatial latents</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> torchvision.datasets <span class="im">import</span> MNIST</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>test_ds  <span class="op">=</span> MNIST(root<span class="op">=</span><span class="st">'./data'</span>, train<span class="op">=</span><span class="va">False</span>, download<span class="op">=</span><span class="va">True</span>, transform<span class="op">=</span>ToTensor())</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> torch.stack([test_ds[i][<span class="dv">0</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">6</span>)])</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(x.shape) <span class="op">&lt;</span> <span class="dv">4</span>: x1 <span class="op">=</span> x.unsqueeze(<span class="dv">1</span>)</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>show_grid(x, <span class="st">"Images"</span>)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>z1 <span class="op">=</span> sub.encode(x)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>show_grid((z1<span class="op">-</span>z1.<span class="bu">min</span>())<span class="op">/</span>(z1.<span class="bu">max</span>()<span class="op">-</span>z1.<span class="bu">min</span>()), <span class="st">"Latents"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -1139,27 +1157,27 @@ To: /Users/shawley/github/blog/posts/downloaded_flow.safetensors
 </div>
 </div>
 <div id="8cb20dbb" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_latent_mask(image, mask, encoder):</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    z_y <span class="op">=</span> encoder(image.to(device))</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    M_z <span class="op">=</span> F.interpolate(mask[<span class="va">None</span>, <span class="va">None</span>], size<span class="op">=</span>z_y.shape[<span class="op">-</span><span class="dv">2</span>:], mode<span class="op">=</span><span class="st">'bilinear'</span>, align_corners<span class="op">=</span><span class="va">False</span>).to(device)</span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    M_z <span class="op">=</span> (M_z <span class="op">&gt;</span> <span class="fl">0.9</span>).<span class="bu">float</span>()    <span class="co"># binarize it</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> z_y <span class="op">*</span> M_z, M_z<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> latents_only_inpaint(sub, inpainting_dict, n_samples, n_steps<span class="op">=</span><span class="dv">20</span>, t0<span class="op">=</span><span class="fl">0.2</span>, warp_fn<span class="op">=</span><span class="va">None</span>):</span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    z_y, M_sq <span class="op">=</span> prepare_latent_mask(y, M, sub.encode)   </span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    inpainting_dict.update({<span class="st">'M_sq'</span>: M_sq, <span class="st">'y'</span>: z_y, <span class="st">'t_min'</span>: t0})</span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    z0 <span class="op">=</span> torch.randn_like(z_y) <span class="op">*</span> (<span class="dv">1</span><span class="op">-</span>t0) <span class="op">+</span> z_y <span class="op">*</span> t0         <span class="co"># Initialize via interpolation</span></span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> generate_samples(sub, n_samples, t0<span class="op">=</span>t0, z0<span class="op">=</span>z0,  guidance_dict<span class="op">=</span>inpainting_dict, warp_fn<span class="op">=</span>warp_fn)</span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>inpainting_dict <span class="op">=</span>{<span class="st">'decode'</span>: <span class="va">None</span>,            <span class="co"># now we're latents-only</span></span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>                <span class="st">'strength'</span>: <span class="fl">1.0</span>,             <span class="co"># "guidance strength", you may vary this</span></span>
-<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>                <span class="st">'t_min'</span>: <span class="fl">0.2</span>, <span class="st">'t_max'</span>: <span class="fl">0.999</span>} <span class="co"># t range to apply guidance, may vary these</span></span>
-<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>show_grid(y.squeeze(), <span class="st">"pixel y's"</span>)</span>
-<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> latents_only_inpaint(sub, inpainting_dict, n_samples<span class="op">=</span><span class="bu">len</span>(y), n_steps<span class="op">=</span><span class="dv">10</span>)</span>
-<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
-<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="st">"inpainted images"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_latent_mask(image, mask, encoder):</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    z_y <span class="op">=</span> encoder(image.to(device))</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    M_z <span class="op">=</span> F.interpolate(mask[<span class="va">None</span>, <span class="va">None</span>], size<span class="op">=</span>z_y.shape[<span class="op">-</span><span class="dv">2</span>:], mode<span class="op">=</span><span class="st">'bilinear'</span>, align_corners<span class="op">=</span><span class="va">False</span>).to(device)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    M_z <span class="op">=</span> (M_z <span class="op">&gt;</span> <span class="fl">0.9</span>).<span class="bu">float</span>()    <span class="co"># binarize it</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> z_y <span class="op">*</span> M_z, M_z<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> latents_only_inpaint(sub, inpainting_dict, n_samples, n_steps<span class="op">=</span><span class="dv">20</span>, t0<span class="op">=</span><span class="fl">0.2</span>, warp_fn<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    z_y, M_sq <span class="op">=</span> prepare_latent_mask(y, M, sub.encode)   </span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>    inpainting_dict.update({<span class="st">'M_sq'</span>: M_sq, <span class="st">'y'</span>: z_y, <span class="st">'t_min'</span>: t0})</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>    z0 <span class="op">=</span> torch.randn_like(z_y) <span class="op">*</span> (<span class="dv">1</span><span class="op">-</span>t0) <span class="op">+</span> z_y <span class="op">*</span> t0         <span class="co"># Initialize via interpolation</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> generate_samples(sub, n_samples, t0<span class="op">=</span>t0, z0<span class="op">=</span>z0,  guidance_dict<span class="op">=</span>inpainting_dict, warp_fn<span class="op">=</span>warp_fn)</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>inpainting_dict <span class="op">=</span>{<span class="st">'decode'</span>: <span class="va">None</span>,            <span class="co"># now we're latents-only</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>                <span class="st">'strength'</span>: <span class="fl">1.0</span>,             <span class="co"># "guidance strength", you may vary this</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>                <span class="st">'t_min'</span>: <span class="fl">0.2</span>, <span class="st">'t_max'</span>: <span class="fl">0.999</span>} <span class="co"># t range to apply guidance, may vary these</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>show_grid(y.squeeze(), <span class="st">"pixel y's"</span>)</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> latents_only_inpaint(sub, inpainting_dict, n_samples<span class="op">=</span><span class="bu">len</span>(y), n_steps<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="st">"inpainted images"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1169,7 +1187,7 @@ To: /Users/shawley/github/blog/posts/downloaded_flow.safetensors
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"c1515ec1a7bd4e46b9b3e37dae18a61f","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"a32422006a5944a9a5d3f88e14256af2","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -1232,42 +1250,42 @@ To: /Users/shawley/github/blog/posts/downloaded_flow.safetensors
 <p>This has a superficial resemblance to the “<a href="https://github.com/Stability-AI/stable-audio-tools/blob/31932349d98c550c48711e7a5a40b24aa3d7c509/stable_audio_tools/inference/sampling.py#L221">ping-pong</a>” integration method used by the flow model Stable Audio Open Small (SAOS) <span class="citation" data-cites="sao_small"><a href="#ref-sao_small" role="doc-biblioref">[14]</a></span>, with a key distinction: the ping-pong integrator and updates the time-integrated latent variable <span class="math inline">\(z\)</span> (called “<span class="math inline">\(x\)</span>” in SAOS), whereas for PnP-Flow it is the projection <span class="math inline">\(\widehat{z_1}\)</span> (called <a href="https://github.com/Stability-AI/stable-audio-tools/blob/31932349d98c550c48711e7a5a40b24aa3d7c509/stable_audio_tools/inference/sampling.py#L242">“denoised”</a> in SAOS) that is the primary variable that is maintained between steps. This is a subtle distinction but worth noting.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <p>To implement PnP-Flow in code, let’s replace our “integrator” with something specific to PnP-Flow:</p>
 <div id="8953d126-358e-4be9-8402-a8372ea8e0c4" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample_pnpflow(model, z0, n_steps<span class="op">=</span><span class="dv">10</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, n_avg<span class="op">=</span><span class="dv">5</span>, warp_fn<span class="op">=</span><span class="kw">lambda</span> x: x, guidance_dict<span class="op">=</span><span class="va">None</span>):</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    ts <span class="op">=</span> warp_fn(torch.linspace(<span class="dv">0</span>, <span class="dv">1</span>, n_steps, device<span class="op">=</span>z0.device, dtype<span class="op">=</span>z0.dtype))  </span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    z1_hat <span class="op">=</span> z0</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> t <span class="kw">in</span> ts[<span class="dv">1</span>:]:</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>        grad <span class="op">=</span> guidance_dict[<span class="st">'M_sq'</span>] <span class="op">*</span> (z1_hat <span class="op">-</span> guidance_dict[<span class="st">'y'</span>])</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>        gamma_t <span class="op">=</span> (<span class="dv">1</span> <span class="op">-</span> t) <span class="op">**</span> alpha</span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>        z1_star <span class="op">=</span> z1_hat <span class="op">-</span> guidance_dict[<span class="st">'strength'</span>] <span class="op">*</span> gamma_t <span class="op">*</span> grad        </span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>        projections <span class="op">=</span> []           <span class="co"># Average multiple noisy projections</span></span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_avg):</span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>            z <span class="op">=</span> t <span class="op">*</span> z1_star  <span class="op">+</span>  (<span class="dv">1</span> <span class="op">-</span> t) <span class="op">*</span> torch.randn_like(z1_star) </span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>            projections.append(z <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> t) <span class="op">*</span> model(z, t))</span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>        z1_hat <span class="op">=</span> torch.stack(projections).mean(dim<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> z1_hat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample_pnpflow(model, z0, n_steps<span class="op">=</span><span class="dv">10</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, n_avg<span class="op">=</span><span class="dv">5</span>, warp_fn<span class="op">=</span><span class="kw">lambda</span> x: x, guidance_dict<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    ts <span class="op">=</span> warp_fn(torch.linspace(<span class="dv">0</span>, <span class="dv">1</span>, n_steps, device<span class="op">=</span>z0.device, dtype<span class="op">=</span>z0.dtype))  </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    z1_hat <span class="op">=</span> z0</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> t <span class="kw">in</span> ts[<span class="dv">1</span>:]:</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>        grad <span class="op">=</span> guidance_dict[<span class="st">'M_sq'</span>] <span class="op">*</span> (z1_hat <span class="op">-</span> guidance_dict[<span class="st">'y'</span>])</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>        gamma_t <span class="op">=</span> (<span class="dv">1</span> <span class="op">-</span> t) <span class="op">**</span> alpha</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>        z1_star <span class="op">=</span> z1_hat <span class="op">-</span> guidance_dict[<span class="st">'strength'</span>] <span class="op">*</span> gamma_t <span class="op">*</span> grad        </span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>        projections <span class="op">=</span> []           <span class="co"># Average multiple noisy projections</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_avg):</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>            z <span class="op">=</span> t <span class="op">*</span> z1_star  <span class="op">+</span>  (<span class="dv">1</span> <span class="op">-</span> t) <span class="op">*</span> torch.randn_like(z1_star) </span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>            projections.append(z <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> t) <span class="op">*</span> model(z, t))</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>        z1_hat <span class="op">=</span> torch.stack(projections).mean(dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> z1_hat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The model we used earlier for latents-only inpainting was trained to have straight trajectories, so we should be able to use it again here, just calling <code>sample_pnpflow</code> (instead of <code>integrate_path</code>). The results are as follows:</p>
 <div id="e5411455-8ecb-4b4e-8f49-fa03b8528371" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pnp_flow_inpaint(sub, inpainting_dict, n_samples, n_steps<span class="op">=</span><span class="dv">10</span>, t0<span class="op">=</span><span class="dv">0</span>, seed<span class="op">=</span><span class="va">None</span>, <span class="op">**</span>kwargs):</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Inpaint using PnP-Flow method"""</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> seed <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>: torch.manual_seed(seed)</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    z_y, M_sq <span class="op">=</span> prepare_latent_mask(y, M, sub.encode)</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    inpainting_dict.update({<span class="st">'M_sq'</span>: M_sq, <span class="st">'y'</span>: z_y, <span class="st">'t_min'</span>: t0})</span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    z0 <span class="op">=</span> torch.randn_like(z_y) <span class="op">*</span> (<span class="dv">1</span><span class="op">-</span>t0) <span class="op">+</span> z_y <span class="op">*</span> t0</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sample_pnpflow(sub.flow_model, z0, guidance_dict<span class="op">=</span>inpainting_dict, <span class="op">**</span>kwargs)</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>inpainting_dict <span class="op">=</span> {<span class="st">'strength'</span>: <span class="fl">1.0</span>, <span class="st">'t_min'</span>: <span class="fl">0.0</span>, <span class="st">'t_max'</span>: <span class="fl">0.999</span>}</span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>show_grid(y,<span class="st">"Masked pixel images (y)"</span>)</span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>z1 <span class="op">=</span> pnp_flow_inpaint(sub, inpainting_dict, n_samples<span class="op">=</span><span class="bu">len</span>(y), n_steps<span class="op">=</span><span class="dv">20</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, seed<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> F.sigmoid(sub.decode(z1)).cpu()   <span class="co"># convert latents to pixels</span></span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="ss">f"Inpainted images (alpha=0.5, strength=</span><span class="sc">{</span>inpainting_dict[<span class="st">'strength'</span>]<span class="sc">}</span><span class="ss">)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="at">@torch.no_grad</span>()</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pnp_flow_inpaint(sub, inpainting_dict, n_samples, n_steps<span class="op">=</span><span class="dv">10</span>, t0<span class="op">=</span><span class="dv">0</span>, seed<span class="op">=</span><span class="va">None</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Inpaint using PnP-Flow method"""</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> seed <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>: torch.manual_seed(seed)</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    z_y, M_sq <span class="op">=</span> prepare_latent_mask(y, M, sub.encode)</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    inpainting_dict.update({<span class="st">'M_sq'</span>: M_sq, <span class="st">'y'</span>: z_y, <span class="st">'t_min'</span>: t0})</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    z0 <span class="op">=</span> torch.randn_like(z_y) <span class="op">*</span> (<span class="dv">1</span><span class="op">-</span>t0) <span class="op">+</span> z_y <span class="op">*</span> t0</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sample_pnpflow(sub.flow_model, z0, guidance_dict<span class="op">=</span>inpainting_dict, <span class="op">**</span>kwargs)</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>inpainting_dict <span class="op">=</span> {<span class="st">'strength'</span>: <span class="fl">1.0</span>, <span class="st">'t_min'</span>: <span class="fl">0.0</span>, <span class="st">'t_max'</span>: <span class="fl">0.999</span>}</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>show_grid(y,<span class="st">"Masked pixel images (y)"</span>)</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>z1 <span class="op">=</span> pnp_flow_inpaint(sub, inpainting_dict, n_samples<span class="op">=</span><span class="bu">len</span>(y), n_steps<span class="op">=</span><span class="dv">20</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, seed<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> F.sigmoid(sub.decode(z1)).cpu()   <span class="co"># convert latents to pixels</span></span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>show_grid(x1, <span class="ss">f"Inpainted images (alpha=0.5, strength=</span><span class="sc">{</span>inpainting_dict[<span class="st">'strength'</span>]<span class="sc">}</span><span class="ss">)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -1353,13 +1371,13 @@ To: /Users/shawley/github/blog/posts/downloaded_flow.safetensors
 </div>
 </div>
 <p><br> If you found this tutorial helpful, I encourage you to cite it:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode bibtex code-with-copy"><code class="sourceCode bibtex"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="va">@misc</span>{<span class="ot">hawley2025flowwhere</span>,</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>      <span class="dt">title</span>={Flow Where You Want}, </span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>      <span class="dt">author</span>={Scott H. Hawley},</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">date</span>={Nov 27, 2025},</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">howpublished</span>={Scott Hawley's Blog},</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">url</span>={https://drscotthawley.github.io/blog/posts/FlowWhereYouWant.html}</span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode bibtex code-with-copy"><code class="sourceCode bibtex"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="va">@misc</span>{<span class="ot">hawley2025flowwhere</span>,</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>      <span class="dt">title</span>={Flow Where You Want}, </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>      <span class="dt">author</span>={Scott H. Hawley},</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">date</span>={Nov 27, 2025},</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">howpublished</span>={Scott Hawley's Blog},</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">url</span>={https://drscotthawley.github.io/blog/posts/FlowWhereYouWant.html}</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>
