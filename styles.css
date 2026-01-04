@@ -1,1 +1,39 @@
-/* css styles */
+/* Custom styles to match main site */
+
+/* Logo styling - force Quarto to use our size */
+.navbar-logo,
+.navbar-brand-logo,
+.navbar-brand img,
+.navbar .navbar-brand img,
+img[alt="SH Logo"] {
+  height: 2.5rem !important;
+  max-height: 2.5rem !important;
+  width: auto !important;
+  margin-right: 0.75rem !important;
+}
+
+/* Navbar title - make it link back to main site */
+.navbar-title {
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 700;
+  transition: color 0.15s ease-in-out;
+}
+
+.navbar-title:hover {
+  color: #00bc8c !important;
+  text-decoration: none;
+}
+
+/* Ensure navbar background matches */
+.navbar {
+  background-color: #3f597c !important;
+}
+
+/* Accent color for links - use teal */
+a {
+  color: #00bc8c;
+}
+
+a:hover {
+  color: #00d4a0;
+}

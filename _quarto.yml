@@ -4,9 +4,14 @@ project:
 website:
   title: "Scott H. Hawley"
   site-url: https://drscotthawley.github.io/blog
+  favicon: images/logo.png
   twitter-card: true
   drafts: unlinked
   navbar:
+    logo: images/logo.png
+    logo-alt: "SH Logo"
+    logo-href: https://www.scotthawley.com
+    title-href: https://www.scotthawley.com
     right:
       - about.qmd
       - icon: github
@@ -23,7 +28,12 @@ format:
     css: styles.css
     link-external-newwindow: true
     highlight-style: monokai
-    include-in-header: custom_css.css
+    include-in-header:
+      - custom_css.css
+      - text: |
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;600;700&display=swap" rel="stylesheet">
 execute:
   freeze: auto
 
