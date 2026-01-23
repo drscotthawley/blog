@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Scott H. Hawley">
+<meta name="dcterms.date" content="2026-01-26">
+<meta name="description" content="Classification as Pattern Recognition">
+
+<title>Noticing a Pattern – Scott H. Hawley</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/logo.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-1b3db88def35042d172274863c1cdcf0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-8d1ea2f4f8e14d12cbb0a1c491d81284.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+details > summary {
+    color: #00966f;   /* the greenish tinge that appears in my blog */
+    cursor: pointer; /* lil triangle thingy */
+}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&amp;display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Noticing a Pattern – Scott H. Hawley">
+<meta property="og:description" content="Classification as Pattern Recognition">
+<meta property="og:image" content="https://drscotthawley.github.io/blog/posts/images/tench_compact.png">
+<meta property="og:site_name" content="Scott H. Hawley">
+<meta property="og:image:height" content="393">
+<meta property="og:image:width" content="595">
+<meta name="twitter:title" content="Noticing a Pattern – Scott H. Hawley">
+<meta name="twitter:description" content="Classification as Pattern Recognition">
+<meta name="twitter:image" content="https://drscotthawley.github.io/blog/posts/images/tench_compact.png">
+<meta name="twitter:image-height" content="393">
+<meta name="twitter:image-width" content="595">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="https://www.scotthawley.com" class="navbar-brand navbar-brand-logo">
+    <img src="../images/logo.png" alt="SH Logo" class="navbar-logo light-content">
+    <img src="../images/logo.png" alt="SH Logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="https://www.scotthawley.com">
+    <span class="navbar-title">Scott H. Hawley</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/drscotthawley"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://bsky.app/profile/drscotthawley.bsky.social"> 
+<span class="menu-text"><i class="fa-brands fa-bluesky" aria-label="bluesky"></i></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/drscotthawley"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/drscotthawley/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Noticing a Pattern</h1>
+                  <div>
+        <div class="description">
+          Classification as Pattern Recognition
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">classification</div>
+                <div class="quarto-category">similarity</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Scott H. Hawley </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 26, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro"><span class="header-section-number">1</span> Intro</a></li>
+  <li><a href="#interactive-demo-if-the-shape-fits-pass-it" id="toc-interactive-demo-if-the-shape-fits-pass-it" class="nav-link" data-scroll-target="#interactive-demo-if-the-shape-fits-pass-it"><span class="header-section-number">2</span> Interactive Demo: If the Shape Fits Pass It</a></li>
+  <li><a href="#learning-to-see" id="toc-learning-to-see" class="nav-link" data-scroll-target="#learning-to-see"><span class="header-section-number">3</span> Learning to See</a></li>
+  <li><a href="#you-spot-it-you-got-it" id="toc-you-spot-it-you-got-it" class="nav-link" data-scroll-target="#you-spot-it-you-got-it"><span class="header-section-number">4</span> You Spot It, You Got It</a></li>
+  <li><a href="#interactive-demo-similar-signals" id="toc-interactive-demo-similar-signals" class="nav-link" data-scroll-target="#interactive-demo-similar-signals"><span class="header-section-number">5</span> Interactive Demo: Similar Signals</a></li>
+  <li><a href="#what-do-computer-vision-classifiers-see" id="toc-what-do-computer-vision-classifiers-see" class="nav-link" data-scroll-target="#what-do-computer-vision-classifiers-see"><span class="header-section-number">6</span> What Do Computer Vision Classifiers ‘See’?</a></li>
+  <li><a href="#similar-stories" id="toc-similar-stories" class="nav-link" data-scroll-target="#similar-stories"><span class="header-section-number">7</span> Similar Stories</a></li>
+  <li><a href="#hope-for-retraining" id="toc-hope-for-retraining" class="nav-link" data-scroll-target="#hope-for-retraining"><span class="header-section-number">8</span> Hope for Retraining</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p><em>(Original draft: Jun 28, 2020)</em></p>
+<p>“Faced with information overload, we have no alternative but pattern-recognition”—Marshall McLuhan <span class="citation" data-cites="mcluhan_counterblast"><a href="#ref-mcluhan_counterblast" role="doc-biblioref">[1]</a></span></p>
+<section id="intro" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="intro"><span class="header-section-number">1</span> Intro</h2>
+<p>In the preceding material, we’ve brought readers up to speed on the idea that classification (i.e., grouping animals, concepts, events, or people together based on similar features) is something that humans just do, even to the extent that from antiquity until the 19th century, despite many forms of classification being created and debated, the fact that we tend to categorize at all went largely unexamined. We’ve explored that categories and concepts are tied up with language (because “something something Wittgenstein” <span class="citation" data-cites="gualeni_2017"><a href="#ref-gualeni_2017" role="doc-biblioref">[2]</a></span>) and that thinking about certain categories tends to activate particular regions of people’s brains (e.g., as shown in the amazing 3D web demo for Huth et al.’s “PrAGMATIC Atlas” <span class="citation" data-cites="huth_pragmatic huth_nature"><a href="#ref-huth_pragmatic" role="doc-biblioref">[3]</a>, <a href="#ref-huth_nature" role="doc-biblioref">[4]</a></span>).</p>
+<p>When we classify or categorize (and we use these terms interchangeably), it is done as a means of simplifying and adding structure to the world — in the words of psychologist Eleanor Rosch, “to provide maximum information with the least cognitive effort” so that “the perceived world comes as structured information rather than as arbitrary or unpredictable attributes” <span class="citation" data-cites="rosch_1978"><a href="#ref-rosch_1978" role="doc-biblioref">[5]</a></span>. This amounts to filtering the variability present in the world in order to retain the essence of what’s important. This has been described via the metaphor of an “information bottleneck” <span class="citation" data-cites="bottleneck_tishby"><a href="#ref-bottleneck_tishby" role="doc-biblioref">[6]</a></span> yet the mechanism of how the bottleneck is able to be selective in a useful way that gives rise to structures beyond the mere exclusion of noise, merits careful attention. When we classify, we are noticing and identifying patterns, thus performing pattern recognition. It is no coincidence that the neural structures in biological brains, as well as artificial neural networks, tend to be adept recognizers of patterns. How do they work?</p>
+<p>Let’s consider pattern recognition in greater detail, starting with visual patterns. Modern machine learning classification research has devoted exorbitant time and resources to the problem of image classification, and the most successful and prevalent image classifiers rely on convolutional neural networks (CNN) which apply successive filtering operations to an image, in so doing learning to recognize patterns in the images in their datasets. These networks are based explicitly on detailed studies of the visual cortexes of mammals, specifically cats <span class="citation" data-cites="fukushima"><a href="#ref-fukushima" role="doc-biblioref">[7]</a></span>. More on the cats later.</p>
+<p>Usually we explain convolution by saying that, for each pixel in the image (where each pixel consists of a numerical value for its intensity), we take a weighted sum over its neighboring pixels, and generate a new image consisting of all the weighted sums. For example if we used each pixel’s immediate neighbors, including the “diagonal-neighbors,” then we’d have a 3x3 matrix of “weights” which encode how much each pixel in the filter’s “receptive field” contributes weighted sum. This matrix of weights is called the convolution kernel and performs the work of a filter. Using convolution for image processing is something familiar to users of Photoshop, or image-intensive professions such as astronomy or medical imaging. One familiar example is the running average, in which all the weights are the same; this has the effect of filtering out high frequency features such as noise, and allowing the smoother parts of the image through. Other choices for weights can produce effects such as edge-detection, which is apropos to our ensuing discussion. We can view classification as the final stage of filtering, in which the entire input signal is reduced to a single point, namely the category in which the input belongs.</p>
+<p>There’s an alternative way to think of convolution that yields more insight for our topic of classification, and it’s directly related to pattern matching: convolution is essentially the same thing as (cross-)correlation. In this case we view the weights matrix as a tiny image, and the output of the filter operation is a measure of the strength of the correlation between (each small region of) the input image and the kernel-image. This correlation process produces large outputs wherever part of the image matches the kernel, and similarly where they don’t match, the output is attenuated. (I’m oversimplifying a bit, but this is close enough.)</p>
+</section>
+<section id="interactive-demo-if-the-shape-fits-pass-it" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="interactive-demo-if-the-shape-fits-pass-it"><span class="header-section-number">2</span> Interactive Demo: If the Shape Fits Pass It</h2>
+<p>In the interactive demo below, we see an image containing some lines, a circle, and various textures. By editing the values of the weights in the convolution operation’s filter kernel, you can allow different parts of — i.e., different patterns in — the image to ‘activate.’ These activations (i.e., filtered images) would then ‘be allowed to pass through’ to subsequent layers in a neural network, where they could then be used for the formation of higher-order representations and features.</p>
+<p>Try editing the weights in the filter kernel matrix below by selecting from the drop-down presets and/or clicking the ‘squares’ to turn them on or off, and try to allow different parts of the image through, such as horizontal or vertical lines. (The default kernel is designed to match with diagonal lines that go from lower left to upper right.)</p>
+<iframe type="text/html" src="https://hedges.belmont.edu/~shawley/acts/demo/demo_draw.html" width="700px" height="280px" frameborder="0">
+</iframe>
+<p>(As for the texture patterns toward the bottom, we’ll say more about them later.)</p>
+<p>Through this exercise, we can infer that what is usually allowed through the filter is what fits or matches the shape stored in the kernel. In ML, we tend to call kernels feature detectors, because by allowing certain features to pass rather than blocking them, the filters present them to the remainder of the network. Feature detectors can be arranged in succession, so for example, if you want to ‘detect’ the large circle, you might combine the outputs from feature detectors for horizontal lines, vertical lines, diagonal lines, etc. Or if you want to detect faces, you can feed the edge-detectors into a hierarchical set of levels that aggregate increasing higher-level features like eyes and noses, as shown in this ‘ubiquitous’ image from Lee et al in 2009 <span class="citation" data-cites="lee_et_al_faces"><a href="#ref-lee_et_al_faces" role="doc-biblioref">[8]</a></span>:</p>
+<div id="fig-faces" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-faces-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/lee_et_all_faces.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-faces-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<strong>Figure</strong>&nbsp;1<strong>.</strong> An example hierarchy of feature detectors for a facial recognition system. (Source: Lee et al, 2009.)
+</figcaption>
+</figure>
+</div>
+<p>As we mentioned earlier, convolutional filters are used in all kinds of fields, from astronomy to medicine to the selfies you take with you phone, and appear in apps such as Photoshop, SnapChat and Instagram. In our present discussion we are not so much interested in the filtered image as an artistic or scientific product as we are in which features make it into the output image — which features are “passed” if you will — and which are suppressed, because this will determine what sorts of information can propagate to ‘downstream’ parts of the network and ultimately determine the classification output. In the example of the facial features above, imagine if you couldn’t detect horizontal lines: would you even be able to detect faces at all?</p>
+<p>Ultimately, when the high-level features generate classifications, we can view the classification as the final filter, in which the entire input signal is collapsed into one point. Examples of this include the discovery of the “Jennifer Anniston neuron” a single neuron in humans that will only fire when presented with an image of the actress <span class="citation" data-cites="jennifer_anniston_neuron"><a href="#ref-jennifer_anniston_neuron" role="doc-biblioref">[9]</a></span> or Google Brain’s “Cat” image of Quoc Le et al <span class="citation" data-cites="google_cat_le"><a href="#ref-google_cat_le" role="doc-biblioref">[10]</a></span>, which demonstrates the combined effect of inputs resulting in the classification “cat” by team’s neural network:</p>
+<div id="fig-google-cat" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-google-cat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/google_cat.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-google-cat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<strong>Figure</strong>&nbsp;2<strong>.</strong> The ‘Google Cat’ neuron activation image (Source: Google)
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="learning-to-see" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="learning-to-see"><span class="header-section-number">3</span> Learning to See</h2>
+<p>Speaking of cats! Like the interactive exercise above illustrated, the Nobel-prize-winning work of David Hubel and Torsten Wiesel in the 1960s showed that individual neurons in cat brains will respond to certain visual stimuli such as diagonal, horizontal, or vertical lines. Even more interesting is how and when such feature detectors are developed — or not. Hubel and Wiesel found that there is a “critical period” of “neuroplasticity” in the early lives of cats during which their visual cortexes can ‘learn’ to acquire their feature-detecting ability. Several years later, Colin Blakemore and Grahame Cooper showed <span class="citation" data-cites="blakemore1970"><a href="#ref-blakemore1970" role="doc-biblioref">[11]</a></span> <span class="citation" data-cites="kitten_video"><a href="#ref-kitten_video" role="doc-biblioref">[12]</a></span> that kittens raised in darkness but occasionally placed in an environment consisting of only horizontal lines never acquired the ability to detect vertical lines, and likewise that allowing them to see only vertical lines kept them from developing feature detectors for horizontal lines. In the later case, the kittens could not detect the edge of a tabletop visually and relied on touch to navigate.</p>
+<div id="fig-kitten" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-kitten-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/blakemore_cooper_cat.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-kitten-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<strong>Figure</strong>&nbsp;3<strong>.</strong> Black Mirror scenario, for cats: Kitten raised in darkness but occasionally placed in an environment with only vertical lines, never develops ‘feature detectors’ for horizontal edges. (Source: Blakemore and Cooper, 1970.)
+</figcaption>
+</figure>
+</div>
+<p>The kittens raised in the presence of horizontal lines could “see” the vertical features in their surroundings, in the sense that the light from such objects was hitting the photoreceptors in their eyes, but couldn’t “see” them in the sense of detecting or noticing them because they didn’t have sensors for them — they were insensitive to them. When you are insensitive to something, you don’t believe it’s there. But when your neurons encode a pattern acquired by experience, then you start to notice features in your environment that you were otherwise oblivious to.</p>
+<p>The takeaway from this is that if you don’t have (or develop) feature detectors for something, then you can’t notice it, or reason about it, etc.</p>
+<p>This has many implications, one of the most widely discussed currently being racial bias in computer vision systems, and by “bias” we mean “completely not working at all.” This can be as simple as an automated hand dryer in a bathroom not turning on when a Black person puts his hand under it, to AI researcher Joy Buolamwini’s demonstrations — in the aptly-titled “Algorithms Aren’t Racist. Your Skin is Just Too Dark” <span class="citation" data-cites="buolamwini2017"><a href="#ref-buolamwini2017" role="doc-biblioref">[13]</a></span> — that because of her dark skin, facial recognition systems treat her as “invisible.” This lack of detection amounts to misclassification by treating a relevant foreground object as if it were part of the background. (See the later chapter on Misclassification.)</p>
+<p>When humans are detecting things, we may not notice them as a result of not having experienced them. Thus for example, a person who has not experienced certain forms of abuse may not recognize patterns of behavior that are triggering for those have experienced them. Thus we may deny the existence of certain dynamics because we don’t see them, or don’t see them in the same light as others. The neurological basis for this, and indeed for pattern matching and learning in general, is known as Hebbian learning. Broadly speaking, when neurons fire in response to certain stimuli, they also lower their activation thresholds so they are more likely to fire for the same stimuli in the future — as the saying goes, “neurons that fire together, wire together.” So in order to recognize things, we must have experienced them, and once we’ve experienced them, we’re more likely to ‘see’ them in the future.</p>
+<p>The preceding section could be summarized as “you’ve got to got it, to spot it,” which is a corollary of a more famous phrase…</p>
+</section>
+<section id="you-spot-it-you-got-it" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="you-spot-it-you-got-it"><span class="header-section-number">4</span> You Spot It, You Got It</h2>
+<p>As we’ve said, the filtered stimuli that are allowed to pass into our pattern-matching apparatus can ultimately lead to classifications as conclusions. For example, people shown the same facts will draw completely different conclusions, depending on their pre-existing biases; this is particularly challenging for when this is applied to politics, as in “Conservative and liberal attitudes drive polarized neural responses to political content” <span class="citation" data-cites="conservative_liberal_bias"><a href="#ref-conservative_liberal_bias" role="doc-biblioref">[14]</a></span>.</p>
+<p>The earlier example of convolutional image filters established a link with correlation, showing we often detect things on the basis of correlations. This applies not only visually, but for time-series signals as well. Essentially, the correlation process will produce an output that is either amplified or attenuated by the strength of the correlation, as with a “low pass filter” in audio production, and then this may be passed along to other systems such as (following the audio metaphor) a noise gate, which rejects signals with strengths below a certain threshold. We’ll have a much deeper discussion of thresholding phenomena later, but for now, it suffices to say that this is an immensely important form of classification. The most sensitive scientific instrument ever made, the LIGO gravitational wave detector system, measures time series data about the infinitesimal changes in length of a pair of laser beams — changes as small as 1 part in 1021. Yet this sensitivity comes with cost that the detector highly sensitive to noise as well. In order to pick out the true signals from the background of noise, researchers apply pattern-matching filters, and to great effect: Three leaders of the LIGO Scientific Collaboration received the Nobel Prize in Physics in 2016, for the successful detection of gravitational wave signals from distant colliding black holes. My work as a postdoctoral researcher involved simulating colliding black holes for the purpose of providing “template waveforms,” probable signals (used like the kernels above) that experimenters running the LIGO detectors could use as patterns to search for. In the next interactive demo (below), you can try different template signals to try to match or filter different parts of the inputs.</p>
+</section>
+<section id="interactive-demo-similar-signals" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="interactive-demo-similar-signals"><span class="header-section-number">5</span> Interactive Demo: Similar Signals</h2>
+<p>In this example, the Input (blue) and Filter (purple) signals are combined in two different ways. The first way is shown in the bar at the right, which is the correlation coefficient (“R”) showing how well the two signals match. (This “Pearson product-moment correlation coefficient” is exactly the same as the “cosine similarity” measure used in fields such as Natural Language Processing, and is simply a normalized “dot product” between the two signals, i.e., the weighted sum of the Input elements using their respective Filter elements as weights — or vice versa, it’s symmetric! — then divided by the magnitudes of both signals.) When the input matches with filter, the two can be said to correlate or even resonate, resulting in a strong detection of the signal. The second way is one in which the Filter is used like a convolution kernel to produce a “cross-correlation” filtered Output (shown as the red graph).</p>
+<iframe type="text/html" src="https://hedges.belmont.edu/scottergories/images/signal_corr_trans.html" width="770px" height="610px" frameborder="0">
+</iframe>
+<p>A key observation from the demo is that the correlation measure “R” is high when Input (i.e., new data) and Filter (i.e., the stored pattern) seem to match up. The filter also determines what part of the input is passed (if any) and how the input is transformed when it gets passed.</p>
+<p>Correlation is not a guarantee of proper detection, but it works well enough that it serves as a go-to response. The old adage “correlation does not imply causality” exists for two main reasons. The first is precisely because our ability to recognize aspects of the work relies, neurologically, on correlation as a means of filtering and making sense of the world. The second reason is that many different phenomena can appear to correlate. One of my favorite websites (and books) is Tyler Vigen’s “Spurious Correlations” <span class="citation" data-cites="spurious_correlations"><a href="#ref-spurious_correlations" role="doc-biblioref">[15]</a></span>, which shows all manner of yearly data that are highly correlated despite being utterly ridiculous, such as showing how “Age of Miss America” correlates with “Murders by steam, hot vapors and hot objects” or as shown below, “Number of people who drowned by falling into a pool” vs.&nbsp;“[Number of] Films Nicolas Cage appeared in.”</p>
+<div id="fig-spurious" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-spurious-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/spurious1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spurious-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<strong>Figure</strong>&nbsp;4<strong>.</strong> One example from Tyler Vigen’s “Spurious Correlations” website. (Creative Commons License.)
+</figcaption>
+</figure>
+</div>
+<p>We’re well acquainted with spurious correlations in the visual domain as well, such as the common practice of seeing animal shapes in clouds <span class="citation" data-cites="bear_in_clouds"><a href="#ref-bear_in_clouds" role="doc-biblioref">[16]</a></span> or Jesus in a piece of toast <span class="citation" data-cites="jesus_toast"><a href="#ref-jesus_toast" role="doc-biblioref">[17]</a></span>. Since one of the themes of this book is investigating similarities and differences between how humans and machines classify things, we might ask the question, “Do computer vision systems see things in other things?” The answer is: All the time.</p>
+</section>
+<section id="what-do-computer-vision-classifiers-see" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="what-do-computer-vision-classifiers-see"><span class="header-section-number">6</span> What Do Computer Vision Classifiers ‘See’?</h2>
+<p>There are numerous methods intended to help people determine which inputs (or parts of inputs) are significant — or “salient” — for classification outcomes, so they can better understand how the networks operate.</p>
+<p>Often the salient features are not the same as those humans typically rely on. In the computer vision community there is an apocryphal story told about a US Army software system designed to detect tanks in photographs. The story goes that a series of photographs were taken of scenes containing tanks or not, and the AI system was trained to be a binary classifier (i.e.&nbsp;“tank” or “no tank”) and it performed extremely accurately. Then someone noticed that all the photos containing tanks were taken on cloudy days, and the non-tank photos were taken on sunny days (or in some tellings these are reversed); the developers had trained a cloudy-day detector, not a tank detector! In cases like this, one might say that the AI system was ‘cheating,’ but this is an anthropomorphism; a better description would be that it was latching on to any pattern sufficient to produce the desired outcome, resulting in a spurious correlation. (Incidentally, I believe the story to be true, because it was told to me when I was working for the US Army at Fort Belvoir in my first full-time job after college, on a project specifically intended to generate simulated images of tanks in various natural scenarios with extra-realistic trees <span class="citation" data-cites="creation_weber"><a href="#ref-creation_weber" role="doc-biblioref">[18]</a></span>, in both optical and thermal bands.) Similar examples abound, such as tendency for models trained on the ImageNet database to identify the trophy fish known as a “tench” solely based on the presence of human fingertips along the underside of the fish — because all the training images of tenches were taken of fishermen proudly holding their catches <span class="citation" data-cites="brandel_bof_2019"><a href="#ref-brandel_bof_2019" role="doc-biblioref">[19]</a></span>. We can see this by making saliency map that shows you which parts of the image were most ‘important’ for producing a given classification output. Here are saliency maps for a few pictures of tenches found on the internet, run through a popular deep learning image classifier, in which we see that the fish is almost “invisible” compared to the fishermen’s salient (bright yellow) features:</p>
+<div id="fig-tench" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tench-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/tench_compact.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tench-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<strong>Figure</strong>&nbsp;5<strong>.</strong> Salient features for classifying an image as a picture of the trophy fish called a tench: humans! Either the fingers, or the hat, or the ears — but nothing about the fish — appear as salient features for determining the classification of ‘tench’. (Source: Uploads by anglers to Creative Commons, processed by the author.)
+</figcaption>
+</figure>
+</div>
+<p>There are several methods for producing saliency maps (see, e.g.&nbsp;<span class="citation" data-cites="sanity_checks"><a href="#ref-sanity_checks" role="doc-biblioref">[20]</a></span>), so they don’t always look the same, but when it comes to this example of the tench, they yield similar results. For the above image, the method used (“gradients with guided backpropagation” <span class="citation" data-cites="saliency_guided_backprop flashtorch"><a href="#ref-saliency_guided_backprop" role="doc-biblioref">[21]</a>, <a href="#ref-flashtorch" role="doc-biblioref">[22]</a></span>) measures which parts of the image contribute the most to nudging the classification output in the direction of “tench.” A more rudimentary method would be to just block out different parts of the input image and notice when the classification output switches to a different category.</p>
+<p>Even for something as mundane as the canonical dogs-vs-cats image classification problem, neural networks will often classify on the basis of something other than what humans use. Humans will tend to use the shape of the animal, the types of ears, the tail, etc, whereas the typical convolutional neural network will use the textures of patterns in the image as being most significant rather than the shapes of the objects in the image <span class="citation" data-cites="geirhos_textures"><a href="#ref-geirhos_textures" role="doc-biblioref">[23]</a></span>. Cats are more likely to have coats with stripes and swirls than dogs. Given the “local receptive fields” of convolutional neural networks, the textures become “low level” features whereas the shapes are higher levels. The point is not that shapes can’t be used or are never used; rather it is that the textures can be sufficient for classification, and thus like the sky in the story about the tanks, may become an expedient proxy for cat detection.</p>
+<p>The preeminence of textures for classification outcomes can be observed in the interactive demo from the beginning of the chapter: Certain textures present in the lower part of the input image seem to pass through the filter for a variety of filter shapes; thus these inputs are likely to cause higher-level neurons to activate, and thus to directly influence classification outcomes, perhaps more so than agglomerations of independent detectors for horizontal, vertical and diagonal lines.</p>
+<p>As with the “You Spot it You Got It” section, the correlated patterns that have been strengthened in the network (either via Hebbian learning for humans, or gradient descent for artificial neural networks) become essentially “stored” in the filter of kernel weights in the network. Saliency maps (like those for the tench, above) are one way of investigating this. Another is the “Deep Dream” method made popular by Google, which runs the network “backwards” to impose the activated feature detectors back on the image. Given that training dataset consists mostly of images of animals and humans, one tends to observe lots of eyes and animal-faces appearing in such images, as in this Deep Dream visualization of Van Gogh’s “Starry Night”:</p>
+<div id="fig-deepdream" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-deepdream-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/deepdream_sn.jpg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-deepdream-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<strong>Figure</strong>&nbsp;6<strong>.</strong> Van Gogh’s “Starry Night” interpreted via Deep Dream (Source: Google)
+</figcaption>
+</figure>
+</div>
+<p>Here we see the computer model “seeing” eyes and animal faces in Van Gogh’s painting because the model contains patterns that “trigger” on similar features in the image even though they were not intended by the artist and are “not really there,” another example of “you spot it you got it.”</p>
+<p>For more on the subject of visualizing feature detectors, I recommend the excellent work of Chris Olah et al.&nbsp;over at distil.pub <span class="citation" data-cites="olah2017feature"><a href="#ref-olah2017feature" role="doc-biblioref">[24]</a></span>.</p>
+</section>
+<section id="similar-stories" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="similar-stories"><span class="header-section-number">7</span> Similar Stories</h2>
+<p>The idea that patterns act as filters that determine how we perceive and make sense of the world extends beyond the visual and auditory domains. Frank Rose, Director of Columbia University’s “Strategic Storytelling” program, put it this way in WIRED:</p>
+<p>“Just as the brain detects patterns in the visual forms of nature – a face, a figure, a flower – and in sound, so too it detects patterns in information. Stories are recognizable patterns, and in those patterns we find meaning. We use stories to make sense of our world and to share that understanding with others. They are the signal within the noise.” <span class="citation" data-cites="wired_storytelling"><a href="#ref-wired_storytelling" role="doc-biblioref">[25]</a></span></p>
+<p>Similarly, L.M. Sacassas, author of The Convivial Society blog on technology and culture, writes about the role of stories as filters:</p>
+<p>“…Stories of this sort also act as a filter on reality. We never merely perceive the world, we interpret it. In fact, our perception is already interpretation. And the work of interpretation depends to no small degree on the stories that we have internalized about the world. So when we hear about this, that, or the other thing happening, we tend to fit the event into our paradigmatic stories.” <span class="citation" data-cites="sacasas_narrative_collapse"><a href="#ref-sacasas_narrative_collapse" role="doc-biblioref">[26]</a></span></p>
+<p>If stories contain patterns that over time we encode as filters, then how do stories influence classification? Our categories such as good and evil are formed by stories as much as by didactic teaching. Humans have used stories to communicate and teach for millennia — fables, parables, legends, all come with messages, lessons, archetypes, categories of the types of stories (“man vs.&nbsp;nature”) and roles (heroes and villains). Writers of novels or scripts often make use of patterns or “tropes” because they fit in well with established aspects of the human psyche. These story components closely mimic the way we draw inferences from experience, and even the same portions of the brain “light up” when reading, hearing or watching stories unfold as in real experience <span class="citation" data-cites="brainonfiction"><a href="#ref-brainonfiction" role="doc-biblioref">[27]</a></span>. Interestingly, though we often infer lessons and categories automatically, cognitive scientist are still not sure exactly how we do it, because it often is not conscious. We don’t always do it consistently, or learn the lessons that were intended, but we do it. We even do this with ourselves. Self-help gurus encourage listeners to define the role in our own stories — “Are you a victim?” or “Are you a survivor?” These self-classifications have been tied to outcomes of success and mental health <span class="citation" data-cites="survivor_vs_victim"><a href="#ref-survivor_vs_victim" role="doc-biblioref">[28]</a></span>, particularly when recovering from trauma.</p>
+<p>One important pattern of human filtering in our story-reading is anthropomorphism. Like the Deep Dream image that tends to “see” eyes and faces everywhere, the human brain seems to be biased towards social interactions, and thus we tend to pass observations through a social filter, even for inanimate objects. In a classic experiment from the 1940s <span class="citation" data-cites="heider1944experimental"><a href="#ref-heider1944experimental" role="doc-biblioref">[29]</a></span>, psychologists Fritz Heider and Marianne Simmel showed a short movie involving the motions of geometric shapes and asked the test subjects to describe what happened in the film. Of the people tested, 97% described the film in anthropomorphic terms such as the big triangle acting like a bully toward the small triangle and circle. This interpretation of meaning in anthropomorphic terms is a strong form of filtering that manifests in humans at a very early age, seems to be “hard wired” into us for the purpose of social interaction. Despite primitive pre-scientific humans’ tendencies to anthropomorphize the natural world, this practice is as frequent as ever today <span class="citation" data-cites="waytz_2010"><a href="#ref-waytz_2010" role="doc-biblioref">[30]</a></span>, and even “Scientists are no exception, they are as inclined to anthropomorphism as lay people” <span class="citation" data-cites="airenti_anthro"><a href="#ref-airenti_anthro" role="doc-biblioref">[31]</a></span>.</p>
+<p>These human ways of interacting with stories relate to machine-based systems in two important ways. First, efforts in the Humanities to form machine-based systems of moral reasoning will rely to some extent on textual analysis, and as we’ve noted, human language is often narrative in nature, particularly in stories that teach moral lessons. Secondly, the prospect of having robots to work along side humans can involve “teaching” the robots how to behave. One effort is to record videos of human interaction and supply labels of “pro-social” or “anti-social” behavior to them, and let the machine learning system glean the appropriate behaviors from these short “stories” <span class="citation" data-cites="train_social_robots"><a href="#ref-train_social_robots" role="doc-biblioref">[32]</a></span>. The explicit use of textual narratives to train robots has been proposed by Mark Riedl and collaborators <span class="citation" data-cites="Riedl2016UsingST"><a href="#ref-Riedl2016UsingST" role="doc-biblioref">[33]</a></span>, who have also done significant work on generating stories using the patterns such as “plot graphs” <span class="citation" data-cites="plot_graphs"><a href="#ref-plot_graphs" role="doc-biblioref">[34]</a></span> learned by ML models. Other researchers have used ML systems to chart story arcs—“Our ability to communicate relies in part upon a shared emotional experience, with stories often following distinct emotional trajectories and forming patterns that are meaningful to us” <span class="citation" data-cites="story_arcs"><a href="#ref-story_arcs" role="doc-biblioref">[35]</a></span>—and even classified which sorts of stories correlate with commercial success because they resonate with human readers.</p>
+</section>
+<section id="hope-for-retraining" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="hope-for-retraining"><span class="header-section-number">8</span> Hope for Retraining</h2>
+<p>We’ve talked about the “information flow” of pattern-matching filters as determining what ends up in the “pipeline” for classification decisions, first in terms of images, then for time series, and finally for experiences and stories. We would be remiss to leave out the fact that stories are made up of language, and patterns in language is a huge and very important topic for both the history of classification and current machine learning systems – think about the automatic content moderation algorithms on social media platforms. Since language is such a huge topic, we will explore that in a later chapter.</p>
+<p>We noted that certain kinds of pattern-matching (or lacks thereof) can get “baked in” to neural pathways such as the kittens’ optic nerves, and this may have given the impression that these filters can never be retrained – that the judgements that result from these are stuck with us forever. While it’s true that “neuroplasticity” seems to be maximal in the early stages of life, there is an increasing body of work in therapeutic neuroplasticity, and I will refer the reader to Norman Doidge’s <em>The Brain That Changes Itself</em> <span class="citation" data-cites="doidge_neuroplasticity"><a href="#ref-doidge_neuroplasticity" role="doc-biblioref">[36]</a></span> for an accessible introduction, and to Gazerani <span class="citation" data-cites="gazerani_neuroplasticity"><a href="#ref-gazerani_neuroplasticity" role="doc-biblioref">[37]</a></span> for a recent review of breakthroughs and emerging frontiers.</p>
+<p>To summarize: classification emerges from pattern recognition, and pattern recognition depends on the filters we have developed—whether through evolution, early experience, or training data. What passes through these filters determines what we can notice, reason about, and ultimately categorize. As McLuhan suggested, pattern recognition is how we cope with information overload. But the patterns we’ve encoded also constrain us, making us sensitive to some distinctions while blind to others. In the next chapter, we turn to language—the medium through which we name our categories, debate their boundaries, and encode them in the systems we build.</p>
+</section>
+<section id="references" class="level2" data-number="9">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">9 References</h2><div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-mcluhan_counterblast" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">M. McLuhan, <em>Counterblast</em>. London: Rapp <span>&amp;</span> Whiting, 1969.</div>
+</div>
+<div id="ref-gualeni_2017" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">S. Gualeni, <span>“Something something soup something.”</span> 2017. Available: <a href="https://soup.gua-le-ni.com/how/">https://soup.gua-le-ni.com/how/</a></div>
+</div>
+<div id="ref-huth_pragmatic" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">A. G. Huth, W. A. de Heer, T. L. Griffiths, F. E. Theunissen, and J. L. Gallant, <span>“<span>PRAGMATIC</span> atlas,”</span> 2016, Available: <a href="https://gallantlab.org/huth2016/">https://gallantlab.org/huth2016/</a></div>
+</div>
+<div id="ref-huth_nature" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">A. G. Huth, W. A. de Heer, T. L. Griffiths, F. E. Theunissen, and J. L. Gallant, <span>“Natural speech reveals the semantic maps that tile human cerebral cortex,”</span> <em><span>N</span>ature</em>, vol. 532, no. 7600, pp. 453–458, Apr. 2016, doi: <a href="https://doi.org/10.1038/nature17637">10.1038/nature17637</a>.</div>
+</div>
+<div id="ref-rosch_1978" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">E. Rosch, <span>“Principles of categorization,”</span> in <em><span>C</span>ognition and <span>C</span>ategorization</em>, E. Rosch and B. B. Lloyd, Eds., Hillsdale, NJ: Erlbaum, 1978, pp. 27–48.</div>
+</div>
+<div id="ref-bottleneck_tishby" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[6] </div><div class="csl-right-inline">R. Shwartz-Ziv and N. Tishby, <span>“Opening the black box of deep neural networks via information,”</span> <em><span>C</span>oRR</em>, vol. abs/1703.00810, 2017, Available: <a href="http://arxiv.org/abs/1703.00810">http://arxiv.org/abs/1703.00810</a></div>
+</div>
+<div id="ref-fukushima" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[7] </div><div class="csl-right-inline">K. Fukushima, <span>“<span>N</span>eocognitron: <span>A</span> self-organizing neural network model for a mechanism of pattern recognition unaffected by shift in position,”</span> <em><span>B</span>iological <span>C</span>ybernetics</em>, vol. 36, pp. 193–202, 1980, Available: <a href="https://www.rctn.org/bruno/public/papers/Fukushima1980.pdf">https://www.rctn.org/bruno/public/papers/Fukushima1980.pdf</a></div>
+</div>
+<div id="ref-lee_et_al_faces" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[8] </div><div class="csl-right-inline">H. Lee, R. Grosse, R. Ranganath, and A. Ng, <span>“Convolutional deep belief networks for scalable unsupervised learning of hierarchical representations,”</span> in <em><span>P</span>roceedings of the 26th <span>I</span>nternational <span>C</span>onference <span>O</span>n <span>M</span>achine <span>L</span>earning, <span>I</span>CML 2009</em>, Jan. 2009, p. 77. doi: <a href="https://doi.org/10.1145/1553374.1553453">10.1145/1553374.1553453</a>.</div>
+</div>
+<div id="ref-jennifer_anniston_neuron" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[9] </div><div class="csl-right-inline">R. Q. Quiroga, L. Reddy, G. Kreiman, C. Koch, and I. Fried, <span>“Invariant visual representation by single neurons in the human brain,”</span> <em><span>N</span>ature</em>, vol. 435, no. 7045, pp. 1102–1107, Jun. 2005, doi: <a href="https://doi.org/10.1038/nature03687">10.1038/nature03687</a>.</div>
+</div>
+<div id="ref-google_cat_le" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[10] </div><div class="csl-right-inline">Q. Le <em>et al.</em>, <span>“Building high-level features using large scale unsupervised learning,”</span> in <em><span>P</span>roceedings of the 29th <span>I</span>nternational <span>C</span>onference on <span>M</span>achine <span>L</span>earning (ICML-12)</em>, J. Langford and J. Pineau, Eds., in ICML ’12. New York, NY, USA: Omnipress, 2012, pp. 81–88. Available: <a href="https://icml.cc/2012/papers/73.pdf">https://icml.cc/2012/papers/73.pdf</a></div>
+</div>
+<div id="ref-blakemore1970" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[11] </div><div class="csl-right-inline">C. Blakemore and G. F. Cooper, <span>“Development of the brain depends on the visual environment,”</span> <em><span>N</span>ature</em>, vol. 228, no. 5270, pp. 477–478, Oct. 1970, doi: <a href="https://doi.org/10.1038/228477a0">10.1038/228477a0</a>.</div>
+</div>
+<div id="ref-kitten_video" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[12] </div><div class="csl-right-inline"><span>“Colin blakemore does terrible things to kittehz. For science!”</span> <em><span>Y</span>ouTube</em>. <a href="https://youtu.be/QzkMo45pcUo" class="uri">https://youtu.be/QzkMo45pcUo</a>. Available: <a href="https://youtu.be/QzkMo45pcUo">https://youtu.be/QzkMo45pcUo</a></div>
+</div>
+<div id="ref-buolamwini2017" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[13] </div><div class="csl-right-inline">J. Buolamwini, <span>“Algorithms aren’t racist. Your skin is just too dark,”</span> <em><span>H</span>acker <span>N</span>oon</em>, May 2017, Available: <a href="https://hackernoon.com/algorithms-arent-racist-your-skin-is-just-too-dark-4ed31a7304b8">https://hackernoon.com/algorithms-arent-racist-your-skin-is-just-too-dark-4ed31a7304b8</a></div>
+</div>
+<div id="ref-conservative_liberal_bias" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[14] </div><div class="csl-right-inline">Y. C. Leong, J. Chen, R. Willer, and J. Zaki, <span>“Conservative and liberal attitudes drive polarized neural responses to political content,”</span> <em>bioRxiv</em>, 2020, doi: <a href="https://doi.org/10.1101/2020.04.30.071084">10.1101/2020.04.30.071084</a>.</div>
+</div>
+<div id="ref-spurious_correlations" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[15] </div><div class="csl-right-inline">T. Vigen, <span>“Spurious correlations,”</span> Available: <a href="https://www.tylervigen.com/spurious-correlations">https://www.tylervigen.com/spurious-correlations</a></div>
+</div>
+<div id="ref-bear_in_clouds" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[16] </div><div class="csl-right-inline">J. Dunn, <span>“Bear-ly believable: Cloud shaped exactly like a very relaxed winnie the pooh is spotted at a charity event for children,”</span> <em><span>D</span>aily <span>M</span>ail <span>O</span>nline</em>, 2016, Available: <a href="https://www.dailymail.co.uk/news/article-3710362/Bear-ly-believable-Cloud-shaped-exactly-like-relaxed-Winnie-Pooh-spotted-charity-event-children.html">https://www.dailymail.co.uk/news/article-3710362/Bear-ly-believable-Cloud-shaped-exactly-like-relaxed-Winnie-Pooh-spotted-charity-event-children.html</a></div>
+</div>
+<div id="ref-jesus_toast" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[17] </div><div class="csl-right-inline">J. Liu, J. Li, L. Feng, L. Li, J. Tian, and K. Lee, <span>“Seeing jesus in toast: Neural and behavioral correlates of face pareidolia,”</span> <em><span>C</span>ortex</em>, vol. 53, pp. 60–77, 2014, doi: <a href="https://doi.org/10.1016/j.cortex.2014.01.013">https://doi.org/10.1016/j.cortex.2014.01.013</a>.</div>
+</div>
+<div id="ref-creation_weber" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[18] </div><div class="csl-right-inline">J. Weber and J. Penn, <span>“Creation and rendering of realistic trees,”</span> in <em><span>I</span>n <span>P</span>roceedings of the 22nd annual conference on <span>C</span>omputer graphics and interactive techniques (SIGGRAPH95</em>, ACM Press, 1995, pp. 119–128. Available: <a href="https://dl.acm.org/doi/abs/10.1145/218380.218427">https://dl.acm.org/doi/abs/10.1145/218380.218427</a></div>
+</div>
+<div id="ref-brandel_bof_2019" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[19] </div><div class="csl-right-inline">W. Brendel and M. Bethge, <span>“Approximating <span>CNN</span>s with bag-of-local-features models works surprisingly well on ImageNet,”</span> in <em><span>I</span>nternational <span>C</span>onference on <span>L</span>earning <span>R</span>epresentations</em>, 2019. Available: <a href="https://openreview.net/forum?id=SkfMWhAqYQ">https://openreview.net/forum?id=SkfMWhAqYQ</a></div>
+</div>
+<div id="ref-sanity_checks" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[20] </div><div class="csl-right-inline">J. Adebayo, J. Gilmer, M. Muelly, I. Goodfellow, M. Hardt, and B. Kim, <span>“Sanity checks for saliency maps,”</span> in <em><span>P</span>roceedings of the 32nd <span>I</span>nternational <span>C</span>onference on <span>N</span>eural <span>I</span>nformation <span>P</span>rocessing <span>S</span>ystems</em>, in NIPS’18. Red Hook, NY, USA: Curran Associates Inc., 2018, pp. 9525–9536. Available: <a href="https://arxiv.org/abs/1810.03292">https://arxiv.org/abs/1810.03292</a></div>
+</div>
+<div id="ref-saliency_guided_backprop" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[21] </div><div class="csl-right-inline">J. T. Springenberg, A. Dosovitskiy, T. Brox, and M. Riedmiller, <span>“Striving for simplicity: The all convolutional net,”</span> in <em><span>I</span>CLR (workshop track)</em>, 2015. Available: <a href="https://arxiv.org/abs/1412.6806">https://arxiv.org/abs/1412.6806</a></div>
+</div>
+<div id="ref-flashtorch" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[22] </div><div class="csl-right-inline">&amp;. R. J. Misa Ogura, <span>“MisaOgura/flashtorch: 0.1.2 (version v0.1.2).”</span> 2020. Available: <a href="http://doi.org/10.5281/zenodo.3596650">http://doi.org/10.5281/zenodo.3596650</a></div>
+</div>
+<div id="ref-geirhos_textures" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[23] </div><div class="csl-right-inline">R. Geirhos, P. Rubisch, C. Michaelis, M. Bethge, F. A. Wichmann, and W. Brendel, <span>“ImageNet-trained <span>CNN</span>s are biased towards texture; increasing shape bias improves accuracy and robustness,”</span> 2019, Available: <a href="https://openreview.net/forum?id=Bygh9j09KX">https://openreview.net/forum?id=Bygh9j09KX</a></div>
+</div>
+<div id="ref-olah2017feature" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[24] </div><div class="csl-right-inline">C. Olah, A. Mordvintsev, and L. Schubert, <span>“Feature visualization,”</span> <em><span>D</span>istill</em>, 2017, doi: <a href="https://doi.org/10.23915/distill.00007">10.23915/distill.00007</a>.</div>
+</div>
+<div id="ref-wired_storytelling" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[25] </div><div class="csl-right-inline">F. Rose, <span>“The art of immersion: Why do we tell stories?”</span> <em><span>WIRED</span></em>, 2011, Available: <a href="https://www.wired.com/2011/03/why-do-we-tell-stories/">https://www.wired.com/2011/03/why-do-we-tell-stories/</a></div>
+</div>
+<div id="ref-sacasas_narrative_collapse" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[26] </div><div class="csl-right-inline">L. M. Sacasas, <span>“Narrative collapse,”</span> <em><span>T</span>he <span>C</span>onvivial <span>S</span>ociety</em>, 2020, Available: <a href="https://theconvivialsociety.substack.com/p/narrative-collapse">https://theconvivialsociety.substack.com/p/narrative-collapse</a></div>
+</div>
+<div id="ref-brainonfiction" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[27] </div><div class="csl-right-inline">A. M. Paul, <span>“The neuroscience of your brain on fiction,”</span> <em><span>N</span>ew <span>Y</span>ork <span>T</span>imes</em>, Mar. 2012, Accessed: Dec. 27, 2020. [Online]. Available: <a href="https://www.nytimes.com/2012/03/18/opinion/sunday/the-neuroscience-of-your-brain-on-fiction.html">https://www.nytimes.com/2012/03/18/opinion/sunday/the-neuroscience-of-your-brain-on-fiction.html</a></div>
+</div>
+<div id="ref-survivor_vs_victim" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[28] </div><div class="csl-right-inline">C. P. Associates, <span>“The survivor mentality.”</span> Dec. 27, 2020. Accessed: Dec. 27, 2020. [Online]. Available: <a href="https://cbtpsychologicalassociates.com/the-survivor-mentality/">https://cbtpsychologicalassociates.com/the-survivor-mentality/</a></div>
+</div>
+<div id="ref-heider1944experimental" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[29] </div><div class="csl-right-inline">F. Heider and M. Simmel, <span>“An experimental study of apparent behavior,”</span> <em><span>T</span>he <span>A</span>merican <span>J</span>ournal of <span>P</span>sychology</em>, vol. 57, no. 2, pp. 243–259, 1944, Available: <a href="https://psycnet.apa.org/doi/10.2307/1416950">https://psycnet.apa.org/doi/10.2307/1416950</a></div>
+</div>
+<div id="ref-waytz_2010" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[30] </div><div class="csl-right-inline">A. Waytz, J. Cacioppo, and N. Epley, <span>“Who sees human? The stability and importance of individual differences in anthropomorphism,”</span> <em><span>P</span>erspectives on <span>P</span>sychological <span>S</span>cience</em>, vol. 5, no. 3, pp. 219–232, May 2010, doi: <a href="https://doi.org/10.1177/1745691610369336">10.1177/1745691610369336</a>.</div>
+</div>
+<div id="ref-airenti_anthro" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[31] </div><div class="csl-right-inline">G. Airenti, M. Cruciani, and A. Plebe, <span>“Editorial: The cognitive underpinnings of anthropomorphism,”</span> <em><span>F</span>rontiers in <span>P</span>sychology</em>, vol. 10, p. 1539, 2019, doi: <a href="https://doi.org/10.3389/fpsyg.2019.01539">10.3389/fpsyg.2019.01539</a>.</div>
+</div>
+<div id="ref-train_social_robots" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[32] </div><div class="csl-right-inline">W.-R. Ko, M. Jang, J. Lee, and J. Kim, <span>“AIR-Act2Act: Human-human interaction dataset for teaching non-verbal social behaviors to robots.”</span> 2020. Available: <a href="https://arxiv.org/abs/2009.02041">https://arxiv.org/abs/2009.02041</a></div>
+</div>
+<div id="ref-Riedl2016UsingST" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[33] </div><div class="csl-right-inline">M. O. Riedl and B. Harrison, <span>“Using stories to teach human values to artificial agents,”</span> in <em><span>A</span>AAI <span>W</span>orkshop: <span>A</span>i, <span>E</span>thics, and <span>S</span>ociety</em>, 2016.</div>
+</div>
+<div id="ref-plot_graphs" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[34] </div><div class="csl-right-inline">C. Purdy and M. O. Riedl, <span>“Reading between the lines: Using plot graphs to draw inferences from stories,”</span> in <em><span>I</span>nternational <span>C</span>onference on <span>I</span>nteractive <span>D</span>igital <span>S</span>torytelling</em>, <a href="https://link.springer.com/chapter/10.1007/978-3-319-48279-8_18" class="uri">https://link.springer.com/chapter/10.1007/978-3-319-48279-8_18</a>, 2016, pp. 197–208. Available: <a href="https://www.cc.gatech.edu/~riedl/pubs/purdy-icids16.pdf">https://www.cc.gatech.edu/~riedl/pubs/purdy-icids16.pdf</a></div>
+</div>
+<div id="ref-story_arcs" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[35] </div><div class="csl-right-inline">A. J. Reagan, L. Mitchell, D. Kiley, C. M. Danforth, and P. S. Dodds, <span>“The emotional arcs of stories are dominated by six basic shapes,”</span> <em><span>E</span>PJ <span>D</span>ata <span>S</span>cience</em>, vol. 5, 2016, doi: <a href="https://doi.org/10.1140/epjds/s13688-016-0093-1">https://doi.org/10.1140/epjds/s13688-016-0093-1</a>.</div>
+</div>
+<div id="ref-doidge_neuroplasticity" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[36] </div><div class="csl-right-inline">N. Doidge, <em><span>T</span>he <span>B</span>rain <span>T</span>hat <span>C</span>hanges <span>I</span>tself: <span>S</span>tories of <span>P</span>ersonal <span>T</span>riumph from the <span>F</span>rontiers of <span>B</span>rain <span>S</span>cience</em>. Viking Press, 2007.</div>
+</div>
+<div id="ref-gazerani_neuroplasticity" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[37] </div><div class="csl-right-inline">P. Gazerani, <span>“<span>T</span>he neuroplastic brain: Current breakthroughs and emerging frontiers,”</span> <em><span>B</span>rain <span>R</span>esearch</em>, vol. 1858, p. 149643, 2025, doi: <a href="https://doi.org/10.1016/j.brainres.2025.149643">10.1016/j.brainres.2025.149643</a>.</div>
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/drscotthawley\.github\.io\/blog");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -15,7 +15,18 @@
 <link>https://drscotthawley.github.io/blog/</link>
 </image>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Thu, 27 Nov 2025 06:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 26 Jan 2026 06:00:00 GMT</lastBuildDate>
+<item>
+  <title>Noticing a Pattern</title>
+  <dc:creator>Scott H. Hawley</dc:creator>
+  <link>https://drscotthawley.github.io/blog/posts/Noticing-A-Pattern.html</link>
+  <description><![CDATA[ Classification as Pattern Recognition ]]></description>
+  <category>classification</category>
+  <category>similarity</category>
+  <guid>https://drscotthawley.github.io/blog/posts/Noticing-A-Pattern.html</guid>
+  <pubDate>Mon, 26 Jan 2026 06:00:00 GMT</pubDate>
+  <media:content url="https://drscotthawley.github.io/blog/posts/images/tench_compact.png" medium="image" type="image/png" height="95" width="144"/>
+</item>
 <item>
   <title>Flow Where You Want</title>
   <dc:creator>Scott H. Hawley</dc:creator>
@@ -215,15 +226,6 @@
   <guid>https://drscotthawley.github.io/blog/posts/2019-12-06-Getting-Started-In-ML-Audio.html</guid>
   <pubDate>Fri, 06 Dec 2019 06:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/class_chairs.jpg" medium="image" type="image/jpeg"/>
-</item>
-<item>
-  <title>My First NN Part 3. Multi-Layer Networks and Backpropagation</title>
-  <link>https://drscotthawley.github.io/blog/posts/2019-02-08-my-1st-nn-part-3-multi-layer-and-backprop.html</link>
-  <description><![CDATA[ Multi-Layer Networks and Backpropagation ]]></description>
-  <category>foundations</category>
-  <guid>https://drscotthawley.github.io/blog/posts/2019-02-08-my-1st-nn-part-3-multi-layer-and-backprop.html</guid>
-  <pubDate>Fri, 08 Feb 2019 06:00:00 GMT</pubDate>
-  <media:content url="https://i.imgur.com/WjaQDnW.png" medium="image" type="image/png"/>
 </item>
 </channel>
 </rss>
