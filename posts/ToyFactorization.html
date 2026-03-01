@@ -772,7 +772,7 @@ target=+1: mean cos=0.951, mean |cos|=0.951
 target=-1: mean cos=-0.864, mean |cos|=0.864</code></pre>
 </div>
 </div>
-<p>This imperfect factorization allows the model to develop factorized representations where it’s helpful, but not to the detriment of the overall expressive power of the model (i.e.&nbsp;the factorization can’t explain everything, so we let the model “decide”.) The asymmetry between +1 and -1 that we see on the right, we’ll explore just a bit below.</p>
+<p>This imperfect factorization is the point: the model develops factored structure where it’s helpful, without sacrificing expressive power elsewhere. The asymmetry between +1 and −1 visible on the right is explored below.</p>
 </section>
 <section id="results-summary" class="level2" data-number="10">
 <h2 data-number="10" class="anchored" data-anchor-id="results-summary"><span class="header-section-number">10</span> Results summary</h2>
@@ -894,16 +894,15 @@ Expained variance ratios: [0.292112   0.26890936]</code></pre>
 </div>
 </div>
 </div>
-<p>Okay, so while we see that the first principal component or two do contain the bulk of the variance, there is still some decent amount of variance in the other directions. This is fine. We let the model try to factorize when it’s appropriate, but we’d never expect that the factorization to be fully descriptive of all the data.</p>
+<p>We see that the first principal component or two do contain the bulk of the variance, yet there is still some decent amount of variance in the other directions. This is fine. We let the model try to factorize when it’s appropriate, but we’d never expect that the factorization to be fully descriptive of all the data.</p>
 </section>
 </section>
 <section id="deeper-analysis-kernel-pca-and-svd" class="level2" data-number="11">
 <h2 data-number="11" class="anchored" data-anchor-id="deeper-analysis-kernel-pca-and-svd"><span class="header-section-number">11</span> Deeper analysis: Kernel PCA and SVD</h2>
-<p>The cosine histograms confirm that the soft loss achieves the desired geometric relationships. But does the latent space admit a <strong>tensor-product</strong> structure — i.e., can embeddings be decomposed into pitch ⊗ time components?</p>
-<p>We use two complementary analyses:</p>
+<p>The cosine histograms confirm the desired geometric relationships. But does the latent space admit a <strong>tensor-product</strong> structure — i.e., can embeddings be decomposed into pitch ⊗ time components? We probe this via two methods:</p>
 <ol type="1">
-<li><p><strong>Kernel PCA</strong> with an RBF kernel (inspired by Albinet’s (2026) connection between soft constraints and eigenstructure via kernel methods). The RBF kernel can reveal nonlinear factored structure that linear PCA would miss. Results show that the first two kernel principal components cleanly separate pitch and time with orthogonal gradients, while kPC3–4 contain no factor-related structure — confirming a 2D factored subspace.</p></li>
-<li><p><strong>SVD on a grid of shift embeddings</strong>: For each blob, we encode a full grid of (pitch, time) shifts and reshape as a matrix. The first singular value captures 60–80% of the total energy, with most of the remainder in just 2–3 components — indicating approximately low-rank (near tensor-product) structure in the learned embeddings.</p></li>
+<li><strong>kernel Principal Component Analysis (PCA)</strong> using a radial basis function (RBF) kernel, inspired by Albinet’s (2026) connection between soft constraints and eigenstructure</li>
+<li><strong>Singular Value Decomposition (SVD)</strong> on shift-grid embeddings.</li>
 </ol>
 <div id="770b9664-08f9-41d7-a293-2bc87e8b20a4" class="cell">
 <details class="code-fold">
@@ -968,7 +967,7 @@ Expained variance ratios: [0.292112   0.26890936]</code></pre>
 </div>
 </div>
 </div>
-<p>So we see clean separation between the first two principal components (using the RBF kernel), yet the higher-order components show no special relationship. This is as we would expect If the “soft” factorization was working.</p>
+<p>There is clean separation between the first two principal components (using the RBF kernel), yet the higher-order components show no special relationship. This is as we would expect If the “soft” factorization was working.</p>
 </section>
 <section id="does-umap-show-us-anything" class="level2" data-number="12">
 <h2 data-number="12" class="anchored" data-anchor-id="does-umap-show-us-anything"><span class="header-section-number">12</span> Does UMAP Show Us Anything?</h2>
