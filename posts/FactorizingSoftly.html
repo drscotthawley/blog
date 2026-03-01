@@ -1061,18 +1061,25 @@ Answer: Not really
 <span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>    )])</span>
 <span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a>    fig_time.update_layout(title<span class="op">=</span><span class="st">'UMAP 3D — colored by time (dx)'</span>, margin<span class="op">=</span><span class="bu">dict</span>(l<span class="op">=</span><span class="dv">0</span>, r<span class="op">=</span><span class="dv">0</span>, b<span class="op">=</span><span class="dv">0</span>, t<span class="op">=</span><span class="dv">30</span>))</span>
 <span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>    fig_pitch.show()</span>
-<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a>    fig_time.show()</span>
-<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> coords, dy_labels, dx_labels</span>
+<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>    <span class="co">#fig_pitch.show() # Quarto blogs can't handle two plotly plots in a row as iframes, so we're going to have to do them in separate cells</span></span>
+<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a>    <span class="co">#fig_time.show()</span></span>
+<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fig_pitch, fig_time, coords, dy_labels, dx_labels</span>
 <span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a>coords, dy_lab, dx_lab <span class="op">=</span> umap_3d_analysis(enc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a>fig_pitch, fig_time, coords, dy_lab, dx_lab <span class="op">=</span> umap_3d_analysis(enc)</span>
+<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a>fig_pitch.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
-<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_33.html" frameborder="0" allowfullscreen=""></iframe>
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_34.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
+</div>
+<div id="4c5bb581-6ace-4d03-97f4-58c3f13cbae9" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fig_time.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
-<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_33.html" frameborder="0" allowfullscreen=""></iframe>
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_35.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
 </div>
 </details>
