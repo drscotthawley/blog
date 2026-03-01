@@ -301,7 +301,7 @@ Note
 </div>
 <section id="tldr" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="tldr"><span class="header-section-number">1</span> TL;DR</h2>
-<p>We exploit the fact that pitch-shifts and time-shifts are explicitly labeled augmentations, and use those labels to encode the operations geometrically via a loss function. Add this to an encoder and see if it achieves a <strong>soft factorization</strong> of pitch and time:</p>
+<p>We exploit the fact that pitch-shifts and time-shifts are explicitly labeled augmentations, and use those labels to encode the transformations geometrically via a loss function. Combine this with an encoder and see if it achieves a “soft factorization” of pitch and time:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> factorization_loss(z_anchor, z_crop1, z_crop2, targets):</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    d1 <span class="op">=</span> z_crop1 <span class="op">-</span> z_anchor</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    d2 <span class="op">=</span> z_crop2 <span class="op">-</span> z_anchor</span>
