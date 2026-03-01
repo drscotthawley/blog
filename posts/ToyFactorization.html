@@ -267,10 +267,7 @@ details > summary {
   <li><a href="#why-soft-factorization" id="toc-why-soft-factorization" class="nav-link" data-scroll-target="#why-soft-factorization"><span class="header-section-number">2.2</span> Why soft factorization?</a></li>
   <li><a href="#why-blobs" id="toc-why-blobs" class="nav-link" data-scroll-target="#why-blobs"><span class="header-section-number">2.3</span> Why blobs?</a></li>
   </ul></li>
-  <li><a href="#the-larger-context" id="toc-the-larger-context" class="nav-link" data-scroll-target="#the-larger-context"><span class="header-section-number">3</span> The Larger Context</a>
-  <ul class="collapse">
-  <li><a href="#why-a-toy-model" id="toc-why-a-toy-model" class="nav-link" data-scroll-target="#why-a-toy-model"><span class="header-section-number">3.1</span> Why a toy model?</a></li>
-  </ul></li>
+  <li><a href="#the-larger-context" id="toc-the-larger-context" class="nav-link" data-scroll-target="#the-larger-context"><span class="header-section-number">3</span> The Larger Context</a></li>
   <li><a href="#data-random-blob-patches-augmentations" id="toc-data-random-blob-patches-augmentations" class="nav-link" data-scroll-target="#data-random-blob-patches-augmentations"><span class="header-section-number">4</span> Data: Random blob patches + augmentations</a></li>
   <li><a href="#encoder-tiny-convnet-latent-vector" id="toc-encoder-tiny-convnet-latent-vector" class="nav-link" data-scroll-target="#encoder-tiny-convnet-latent-vector"><span class="header-section-number">5</span> Encoder: tiny ConvNet → latent vector</a></li>
   <li><a href="#loss-cosine-factorization-objective" id="toc-loss-cosine-factorization-objective" class="nav-link" data-scroll-target="#loss-cosine-factorization-objective"><span class="header-section-number">6</span> Loss: cosine factorization objective</a></li>
@@ -304,22 +301,22 @@ details > summary {
 </div>
 <p><strong>Idea</strong>: Apply pitch-shifts and time-shifts to random blob images. Train a small ConvNet encoder with a cosine-similarity loss that enforces: - Same-type, same-sign shifts → <strong>parallel</strong> difference vectors (target +1) - Same-type, opposite-sign shifts → <strong>anti-parallel</strong> difference vectors (target −1) - Cross-type shifts → <strong>orthogonal</strong> difference vectors (target 0)</p>
 <p>As shown below, PCA of the difference vectors reveals a clear cross pattern with pitch and time axes separating cleanly, and cosine similarity histograms confirm the desired geometric relationships.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Warning
+Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Usually I write everything by hand, but this time a decent amount of the text was straight-up spit out by Claude, with my approval.</p>
+<p>Some prose in this post was drafted with LLM assistance and edited by hand.</p>
 </div>
 </div>
 <section id="tldr" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="tldr"><span class="header-section-number">1</span> TL;DR</h2>
-<p>We use our explicit data augmentation of translations and pitch and time and feed those as labels into a loss function to try and encode those operations geometrically. Add this loss function to an encoder and see if it achieves a <strong>soft factorization</strong> of pitch and time:</p>
+<p>We exploit the fact that pitch-shifts and time-shifts are explicitly labeled augmentations, and use those labels to encode the operations geometrically via a loss function. Add this to an encoder and see if it achieves a <strong>soft factorization</strong> of pitch and time:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> factorization_loss(z_anchor, z_crop1, z_crop2, targets):</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    d1 <span class="op">=</span> z_crop1 <span class="op">-</span> z_anchor</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    d2 <span class="op">=</span> z_crop2 <span class="op">-</span> z_anchor</span>
@@ -329,37 +326,45 @@ Warning
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/soft_sep_diagram.png" class="img-fluid figure-img"></p>
-<figcaption>Figure 1: Our loss enforces differences between pairs of embeddings to either be parallel, anti-parallel, or orthogonal, depending on the type of data augmentation used.</figcaption>
+<figcaption>Figure 1: Our loss enforces differences between pairs of embeddings to either be parallel, anti-parallel, or orthogonal, depending on the type of data augmentation.</figcaption>
 </figure>
 </div>
 <p>(We do not specify these directions. We simply enforce parallel, anti-parallel, or orthogonal, and let the system evolve on its own.)</p>
-<p><strong>Spoiler: it works.</strong> Since this toy model succeeds, we will have confidence to move on to applying it to the full problem with real MIDI data.</p>
+<p><strong>Spoiler: it works.</strong> Since this toy model succeeds (as shown below), we will have confidence to move on and apply it to a “real” problem with real MIDI data.</p>
 </section>
 <section id="motivation" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="motivation"><span class="header-section-number">2</span> Motivation</h2>
 <section id="why-factorize-pitch-and-time" class="level3" data-number="2.1">
 <h3 data-number="2.1" class="anchored" data-anchor-id="why-factorize-pitch-and-time"><span class="header-section-number">2.1</span> Why factorize pitch and time?</h3>
-<p>Musical motifs exhibit repeated melodic patterns (pitch) and repeated rhythmic patterns (time) that together explain much of the variety within a song. This suggests a natural decomposition of musical representations into a <strong>pitch vocabulary</strong> and a <strong>rhythm vocabulary</strong>, where a given motif can be approximated as an interaction (outer product) of pitch and time components. Factored representations are also connected to compositional algebraic properties — the <strong>GloVe</strong> word vectors (Pennington et al., 2014) demonstrated that vector arithmetic relationships (e.g., <em>king − man + woman ≈ queen</em>) arose from GloVe’s explicitly factorized construction of word co-occurrence matrices.</p>
+<p>Much of the variety within a song comes from repeating melodic patterns (pitch) and rhythmic patterns (time), which suggests a natural decomposition into a <strong>pitch vocabulary</strong> and a <strong>rhythm vocabulary</strong>, where a motif can be approximated as an interaction (outer product) of pitch and time components. Factored representations are also connected to compositional algebraic properties — <strong>GloVe</strong> word vectors (Pennington et al., 2014) demonstrated that vector arithmetic (e.g., <em>king − man + woman ≈ queen</em>) arose from GloVe’s explicitly factorized construction of word co-occurrence matrices.</p>
 </section>
 <section id="why-soft-factorization" class="level3" data-number="2.2">
 <h3 data-number="2.2" class="anchored" data-anchor-id="why-soft-factorization"><span class="header-section-number">2.2</span> Why soft factorization?</h3>
-<p>Prior work in symbolic music analysis has explored both fully factored and fully combined representations. Notably, <strong>MelodyGLM</strong> (Wu et al., 2023) compared pitch n-grams, rhythm n-grams, and combined n-grams for melody generation. Their ablation study showed that using all three together worked best, but that the <em>combined</em> (non-factored) n-grams carried meaningful information lost by independent factorization. Similarly, <strong>Music SketchNet</strong> (Chen et al., 2020) and <strong>PiRhDy</strong> (Liang et al., 2020) construct factored representations by design, which limits the model’s ability to capture pitch–rhythm interactions.</p>
-<p>This motivates a <strong>middle path</strong>: rather than forcing factorization by construction (hard factorization) or hoping to discover it post-hoc (e.g., GANSpace), we use a <strong>soft factorization</strong> via the loss function. The cosine-similarity loss encourages orthogonality between pitch and time directions in latent space, while still allowing the model freedom to represent non-factored structure. This approach is inspired by the idea—articulated in Albinet (2026)—that competing soft constraints in an objective can give rise to discrete eigenstructure at equilibrium, analogous to how kernel PCA discovers structure through balanced forces rather than hard architectural choices.</p>
-<p>Recent theoretical work lends further support to this direction. <strong>Shai et al.&nbsp;(2026)</strong> show that transformers trained via next-token prediction naturally learn <strong>factored representations</strong> in orthogonal subspaces when the underlying factors are conditionally independent — and exhibit an inductive bias toward factoring even when strict independence is violated. This suggests that factored structure is not merely a convenient assumption but something models actively prefer, and that nudging them toward it via a soft loss aligns with their natural learning dynamics.</p>
+<p>Prior work (MelodyGLM, Music SketchNet, PiRhDy) has shown that hard factorization loses meaningful pitch–rhythm interactions, while fully combined representations miss the benefits of structure.</p>
+<p>This motivates a <strong>middle path</strong>: rather than forcing factorization by construction or hoping to discover it post-hoc (e.g., GANSpace), we use a <strong>soft factorization</strong> via the loss function. The cosine-similarity loss encourages orthogonality between pitch and time directions in latent space, while still allowing the model freedom to represent non-factored structure.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Theoretical connections
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This approach is inspired by Albinet (2026), who shows that competing soft constraints in an objective can give rise to discrete eigenstructure at equilibrium — analogous to how kernel PCA discovers structure through balanced forces rather than hard architectural choices. Additionally, Shai et al.&nbsp;(2026) show that transformers naturally prefer factored representations in orthogonal subspaces, suggesting that nudging models toward factored structure via a soft loss aligns with their inductive bias.</p>
+</div>
+</div>
 </section>
 <section id="why-blobs" class="level3" data-number="2.3">
 <h3 data-number="2.3" class="anchored" data-anchor-id="why-blobs"><span class="header-section-number">2.3</span> Why blobs?</h3>
-<p>This toy experiment uses random binary blob images as a stand-in for MIDI piano-roll data. Vertical shifts simulate <strong>pitch transposition</strong> and horizontal shifts simulate <strong>time shifting</strong>. These shifts are exact, continuous, and independently controllable—making this domain particularly well-suited for testing whether soft geometric constraints can induce factored latent structure. The real target application is learning factored representations of musical motifs, where the training signal would come from a JEPA-style self-supervised objective augmented with this orthogonality loss.</p>
+<p>Random binary blob images stand in for MIDI piano-roll data: vertical shifts = <strong>pitch transposition</strong>, horizontal shifts = <strong>time shifting</strong>. These shifts are exact, continuous, and independently controllable — ideal for testing whether soft geometric constraints can induce factored latent structure.</p>
 </section>
 </section>
 <section id="the-larger-context" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="the-larger-context"><span class="header-section-number">3</span> The Larger Context</h2>
-<p>I’m building a Representation Autoencoder (RAE, Zheng et al., 2025) for MIDI music based on piano roll representations. I had the idea that some kind of factorization in pitch and time would be useful, but actually prescribing it by construction would probably be detrimental (as the MelodyGLM paper noted). And I love trying to do geometrical operations in latent space, e.g., Operational Latent Spaces (OpLaS, Hawley &amp; Tackett, 2024).</p>
-<p>So, after reading Franck’s series on SVD (Abinet, 2026), which includes contact with contrastive losses and soft objectives. This seemed like a natural thing thing to try!</p>
-<section id="why-a-toy-model" class="level3" data-number="3.1">
-<h3 data-number="3.1" class="anchored" data-anchor-id="why-a-toy-model"><span class="header-section-number">3.1</span> Why a toy model?</h3>
-<p>I generally like to create toy models when I do anything new because they’re interpretable and you can iterate quickly. If I couldn’t even get the thing to work on this simple system with a small latent space and fake piano rolls, then what hope would I have for doing it in the larger context with the full code and the real data?</p>
-</section>
+<p>I’m building a Representation Autoencoder (RAE, Zheng et al., 2025) for MIDI piano rolls. Factorization in pitch and time seemed useful, but prescribing it by construction would likely be detrimental (as the MelodyGLM paper noted). I’m drawn to geometrical operations in latent space (cf.&nbsp;Operational Latent Spaces — Hawley &amp; Tackett, 2024), and after reading Albinet’s (2026) series connecting SVD with contrastive losses and soft objectives, this approach seemed like a natural thing to try.</p>
+<p><strong>Why a toy model?</strong> I like to start with toy models — they’re interpretable and you can iterate quickly. If I can’t get this to work with a small latent space and fake piano rolls, what hope is there for the real thing?</p>
 </section>
 <section id="data-random-blob-patches-augmentations" class="level2" data-number="4">
 <h2 data-number="4" class="anchored" data-anchor-id="data-random-blob-patches-augmentations"><span class="header-section-number">4</span> Data: Random blob patches + augmentations</h2>
@@ -1133,13 +1138,13 @@ if (outputEl) {{
 </section>
 <section id="discussion" class="level2" data-number="13">
 <h2 data-number="13" class="anchored" data-anchor-id="discussion"><span class="header-section-number">13</span> Discussion</h2>
-<p>So where are we going with this? The idea that factorization in pitch and time is useful but not the complete picture seems to be borne out and supported by the soft factorization method, which would allow us some level of interpretable controls or structure without forcing it in a detrimental way.</p>
-<p>The fact that our augmentation scheme allows us to explicitly label the degree to which we’re Performing the augmentations is a key aspect of this method, i.e., if you were just doing other types of augmentations, you might not be able to pull this off.</p>
-<p>I’ll mention that when Christian Steinmetz and I looked at directions for audio effects parameters in latent space (Hawley &amp; Steinmetz, 2023), it was….okay, but ultimately kind of disappointing. Because CLAP embeddings suck. Anyway, this work is kind of on the continuum with that. And the OpLaS paper for letting the latent space encode transformations geometrically.</p>
-<p><strong>“Selling Points”:</strong></p>
+<p>The idea that factorization in pitch and time is useful but not the complete picture seems to be borne out here — soft factorization gives us interpretable structure without forcing it in a detrimental way.</p>
+<p>A key requirement is that the augmentations be <strong>explicitly labeled</strong> — we need to know <em>what kind</em> of shift was applied and its sign. This wouldn’t work as easily with augmentations you can’t characterize.</p>
+<p>This builds on earlier work: Hawley &amp; Steinmetz (2023) looked at directions for audio effects parameters in latent space, with mixed results (limited by CLAP embedding quality). The present approach sits on a continuum with that work and with OpLaS (Hawley &amp; Tackett, 2024) — letting the latent space encode transformations geometrically, but now with explicit supervision of the geometric relationships.</p>
+<p><strong>What I like about this approach:</strong></p>
 <ul>
-<li>I like the flexibility of the implementation. It doesn’t require any architecture changes at all as it would if you were going to try to do the factorization by construction. You just add it as a loss term.</li>
-<li>Furthermore, it’s tunable. You can sort of weight how strongly you want the factorization thing to take hold just by tuning a regularization parameter in the overall loss term. That’s got to be worth some attention from the machine learning community, right? LOL</li>
+<li><strong>No architecture changes.</strong> You just add a loss term — no need to redesign the encoder for factorization by construction.</li>
+<li><strong>Tunable.</strong> Weight the factorization loss to control how strongly the structure is enforced. Want more factorization? Turn up the coefficient. Want the model to have more freedom? Turn it down.</li>
 </ul>
 </section>
 <section id="references" class="level2" data-number="14">
