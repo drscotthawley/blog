@@ -15,7 +15,20 @@
 <link>https://drscotthawley.github.io/blog/</link>
 </image>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Mon, 26 Jan 2026 06:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 01 Mar 2026 06:00:00 GMT</lastBuildDate>
+<item>
+  <title>Factorizing Softly</title>
+  <dc:creator>Scott H. Hawley</dc:creator>
+  <link>https://drscotthawley.github.io/blog/posts/ToyFactorization.html</link>
+  <description><![CDATA[ Learning “soft-separable” directions in latent space as an alternative to explicit factorization. ]]></description>
+  <category>generative</category>
+  <category>SSL</category>
+  <category>geometry</category>
+  <category>representation learning</category>
+  <guid>https://drscotthawley.github.io/blog/posts/ToyFactorization.html</guid>
+  <pubDate>Sun, 01 Mar 2026 06:00:00 GMT</pubDate>
+  <media:content url="https://drscotthawley.github.io/blog/posts/images/soft_sep.png" medium="image" type="image/png" height="96" width="144"/>
+</item>
 <item>
   <title>Noticing a Pattern</title>
   <dc:creator>Scott H. Hawley</dc:creator>
@@ -217,15 +230,6 @@
   <guid>https://drscotthawley.github.io/blog/posts/2019-12-21-pca-from-scratch.html</guid>
   <pubDate>Sat, 21 Dec 2019 06:00:00 GMT</pubDate>
   <media:content url="https://i.imgur.com/vKiH8As.png" medium="image" type="image/png"/>
-</item>
-<item>
-  <title>Getting Started in ML+Audio</title>
-  <link>https://drscotthawley.github.io/blog/posts/2019-12-06-Getting-Started-In-ML-Audio.html</link>
-  <description><![CDATA[ For audio students interested in machine learning ]]></description>
-  <category>foundations</category>
-  <guid>https://drscotthawley.github.io/blog/posts/2019-12-06-Getting-Started-In-ML-Audio.html</guid>
-  <pubDate>Fri, 06 Dec 2019 06:00:00 GMT</pubDate>
-  <media:content url="https://drscotthawley.github.io/blog/posts/images/class_chairs.jpg" medium="image" type="image/jpeg"/>
 </item>
 </channel>
 </rss>
