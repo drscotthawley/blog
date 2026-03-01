@@ -19,13 +19,13 @@
 <item>
   <title>Factorizing Softly</title>
   <dc:creator>Scott H. Hawley</dc:creator>
-  <link>https://drscotthawley.github.io/blog/posts/ToyFactorization.html</link>
+  <link>https://drscotthawley.github.io/blog/posts/FactorizingSoftly.html</link>
   <description><![CDATA[ Learning “soft-separable” directions in latent space as an alternative to explicit factorization. ]]></description>
   <category>generative</category>
   <category>SSL</category>
   <category>geometry</category>
   <category>representation learning</category>
-  <guid>https://drscotthawley.github.io/blog/posts/ToyFactorization.html</guid>
+  <guid>https://drscotthawley.github.io/blog/posts/FactorizingSoftly.html</guid>
   <pubDate>Sun, 01 Mar 2026 06:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/factorization_card.png" medium="image" type="image/png" height="76" width="144"/>
 </item>
