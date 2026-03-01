@@ -381,7 +381,7 @@ Note
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> torch.rand(<span class="dv">1</span>) <span class="op">&gt;</span> <span class="fl">0.5</span>: img <span class="op">=</span> torch.flip(img, [<span class="dv">2</span>])</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> img</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>We’ll shift horizontally and vertically, but without the “roll” usually induced by torch. This routine responsible for both our data augmentation and our representation learning:</p>
+<p>We’ll shift horizontally and vertically, but without the “roll” usually induced by torch. This routine is responsible for both our data augmentation and our representation learning:</p>
 <div id="43fdf5a8-9058-417d-b144-3eebfdcfe626" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> shift_no_wrap(x, shifts, dims):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Drop-in replacement for torch.roll with zero-fill instead of wrap."""</span></span>
@@ -894,7 +894,7 @@ Expained variance ratios: [0.292112   0.26890936]</code></pre>
 </div>
 </div>
 </div>
-<p>We see that the first principal component or two do contain the bulk of the variance, yet there is still some decent amount of variance in the other directions. This is fine. We let the model try to factorize when it’s appropriate, but we’d never expect that the factorization to be fully descriptive of all the data.</p>
+<p>The first principal component or two contain the bulk of the variance, with a decent amount remaining in other directions. This is expected — we let the model factorize where it’s helpful, but the factorization was never going to be fully descriptive of all the data.</p>
 </section>
 </section>
 <section id="deeper-analysis-kernel-pca-and-svd" class="level2" data-number="11">
@@ -967,7 +967,7 @@ Expained variance ratios: [0.292112   0.26890936]</code></pre>
 </div>
 </div>
 </div>
-<p>There is clean separation between the first two principal components (using the RBF kernel), yet the higher-order components show no special relationship. This is as we would expect If the “soft” factorization was working.</p>
+<p>We see clean separation between the first two kernel principal components, yet the higher-order components show no special relationship — exactly what we’d expect if the soft factorization is working.</p>
 </section>
 <section id="does-umap-show-us-anything" class="level2" data-number="12">
 <h2 data-number="12" class="anchored" data-anchor-id="does-umap-show-us-anything"><span class="header-section-number">12</span> Does UMAP Show Us Anything?</h2>
@@ -976,7 +976,7 @@ Expained variance ratios: [0.292112   0.26890936]</code></pre>
 Answer: Not really
 </summary>
 <p>If the nonlinear PCA with the RBF kernel is showing a clean separation, does that mean that there’s a two-dimensional subspace manifold at work? Maybe UMAP can discover this manifold and show us something interesting.</p>
-<p>Spoiler: No, This is pretty much a jumbled mess because the UMAP focuses on the local structure and twists everything around:</p>
+<p>Spoiler: No, this is pretty much a jumbled mess because the UMAP focuses on the local structure and twists everything around:</p>
 <div id="2ff2c922-5269-49ef-b9c5-28aed7475600" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
