@@ -284,7 +284,12 @@ details > summary {
 <div style="text-align: right; margin: 0;">
 <p><a href="https://colab.research.google.com/drive/1FfCAirGj3AP_SlRTSLqEip26TtmuYfqv?usp=sharing" target="_"> <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style="display: inline-block;"></a></p>
 </div>
-<p><strong>Idea</strong>: Apply pitch-shifts and time-shifts to random blob images. Train a small ConvNet encoder with a cosine-similarity loss that enforces: - Same-type, same-sign shifts → <strong>parallel</strong> difference vectors (target +1) - Same-type, opposite-sign shifts → <strong>anti-parallel</strong> difference vectors (target −1) - Cross-type shifts → <strong>orthogonal</strong> difference vectors (target 0)</p>
+<p><strong>Idea</strong>: Apply pitch-shifts and time-shifts to random blob images. Train a small ConvNet encoder with a cosine-similarity loss that enforces:</p>
+<ul>
+<li>Same-type, same-sign shifts → <strong>parallel</strong> difference vectors (target +1)</li>
+<li>Same-type, opposite-sign shifts → <strong>anti-parallel</strong> difference vectors (target −1)</li>
+<li>Cross-type shifts → <strong>orthogonal</strong> difference vectors (target 0)</li>
+</ul>
 <p>As shown below, PCA of the difference vectors reveals a clear cross pattern with pitch and time axes separating cleanly, and cosine similarity histograms confirm the desired geometric relationships.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">

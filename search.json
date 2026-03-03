@@ -256,7 +256,7 @@
     "href": "posts/FactorizingSoftly.html",
     "title": "Factorizing Softly",
     "section": "",
-    "text": "Can a simple encoder learn “soft-separable” pitch vs time directions in latent space? An alternative to explicit factorization\nIdea: Apply pitch-shifts and time-shifts to random blob images. Train a small ConvNet encoder with a cosine-similarity loss that enforces: - Same-type, same-sign shifts → parallel difference vectors (target +1) - Same-type, opposite-sign shifts → anti-parallel difference vectors (target −1) - Cross-type shifts → orthogonal difference vectors (target 0)\nAs shown below, PCA of the difference vectors reveals a clear cross pattern with pitch and time axes separating cleanly, and cosine similarity histograms confirm the desired geometric relationships."
+    "text": "Can a simple encoder learn “soft-separable” pitch vs time directions in latent space? An alternative to explicit factorization\nIdea: Apply pitch-shifts and time-shifts to random blob images. Train a small ConvNet encoder with a cosine-similarity loss that enforces:\nAs shown below, PCA of the difference vectors reveals a clear cross pattern with pitch and time axes separating cleanly, and cosine similarity histograms confirm the desired geometric relationships."
   },
   {
     "objectID": "posts/FactorizingSoftly.html#tldr",
