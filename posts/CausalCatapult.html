@@ -62,6 +62,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -311,8 +312,9 @@ figcaption {
 </style>
 <section id="intro" class="level1">
 <h1>Intro</h1>
-<p>I’ve been wanting to learn Causal Modeling / Causal Inference properly, but exiting tutorials and treatments were too front-loaded with math for me. This is the classic thing that gets me writing a blog post: there’s a “wall of math” which in this case is not so much equations but rather seemingly-endless definitions and jargon that induce a cognitive load when you’re simply trying to learn <em>“How can I calculate something?”</em></p>
-<p>In this post we’re going to get started really fast: rapid acceleration so we <em>catapult over the wall</em> of math and get started <em>immediately</em> calculating things, and only introducing lingo, definitions and/or proofs when we need them.</p>
+<p>I’ve been wanting to learn Causal Modeling (CM) / Causal Inference “properly” ever since I asked for Judea Pearl’s bestselling <em>The Book of Why</em> <span class="citation" data-cites="pearl2018why"><a href="#ref-pearl2018why" role="doc-biblioref">[1]</a></span> for Christmas in 2019. It’s a great read but it hides any actual computation by simply referring to the mystical “do calculus” and occasionally saying, “Why don’t you read my textbook?”</p>
+<p>Ok, well I’m not reading his textbook but I have been reading various other tutorials and watching videos and other papersm. And these exiting tutorials and treatments follow the classic trend of front-loading lots of mathematical abstraction. This sort of thing is typical enough that I refer to this in physics education as the “Chapter 2 Math Dump” and in machine learning as the “Wall of Math”. In the CM case is not so much equations but rather seemingly-endless definitions and jargon that induce a cognitive load when you’re simply trying to learn <em>“How can I calculate something?”</em> We don’t need to front-load our tutorials with a ton of abstract equations and definitions that aren’t going to be used for a while.</p>
+<p>In this post, we’re going to get started really fast: rapid acceleration so we <em>catapult over the wall</em> of math and get started <em>immediately</em> calculating things, and only introducing lingo, definitions and/or proofs when we need them.</p>
 </section>
 <section id="case-study-gas" class="level1">
 <h1>Case Study: GAS</h1>
@@ -580,7 +582,7 @@ setTimeout(initGraphs, 100);
 </script>
 </div>
 </div>
-<p>Let’s say <code>Sound</code> is the “outcome”, thing we measure via listening tests where listers rate their preferences. We could use a multi-valued score like and then take the Mean Opinion Score (MOS), but for now it suffices to just do A/B Testing for user preferences. Following CM conventions, we’ll denote the outcome as <span class="math inline">\(Y\)</span> and use binary values:</p>
+<p>Let’s say <code>Sound</code> is the “outcome”, the thing we measure via listening tests (where listers rate their preferences). We could use a multi-valued score like and then take the Mean Opinion Score (MOS), but for now it suffices to just do A/B Testing for user preferences. Following CM conventions, we’ll denote the outcome as <span class="math inline">\(Y\)</span> and use binary values:</p>
 <ul>
 <li><span class="math inline">\(Y=1\)</span>: sounds great</li>
 <li><span class="math inline">\(Y=0\)</span>: sounds bad (Technical term: “like ass”)</li>
@@ -712,8 +714,10 @@ setTimeout(initGraphs, 100);
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
-<div id="refs" role="list">
-
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-pearl2018why" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">J. Pearl and D. Mackenzie, <em>The book of why: The new science of cause and effect</em>. New York: Basic Books, 2018.</div>
+</div>
 </div>
 <hr>
 <ol start="3" type="a">
