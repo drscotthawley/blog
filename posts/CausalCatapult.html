@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Scott H. Hawley">
+<meta name="dcterms.date" content="2026-05-15">
+<meta name="description" content="Launching over the walls of math">
+
+<title>Catapulting into Causal Modeling – Scott H. Hawley</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/logo.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-1b3db88def35042d172274863c1cdcf0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-8d1ea2f4f8e14d12cbb0a1c491d81284.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+details > summary {
+    color: #00966f;   /* the greenish tinge that appears in my blog */
+    cursor: pointer; /* lil triangle thingy */
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&amp;display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Catapulting into Causal Modeling – Scott H. Hawley">
+<meta property="og:description" content="Launching over the walls of math">
+<meta property="og:image" content="https://drscotthawley.github.io/blog/posts/images/catapult.png">
+<meta property="og:site_name" content="Scott H. Hawley">
+<meta property="og:image:height" content="768">
+<meta property="og:image:width" content="1408">
+<meta name="twitter:title" content="Catapulting into Causal Modeling – Scott H. Hawley">
+<meta name="twitter:description" content="Launching over the walls of math">
+<meta name="twitter:image" content="https://drscotthawley.github.io/blog/posts/images/catapult.png">
+<meta name="twitter:image-height" content="768">
+<meta name="twitter:image-width" content="1408">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="https://www.scotthawley.com" class="navbar-brand navbar-brand-logo">
+    <img src="../images/logo.png" alt="SH Logo" class="navbar-logo light-content">
+    <img src="../images/logo.png" alt="SH Logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="https://www.scotthawley.com">
+    <span class="navbar-title">Scott H. Hawley</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/drscotthawley"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://bsky.app/profile/drscotthawley.bsky.social"> 
+<span class="menu-text"><i class="fa-brands fa-bluesky" aria-label="bluesky"></i></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/drscotthawley"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/drscotthawley/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Catapulting into Causal Modeling</h1>
+                  <div>
+        <div class="description">
+          Launching over the walls of math
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">draft</div>
+                <div class="quarto-category">causal</div>
+                <div class="quarto-category">machine learning</div>
+                <div class="quarto-category">tutorial</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Scott H. Hawley </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 15, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
+  <li><a href="#modeling-case-study-gas" id="toc-modeling-case-study-gas" class="nav-link" data-scroll-target="#modeling-case-study-gas">Modeling Case Study: GAS</a></li>
+  <li><a href="#lets-write-some-fcking-code" id="toc-lets-write-some-fcking-code" class="nav-link" data-scroll-target="#lets-write-some-fcking-code">Let’s Write Some F*cking Code</a>
+  <ul class="collapse">
+  <li><a href="#defining-and-visualizing-graphs" id="toc-defining-and-visualizing-graphs" class="nav-link" data-scroll-target="#defining-and-visualizing-graphs">Defining and Visualizing Graphs</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<style>
+figcaption {
+  margin: auto;
+  text-align: center;
+</style>
+<section id="intro" class="level2">
+<h2 class="anchored" data-anchor-id="intro">Intro</h2>
+<p>Ok so I’m confused and exiting tutorials and treatments were too front-loaded with math for me. This is the classic thing that gets me writing a blog post: there’s a “wall of math” which in this case is equations, but just endless definitions and introducing of jargon that you’re supposed to keep in your brain while you’re simply trying to learn <em>“How can I calculate something?”</em></p>
+<p>Well. in this post we’re going to get started really fast. It’s going to be a rapid acceleration because we’re going to <em>catapult over the wall</em> of math and get started <em>immediately</em> calculating things, and learn definitions and proofs as needed as we go.</p>
+</section>
+<section id="modeling-case-study-gas" class="level2">
+<h2 class="anchored" data-anchor-id="modeling-case-study-gas">Modeling Case Study: GAS</h2>
+<p>Since causal modeling introductions invariably choose some medical intervention, we’re going to discuss the condition known as <strong>Gear Acquisition Syndrome (GAS)</strong>.</p>
+<p>GAS is a debilitating condition affecting millions of musicians worldwide. It is the (false) cognitive bias in which the musician thinks that buying gear will make them more talented, and therefore result in better sound. While better gear can lead to better sound, we will explore using causal modeling whether gear actually has any impact on talent.</p>
+</section>
+<section id="lets-write-some-fcking-code" class="level2">
+<h2 class="anchored" data-anchor-id="lets-write-some-fcking-code">Let’s Write Some F*cking Code</h2>
+<p>I have yet to find a single intro to causal modeling that lets me see any code before the time scale for <a href="https://en.wikipedia.org/wiki/Proton_decay">proton decay</a>. So get ready, we are launching the catapult – with us inside.</p>
+<section id="defining-and-visualizing-graphs" class="level3">
+<h3 class="anchored" data-anchor-id="defining-and-visualizing-graphs">Defining and Visualizing Graphs</h3>
+<p>We’re going to want to see our graphs as we go, so I’m going to make the first code just the visualization utilities. And D3 is good for that – we just need to be able to drive it from Python.</p>
+<p>So the hope is we define our graph with Python – Nodes, edges, directions – then we push it to the viz routine and have it appear in a little box below. Where we can see it and move it around.</p>
+<p>I’m going to use two libraries for all this:</p>
+<ol type="1">
+<li><strong>NetworkX</strong> is a general lib for graph bookkeeping, which is good because I don’t feel like building up a whole suite from scratch.</li>
+<li><strong>PyTorch</strong> for any and all numerical calculations because ultimately I want to do cool machine learning stuff.</li>
+</ol>
+<p>For visualization, we’ll use <strong>D3.js</strong> directly via ES module import – no extra Python dependency needed, it just works in the browser.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>I will often hide the code via folds to preserve the narrative unless there’s some code that I really want you to see.</p>
+</div>
+</div>
+<div id="16588c95-bba8-49a6-a550-aeded8893f9a" class="cell">
+<details class="code-fold">
+<summary>Installing Packages</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>uv pip install networkx matplotlib torch torchvision <span class="op">--</span>quiet</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Let’s define a small graph or two with <code>NetworkX</code>:</p>
+<div id="a1ff96cf-fbc8-47f0-ad66-77bc4dc731d4" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> copy</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Gear Acquisition Syndrome</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> nx.DiGraph()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Talent"</span>, role<span class="op">=</span><span class="st">"default"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Gear"</span>,   role<span class="op">=</span><span class="st">"treatment"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Sound"</span>,  role<span class="op">=</span><span class="st">"outcome"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>G.add_edges_from([</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>, <span class="st">"Sound"</span>),</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Gear"</span>,   <span class="st">"Sound"</span>),</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Gear"</span>,   <span class="st">"Talent"</span>,),</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Reality</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>G2 <span class="op">=</span> copy.deepcopy(G)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>G2.remove_edge(<span class="st">"Gear"</span>, <span class="st">"Talent"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>And then vizualize with D3.js, which gives us nice draggable, force-directed nodes:</p>
+<div id="e2c3fd7a" class="cell">
+<details class="code-fold">
+<summary>Visualization utility code — feel free to ignore</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json, itertools</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> HTML</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>ROLE_COLORS <span class="op">=</span> {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"treatment"</span>:  <span class="st">"#c0392b"</span>,  <span class="co"># dark red</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"outcome"</span>:    <span class="st">"#1e8449"</span>,  <span class="co"># dark green</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"confounder"</span>: <span class="st">"#6c3483"</span>,  <span class="co"># dark purple</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"default"</span>:    <span class="st">"#2471a3"</span>,  <span class="co"># dark blue</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>_dag_counter <span class="op">=</span> itertools.count()</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_dag(G, width<span class="op">=</span><span class="dv">600</span>, height<span class="op">=</span><span class="dv">300</span>, node_size<span class="op">=</span><span class="dv">34</span>, font_size<span class="op">=</span><span class="dv">13</span>, title<span class="op">=</span><span class="st">""</span>):</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">isinstance</span>(G, <span class="bu">list</span>):</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        G, title <span class="op">=</span> [G], [title]</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> <span class="kw">not</span> <span class="bu">isinstance</span>(title, <span class="bu">list</span>):</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> [title] <span class="op">*</span> <span class="bu">len</span>(G)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    specs <span class="op">=</span> []</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    divs  <span class="op">=</span> []</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> g, t <span class="kw">in</span> <span class="bu">zip</span>(G, title):</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        nodes <span class="op">=</span> [{<span class="st">"id"</span>: <span class="bu">str</span>(n), <span class="st">"color"</span>: ROLE_COLORS.get(d.get(<span class="st">"role"</span>), ROLE_COLORS[<span class="st">"default"</span>])}</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>                 <span class="cf">for</span> n, d <span class="kw">in</span> g.nodes(data<span class="op">=</span><span class="va">True</span>)]</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        links <span class="op">=</span> [{<span class="st">"source"</span>: <span class="bu">str</span>(u), <span class="st">"target"</span>: <span class="bu">str</span>(v), <span class="st">"label"</span>: d.get(<span class="st">"label"</span>, <span class="st">""</span>)}</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>                 <span class="cf">for</span> u, v, d <span class="kw">in</span> g.edges(data<span class="op">=</span><span class="va">True</span>)]</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        uid <span class="op">=</span> <span class="ss">f"dag</span><span class="sc">{</span><span class="bu">next</span>(_dag_counter)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        specs.append({<span class="st">"uid"</span>: uid, <span class="st">"nodes"</span>: nodes, <span class="st">"links"</span>: links,</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"title"</span>: t, <span class="st">"titleOffset"</span>: <span class="dv">28</span> <span class="cf">if</span> t <span class="cf">else</span> <span class="dv">0</span>})</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        divs.append(<span class="ss">f'&lt;div id="</span><span class="sc">{</span>uid<span class="sc">}</span><span class="ss">" style="width:</span><span class="sc">{</span>width<span class="sc">}</span><span class="ss">px;height:</span><span class="sc">{</span>height<span class="sc">}</span><span class="ss">px;'</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>                    <span class="ss">f'border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"&gt;&lt;/div&gt;'</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    specs_json <span class="op">=</span> json.dumps(specs)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    container  <span class="op">=</span> <span class="st">'&lt;div style="display:flex;gap:12px;flex-wrap:wrap;"&gt;'</span> <span class="op">+</span> <span class="st">""</span>.join(divs) <span class="op">+</span> <span class="st">'&lt;/div&gt;'</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    script <span class="op">=</span> <span class="ss">f"""</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="ss">&lt;script type="module"&gt;</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="ss">import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="ss">function initGraphs() </span><span class="ch">{{</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="ss">  const specs = </span><span class="sc">{</span>specs_json<span class="sc">}</span><span class="ss">;</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="ss">  const W = </span><span class="sc">{</span>width<span class="sc">}</span><span class="ss">, H = </span><span class="sc">{</span>height<span class="sc">}</span><span class="ss">, R = </span><span class="sc">{</span>node_size<span class="sc">}</span><span class="ss">, FS = </span><span class="sc">{</span>font_size<span class="sc">}</span><span class="ss">;</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="ss">  console.log("initGraphs: found", specs.length, "specs");</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="ss">  for (const spec of specs) </span><span class="ch">{{</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="ss">    const </span><span class="ch">{{</span><span class="ss">uid, nodes, links, title, titleOffset</span><span class="ch">}}</span><span class="ss"> = spec;</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="ss">    const el = document.getElementById(uid);</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="ss">    console.log("Looking for #" + uid + ":", el);</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="ss">    if (!el) continue;</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="ss">    const w = W, h = H, r = R, fs = FS;</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="ss">    const svg = d3.select(el).append("svg").attr("width", w).attr("height", h);</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="ss">    if (title) </span><span class="ch">{{</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="ss">      svg.append("text").attr("x", w/2).attr("y", 22)</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="ss">        .attr("text-anchor", "middle").attr("fill", "#ccc")</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="ss">        .attr("font-size", "18px").attr("font-family", "sans-serif").attr("font-weight", "bold")</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="ss">        .text(title);</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="ss">    svg.append("defs").append("marker")</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("id", uid + "-arrow").attr("viewBox", "0 -5 10 10")</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("refX", 10).attr("refY", 0).attr("markerWidth", 7).attr("markerHeight", 7).attr("orient", "auto")</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="ss">      .append("path").attr("d", "M0,-5L10,0L0,5").attr("fill", "#aaa");</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="ss">    const linkData = links.map(l =&gt; (</span><span class="ch">{{</span><span class="ss">...l</span><span class="ch">}}</span><span class="ss">));</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="ss">    const nodeData = nodes.map(n =&gt; (</span><span class="ch">{{</span><span class="ss">...n</span><span class="ch">}}</span><span class="ss">));</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="ss">    const sim = d3.forceSimulation(nodeData)</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="ss">      .force("link", d3.forceLink(linkData).id(d =&gt; d.id).distance(140))</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="ss">      .force("charge", d3.forceManyBody().strength(-500))</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a><span class="ss">      .force("center", d3.forceCenter(w/2, titleOffset/2 + h/2));</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a><span class="ss">    const link = svg.append("g").selectAll("line").data(linkData).join("line")</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("stroke", "#aaa").attr("stroke-width", 2)</span></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("marker-end", "url(#" + uid + "-arrow)");</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a><span class="ss">    const edgeLabels = svg.append("g").selectAll("text").data(linkData.filter(d =&gt; d.label)).join("text")</span></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("text-anchor", "middle").attr("fill", "#ffdd57")</span></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("font-size", "16px").attr("font-family", "sans-serif").attr("font-weight", "bold")</span></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a><span class="ss">      .text(d =&gt; d.label);</span></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a><span class="ss">    const node = svg.append("g").selectAll("g").data(nodeData).join("g")</span></span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a><span class="ss">      .call(d3.drag()</span></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a><span class="ss">        .on("start", (e,d) =&gt; </span><span class="ch">{{</span><span class="ss"> if (!e.active) sim.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; </span><span class="ch">}}</span><span class="ss">)</span></span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a><span class="ss">        .on("drag",  (e,d) =&gt; </span><span class="ch">{{</span><span class="ss"> d.fx=e.x; d.fy=e.y; </span><span class="ch">}}</span><span class="ss">)</span></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a><span class="ss">        .on("end",   (e,d) =&gt; </span><span class="ch">{{</span><span class="ss"> if (!e.active) sim.alphaTarget(0); d.fx=null; d.fy=null; </span><span class="ch">}}</span><span class="ss">));</span></span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a><span class="ss">    node.append("circle").attr("r", r).attr("fill", d =&gt; d.color).attr("stroke", "#fff").attr("stroke-width", 1.5);</span></span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a><span class="ss">    node.each(function(d) </span><span class="ch">{{</span></span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a><span class="ss">      const lines = d.id.split("</span><span class="ch">\\</span><span class="ss">n");</span></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a><span class="ss">      const txt = d3.select(this).append("text").attr("text-anchor", "middle")</span></span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a><span class="ss">        .attr("fill", "white").attr("font-size", fs+"px").attr("font-family", "sans-serif");</span></span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a><span class="ss">      const lh = fs * 1.2, yStart = -((lines.length - 1) * lh) / 2;</span></span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a><span class="ss">      lines.forEach((line, i) =&gt; </span><span class="ch">{{</span></span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a><span class="ss">        txt.append("tspan").attr("x", 0).attr("y", yStart + i*lh).attr("dy", "0.35em").text(line);</span></span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a><span class="ss">      </span><span class="ch">}}</span><span class="ss">);</span></span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span><span class="ss">);</span></span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a><span class="ss">    sim.on("tick", () =&gt; </span><span class="ch">{{</span></span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a><span class="ss">      link.each(function(d) </span><span class="ch">{{</span></span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a><span class="ss">        const dx = d.target.x-d.source.x, dy = d.target.y-d.source.y;</span></span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a><span class="ss">        const dist = Math.sqrt(dx*dx+dy*dy) || 1, ux = dx/dist, uy = dy/dist;</span></span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a><span class="ss">        d3.select(this)</span></span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a><span class="ss">          .attr("x1", d.source.x+ux*r).attr("y1", d.source.y+uy*r)</span></span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a><span class="ss">          .attr("x2", d.target.x-ux*r).attr("y2", d.target.y-uy*r);</span></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a><span class="ss">      </span><span class="ch">}}</span><span class="ss">);</span></span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a><span class="ss">      edgeLabels</span></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a><span class="ss">        .attr("x", d =&gt; (d.source.x+d.target.x)/2)</span></span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a><span class="ss">        .attr("y", d =&gt; (d.source.y+d.target.y)/2 - 8);</span></span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a><span class="ss">      node.attr("transform", d =&gt; `translate($</span><span class="ch">{{</span><span class="ss">d.x</span><span class="ch">}}</span><span class="ss">,$</span><span class="ch">{{</span><span class="ss">d.y</span><span class="ch">}}</span><span class="ss">)`);</span></span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span><span class="ss">);</span></span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a><span class="ss">  </span><span class="ch">}}</span></span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a><span class="ch">}}</span></span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a><span class="ss">setTimeout(initGraphs, 100);</span></span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a><span class="ss">&lt;/script&gt;</span></span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span></span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> HTML(container <span class="op">+</span> script)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="e97546e4-26ad-4ce4-b96f-1fb821a44352" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>show_dag([G, G2], width<span class="op">=</span><span class="dv">380</span>, height<span class="op">=</span><span class="dv">350</span>, title<span class="op">=</span>[<span class="st">"Gear Acquisition Syndrome"</span>, <span class="st">"Reality"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div style="display:flex;gap:12px;flex-wrap:wrap;"><div id="dag12" style="width:380px;height:350px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div><div id="dag13" style="width:380px;height:350px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div></div>
+<script type="module">
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+
+function initGraphs() {
+  const specs = [{"uid": "dag12", "nodes": [{"id": "Talent", "color": "#2471a3"}, {"id": "Gear", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Talent", "target": "Sound", "label": ""}, {"source": "Gear", "target": "Sound", "label": ""}, {"source": "Gear", "target": "Talent", "label": ""}], "title": "Gear Acquisition Syndrome", "titleOffset": 28}, {"uid": "dag13", "nodes": [{"id": "Talent", "color": "#2471a3"}, {"id": "Gear", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Talent", "target": "Sound", "label": ""}, {"source": "Gear", "target": "Sound", "label": ""}], "title": "Reality", "titleOffset": 28}];
+  const W = 380, H = 350, R = 34, FS = 13;
+  console.log("initGraphs: found", specs.length, "specs");
+
+  for (const spec of specs) {
+    const {uid, nodes, links, title, titleOffset} = spec;
+    const el = document.getElementById(uid);
+    console.log("Looking for #" + uid + ":", el);
+    if (!el) continue;
+
+    const w = W, h = H, r = R, fs = FS;
+    const svg = d3.select(el).append("svg").attr("width", w).attr("height", h);
+
+    if (title) {
+      svg.append("text").attr("x", w/2).attr("y", 22)
+        .attr("text-anchor", "middle").attr("fill", "#ccc")
+        .attr("font-size", "18px").attr("font-family", "sans-serif").attr("font-weight", "bold")
+        .text(title);
+    }
+
+    svg.append("defs").append("marker")
+      .attr("id", uid + "-arrow").attr("viewBox", "0 -5 10 10")
+      .attr("refX", 10).attr("refY", 0).attr("markerWidth", 7).attr("markerHeight", 7).attr("orient", "auto")
+      .append("path").attr("d", "M0,-5L10,0L0,5").attr("fill", "#aaa");
+
+    const linkData = links.map(l => ({...l}));
+    const nodeData = nodes.map(n => ({...n}));
+
+    const sim = d3.forceSimulation(nodeData)
+      .force("link", d3.forceLink(linkData).id(d => d.id).distance(140))
+      .force("charge", d3.forceManyBody().strength(-500))
+      .force("center", d3.forceCenter(w/2, titleOffset/2 + h/2));
+
+    const link = svg.append("g").selectAll("line").data(linkData).join("line")
+      .attr("stroke", "#aaa").attr("stroke-width", 2)
+      .attr("marker-end", "url(#" + uid + "-arrow)");
+
+    const edgeLabels = svg.append("g").selectAll("text").data(linkData.filter(d => d.label)).join("text")
+      .attr("text-anchor", "middle").attr("fill", "#ffdd57")
+      .attr("font-size", "16px").attr("font-family", "sans-serif").attr("font-weight", "bold")
+      .text(d => d.label);
+
+    const node = svg.append("g").selectAll("g").data(nodeData).join("g")
+      .call(d3.drag()
+        .on("start", (e,d) => { if (!e.active) sim.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; })
+        .on("drag",  (e,d) => { d.fx=e.x; d.fy=e.y; })
+        .on("end",   (e,d) => { if (!e.active) sim.alphaTarget(0); d.fx=null; d.fy=null; }));
+
+    node.append("circle").attr("r", r).attr("fill", d => d.color).attr("stroke", "#fff").attr("stroke-width", 1.5);
+
+    node.each(function(d) {
+      const lines = d.id.split("\n");
+      const txt = d3.select(this).append("text").attr("text-anchor", "middle")
+        .attr("fill", "white").attr("font-size", fs+"px").attr("font-family", "sans-serif");
+      const lh = fs * 1.2, yStart = -((lines.length - 1) * lh) / 2;
+      lines.forEach((line, i) => {
+        txt.append("tspan").attr("x", 0).attr("y", yStart + i*lh).attr("dy", "0.35em").text(line);
+      });
+    });
+
+    sim.on("tick", () => {
+      link.each(function(d) {
+        const dx = d.target.x-d.source.x, dy = d.target.y-d.source.y;
+        const dist = Math.sqrt(dx*dx+dy*dy) || 1, ux = dx/dist, uy = dy/dist;
+        d3.select(this)
+          .attr("x1", d.source.x+ux*r).attr("y1", d.source.y+uy*r)
+          .attr("x2", d.target.x-ux*r).attr("y2", d.target.y-uy*r);
+      });
+      edgeLabels
+        .attr("x", d => (d.source.x+d.target.x)/2)
+        .attr("y", d => (d.source.y+d.target.y)/2 - 8);
+      node.attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+  }
+}
+
+setTimeout(initGraphs, 100);
+</script>
+</div>
+</div>
+</section>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<div id="refs" role="list">
+
+</div>
+<hr>
+<ol start="3" type="a">
+<li>2026 Scott H. Hawley</li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/drscotthawley\.github\.io\/blog");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
