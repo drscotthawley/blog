@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Scott H. Hawley">
-<meta name="dcterms.date" content="2026-05-15">
+<meta name="dcterms.date" content="2026-05-14">
 <meta name="description" content="Launching over the walls of math">
 
 <title>Catapulting into Causal Modeling – Scott H. Hawley</title>
@@ -271,7 +271,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">May 15, 2026</p>
+        <p class="date">May 14, 2026</p>
       </div>
     </div>
     
@@ -288,7 +288,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
-  <li><a href="#case-study-gas" id="toc-case-study-gas" class="nav-link" data-scroll-target="#case-study-gas">Case Study: GAS</a></li>
+  <li><a href="#case-study-gear-afflication-syndrome-gas" id="toc-case-study-gear-afflication-syndrome-gas" class="nav-link" data-scroll-target="#case-study-gear-afflication-syndrome-gas">Case Study: Gear Afflication Syndrome (GAS)</a></li>
   <li><a href="#lets-write-some-fcking-code" id="toc-lets-write-some-fcking-code" class="nav-link" data-scroll-target="#lets-write-some-fcking-code">Let’s Write Some F*cking Code</a>
   <ul class="collapse">
   <li><a href="#defining-and-visualizing-graphs" id="toc-defining-and-visualizing-graphs" class="nav-link" data-scroll-target="#defining-and-visualizing-graphs">Defining and Visualizing Graphs</a></li>
@@ -312,8 +312,8 @@ figcaption {
 </style>
 <section id="intro" class="level1">
 <h1>Intro</h1>
-<p>I’ve been wanting to learn Causal Modeling (CM) / Causal Inference “properly” ever since I asked for Judea Pearl’s bestselling <em>The Book of Why</em> <span class="citation" data-cites="pearl2018why"><a href="#ref-pearl2018why" role="doc-biblioref">[1]</a></span> for Christmas in 2019. It’s a great read but it hides any actual computation by simply referring to the mystical “do calculus” and occasionally saying, “Why don’t you read my textbook?”</p>
-<p>Ok, well I’m not reading his textbook but I have been reading &amp; watching various other treatments <span class="citation" data-cites="tucci2013"><a href="#ref-tucci2013" role="doc-biblioref">[2]</a></span> <span class="citation" data-cites="neal2020"><a href="#ref-neal2020" role="doc-biblioref">[3]</a></span>. And these exiting tutorials and treatments quickly fall into the classic <a href="https://en.wikipedia.org/wiki/Slough_of_Despond">Slough of Despond</a> by front-loading lots of mathematical abstraction. This sort of thing is typical enough that I refer to it in physics education as the “Chapter 2 Math Dump” and in machine learning as the “Wall of Math”. In the CM case, it’s not so much equations but rather seemingly-endless definitions and jargon that induce a cognitive load when you’re simply trying to figure out <em>“How can I calculate something?”</em> <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>I’ve been wanting to learn Causal Modeling (CM) / Causal Inference “properly” ever since I asked for Judea Pearl’s bestselling <em>The Book of Why</em> <span class="citation" data-cites="pearl2018why"><a href="#ref-pearl2018why" role="doc-biblioref">[1]</a></span> for Christmas in 2019. It’s a <em>great</em> read, but it hides any actual computation by simply referring to the mystical “do calculus” and occasionally saying, “Why don’t you read my textbook?” <span class="citation" data-cites="pearl2009causality"><a href="#ref-pearl2009causality" role="doc-biblioref">[2]</a></span></p>
+<p>Ok, well I’m not reading his textbook but I have been reading &amp; watching other treatments <span class="citation" data-cites="tucci2013"><a href="#ref-tucci2013" role="doc-biblioref">[3]</a></span> <span class="citation" data-cites="neal2020"><a href="#ref-neal2020" role="doc-biblioref">[4]</a></span>. And these quickly fall into the classic <a href="https://en.wikipedia.org/wiki/Slough_of_Despond">Slough of Despond</a> of front-loading lots of mathematical abstraction. This sort of thing is typical enough that I refer to it in physics education as the “Chapter 2 Math Dump” and in machine learning as the “Wall of Math”. In the CM case, it’s not so much equations but rather seemingly-endless definitions and jargon that induce a cognitive load when you’re anxiously wondering <em>“But how can I calculate something?”</em> <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -329,10 +329,10 @@ figcaption {
 </div>
 <p>In this post, we’re going to get started really fast: rapid acceleration so we <em>catapult over the wall</em> of math and get started <em>immediately</em> calculating things, and only introducing lingo, definitions and/or proofs when we need them.</p>
 </section>
-<section id="case-study-gas" class="level1">
-<h1>Case Study: GAS</h1>
-<p>Since causal modeling introductions invariably choose some medical intervention, we’re going to discuss the condition known as <strong>Gear Acquisition Syndrome (GAS)</strong>.</p>
-<p>GAS is a debilitating condition affecting millions of musicians worldwide. It is the (false) cognitive bias in which the musician thinks that buying gear will make them more talented, and therefore result in better sound. While better gear can lead to better sound, we will explore using causal modeling whether gear actually has any impact on talent.</p>
+<section id="case-study-gear-afflication-syndrome-gas" class="level1">
+<h1>Case Study: Gear Afflication Syndrome (GAS)</h1>
+<p>Causal modeling introductions invariably choose some medical intervention. Following my earlier use of examples from the Pro Audio world <span class="citation" data-cites="hawley2014bayes"><a href="#ref-hawley2014bayes" role="doc-biblioref">[5]</a></span>, we’ll discuss the sad afflication known as <strong>Gear Acquisition Syndrome (GAS)</strong>.</p>
+<p>GAS is a debilitating condition affecting millions of musicians worldwide. It is the (false) cognitive bias in which the musician thinks that buying gear will make them more talented, and therefore result in better sound.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> While better gear can lead to better sound, we will explore using causal modeling whether gear actually has any impact on talent.</p>
 </section>
 <section id="lets-write-some-fcking-code" class="level1">
 <h1>Let’s Write Some F*cking Code</h1>
@@ -597,10 +597,10 @@ setTimeout(initGraphs, 100);
 </script>
 </div>
 </div>
-<p>Let’s say <code>Sound</code> is the “outcome”, the thing we measure via listening tests where listers rate their preferences. We could use a multi-valued score like and then take the Mean Opinion Score (MOS), but for now it suffices to just do A/B Testing for user preferences. Following CM conventions, we’ll denote the outcome as <span class="math inline">\(Y\)</span> and use binary values:</p>
+<p><br> We’ll regard <code>Sound</code> as the “outcome”, the thing we measure via listening tests where listers rate their preferences. We could use a multi-valued score like and then take the Mean Opinion Score (MOS), but for now it suffices to just do A/B Testing for user preferences. Following CM conventions, we’ll denote the outcome as <span class="math inline">\(Y\)</span> and use binary values:</p>
 <ul>
-<li><span class="math inline">\(Y=1\)</span>: sounds great</li>
-<li><span class="math inline">\(Y=0\)</span>: sounds bad (Technical term: “like ass”)</li>
+<li><span class="math inline">\(Y=1\)</span>: Sounds Great</li>
+<li><span class="math inline">\(Y=0\)</span>: Sounds Bad (Technical term: “like ass”)</li>
 </ul>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -608,11 +608,11 @@ setTimeout(initGraphs, 100);
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>But How Do You Measure Talent?!
+<span class="screen-reader-only">Warning</span>But Wait – How Do You Measure Talent?!
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>We’re not going to be measuring <code>Talent</code>. Rather, we’re going to explore how allowing a causal link between <code>Gear</code> and <code>Talent</code> changes the expected statistics of <code>Sound</code>, and this will help us distinguish whether the <code>GAS</code> picture or the <code>Reality</code> picture best fits the data. (Spoiler: it’s the one with “<code>Reality</code>” in the name.)</p>
+<p>We’re not going to be measuring <code>Talent</code>. Rather, we’re going to explore how allowing a causal link between <code>Gear</code> and <code>Talent</code> changes the expected statistics of <code>Sound</code>, and this will help us distinguish whether the <code>GAS</code> picture or the <code>Reality</code> picture best fits the data.</p>
 </div>
 </div>
 </section>
@@ -733,11 +733,17 @@ setTimeout(initGraphs, 100);
 <div id="ref-pearl2018why" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[1] </div><div class="csl-right-inline">J. Pearl and D. Mackenzie, <em><span class="nocase">The Book of Why</span>: The new science of cause and effect</em>. New York: Basic Books, 2018.</div>
 </div>
+<div id="ref-pearl2009causality" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">J. Pearl, <em>Causality: Models, reasoning, and inference</em>, 2nd ed. Cambridge, UK: Cambridge University Press, 2009.</div>
+</div>
 <div id="ref-tucci2013" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline">R. R. Tucci, <span>“Introduction to <span>J</span>udea <span>P</span>earl’s do-calculus,”</span> <em>CoRR</em>, vol. abs/1305.5506, 2013, Available: <a href="http://arxiv.org/abs/1305.5506">http://arxiv.org/abs/1305.5506</a></div>
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">R. R. Tucci, <span>“Introduction to <span>J</span>udea <span>P</span>earl’s do-calculus,”</span> <em>CoRR</em>, vol. abs/1305.5506, 2013, Available: <a href="http://arxiv.org/abs/1305.5506">http://arxiv.org/abs/1305.5506</a></div>
 </div>
 <div id="ref-neal2020" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[3] </div><div class="csl-right-inline">B. Neal, <em><span class="nocase">Introduction to Causal Inference</span> (from a machine learning perspective)</em>. 2020. Available: <a href="https://www.bradyneal.com/causal-inference-course">https://www.bradyneal.com/causal-inference-course</a></div>
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">B. Neal, <em><span class="nocase">Introduction to Causal Inference</span> (from a machine learning perspective)</em>. 2020. Available: <a href="https://www.bradyneal.com/causal-inference-course">https://www.bradyneal.com/causal-inference-course</a></div>
+</div>
+<div id="ref-hawley2014bayes" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline"><span>“<span>B</span>ayesian analysis for audio engineers.”</span> Belmont student section of the <span>A</span>udio <span>E</span>ngineering <span>S</span>ociety, 2014. Available: <a href="https://hedges.belmont.edu/BayesianAnalysisPartI.pdf">https://hedges.belmont.edu/BayesianAnalysisPartI.pdf</a></div>
 </div>
 </div>
 <hr>
@@ -752,7 +758,8 @@ setTimeout(initGraphs, 100);
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Interestingly, these also typically claim to assume mere “basic familiarity with statistics” yet invariably pull out laws I’ve never heard of.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Interestingly, these also typically claim to assume mere “basic familiarity with statistics” yet invariably pull out laws I’ve never heard of. Seems “basic” is relative.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Other definitions of GAS are isomorphic to this one. ;-)<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
