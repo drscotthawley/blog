@@ -281,8 +281,8 @@ figcaption {
 </style>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
-<p>I’ve been wanting to learn Causal Modeling / Causal Inference properly, but exiting tutorials and treatments were too front-loaded with math for me. This is the classic thing that gets me writing a blog post: there’s a “wall of math” which in this case is equations, but just endless definitions and introducing of jargon that you’re supposed to keep in your brain while you’re simply trying to learn <em>“How can I calculate something?”</em></p>
-<p>In this post we’re going to get started really fast. It’s going to be a rapid acceleration because we’re going to <em>catapult over the wall</em> of math and get started <em>immediately</em> calculating things, learning definitions and proofs as needed as we go.</p>
+<p>I’ve been wanting to learn Causal Modeling / Causal Inference properly, but exiting tutorials and treatments were too front-loaded with math for me. This is the classic thing that gets me writing a blog post: there’s a “wall of math” which in this case is not so much equations as seemingly-endless definitions and jargon that induce a cognitive load when you’re simply trying to learn <em>“How can I calculate something?”</em></p>
+<p>In this post we’re going to get started really fast: rapid acceleration so we <em>catapult over the wall</em> of math and get started <em>immediately</em> calculating things, learning definitions and proofs as needed as we go.</p>
 </section>
 <section id="modeling-case-study-gas" class="level2">
 <h2 class="anchored" data-anchor-id="modeling-case-study-gas">Modeling Case Study: GAS</h2>
@@ -294,12 +294,11 @@ figcaption {
 <p>I have yet to find a single intro to causal modeling that lets me see any code before the time scale for <a href="https://en.wikipedia.org/wiki/Proton_decay">proton decay</a>. So get ready, we are launching the catapult – with us inside.</p>
 <section id="defining-and-visualizing-graphs" class="level3">
 <h3 class="anchored" data-anchor-id="defining-and-visualizing-graphs">Defining and Visualizing Graphs</h3>
-<p>We’re going to want to see our graphs as we go, so I’m going to make the first code just the visualization utilities. And D3 is good for that – we just need to be able to drive it from Python.</p>
-<p>We’ll define graph with Python (nodes, edges, directions) then push it to the viz routine so we can see it and move it around. I’m going to use 3 libraries for all this:</p>
+<p>First we need to be able to define and take a look at the graphs that will comprise our causal models. We’ll setup the graph with Python (nodes, edges, directions) then push it to the viz routine so we can see it and move it around. I’m going to use 3 libraries for all this:</p>
 <ol type="1">
-<li><strong><a href="https://networkx.org/en/">NetworkX</a></strong> is a general lib for graph bookkeeping, which is good because I don’t feel like building up a whole suite from scratch.</li>
-<li><strong><a href="https://d3js.org/">D3.js</a></strong> for visualization, just writing the scripting directly into the browser.</li>
-<li><strong>PyTorch</strong> for any and all numerical calculations because ultimately I want to do cool machine learning stuff.</li>
+<li><strong><a href="https://networkx.org/en/">NetworkX</a></strong> for general graph bookkeeping</li>
+<li><strong><a href="https://d3js.org/">D3.js</a></strong> for interactive visualizations with force-directed nodes.</li>
+<li><strong>PyTorch</strong> for any and all numerical calculations, because ultimately I want to do cool machine learning stuff.</li>
 </ol>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
