@@ -555,11 +555,112 @@ setTimeout(initGraphs, 100);
 </section>
 <section id="advanced-topics" class="level1">
 <h1>Advanced Topics</h1>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="CausalCatapult_files/figure-html/ec9e7823-13b4-4eee-bbaa-657092d46d8b-1-e9ef4f20-a47c-49d9-8cd3-f6a5318e3bf2.png" class="img-fluid figure-img"></p>
-<figcaption>image.png</figcaption>
-</figure>
+<div id="fdd80e8f-6079-4433-82a8-f2e4258df85c" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>G3 <span class="op">=</span> nx.DiGraph()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Talent"</span>,      role<span class="op">=</span><span class="st">"default"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Performance"</span>, role<span class="op">=</span><span class="st">"confounder"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Gear"</span>,        role<span class="op">=</span><span class="st">"default"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Recording"</span>,   role<span class="op">=</span><span class="st">"confounder"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>, role<span class="op">=</span><span class="st">"treatment"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Sound"</span>,       role<span class="op">=</span><span class="st">"outcome"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>G3.add_edges_from([</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,      <span class="st">"Performance"</span>),</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Performance"</span>, <span class="st">"Recording"</span>),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Gear"</span>,        <span class="st">"Recording"</span>),</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Recording"</span>,   <span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>),</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>, <span class="st">"Sound"</span>),</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>show_dag(G3, width<span class="op">=</span><span class="dv">800</span>, height<span class="op">=</span><span class="dv">600</span>, title<span class="op">=</span><span class="st">"Why does my recording sound like ass?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div style="display:flex;gap:12px;flex-wrap:wrap;"><div id="dag4" style="width:800px;height:600px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div></div>
+<script type="module">
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+
+function initGraphs() {
+  const specs = [{"uid": "dag4", "nodes": [{"id": "Talent", "color": "#2471a3"}, {"id": "Performance", "color": "#6c3483"}, {"id": "Gear", "color": "#2471a3"}, {"id": "Recording", "color": "#6c3483"}, {"id": "Signal\nProc", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Talent", "target": "Performance", "label": ""}, {"source": "Performance", "target": "Recording", "label": ""}, {"source": "Gear", "target": "Recording", "label": ""}, {"source": "Recording", "target": "Signal\nProc", "label": ""}, {"source": "Signal\nProc", "target": "Sound", "label": ""}], "title": "Why does my recording sound like ass?", "titleOffset": 28}];
+  const W = 800, H = 600, R = 34, FS = 13;
+  console.log("initGraphs: found", specs.length, "specs");
+
+  for (const spec of specs) {
+    const {uid, nodes, links, title, titleOffset} = spec;
+    const el = document.getElementById(uid);
+    console.log("Looking for #" + uid + ":", el);
+    if (!el) continue;
+
+    const w = W, h = H, r = R, fs = FS;
+    const svg = d3.select(el).append("svg").attr("width", w).attr("height", h);
+
+    if (title) {
+      svg.append("text").attr("x", w/2).attr("y", 22)
+        .attr("text-anchor", "middle").attr("fill", "#ccc")
+        .attr("font-size", "18px").attr("font-family", "sans-serif").attr("font-weight", "bold")
+        .text(title);
+    }
+
+    svg.append("defs").append("marker")
+      .attr("id", uid + "-arrow").attr("viewBox", "0 -5 10 10")
+      .attr("refX", 10).attr("refY", 0).attr("markerWidth", 7).attr("markerHeight", 7).attr("orient", "auto")
+      .append("path").attr("d", "M0,-5L10,0L0,5").attr("fill", "#aaa");
+
+    const linkData = links.map(l => ({...l}));
+    const nodeData = nodes.map(n => ({...n}));
+
+    const sim = d3.forceSimulation(nodeData)
+      .force("link", d3.forceLink(linkData).id(d => d.id).distance(140))
+      .force("charge", d3.forceManyBody().strength(-500))
+      .force("center", d3.forceCenter(w/2, titleOffset/2 + h/2));
+
+    const link = svg.append("g").selectAll("line").data(linkData).join("line")
+      .attr("stroke", "#aaa").attr("stroke-width", 2)
+      .attr("marker-end", "url(#" + uid + "-arrow)");
+
+    const edgeLabels = svg.append("g").selectAll("text").data(linkData.filter(d => d.label)).join("text")
+      .attr("text-anchor", "middle").attr("fill", "#ffdd57")
+      .attr("font-size", "16px").attr("font-family", "sans-serif").attr("font-weight", "bold")
+      .text(d => d.label);
+
+    const node = svg.append("g").selectAll("g").data(nodeData).join("g")
+      .call(d3.drag()
+        .on("start", (e,d) => { if (!e.active) sim.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; })
+        .on("drag",  (e,d) => { d.fx=e.x; d.fy=e.y; })
+        .on("end",   (e,d) => { if (!e.active) sim.alphaTarget(0); d.fx=null; d.fy=null; }));
+
+    node.append("circle").attr("r", r).attr("fill", d => d.color).attr("stroke", "#fff").attr("stroke-width", 1.5);
+
+    node.each(function(d) {
+      const lines = d.id.split("\n");
+      const txt = d3.select(this).append("text").attr("text-anchor", "middle")
+        .attr("fill", "white").attr("font-size", fs+"px").attr("font-family", "sans-serif");
+      const lh = fs * 1.2, yStart = -((lines.length - 1) * lh) / 2;
+      lines.forEach((line, i) => {
+        txt.append("tspan").attr("x", 0).attr("y", yStart + i*lh).attr("dy", "0.35em").text(line);
+      });
+    });
+
+    sim.on("tick", () => {
+      link.each(function(d) {
+        const dx = d.target.x-d.source.x, dy = d.target.y-d.source.y;
+        const dist = Math.sqrt(dx*dx+dy*dy) || 1, ux = dx/dist, uy = dy/dist;
+        d3.select(this)
+          .attr("x1", d.source.x+ux*r).attr("y1", d.source.y+uy*r)
+          .attr("x2", d.target.x-ux*r).attr("y2", d.target.y-uy*r);
+      });
+      edgeLabels
+        .attr("x", d => (d.source.x+d.target.x)/2)
+        .attr("y", d => (d.source.y+d.target.y)/2 - 8);
+      node.attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+  }
+}
+
+setTimeout(initGraphs, 100);
+</script>
+</div>
 </div>
 </section>
 <section id="references" class="level1">
