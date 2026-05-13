@@ -258,11 +258,12 @@ details > summary {
    
   <ul>
   <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
-  <li><a href="#modeling-case-study-gas" id="toc-modeling-case-study-gas" class="nav-link" data-scroll-target="#modeling-case-study-gas">Modeling Case Study: GAS</a></li>
+  <li><a href="#case-study-gas" id="toc-case-study-gas" class="nav-link" data-scroll-target="#case-study-gas">Case Study: GAS</a></li>
   <li><a href="#lets-write-some-fcking-code" id="toc-lets-write-some-fcking-code" class="nav-link" data-scroll-target="#lets-write-some-fcking-code">Let’s Write Some F*cking Code</a>
   <ul class="collapse">
   <li><a href="#defining-and-visualizing-graphs" id="toc-defining-and-visualizing-graphs" class="nav-link" data-scroll-target="#defining-and-visualizing-graphs">Defining and Visualizing Graphs</a></li>
   </ul></li>
+  <li><a href="#advanced-topics" id="toc-advanced-topics" class="nav-link" data-scroll-target="#advanced-topics">Advanced Topics</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -279,21 +280,21 @@ figcaption {
   margin: auto;
   text-align: center;
 </style>
-<section id="intro" class="level2">
-<h2 class="anchored" data-anchor-id="intro">Intro</h2>
+<section id="intro" class="level1">
+<h1>Intro</h1>
 <p>I’ve been wanting to learn Causal Modeling / Causal Inference properly, but exiting tutorials and treatments were too front-loaded with math for me. This is the classic thing that gets me writing a blog post: there’s a “wall of math” which in this case is not so much equations but rather seemingly-endless definitions and jargon that induce a cognitive load when you’re simply trying to learn <em>“How can I calculate something?”</em></p>
 <p>In this post we’re going to get started really fast: rapid acceleration so we <em>catapult over the wall</em> of math and get started <em>immediately</em> calculating things, and only introducing lingo, definitions and/or proofs when we need them.</p>
 </section>
-<section id="modeling-case-study-gas" class="level2">
-<h2 class="anchored" data-anchor-id="modeling-case-study-gas">Modeling Case Study: GAS</h2>
+<section id="case-study-gas" class="level1">
+<h1>Case Study: GAS</h1>
 <p>Since causal modeling introductions invariably choose some medical intervention, we’re going to discuss the condition known as <strong>Gear Acquisition Syndrome (GAS)</strong>.</p>
 <p>GAS is a debilitating condition affecting millions of musicians worldwide. It is the (false) cognitive bias in which the musician thinks that buying gear will make them more talented, and therefore result in better sound. While better gear can lead to better sound, we will explore using causal modeling whether gear actually has any impact on talent.</p>
 </section>
-<section id="lets-write-some-fcking-code" class="level2">
-<h2 class="anchored" data-anchor-id="lets-write-some-fcking-code">Let’s Write Some F*cking Code</h2>
+<section id="lets-write-some-fcking-code" class="level1">
+<h1>Let’s Write Some F*cking Code</h1>
 <p>I have yet to encounter an intro to causal modeling that lets me see any code before the time scale for <a href="https://en.wikipedia.org/wiki/Proton_decay">proton decay</a>. So get ready, we are launching the catapult – with us inside.</p>
-<section id="defining-and-visualizing-graphs" class="level3">
-<h3 class="anchored" data-anchor-id="defining-and-visualizing-graphs">Defining and Visualizing Graphs</h3>
+<section id="defining-and-visualizing-graphs" class="level2">
+<h2 class="anchored" data-anchor-id="defining-and-visualizing-graphs">Defining and Visualizing Graphs</h2>
 <p>First we need to be able to define and take a look at the graphs that will comprise our causal models. We’ll setup the graph with Python (nodes, edges, directions) then push it to the viz routine so we can see it and move it around. I’m going to use 3 libraries for all this:</p>
 <ol type="1">
 <li><strong><a href="https://networkx.org/en/">NetworkX</a></strong> for general graph bookkeeping</li>
@@ -551,6 +552,15 @@ setTimeout(initGraphs, 100);
 </div>
 </div>
 </section>
+</section>
+<section id="advanced-topics" class="level1">
+<h1>Advanced Topics</h1>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="CausalCatapult_files/figure-html/ec9e7823-13b4-4eee-bbaa-657092d46d8b-1-e9ef4f20-a47c-49d9-8cd3-f6a5318e3bf2.png" class="img-fluid figure-img"></p>
+<figcaption>image.png</figcaption>
+</figure>
+</div>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
