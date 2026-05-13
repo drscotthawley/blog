@@ -281,8 +281,8 @@ figcaption {
 </style>
 <section id="intro" class="level2">
 <h2 class="anchored" data-anchor-id="intro">Intro</h2>
-<p>Ok so I’m confused and exiting tutorials and treatments were too front-loaded with math for me. This is the classic thing that gets me writing a blog post: there’s a “wall of math” which in this case is equations, but just endless definitions and introducing of jargon that you’re supposed to keep in your brain while you’re simply trying to learn <em>“How can I calculate something?”</em></p>
-<p>Well. in this post we’re going to get started really fast. It’s going to be a rapid acceleration because we’re going to <em>catapult over the wall</em> of math and get started <em>immediately</em> calculating things, and learn definitions and proofs as needed as we go.</p>
+<p>I’ve been wanting to learn Causal Modeling / Causal Inference properly, but exiting tutorials and treatments were too front-loaded with math for me. This is the classic thing that gets me writing a blog post: there’s a “wall of math” which in this case is equations, but just endless definitions and introducing of jargon that you’re supposed to keep in your brain while you’re simply trying to learn <em>“How can I calculate something?”</em></p>
+<p>In this post we’re going to get started really fast. It’s going to be a rapid acceleration because we’re going to <em>catapult over the wall</em> of math and get started <em>immediately</em> calculating things, learning definitions and proofs as needed as we go.</p>
 </section>
 <section id="modeling-case-study-gas" class="level2">
 <h2 class="anchored" data-anchor-id="modeling-case-study-gas">Modeling Case Study: GAS</h2>
@@ -295,13 +295,12 @@ figcaption {
 <section id="defining-and-visualizing-graphs" class="level3">
 <h3 class="anchored" data-anchor-id="defining-and-visualizing-graphs">Defining and Visualizing Graphs</h3>
 <p>We’re going to want to see our graphs as we go, so I’m going to make the first code just the visualization utilities. And D3 is good for that – we just need to be able to drive it from Python.</p>
-<p>So the hope is we define our graph with Python – Nodes, edges, directions – then we push it to the viz routine and have it appear in a little box below. Where we can see it and move it around.</p>
-<p>I’m going to use two libraries for all this:</p>
+<p>We’ll define graph with Python (nodes, edges, directions) then push it to the viz routine so we can see it and move it around. I’m going to use 3 libraries for all this:</p>
 <ol type="1">
-<li><strong>NetworkX</strong> is a general lib for graph bookkeeping, which is good because I don’t feel like building up a whole suite from scratch.</li>
+<li><strong><a href="https://networkx.org/en/">NetworkX</a></strong> is a general lib for graph bookkeeping, which is good because I don’t feel like building up a whole suite from scratch.</li>
+<li><strong><a href="https://d3js.org/">D3.js</a></strong> for visualization, just writing the scripting directly into the browser.</li>
 <li><strong>PyTorch</strong> for any and all numerical calculations because ultimately I want to do cool machine learning stuff.</li>
 </ol>
-<p>For visualization, we’ll use <strong>D3.js</strong> directly via ES module import – no extra Python dependency needed, it just works in the browser.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -331,16 +330,15 @@ Note
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Talent"</span>, role<span class="op">=</span><span class="st">"default"</span>)</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Gear"</span>,   role<span class="op">=</span><span class="st">"treatment"</span>)</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Sound"</span>,  role<span class="op">=</span><span class="st">"outcome"</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>G.add_edges_from([</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>, <span class="st">"Sound"</span>),</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Gear"</span>,   <span class="st">"Sound"</span>),</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Gear"</span>,   <span class="st">"Talent"</span>,),</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Reality</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>G2 <span class="op">=</span> copy.deepcopy(G)</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>G2.remove_edge(<span class="st">"Gear"</span>, <span class="st">"Talent"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>G.add_edges_from([</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>, <span class="st">"Sound"</span>),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Gear"</span>,   <span class="st">"Sound"</span>),</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Gear"</span>,   <span class="st">"Talent"</span>,),</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># "Reality"</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>G2 <span class="op">=</span> copy.deepcopy(G)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>G2.remove_edge(<span class="st">"Gear"</span>, <span class="st">"Talent"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>And then vizualize with D3.js, which gives us nice draggable, force-directed nodes:</p>
 <div id="e2c3fd7a" class="cell">
