@@ -336,7 +336,20 @@ figcaption {
 <section id="case-study-gear-acquisition-syndrome-gas" class="level1">
 <h1>Case Study: Gear Acquisition Syndrome (GAS)</h1>
 <p>Causal modeling introductions invariably choose some medical intervention as an illustrative example. Since my specialty is teaching audio engineers <span class="citation" data-cites="hawley2014bayes"><a href="#ref-hawley2014bayes" role="doc-biblioref">[5]</a></span>, we’ll discuss the sad affliction known as <strong><a href="https://www.joshuasarinana.com/sciart/the-science-of-gear-acquisition-syndrome">Gear Acquisition Syndrome (GAS)</a></strong>.</p>
-<p>GAS is a (fictitious) debilitating condition affecting millions of musicians worldwide. It is the (false) cognitive bias in which the musician thinks that buying gear will make them more talented, and therefore result in better sound.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>GAS is a debilitating condition affecting millions of musicians worldwide. It is the (false) cognitive bias in which the musician thinks that buying gear will make them more talented, and therefore result in better sound.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Clarification
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To musicians, this whole thing is understood to be a joke. My intent is to use a humorous, absurd example to illustrate CM in hopes of maintaining reader interest ;-).</p>
+</div>
+</div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/gas_info.png" class="img-fluid figure-img"></p>
@@ -519,16 +532,16 @@ Note
 <span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span></span>
 <span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> HTML(container <span class="op">+</span> script)</span>
 <span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a>show_dag([G, G2], width<span class="op">=</span><span class="dv">380</span>, height<span class="op">=</span><span class="dv">350</span>, title<span class="op">=</span>[<span class="st">"Gear Acquisition Syndrome"</span>, <span class="st">"Reality"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a>show_dag([G, G2], width<span class="op">=</span><span class="dv">360</span>, height<span class="op">=</span><span class="dv">320</span>, title<span class="op">=</span>[<span class="st">"Gear Acquisition Syndrome"</span>, <span class="st">"Reality"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
-<div style="display:flex;gap:12px;flex-wrap:wrap;"><div id="dag0" style="width:380px;height:350px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div><div id="dag1" style="width:380px;height:350px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div></div>
+<div style="display:flex;gap:12px;flex-wrap:wrap;"><div id="dag0" style="width:360px;height:320px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div><div id="dag1" style="width:360px;height:320px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div></div>
 <script type="module">
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 function initGraphs() {
   const specs = [{"uid": "dag0", "nodes": [{"id": "Talent", "color": "#2471a3"}, {"id": "Gear", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Talent", "target": "Sound", "label": ""}, {"source": "Gear", "target": "Sound", "label": ""}, {"source": "Gear", "target": "Talent", "label": ""}], "title": "Gear Acquisition Syndrome", "titleOffset": 28}, {"uid": "dag1", "nodes": [{"id": "Talent", "color": "#2471a3"}, {"id": "Gear", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Talent", "target": "Sound", "label": ""}, {"source": "Gear", "target": "Sound", "label": ""}], "title": "Reality", "titleOffset": 28}];
-  const W = 380, H = 350, R = 34, FS = 13;
+  const W = 360, H = 320, R = 34, FS = 13;
   console.log("initGraphs: found", specs.length, "specs");
 
   for (const spec of specs) {
@@ -655,12 +668,12 @@ setTimeout(initGraphs, 100);
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>show_dag(G3, width<span class="op">=</span><span class="dv">800</span>, height<span class="op">=</span><span class="dv">600</span>, title<span class="op">=</span><span class="st">"Why does my recording sound like ass?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
-<div style="display:flex;gap:12px;flex-wrap:wrap;"><div id="dag4" style="width:800px;height:600px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div></div>
+<div style="display:flex;gap:12px;flex-wrap:wrap;"><div id="dag2" style="width:800px;height:600px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div></div>
 <script type="module">
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 function initGraphs() {
-  const specs = [{"uid": "dag4", "nodes": [{"id": "Talent", "color": "#2471a3"}, {"id": "Performance", "color": "#6c3483"}, {"id": "Gear", "color": "#2471a3"}, {"id": "Recording", "color": "#6c3483"}, {"id": "Signal\nProc", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Talent", "target": "Performance", "label": ""}, {"source": "Performance", "target": "Recording", "label": ""}, {"source": "Gear", "target": "Recording", "label": ""}, {"source": "Recording", "target": "Signal\nProc", "label": ""}, {"source": "Signal\nProc", "target": "Sound", "label": ""}], "title": "Why does my recording sound like ass?", "titleOffset": 28}];
+  const specs = [{"uid": "dag2", "nodes": [{"id": "Talent", "color": "#2471a3"}, {"id": "Performance", "color": "#6c3483"}, {"id": "Gear", "color": "#2471a3"}, {"id": "Recording", "color": "#6c3483"}, {"id": "Signal\nProc", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Talent", "target": "Performance", "label": ""}, {"source": "Performance", "target": "Recording", "label": ""}, {"source": "Gear", "target": "Recording", "label": ""}, {"source": "Recording", "target": "Signal\nProc", "label": ""}, {"source": "Signal\nProc", "target": "Sound", "label": ""}], "title": "Why does my recording sound like ass?", "titleOffset": 28}];
   const W = 800, H = 600, R = 34, FS = 13;
   console.log("initGraphs: found", specs.length, "specs");
 
@@ -674,7 +687,7 @@ function initGraphs() {
     const svg = d3.select(el).append("svg").attr("width", w).attr("height", h);
 
     if (title) {
-      svg.append("text").attr("x", w/2).attr("y", 22)
+      svg.append("text").attr("x", w/2).attr("y", 30)  // title placement
         .attr("text-anchor", "middle").attr("fill", "#ccc")
         .attr("font-size", "18px").attr("font-family", "sans-serif").attr("font-weight", "bold")
         .text(title);
