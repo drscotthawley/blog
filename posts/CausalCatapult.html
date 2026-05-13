@@ -313,7 +313,7 @@ figcaption {
 <section id="intro" class="level1">
 <h1>Intro</h1>
 <p>I’ve been wanting to learn Causal Modeling (CM) / Causal Inference “properly” ever since I asked for Judea Pearl’s bestselling <em>The Book of Why</em> <span class="citation" data-cites="pearl2018why"><a href="#ref-pearl2018why" role="doc-biblioref">[1]</a></span> for Christmas in 2019. It’s a great read but it hides any actual computation by simply referring to the mystical “do calculus” and occasionally saying, “Why don’t you read my textbook?”</p>
-<p>Ok, well I’m not reading his textbook but I have been reading various other treatments <span class="citation" data-cites="tucci2013"><a href="#ref-tucci2013" role="doc-biblioref">[2]</a></span> <span class="citation" data-cites="neal2020"><a href="#ref-neal2020" role="doc-biblioref">[3]</a></span>, and watching videos and other paper. And these exiting tutorials and treatments follow the classic trend of front-loading lots of mathematical abstraction. This sort of thing is typical enough that I refer to this in physics education as the “Chapter 2 Math Dump” and in machine learning as the “Wall of Math”. In the CM case it’s not so much equations but rather seemingly-endless definitions and jargon that induce a cognitive load when you’re simply trying to learn <em>“How can I calculate something?”</em></p>
+<p>Ok, well I’m not reading his textbook but I have been reading &amp; watching various other treatments <span class="citation" data-cites="tucci2013"><a href="#ref-tucci2013" role="doc-biblioref">[2]</a></span> <span class="citation" data-cites="neal2020"><a href="#ref-neal2020" role="doc-biblioref">[3]</a></span>. And these exiting tutorials and treatments quickly fall into the classic <a href="https://en.wikipedia.org/wiki/Slough_of_Despond">Slough of Despond</a> by front-loading lots of mathematical abstraction. This sort of thing is typical enough that I refer to it in physics education as the “Chapter 2 Math Dump” and in machine learning as the “Wall of Math”. In the CM case, it’s not so much equations but rather seemingly-endless definitions and jargon that induce a cognitive load when you’re simply trying to figure out <em>“How can I calculate something?”</em> <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -597,7 +597,7 @@ setTimeout(initGraphs, 100);
 </script>
 </div>
 </div>
-<p>Let’s say <code>Sound</code> is the “outcome”, the thing we measure via listening tests (where listers rate their preferences). We could use a multi-valued score like and then take the Mean Opinion Score (MOS), but for now it suffices to just do A/B Testing for user preferences. Following CM conventions, we’ll denote the outcome as <span class="math inline">\(Y\)</span> and use binary values:</p>
+<p>Let’s say <code>Sound</code> is the “outcome”, the thing we measure via listening tests where listers rate their preferences. We could use a multi-valued score like and then take the Mean Opinion Score (MOS), but for now it suffices to just do A/B Testing for user preferences. Following CM conventions, we’ll denote the outcome as <span class="math inline">\(Y\)</span> and use binary values:</p>
 <ul>
 <li><span class="math inline">\(Y=1\)</span>: sounds great</li>
 <li><span class="math inline">\(Y=0\)</span>: sounds bad (Technical term: “like ass”)</li>
@@ -748,7 +748,13 @@ setTimeout(initGraphs, 100);
 
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Interestingly, these also typically claim to assume mere “basic familiarity with statistics” yet invariably pull out laws I’ve never heard of.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
