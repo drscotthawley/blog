@@ -1187,14 +1187,14 @@
     "href": "posts/CausalCatapult.html",
     "title": "Catapulting into Causal Modeling",
     "section": "",
-    "text": "I’ve been wanting to learn Causal Modeling / Causal Inference properly, but exiting tutorials and treatments were too front-loaded with math for me. This is the classic thing that gets me writing a blog post: there’s a “wall of math” which in this case is not so much equations as seemingly-endless definitions and jargon that induce a cognitive load when you’re simply trying to learn “How can I calculate something?”\nIn this post we’re going to get started really fast: rapid acceleration so we catapult over the wall of math and get started immediately calculating things, learning definitions and proofs as needed as we go."
+    "text": "I’ve been wanting to learn Causal Modeling / Causal Inference properly, but exiting tutorials and treatments were too front-loaded with math for me. This is the classic thing that gets me writing a blog post: there’s a “wall of math” which in this case is not so much equations as seemingly-endless definitions and jargon that induce a cognitive load when you’re simply trying to learn “How can I calculate something?”\nIn this post we’re going to get started really fast: rapid acceleration so we catapult over the wall of math and get started immediately calculating things, and only introducing lingo, definitions and/or proofs when we need them."
   },
   {
     "objectID": "posts/CausalCatapult.html#intro",
     "href": "posts/CausalCatapult.html#intro",
     "title": "Catapulting into Causal Modeling",
     "section": "",
-    "text": "I’ve been wanting to learn Causal Modeling / Causal Inference properly, but exiting tutorials and treatments were too front-loaded with math for me. This is the classic thing that gets me writing a blog post: there’s a “wall of math” which in this case is not so much equations as seemingly-endless definitions and jargon that induce a cognitive load when you’re simply trying to learn “How can I calculate something?”\nIn this post we’re going to get started really fast: rapid acceleration so we catapult over the wall of math and get started immediately calculating things, learning definitions and proofs as needed as we go."
+    "text": "I’ve been wanting to learn Causal Modeling / Causal Inference properly, but exiting tutorials and treatments were too front-loaded with math for me. This is the classic thing that gets me writing a blog post: there’s a “wall of math” which in this case is not so much equations as seemingly-endless definitions and jargon that induce a cognitive load when you’re simply trying to learn “How can I calculate something?”\nIn this post we’re going to get started really fast: rapid acceleration so we catapult over the wall of math and get started immediately calculating things, and only introducing lingo, definitions and/or proofs when we need them."
   },
   {
     "objectID": "posts/CausalCatapult.html#modeling-case-study-gas",
