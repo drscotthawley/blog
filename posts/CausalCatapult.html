@@ -460,18 +460,17 @@ Note
 <span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a><span class="ss">setTimeout(initGraphs, 100);</span></span>
 <span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a><span class="ss">&lt;/script&gt;</span></span>
 <span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span></span>
-<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> HTML(container <span class="op">+</span> script)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> HTML(container <span class="op">+</span> script)</span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a>show_dag([G, G2], width<span class="op">=</span><span class="dv">380</span>, height<span class="op">=</span><span class="dv">350</span>, title<span class="op">=</span>[<span class="st">"Gear Acquisition Syndrome"</span>, <span class="st">"Reality"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-</div>
-<div id="e97546e4-26ad-4ce4-b96f-1fb821a44352" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>show_dag([G, G2], width<span class="op">=</span><span class="dv">380</span>, height<span class="op">=</span><span class="dv">350</span>, title<span class="op">=</span>[<span class="st">"Gear Acquisition Syndrome"</span>, <span class="st">"Reality"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
-<div style="display:flex;gap:12px;flex-wrap:wrap;"><div id="dag12" style="width:380px;height:350px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div><div id="dag13" style="width:380px;height:350px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div></div>
+<div style="display:flex;gap:12px;flex-wrap:wrap;"><div id="dag0" style="width:380px;height:350px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div><div id="dag1" style="width:380px;height:350px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div></div>
 <script type="module">
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 function initGraphs() {
-  const specs = [{"uid": "dag12", "nodes": [{"id": "Talent", "color": "#2471a3"}, {"id": "Gear", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Talent", "target": "Sound", "label": ""}, {"source": "Gear", "target": "Sound", "label": ""}, {"source": "Gear", "target": "Talent", "label": ""}], "title": "Gear Acquisition Syndrome", "titleOffset": 28}, {"uid": "dag13", "nodes": [{"id": "Talent", "color": "#2471a3"}, {"id": "Gear", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Talent", "target": "Sound", "label": ""}, {"source": "Gear", "target": "Sound", "label": ""}], "title": "Reality", "titleOffset": 28}];
+  const specs = [{"uid": "dag0", "nodes": [{"id": "Talent", "color": "#2471a3"}, {"id": "Gear", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Talent", "target": "Sound", "label": ""}, {"source": "Gear", "target": "Sound", "label": ""}, {"source": "Gear", "target": "Talent", "label": ""}], "title": "Gear Acquisition Syndrome", "titleOffset": 28}, {"uid": "dag1", "nodes": [{"id": "Talent", "color": "#2471a3"}, {"id": "Gear", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Talent", "target": "Sound", "label": ""}, {"source": "Gear", "target": "Sound", "label": ""}], "title": "Reality", "titleOffset": 28}];
   const W = 380, H = 350, R = 34, FS = 13;
   console.log("initGraphs: found", specs.length, "specs");
 
