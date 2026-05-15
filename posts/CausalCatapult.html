@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2026-05-18">
 <meta name="description" content="Launching over the walls of math">
 
-<title>Catapulting into Causal Modeling [DRAFT] – Scott H. Hawley</title>
+<title>Catapulting into Causal Inference [DRAFT] – Scott H. Hawley</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -174,13 +174,13 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="Catapulting into Causal Modeling [DRAFT] – Scott H. Hawley">
+<meta property="og:title" content="Catapulting into Causal Inference [DRAFT] – Scott H. Hawley">
 <meta property="og:description" content="Launching over the walls of math">
 <meta property="og:image" content="https://drscotthawley.github.io/blog/posts/images/catapult.png">
 <meta property="og:site_name" content="Scott H. Hawley">
 <meta property="og:image:height" content="711">
 <meta property="og:image:width" content="1367">
-<meta name="twitter:title" content="Catapulting into Causal Modeling [DRAFT] – Scott H. Hawley">
+<meta name="twitter:title" content="Catapulting into Causal Inference [DRAFT] – Scott H. Hawley">
 <meta name="twitter:description" content="Launching over the walls of math">
 <meta name="twitter:image" content="https://drscotthawley.github.io/blog/posts/images/catapult.png">
 <meta name="twitter:image-height" content="711">
@@ -243,7 +243,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Catapulting into Causal Modeling [DRAFT]</h1>
+      <h1 class="title">Catapulting into Causal Inference [DRAFT]</h1>
                   <div>
         <div class="description">
           Launching over the walls of math
@@ -318,14 +318,14 @@ figcaption {
 </section>
 <section id="intro" class="level1">
 <h1>Intro</h1>
-<p>I’ve been wanting to learn Causal Modeling (CM) / Causal Inference “properly” ever since I asked for Judea Pearl’s bestselling <em>The Book of Why</em> <span class="citation" data-cites="pearl2018why"><a href="#ref-pearl2018why" role="doc-biblioref">[1]</a></span> for Christmas in 2019. It’s a <em>great</em> read, but it hides any actual computation by merely mentioning the mystical “do calculus”. Pearl offers details on that in his textbook <span class="citation" data-cites="pearl2009causality"><a href="#ref-pearl2009causality" role="doc-biblioref">[2]</a></span> but I want get up to speed faster, so I’ve been reading and watching abbreviated treatments <span class="citation" data-cites="tucci2013"><a href="#ref-tucci2013" role="doc-biblioref">[3]</a></span> <span class="citation" data-cites="neal2020"><a href="#ref-neal2020" role="doc-biblioref">[4]</a></span> that quickly throw up what I call the “Wall of Math.”<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>I’ve been wanting to learn Causal Inference (CI) / Causal Modeling (causal inference) “properly” ever since I asked for Judea Pearl’s bestselling <em>The Book of Why</em> <span class="citation" data-cites="pearl2018why"><a href="#ref-pearl2018why" role="doc-biblioref">[1]</a></span> for Christmas in 2019. It’s a <em>great</em> read, but it hides any actual computation by merely mentioning the mystical “do calculus”. Pearl offers details on that in his textbook <span class="citation" data-cites="pearl2009causality"><a href="#ref-pearl2009causality" role="doc-biblioref">[2]</a></span> but I want get up to speed faster, so I’ve been reading and watching abbreviated treatments <span class="citation" data-cites="tucci2013"><a href="#ref-tucci2013" role="doc-biblioref">[3]</a></span> <span class="citation" data-cites="neal2020"><a href="#ref-neal2020" role="doc-biblioref">[4]</a></span> that quickly throw up what I call the “Wall of Math.”<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>In this post, we’re going to catapult straight over that wall — starting immediately with code and calculation, introducing definitions and proofs only when we actually need them.</p>
 <!--- 
 # Intro (old
 
-I've been wanting to learn Causal Modeling (CM) / Causal Inference "properly" ever since I asked for Judea Pearl's bestselling *The Book of Why* [@pearl2018why] for Christmas in 2019. It's a *great* read, but it hides any actual computation by simply referring to the mystical "do calculus" and occasionally saying, "Why don't you read my textbook?" [@pearl2009causality]
+I've been wanting to learn Causal Modeling (causal inference) / Causal Inference "properly" ever since I asked for Judea Pearl's bestselling *The Book of Why* [@pearl2018why] for Christmas in 2019. It's a *great* read, but it hides any actual computation by simply referring to the mystical "do calculus" and occasionally saying, "Why don't you read my textbook?" [@pearl2009causality]
 
-Ok, well I'm not reading his textbook but I have been reading and watching other treatments [@tucci2013] [@neal2020]. And these quickly fall into the classic [Slough of Despond](https://en.wikipedia.org/wiki/Slough_of_Despond) of front-loading lots of mathematical abstraction. This sort of thing is typical enough that I refer to it in physics education as the "Chapter 2 Math Dump" and in machine learning as the "Wall of Math". In the CM case, it's not so much equations but rather seemingly-endless definitions and jargon that induce a cognitive load when you're anxiously wondering *"But how can I calculate something?"* [^b]
+Ok, well I'm not reading his textbook but I have been reading and watching other treatments [@tucci2013] [@neal2020]. And these quickly fall into the classic [Slough of Despond](https://en.wikipedia.org/wiki/Slough_of_Despond) of front-loading lots of mathematical abstraction. This sort of thing is typical enough that I refer to it in physics education as the "Chapter 2 Math Dump" and in machine learning as the "Wall of Math". In the causal inference case, it's not so much equations but rather seemingly-endless definitions and jargon that induce a cognitive load when you're anxiously wondering *"But how can I calculate something?"* [^b]
 
 [^b]: Interestingly, these also typically claim to assume mere "basic familiarity with statistics" yet invariably pull out laws I've never heard of. Seems "basic" is relative.
 
@@ -364,7 +364,7 @@ In this post, we're going to get started really fast: rapid acceleration so we *
 </section>
 <section id="lets-get-coding" class="level1">
 <h1>Let’s Get Coding!</h1>
-<p>Typically, CM tutorials delay the introduction of code until after time scale for <a href="https://en.wikipedia.org/wiki/Proton_decay">proton decay</a>, but this one is different. So get ready, we are launching the catapult – with us inside.</p>
+<p>Typically, causal inference tutorials delay the introduction of code until after time scale for <a href="https://en.wikipedia.org/wiki/Proton_decay">proton decay</a>, but this one is different. So get ready, we are launching the catapult – with us inside.</p>
 <section id="defining-and-visualizing-graphs" class="level2">
 <h2 class="anchored" data-anchor-id="defining-and-visualizing-graphs">Defining and Visualizing Graphs</h2>
 <p>First we need to be able to define and take a look at the graphs that will comprise our causal models. We’ll set up the graph with Python (nodes, edges, directions) then push it to the viz routine so we can see it and move it around. I can’t articulate my intended applications, but based on my interests, I’m use a few libraries for this:</p>
@@ -374,7 +374,7 @@ In this post, we're going to get started really fast: rapid acceleration so we *
 <li><strong>Pandas</strong> for handling tables of data</li>
 <li><strong>PyTorch</strong> for other sundry numerical calculations, since ultimately I want to do “machine learning stuff”</li>
 </ol>
-<p>We won’t use CM-specific libraries like <a href="https://github.com/uber/causalml">CausalML</a> or <a href="https://github.com/py-why/EconML">EconML</a> because I suspect they would likely hide and/or automate the bits I hope to learn to implement.</p>
+<p>We won’t use causal inference-specific libraries like <a href="https://github.com/uber/causalml">CausalML</a> or <a href="https://github.com/py-why/EconML">EconML</a>, <a href="https://github.com/elijahnzeli1/CausalTorch">CausalTorch</a>, etc. because I suspect they would likely hide and/or automate the bits I hope to learn to implement.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -625,7 +625,7 @@ setTimeout(initGraphs, 100);
 </script>
 </div>
 </div>
-<p><br> We’ll regard <code>Sound</code> as the “outcome”, the thing we measure via listening tests where listeners rate their preferences. We could imagine listeners submitting ranking scores and averaging them into a Mean Opinion Score (MOS), but for now it suffices to imagine (binary) <a href="https://www.yum-audio.com/blog/a-b-testing-in-music-production-the-ultimate-guide/">A/B Testing</a> for user preferences. Following CM conventions, we’ll denote the outcome as <span class="math inline">\(Y\)</span> and use binary values:</p>
+<p><br> We’ll regard <code>Sound</code> as the “outcome”, the thing we measure via listening tests where listeners rate their preferences. We could imagine listeners submitting ranking scores and averaging them into a Mean Opinion Score (MOS), but for now it suffices to imagine (binary) <a href="https://www.yum-audio.com/blog/a-b-testing-in-music-production-the-ultimate-guide/">A/B Testing</a> for user preferences. Following causal inference conventions, we’ll denote the outcome as <span class="math inline">\(Y\)</span> and use binary values:</p>
 <ul>
 <li><span class="math inline">\(Y=1\)</span>: Sounds Great</li>
 <li><span class="math inline">\(Y=0\)</span>: Sounds Bad (Technical term: “like ass”)</li>
@@ -1179,7 +1179,7 @@ setTimeout(initGraphs, 100);
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Specifically: a <a href="https://en.wikipedia.org/wiki/Slough_of_Despond">Slough of Despond</a> that front-loads definitions and jargon before you can do anything useful. In physics education I call that the “Chapter 2 Math Dump”; in ML it’s the “Wall of Math”. For CM it’s not even equations, it’s seemingly-endless terminology that induces cognitive load while you’re anxiously wondering <em>“But how can I calculate something?”</em> These treatments also invariably claim to assume mere “basic familiarity with statistics” yet invoke laws I’ve never heard of. Seems “basic” is relative.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Specifically: a <a href="https://en.wikipedia.org/wiki/Slough_of_Despond">Slough of Despond</a> that front-loads definitions and jargon before you can do anything useful. In physics education I call that the “Chapter 2 Math Dump”; in ML it’s the “Wall of Math”. For causal inference it’s not even equations, it’s seemingly-endless terminology that induces cognitive load while you’re anxiously wondering <em>“But how can I calculate something?”</em> These treatments also invariably claim to assume mere “basic familiarity with statistics” yet invoke laws I’ve never heard of. Seems “basic” is relative.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Other definitions of GAS – e.g., “buying more gear will help me make better music” – are isomorphic to the one we have adopted. Predatory companies like <a href="https://www.sweetwater.com/">Sweetwater</a> and <a href="https://www.guitarcenter.com/">Guitar Center</a> capitalize on the pathetic delusions of desperate losers and our lust for shiny toys. /s<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
