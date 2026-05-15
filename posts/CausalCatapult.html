@@ -648,7 +648,7 @@ setTimeout(initGraphs, 100);
 <section id="sample-data" class="level2">
 <h2 class="anchored" data-anchor-id="sample-data">Sample Data</h2>
 <p>For our dataset, we’ll mix in some famous people and anonymous randos with various attributes…</p>
-<div id="c4d6031e-7bc8-42d8-98c7-bfdf70851c8c" class="cell">
+<div id="f1b8d15b-5b5c-4423-8a30-b919f9967345" class="cell">
 <details class="code-fold">
 <summary>Read in dataset</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -665,148 +665,270 @@ setTimeout(initGraphs, 100);
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> COLORS[col].get(val, <span class="st">''</span>)</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f'background-color: </span><span class="sc">{</span>c<span class="sc">}</span><span class="ss">; color: #EEEEEE'</span> <span class="cf">if</span> c <span class="cf">else</span> <span class="st">''</span></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>(df.style</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Talent'</span>], col<span class="op">=</span><span class="st">'Talent'</span>)</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Gear'</span>],   col<span class="op">=</span><span class="st">'Gear'</span>)</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Sound'</span>],  col<span class="op">=</span><span class="st">'Sound'</span>))</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>(df.drop(columns<span class="op">=</span>[<span class="st">'Talent'</span>]).style</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Gear'</span>],  col<span class="op">=</span><span class="st">'Gear'</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Sound'</span>], col<span class="op">=</span><span class="st">'Sound'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_8427a_row0_col1, #T_8427a_row1_col1, #T_8427a_row2_col1, #T_8427a_row3_col1, #T_8427a_row4_col1, #T_8427a_row5_col1, #T_8427a_row6_col1, #T_8427a_row7_col1 {
-  background-color: #4477AA;
-  color: #EEEEEE;
-}
-#T_8427a_row0_col2, #T_8427a_row1_col2, #T_8427a_row2_col2, #T_8427a_row4_col2, #T_8427a_row5_col2, #T_8427a_row6_col2, #T_8427a_row8_col2, #T_8427a_row9_col2, #T_8427a_row13_col2 {
+#T_e369c_row0_col1, #T_e369c_row1_col1, #T_e369c_row2_col1, #T_e369c_row3_col1, #T_e369c_row4_col1, #T_e369c_row5_col1, #T_e369c_row6_col1, #T_e369c_row7_col1 {
   background-color: #AA3377;
   color: #EEEEEE;
 }
-#T_8427a_row0_col3, #T_8427a_row2_col3, #T_8427a_row4_col3, #T_8427a_row5_col3, #T_8427a_row6_col3, #T_8427a_row9_col3, #T_8427a_row11_col3 {
+#T_e369c_row0_col2, #T_e369c_row2_col2, #T_e369c_row3_col2, #T_e369c_row4_col2, #T_e369c_row7_col2, #T_e369c_row8_col2, #T_e369c_row12_col2 {
   background-color: #228833;
   color: #EEEEEE;
 }
-#T_8427a_row1_col3, #T_8427a_row3_col3, #T_8427a_row7_col3, #T_8427a_row8_col3, #T_8427a_row10_col3, #T_8427a_row12_col3, #T_8427a_row13_col3 {
+#T_e369c_row1_col2, #T_e369c_row5_col2, #T_e369c_row6_col2, #T_e369c_row9_col2, #T_e369c_row10_col2, #T_e369c_row11_col2, #T_e369c_row13_col2 {
   background-color: #BB4455;
   color: #EEEEEE;
 }
-#T_8427a_row3_col2, #T_8427a_row7_col2, #T_8427a_row10_col2, #T_8427a_row11_col2, #T_8427a_row12_col2 {
+#T_e369c_row8_col1, #T_e369c_row9_col1, #T_e369c_row10_col1, #T_e369c_row11_col1, #T_e369c_row12_col1, #T_e369c_row13_col1 {
   background-color: #CC9900;
-  color: #EEEEEE;
-}
-#T_8427a_row8_col1, #T_8427a_row9_col1, #T_8427a_row10_col1, #T_8427a_row11_col1, #T_8427a_row12_col1, #T_8427a_row13_col1 {
-  background-color: #CC6600;
   color: #EEEEEE;
 }
 </style>
 
-<table id="T_8427a" class="caption-top table table-sm table-striped small">
+<table id="T_e369c" class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
-<th id="T_8427a_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Name</th>
-<th id="T_8427a_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Talent</th>
-<th id="T_8427a_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Gear</th>
-<th id="T_8427a_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Sound</th>
+<th id="T_e369c_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Name</th>
+<th id="T_e369c_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Gear</th>
+<th id="T_e369c_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Sound</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<th id="T_8427a_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
-<td id="T_8427a_row0_col0" class="data row0 col0">Tom Scholz</td>
-<td id="T_8427a_row0_col1" class="data row0 col1">High</td>
-<td id="T_8427a_row0_col2" class="data row0 col2">Fancy</td>
-<td id="T_8427a_row0_col3" class="data row0 col3">Great</td>
+<th id="T_e369c_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
+<td id="T_e369c_row0_col0" class="data row0 col0">Tom Scholz</td>
+<td id="T_e369c_row0_col1" class="data row0 col1">Fancy</td>
+<td id="T_e369c_row0_col2" class="data row0 col2">Great</td>
 </tr>
 <tr class="even">
-<th id="T_8427a_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
-<td id="T_8427a_row1_col0" class="data row1 col0">Jeff Beck</td>
-<td id="T_8427a_row1_col1" class="data row1 col1">High</td>
-<td id="T_8427a_row1_col2" class="data row1 col2">Fancy</td>
-<td id="T_8427a_row1_col3" class="data row1 col3">Bad</td>
+<th id="T_e369c_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
+<td id="T_e369c_row1_col0" class="data row1 col0">Jeff Beck</td>
+<td id="T_e369c_row1_col1" class="data row1 col1">Fancy</td>
+<td id="T_e369c_row1_col2" class="data row1 col2">Bad</td>
 </tr>
 <tr class="odd">
-<th id="T_8427a_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
-<td id="T_8427a_row2_col0" class="data row2 col0">EVH</td>
-<td id="T_8427a_row2_col1" class="data row2 col1">High</td>
-<td id="T_8427a_row2_col2" class="data row2 col2">Fancy</td>
-<td id="T_8427a_row2_col3" class="data row2 col3">Great</td>
+<th id="T_e369c_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
+<td id="T_e369c_row2_col0" class="data row2 col0">Prince</td>
+<td id="T_e369c_row2_col1" class="data row2 col1">Fancy</td>
+<td id="T_e369c_row2_col2" class="data row2 col2">Great</td>
 </tr>
 <tr class="even">
-<th id="T_8427a_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
-<td id="T_8427a_row3_col0" class="data row3 col0">Bob Dylan</td>
-<td id="T_8427a_row3_col1" class="data row3 col1">High</td>
-<td id="T_8427a_row3_col2" class="data row3 col2">Cheap</td>
-<td id="T_8427a_row3_col3" class="data row3 col3">Bad</td>
+<th id="T_e369c_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
+<td id="T_e369c_row3_col0" class="data row3 col0">Jenny</td>
+<td id="T_e369c_row3_col1" class="data row3 col1">Fancy</td>
+<td id="T_e369c_row3_col2" class="data row3 col2">Great</td>
 </tr>
 <tr class="odd">
-<th id="T_8427a_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
-<td id="T_8427a_row4_col0" class="data row4 col0">Prince</td>
-<td id="T_8427a_row4_col1" class="data row4 col1">High</td>
-<td id="T_8427a_row4_col2" class="data row4 col2">Fancy</td>
-<td id="T_8427a_row4_col3" class="data row4 col3">Great</td>
+<th id="T_e369c_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
+<td id="T_e369c_row4_col0" class="data row4 col0">Jay</td>
+<td id="T_e369c_row4_col1" class="data row4 col1">Fancy</td>
+<td id="T_e369c_row4_col2" class="data row4 col2">Great</td>
 </tr>
 <tr class="even">
-<th id="T_8427a_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">5</th>
-<td id="T_8427a_row5_col0" class="data row5 col0">Jenny</td>
-<td id="T_8427a_row5_col1" class="data row5 col1">High</td>
-<td id="T_8427a_row5_col2" class="data row5 col2">Fancy</td>
-<td id="T_8427a_row5_col3" class="data row5 col3">Great</td>
+<th id="T_e369c_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">5</th>
+<td id="T_e369c_row5_col0" class="data row5 col0">Abe</td>
+<td id="T_e369c_row5_col1" class="data row5 col1">Fancy</td>
+<td id="T_e369c_row5_col2" class="data row5 col2">Bad</td>
 </tr>
 <tr class="odd">
-<th id="T_8427a_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">6</th>
-<td id="T_8427a_row6_col0" class="data row6 col0">Jay</td>
-<td id="T_8427a_row6_col1" class="data row6 col1">High</td>
-<td id="T_8427a_row6_col2" class="data row6 col2">Fancy</td>
-<td id="T_8427a_row6_col3" class="data row6 col3">Great</td>
+<th id="T_e369c_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">6</th>
+<td id="T_e369c_row6_col0" class="data row6 col0">Paris Hilton</td>
+<td id="T_e369c_row6_col1" class="data row6 col1">Fancy</td>
+<td id="T_e369c_row6_col2" class="data row6 col2">Bad</td>
 </tr>
 <tr class="even">
-<th id="T_8427a_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">7</th>
-<td id="T_8427a_row7_col0" class="data row7 col0">Todd</td>
-<td id="T_8427a_row7_col1" class="data row7 col1">High</td>
-<td id="T_8427a_row7_col2" class="data row7 col2">Cheap</td>
-<td id="T_8427a_row7_col3" class="data row7 col3">Bad</td>
+<th id="T_e369c_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">7</th>
+<td id="T_e369c_row7_col0" class="data row7 col0">Milli Vanilli</td>
+<td id="T_e369c_row7_col1" class="data row7 col1">Fancy</td>
+<td id="T_e369c_row7_col2" class="data row7 col2">Great</td>
 </tr>
 <tr class="odd">
-<th id="T_8427a_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">8</th>
-<td id="T_8427a_row8_col0" class="data row8 col0">Paris Hilton</td>
-<td id="T_8427a_row8_col1" class="data row8 col1">Low</td>
-<td id="T_8427a_row8_col2" class="data row8 col2">Fancy</td>
-<td id="T_8427a_row8_col3" class="data row8 col3">Bad</td>
+<th id="T_e369c_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">8</th>
+<td id="T_e369c_row8_col0" class="data row8 col0">Phil Keaggy</td>
+<td id="T_e369c_row8_col1" class="data row8 col1">Cheap</td>
+<td id="T_e369c_row8_col2" class="data row8 col2">Great</td>
 </tr>
 <tr class="even">
-<th id="T_8427a_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">9</th>
-<td id="T_8427a_row9_col0" class="data row9 col0">Milli Vanilli</td>
-<td id="T_8427a_row9_col1" class="data row9 col1">Low</td>
-<td id="T_8427a_row9_col2" class="data row9 col2">Fancy</td>
-<td id="T_8427a_row9_col3" class="data row9 col3">Great</td>
+<th id="T_e369c_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">9</th>
+<td id="T_e369c_row9_col0" class="data row9 col0">Bob Dylan</td>
+<td id="T_e369c_row9_col1" class="data row9 col1">Cheap</td>
+<td id="T_e369c_row9_col2" class="data row9 col2">Bad</td>
 </tr>
 <tr class="odd">
-<th id="T_8427a_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">10</th>
-<td id="T_8427a_row10_col0" class="data row10 col0">Bubba</td>
-<td id="T_8427a_row10_col1" class="data row10 col1">Low</td>
-<td id="T_8427a_row10_col2" class="data row10 col2">Cheap</td>
-<td id="T_8427a_row10_col3" class="data row10 col3">Bad</td>
+<th id="T_e369c_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">10</th>
+<td id="T_e369c_row10_col0" class="data row10 col0">Todd</td>
+<td id="T_e369c_row10_col1" class="data row10 col1">Cheap</td>
+<td id="T_e369c_row10_col2" class="data row10 col2">Bad</td>
 </tr>
 <tr class="even">
-<th id="T_8427a_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">11</th>
-<td id="T_8427a_row11_col0" class="data row11 col0">Dale</td>
-<td id="T_8427a_row11_col1" class="data row11 col1">Low</td>
-<td id="T_8427a_row11_col2" class="data row11 col2">Cheap</td>
-<td id="T_8427a_row11_col3" class="data row11 col3">Great</td>
+<th id="T_e369c_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">11</th>
+<td id="T_e369c_row11_col0" class="data row11 col0">Bubba</td>
+<td id="T_e369c_row11_col1" class="data row11 col1">Cheap</td>
+<td id="T_e369c_row11_col2" class="data row11 col2">Bad</td>
 </tr>
 <tr class="odd">
-<th id="T_8427a_level0_row12" class="row_heading level0 row12" data-quarto-table-cell-role="th">12</th>
-<td id="T_8427a_row12_col0" class="data row12 col0">Earnest</td>
-<td id="T_8427a_row12_col1" class="data row12 col1">Low</td>
-<td id="T_8427a_row12_col2" class="data row12 col2">Cheap</td>
-<td id="T_8427a_row12_col3" class="data row12 col3">Bad</td>
+<th id="T_e369c_level0_row12" class="row_heading level0 row12" data-quarto-table-cell-role="th">12</th>
+<td id="T_e369c_row12_col0" class="data row12 col0">Dale</td>
+<td id="T_e369c_row12_col1" class="data row12 col1">Cheap</td>
+<td id="T_e369c_row12_col2" class="data row12 col2">Great</td>
 </tr>
 <tr class="even">
-<th id="T_8427a_level0_row13" class="row_heading level0 row13" data-quarto-table-cell-role="th">13</th>
-<td id="T_8427a_row13_col0" class="data row13 col0">Abe</td>
-<td id="T_8427a_row13_col1" class="data row13 col1">Low</td>
-<td id="T_8427a_row13_col2" class="data row13 col2">Fancy</td>
-<td id="T_8427a_row13_col3" class="data row13 col3">Bad</td>
+<th id="T_e369c_level0_row13" class="row_heading level0 row13" data-quarto-table-cell-role="th">13</th>
+<td id="T_e369c_row13_col0" class="data row13 col0">Earnest</td>
+<td id="T_e369c_row13_col1" class="data row13 col1">Cheap</td>
+<td id="T_e369c_row13_col2" class="data row13 col2">Bad</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>If we include the confounding effect of <code>Talent</code>:</p>
+<div id="e9856794-c49d-4ae4-812e-ed6f0e6c75fa" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(df.style</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Talent'</span>], col<span class="op">=</span><span class="st">'Talent'</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Gear'</span>],   col<span class="op">=</span><span class="st">'Gear'</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Sound'</span>],  col<span class="op">=</span><span class="st">'Sound'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<style type="text/css">
+#T_cff23_row0_col1, #T_cff23_row1_col1, #T_cff23_row2_col1, #T_cff23_row3_col1, #T_cff23_row4_col1, #T_cff23_row8_col1, #T_cff23_row9_col1, #T_cff23_row10_col1 {
+  background-color: #4477AA;
+  color: #EEEEEE;
+}
+#T_cff23_row0_col2, #T_cff23_row1_col2, #T_cff23_row2_col2, #T_cff23_row3_col2, #T_cff23_row4_col2, #T_cff23_row5_col2, #T_cff23_row6_col2, #T_cff23_row7_col2 {
+  background-color: #AA3377;
+  color: #EEEEEE;
+}
+#T_cff23_row0_col3, #T_cff23_row2_col3, #T_cff23_row3_col3, #T_cff23_row4_col3, #T_cff23_row7_col3, #T_cff23_row8_col3, #T_cff23_row12_col3 {
+  background-color: #228833;
+  color: #EEEEEE;
+}
+#T_cff23_row1_col3, #T_cff23_row5_col3, #T_cff23_row6_col3, #T_cff23_row9_col3, #T_cff23_row10_col3, #T_cff23_row11_col3, #T_cff23_row13_col3 {
+  background-color: #BB4455;
+  color: #EEEEEE;
+}
+#T_cff23_row5_col1, #T_cff23_row6_col1, #T_cff23_row7_col1, #T_cff23_row11_col1, #T_cff23_row12_col1, #T_cff23_row13_col1 {
+  background-color: #CC6600;
+  color: #EEEEEE;
+}
+#T_cff23_row8_col2, #T_cff23_row9_col2, #T_cff23_row10_col2, #T_cff23_row11_col2, #T_cff23_row12_col2, #T_cff23_row13_col2 {
+  background-color: #CC9900;
+  color: #EEEEEE;
+}
+</style>
+
+<table id="T_cff23" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_cff23_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Name</th>
+<th id="T_cff23_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Talent</th>
+<th id="T_cff23_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Gear</th>
+<th id="T_cff23_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Sound</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_cff23_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
+<td id="T_cff23_row0_col0" class="data row0 col0">Tom Scholz</td>
+<td id="T_cff23_row0_col1" class="data row0 col1">High</td>
+<td id="T_cff23_row0_col2" class="data row0 col2">Fancy</td>
+<td id="T_cff23_row0_col3" class="data row0 col3">Great</td>
+</tr>
+<tr class="even">
+<th id="T_cff23_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
+<td id="T_cff23_row1_col0" class="data row1 col0">Jeff Beck</td>
+<td id="T_cff23_row1_col1" class="data row1 col1">High</td>
+<td id="T_cff23_row1_col2" class="data row1 col2">Fancy</td>
+<td id="T_cff23_row1_col3" class="data row1 col3">Bad</td>
+</tr>
+<tr class="odd">
+<th id="T_cff23_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
+<td id="T_cff23_row2_col0" class="data row2 col0">Prince</td>
+<td id="T_cff23_row2_col1" class="data row2 col1">High</td>
+<td id="T_cff23_row2_col2" class="data row2 col2">Fancy</td>
+<td id="T_cff23_row2_col3" class="data row2 col3">Great</td>
+</tr>
+<tr class="even">
+<th id="T_cff23_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
+<td id="T_cff23_row3_col0" class="data row3 col0">Jenny</td>
+<td id="T_cff23_row3_col1" class="data row3 col1">High</td>
+<td id="T_cff23_row3_col2" class="data row3 col2">Fancy</td>
+<td id="T_cff23_row3_col3" class="data row3 col3">Great</td>
+</tr>
+<tr class="odd">
+<th id="T_cff23_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
+<td id="T_cff23_row4_col0" class="data row4 col0">Jay</td>
+<td id="T_cff23_row4_col1" class="data row4 col1">High</td>
+<td id="T_cff23_row4_col2" class="data row4 col2">Fancy</td>
+<td id="T_cff23_row4_col3" class="data row4 col3">Great</td>
+</tr>
+<tr class="even">
+<th id="T_cff23_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">5</th>
+<td id="T_cff23_row5_col0" class="data row5 col0">Abe</td>
+<td id="T_cff23_row5_col1" class="data row5 col1">Low</td>
+<td id="T_cff23_row5_col2" class="data row5 col2">Fancy</td>
+<td id="T_cff23_row5_col3" class="data row5 col3">Bad</td>
+</tr>
+<tr class="odd">
+<th id="T_cff23_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">6</th>
+<td id="T_cff23_row6_col0" class="data row6 col0">Paris Hilton</td>
+<td id="T_cff23_row6_col1" class="data row6 col1">Low</td>
+<td id="T_cff23_row6_col2" class="data row6 col2">Fancy</td>
+<td id="T_cff23_row6_col3" class="data row6 col3">Bad</td>
+</tr>
+<tr class="even">
+<th id="T_cff23_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">7</th>
+<td id="T_cff23_row7_col0" class="data row7 col0">Milli Vanilli</td>
+<td id="T_cff23_row7_col1" class="data row7 col1">Low</td>
+<td id="T_cff23_row7_col2" class="data row7 col2">Fancy</td>
+<td id="T_cff23_row7_col3" class="data row7 col3">Great</td>
+</tr>
+<tr class="odd">
+<th id="T_cff23_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">8</th>
+<td id="T_cff23_row8_col0" class="data row8 col0">Phil Keaggy</td>
+<td id="T_cff23_row8_col1" class="data row8 col1">High</td>
+<td id="T_cff23_row8_col2" class="data row8 col2">Cheap</td>
+<td id="T_cff23_row8_col3" class="data row8 col3">Great</td>
+</tr>
+<tr class="even">
+<th id="T_cff23_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">9</th>
+<td id="T_cff23_row9_col0" class="data row9 col0">Bob Dylan</td>
+<td id="T_cff23_row9_col1" class="data row9 col1">High</td>
+<td id="T_cff23_row9_col2" class="data row9 col2">Cheap</td>
+<td id="T_cff23_row9_col3" class="data row9 col3">Bad</td>
+</tr>
+<tr class="odd">
+<th id="T_cff23_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">10</th>
+<td id="T_cff23_row10_col0" class="data row10 col0">Todd</td>
+<td id="T_cff23_row10_col1" class="data row10 col1">High</td>
+<td id="T_cff23_row10_col2" class="data row10 col2">Cheap</td>
+<td id="T_cff23_row10_col3" class="data row10 col3">Bad</td>
+</tr>
+<tr class="even">
+<th id="T_cff23_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">11</th>
+<td id="T_cff23_row11_col0" class="data row11 col0">Bubba</td>
+<td id="T_cff23_row11_col1" class="data row11 col1">Low</td>
+<td id="T_cff23_row11_col2" class="data row11 col2">Cheap</td>
+<td id="T_cff23_row11_col3" class="data row11 col3">Bad</td>
+</tr>
+<tr class="odd">
+<th id="T_cff23_level0_row12" class="row_heading level0 row12" data-quarto-table-cell-role="th">12</th>
+<td id="T_cff23_row12_col0" class="data row12 col0">Dale</td>
+<td id="T_cff23_row12_col1" class="data row12 col1">Low</td>
+<td id="T_cff23_row12_col2" class="data row12 col2">Cheap</td>
+<td id="T_cff23_row12_col3" class="data row12 col3">Great</td>
+</tr>
+<tr class="even">
+<th id="T_cff23_level0_row13" class="row_heading level0 row13" data-quarto-table-cell-role="th">13</th>
+<td id="T_cff23_row13_col0" class="data row13 col0">Earnest</td>
+<td id="T_cff23_row13_col1" class="data row13 col1">Low</td>
+<td id="T_cff23_row13_col2" class="data row13 col2">Cheap</td>
+<td id="T_cff23_row13_col3" class="data row13 col3">Bad</td>
 </tr>
 </tbody>
 </table>
@@ -835,23 +957,23 @@ P(\text{Sound=Great} \mid do(\text{Gear=Fancy})) &amp;= P(\text{Sound=Great} \mi
 <div id="fdd80e8f-6079-4433-82a8-f2e4258df85c" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>G3 <span class="op">=</span> nx.DiGraph()</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Talent"</span>,      role<span class="op">=</span><span class="st">"default"</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Performance"</span>, role<span class="op">=</span><span class="st">"confounder"</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Gear"</span>,        role<span class="op">=</span><span class="st">"default"</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Recording"</span>,   role<span class="op">=</span><span class="st">"confounder"</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>, role<span class="op">=</span><span class="st">"treatment"</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Sound"</span>,       role<span class="op">=</span><span class="st">"outcome"</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>G3.add_edges_from([</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,      <span class="st">"Performance"</span>),</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Performance"</span>, <span class="st">"Recording"</span>),</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Gear"</span>,        <span class="st">"Recording"</span>),</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Recording"</span>,   <span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>),</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>, <span class="st">"Sound"</span>),</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>show_dag(G3, width<span class="op">=</span><span class="dv">800</span>, height<span class="op">=</span><span class="dv">600</span>, title<span class="op">=</span><span class="st">"Why does my recording sound like ass?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>G3 <span class="op">=</span> nx.DiGraph()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Talent"</span>,      role<span class="op">=</span><span class="st">"default"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Performance"</span>, role<span class="op">=</span><span class="st">"confounder"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Gear"</span>,        role<span class="op">=</span><span class="st">"default"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Recording"</span>,   role<span class="op">=</span><span class="st">"confounder"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>, role<span class="op">=</span><span class="st">"treatment"</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Sound"</span>,       role<span class="op">=</span><span class="st">"outcome"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>G3.add_edges_from([</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,      <span class="st">"Performance"</span>),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Performance"</span>, <span class="st">"Recording"</span>),</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Gear"</span>,        <span class="st">"Recording"</span>),</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Recording"</span>,   <span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>),</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>, <span class="st">"Sound"</span>),</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>show_dag(G3, width<span class="op">=</span><span class="dv">800</span>, height<span class="op">=</span><span class="dv">600</span>, title<span class="op">=</span><span class="st">"Why does my recording sound like ass?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div style="display:flex;gap:12px;flex-wrap:wrap;"><div id="dag2" style="width:800px;height:600px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div></div>
