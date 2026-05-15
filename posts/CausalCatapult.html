@@ -364,7 +364,7 @@ In this post, we're going to get started really fast: rapid acceleration so we *
 </section>
 <section id="lets-get-coding" class="level1">
 <h1>Let’s Get Coding!</h1>
-<p>I have yet to encounter an intro to CM that lets me see any code before the time scale for <a href="https://en.wikipedia.org/wiki/Proton_decay">proton decay</a>. So get ready, we are launching the catapult – with us inside.</p>
+<p>Typically, CM tutorials delay the introduction of code until after time scale for <a href="https://en.wikipedia.org/wiki/Proton_decay">proton decay</a>, but this one is different. So get ready, we are launching the catapult – with us inside.</p>
 <section id="defining-and-visualizing-graphs" class="level2">
 <h2 class="anchored" data-anchor-id="defining-and-visualizing-graphs">Defining and Visualizing Graphs</h2>
 <p>First we need to be able to define and take a look at the graphs that will comprise our causal models. We’ll set up the graph with Python (nodes, edges, directions) then push it to the viz routine so we can see it and move it around. I can’t articulate my intended applications, but based on my interests, I’m use a few libraries for this:</p>
@@ -801,10 +801,13 @@ setTimeout(initGraphs, 100);
 </div>
 <p>If we include the confounding effect of <code>Talent</code>:</p>
 <div id="e9856794-c49d-4ae4-812e-ed6f0e6c75fa" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(df.style</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Talent'</span>], col<span class="op">=</span><span class="st">'Talent'</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Gear'</span>],   col<span class="op">=</span><span class="st">'Gear'</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Sound'</span>],  col<span class="op">=</span><span class="st">'Sound'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
 #T_bfe1a_row0_col1, #T_bfe1a_row1_col1, #T_bfe1a_row2_col1, #T_bfe1a_row3_col1, #T_bfe1a_row4_col1, #T_bfe1a_row5_col1, #T_bfe1a_row6_col1, #T_bfe1a_row9_col1 {
