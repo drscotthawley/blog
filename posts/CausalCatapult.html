@@ -540,16 +540,16 @@ Note
 <span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span></span>
 <span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> HTML(container <span class="op">+</span> script)</span>
 <span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a>show_dag([G, G2], width<span class="op">=</span><span class="dv">360</span>, height<span class="op">=</span><span class="dv">320</span>, title<span class="op">=</span>[<span class="st">"Gear Acquisition Syndrome"</span>, <span class="st">"Reality"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a>show_dag([G, G2], width<span class="op">=</span><span class="dv">330</span>, height<span class="op">=</span><span class="dv">320</span>, title<span class="op">=</span>[<span class="st">"Gear Acquisition Syndrome"</span>, <span class="st">"Reality"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
-<div style="display:flex;gap:12px;flex-wrap:wrap;"><div id="dag0" style="width:360px;height:320px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div><div id="dag1" style="width:360px;height:320px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div></div>
+<div style="display:flex;gap:12px;flex-wrap:wrap;"><div id="dag0" style="width:330px;height:320px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div><div id="dag1" style="width:330px;height:320px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div></div>
 <script type="module">
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 function initGraphs() {
   const specs = [{"uid": "dag0", "nodes": [{"id": "Gear", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Gear", "target": "Sound", "label": ""}], "title": "Gear Acquisition Syndrome", "titleOffset": 28}, {"uid": "dag1", "nodes": [{"id": "Gear", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}, {"id": "Talent", "color": "#6c3483"}], "links": [{"source": "Gear", "target": "Sound", "label": ""}, {"source": "Talent", "target": "Sound", "label": ""}, {"source": "Talent", "target": "Gear", "label": ""}], "title": "Reality", "titleOffset": 28}];
-  const W = 360, H = 320, R = 34, FS = 13;
+  const W = 330, H = 320, R = 34, FS = 13;
   console.log("initGraphs: found", specs.length, "specs");
 
   for (const spec of specs) {
