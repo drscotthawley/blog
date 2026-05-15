@@ -647,10 +647,10 @@ setTimeout(initGraphs, 100);
 </section>
 <section id="sample-data" class="level2">
 <h2 class="anchored" data-anchor-id="sample-data">Sample Data</h2>
-<p>I made a fictitious 16-person dataset that mixes famous artists with anonymous randos:</p>
+<p>I made a fictitious 16-person dataset that mixes famous artists with anonymous randos. The naive/GAS view looks only at the correlation between <code>Gear</code> and <code>Sound</code>:</p>
 <div id="f1b8d15b-5b5c-4423-8a30-b919f9967345" class="cell">
 <details class="code-fold">
-<summary>Read in dataset</summary>
+<summary>Get dataset and display naive view</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'player_data.csv'</span>)</span>
@@ -671,129 +671,129 @@ setTimeout(initGraphs, 100);
 </details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_0838b_row0_col1, #T_0838b_row1_col1, #T_0838b_row2_col1, #T_0838b_row3_col1, #T_0838b_row4_col1, #T_0838b_row5_col1, #T_0838b_row6_col1, #T_0838b_row7_col1 {
+#T_53d0b_row0_col1, #T_53d0b_row1_col1, #T_53d0b_row2_col1, #T_53d0b_row3_col1, #T_53d0b_row4_col1, #T_53d0b_row5_col1, #T_53d0b_row6_col1, #T_53d0b_row7_col1 {
   background-color: #AA3377;
   color: #EEEEEE;
 }
-#T_0838b_row0_col2, #T_0838b_row2_col2, #T_0838b_row3_col2, #T_0838b_row4_col2, #T_0838b_row5_col2, #T_0838b_row6_col2, #T_0838b_row8_col2, #T_0838b_row10_col2 {
+#T_53d0b_row0_col2, #T_53d0b_row2_col2, #T_53d0b_row3_col2, #T_53d0b_row4_col2, #T_53d0b_row5_col2, #T_53d0b_row6_col2, #T_53d0b_row8_col2, #T_53d0b_row10_col2 {
   background-color: #228833;
   color: #EEEEEE;
 }
-#T_0838b_row1_col2, #T_0838b_row7_col2, #T_0838b_row9_col2, #T_0838b_row11_col2, #T_0838b_row12_col2, #T_0838b_row13_col2, #T_0838b_row14_col2, #T_0838b_row15_col2 {
+#T_53d0b_row1_col2, #T_53d0b_row7_col2, #T_53d0b_row9_col2, #T_53d0b_row11_col2, #T_53d0b_row12_col2, #T_53d0b_row13_col2, #T_53d0b_row14_col2, #T_53d0b_row15_col2 {
   background-color: #BB4455;
   color: #EEEEEE;
 }
-#T_0838b_row8_col1, #T_0838b_row9_col1, #T_0838b_row10_col1, #T_0838b_row11_col1, #T_0838b_row12_col1, #T_0838b_row13_col1, #T_0838b_row14_col1, #T_0838b_row15_col1 {
+#T_53d0b_row8_col1, #T_53d0b_row9_col1, #T_53d0b_row10_col1, #T_53d0b_row11_col1, #T_53d0b_row12_col1, #T_53d0b_row13_col1, #T_53d0b_row14_col1, #T_53d0b_row15_col1 {
   background-color: #CC9900;
   color: #EEEEEE;
 }
 </style>
 
-<table id="T_0838b" class="caption-top table table-sm table-striped small">
+<table id="T_53d0b" class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
-<th id="T_0838b_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Name</th>
-<th id="T_0838b_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Gear</th>
-<th id="T_0838b_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Sound</th>
+<th id="T_53d0b_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Name</th>
+<th id="T_53d0b_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Gear</th>
+<th id="T_53d0b_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Sound</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<th id="T_0838b_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
-<td id="T_0838b_row0_col0" class="data row0 col0">Tom Scholz</td>
-<td id="T_0838b_row0_col1" class="data row0 col1">Fancy</td>
-<td id="T_0838b_row0_col2" class="data row0 col2">Great</td>
+<th id="T_53d0b_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
+<td id="T_53d0b_row0_col0" class="data row0 col0">Tom Scholz</td>
+<td id="T_53d0b_row0_col1" class="data row0 col1">Fancy</td>
+<td id="T_53d0b_row0_col2" class="data row0 col2">Great</td>
 </tr>
 <tr class="even">
-<th id="T_0838b_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
-<td id="T_0838b_row1_col0" class="data row1 col0">Jeff Beck</td>
-<td id="T_0838b_row1_col1" class="data row1 col1">Fancy</td>
-<td id="T_0838b_row1_col2" class="data row1 col2">Bad</td>
+<th id="T_53d0b_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
+<td id="T_53d0b_row1_col0" class="data row1 col0">Jeff Beck</td>
+<td id="T_53d0b_row1_col1" class="data row1 col1">Fancy</td>
+<td id="T_53d0b_row1_col2" class="data row1 col2">Bad</td>
 </tr>
 <tr class="odd">
-<th id="T_0838b_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
-<td id="T_0838b_row2_col0" class="data row2 col0">Jimi</td>
-<td id="T_0838b_row2_col1" class="data row2 col1">Fancy</td>
-<td id="T_0838b_row2_col2" class="data row2 col2">Great</td>
+<th id="T_53d0b_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
+<td id="T_53d0b_row2_col0" class="data row2 col0">Jimi</td>
+<td id="T_53d0b_row2_col1" class="data row2 col1">Fancy</td>
+<td id="T_53d0b_row2_col2" class="data row2 col2">Great</td>
 </tr>
 <tr class="even">
-<th id="T_0838b_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
-<td id="T_0838b_row3_col0" class="data row3 col0">Prince</td>
-<td id="T_0838b_row3_col1" class="data row3 col1">Fancy</td>
-<td id="T_0838b_row3_col2" class="data row3 col2">Great</td>
+<th id="T_53d0b_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
+<td id="T_53d0b_row3_col0" class="data row3 col0">Prince</td>
+<td id="T_53d0b_row3_col1" class="data row3 col1">Fancy</td>
+<td id="T_53d0b_row3_col2" class="data row3 col2">Great</td>
 </tr>
 <tr class="odd">
-<th id="T_0838b_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
-<td id="T_0838b_row4_col0" class="data row4 col0">Jenny</td>
-<td id="T_0838b_row4_col1" class="data row4 col1">Fancy</td>
-<td id="T_0838b_row4_col2" class="data row4 col2">Great</td>
+<th id="T_53d0b_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
+<td id="T_53d0b_row4_col0" class="data row4 col0">Jenny</td>
+<td id="T_53d0b_row4_col1" class="data row4 col1">Fancy</td>
+<td id="T_53d0b_row4_col2" class="data row4 col2">Great</td>
 </tr>
 <tr class="even">
-<th id="T_0838b_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">5</th>
-<td id="T_0838b_row5_col0" class="data row5 col0">Jay</td>
-<td id="T_0838b_row5_col1" class="data row5 col1">Fancy</td>
-<td id="T_0838b_row5_col2" class="data row5 col2">Great</td>
+<th id="T_53d0b_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">5</th>
+<td id="T_53d0b_row5_col0" class="data row5 col0">Jay</td>
+<td id="T_53d0b_row5_col1" class="data row5 col1">Fancy</td>
+<td id="T_53d0b_row5_col2" class="data row5 col2">Great</td>
 </tr>
 <tr class="odd">
-<th id="T_0838b_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">6</th>
-<td id="T_0838b_row6_col0" class="data row6 col0">Bill</td>
-<td id="T_0838b_row6_col1" class="data row6 col1">Fancy</td>
-<td id="T_0838b_row6_col2" class="data row6 col2">Great</td>
+<th id="T_53d0b_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">6</th>
+<td id="T_53d0b_row6_col0" class="data row6 col0">Bill</td>
+<td id="T_53d0b_row6_col1" class="data row6 col1">Fancy</td>
+<td id="T_53d0b_row6_col2" class="data row6 col2">Great</td>
 </tr>
 <tr class="even">
-<th id="T_0838b_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">7</th>
-<td id="T_0838b_row7_col0" class="data row7 col0">Paris Hilton</td>
-<td id="T_0838b_row7_col1" class="data row7 col1">Fancy</td>
-<td id="T_0838b_row7_col2" class="data row7 col2">Bad</td>
+<th id="T_53d0b_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">7</th>
+<td id="T_53d0b_row7_col0" class="data row7 col0">Paris Hilton</td>
+<td id="T_53d0b_row7_col1" class="data row7 col1">Fancy</td>
+<td id="T_53d0b_row7_col2" class="data row7 col2">Bad</td>
 </tr>
 <tr class="odd">
-<th id="T_0838b_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">8</th>
-<td id="T_0838b_row8_col0" class="data row8 col0">Milli Vanilli</td>
-<td id="T_0838b_row8_col1" class="data row8 col1">Cheap</td>
-<td id="T_0838b_row8_col2" class="data row8 col2">Great</td>
+<th id="T_53d0b_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">8</th>
+<td id="T_53d0b_row8_col0" class="data row8 col0">Milli Vanilli</td>
+<td id="T_53d0b_row8_col1" class="data row8 col1">Cheap</td>
+<td id="T_53d0b_row8_col2" class="data row8 col2">Great</td>
 </tr>
 <tr class="even">
-<th id="T_0838b_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">9</th>
-<td id="T_0838b_row9_col0" class="data row9 col0">Bob Dylan</td>
-<td id="T_0838b_row9_col1" class="data row9 col1">Cheap</td>
-<td id="T_0838b_row9_col2" class="data row9 col2">Bad</td>
+<th id="T_53d0b_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">9</th>
+<td id="T_53d0b_row9_col0" class="data row9 col0">Bob Dylan</td>
+<td id="T_53d0b_row9_col1" class="data row9 col1">Cheap</td>
+<td id="T_53d0b_row9_col2" class="data row9 col2">Bad</td>
 </tr>
 <tr class="odd">
-<th id="T_0838b_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">10</th>
-<td id="T_0838b_row10_col0" class="data row10 col0">Dale</td>
-<td id="T_0838b_row10_col1" class="data row10 col1">Cheap</td>
-<td id="T_0838b_row10_col2" class="data row10 col2">Great</td>
+<th id="T_53d0b_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">10</th>
+<td id="T_53d0b_row10_col0" class="data row10 col0">Dale</td>
+<td id="T_53d0b_row10_col1" class="data row10 col1">Cheap</td>
+<td id="T_53d0b_row10_col2" class="data row10 col2">Great</td>
 </tr>
 <tr class="even">
-<th id="T_0838b_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">11</th>
-<td id="T_0838b_row11_col0" class="data row11 col0">Todd</td>
-<td id="T_0838b_row11_col1" class="data row11 col1">Cheap</td>
-<td id="T_0838b_row11_col2" class="data row11 col2">Bad</td>
+<th id="T_53d0b_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">11</th>
+<td id="T_53d0b_row11_col0" class="data row11 col0">Todd</td>
+<td id="T_53d0b_row11_col1" class="data row11 col1">Cheap</td>
+<td id="T_53d0b_row11_col2" class="data row11 col2">Bad</td>
 </tr>
 <tr class="odd">
-<th id="T_0838b_level0_row12" class="row_heading level0 row12" data-quarto-table-cell-role="th">12</th>
-<td id="T_0838b_row12_col0" class="data row12 col0">Bubba</td>
-<td id="T_0838b_row12_col1" class="data row12 col1">Cheap</td>
-<td id="T_0838b_row12_col2" class="data row12 col2">Bad</td>
+<th id="T_53d0b_level0_row12" class="row_heading level0 row12" data-quarto-table-cell-role="th">12</th>
+<td id="T_53d0b_row12_col0" class="data row12 col0">Bubba</td>
+<td id="T_53d0b_row12_col1" class="data row12 col1">Cheap</td>
+<td id="T_53d0b_row12_col2" class="data row12 col2">Bad</td>
 </tr>
 <tr class="even">
-<th id="T_0838b_level0_row13" class="row_heading level0 row13" data-quarto-table-cell-role="th">13</th>
-<td id="T_0838b_row13_col0" class="data row13 col0">Abe</td>
-<td id="T_0838b_row13_col1" class="data row13 col1">Cheap</td>
-<td id="T_0838b_row13_col2" class="data row13 col2">Bad</td>
+<th id="T_53d0b_level0_row13" class="row_heading level0 row13" data-quarto-table-cell-role="th">13</th>
+<td id="T_53d0b_row13_col0" class="data row13 col0">Abe</td>
+<td id="T_53d0b_row13_col1" class="data row13 col1">Cheap</td>
+<td id="T_53d0b_row13_col2" class="data row13 col2">Bad</td>
 </tr>
 <tr class="odd">
-<th id="T_0838b_level0_row14" class="row_heading level0 row14" data-quarto-table-cell-role="th">14</th>
-<td id="T_0838b_row14_col0" class="data row14 col0">Earnest</td>
-<td id="T_0838b_row14_col1" class="data row14 col1">Cheap</td>
-<td id="T_0838b_row14_col2" class="data row14 col2">Bad</td>
+<th id="T_53d0b_level0_row14" class="row_heading level0 row14" data-quarto-table-cell-role="th">14</th>
+<td id="T_53d0b_row14_col0" class="data row14 col0">Earnest</td>
+<td id="T_53d0b_row14_col1" class="data row14 col1">Cheap</td>
+<td id="T_53d0b_row14_col2" class="data row14 col2">Bad</td>
 </tr>
 <tr class="even">
-<th id="T_0838b_level0_row15" class="row_heading level0 row15" data-quarto-table-cell-role="th">15</th>
-<td id="T_0838b_row15_col0" class="data row15 col0">Mongo</td>
-<td id="T_0838b_row15_col1" class="data row15 col1">Cheap</td>
-<td id="T_0838b_row15_col2" class="data row15 col2">Bad</td>
+<th id="T_53d0b_level0_row15" class="row_heading level0 row15" data-quarto-table-cell-role="th">15</th>
+<td id="T_53d0b_row15_col0" class="data row15 col0">Mongo</td>
+<td id="T_53d0b_row15_col1" class="data row15 col1">Cheap</td>
+<td id="T_53d0b_row15_col2" class="data row15 col2">Bad</td>
 </tr>
 </tbody>
 </table>
