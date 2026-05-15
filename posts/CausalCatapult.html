@@ -401,18 +401,19 @@ Note
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Gear Acquisition Syndrome</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> nx.DiGraph()</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Talent"</span>, role<span class="op">=</span><span class="st">"confounder"</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Gear"</span>,   role<span class="op">=</span><span class="st">"treatment"</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Sound"</span>,  role<span class="op">=</span><span class="st">"outcome"</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>G.add_edges_from([</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Gear"</span>, <span class="st">"Sound"</span>),</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,   <span class="st">"Sound"</span>),</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,   <span class="st">"Gear"</span>,),</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># "Reality"</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>G2 <span class="op">=</span> copy.deepcopy(G)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>G2.remove_edge(<span class="st">"Talent"</span>, <span class="st">"Gear"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Gear"</span>,   role<span class="op">=</span><span class="st">"treatment"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Sound"</span>,  role<span class="op">=</span><span class="st">"outcome"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>G.add_edges_from([</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Gear"</span>, <span class="st">"Sound"</span>),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># "Reality"</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>G2 <span class="op">=</span> copy.deepcopy(G)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>G2.add_node(<span class="st">"Talent"</span>, role<span class="op">=</span><span class="st">"confounder"</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>G2.add_edges_from([</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,   <span class="st">"Sound"</span>),</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,   <span class="st">"Gear"</span>,),</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>And then visualize with D3.js – try dragging the nodes around!</p>
 <div id="e2c3fd7a" class="cell">
@@ -546,7 +547,7 @@ Note
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 function initGraphs() {
-  const specs = [{"uid": "dag0", "nodes": [{"id": "Talent", "color": "#6c3483"}, {"id": "Gear", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Talent", "target": "Sound", "label": ""}, {"source": "Talent", "target": "Gear", "label": ""}, {"source": "Gear", "target": "Sound", "label": ""}], "title": "Gear Acquisition Syndrome", "titleOffset": 28}, {"uid": "dag1", "nodes": [{"id": "Talent", "color": "#6c3483"}, {"id": "Gear", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Talent", "target": "Sound", "label": ""}, {"source": "Gear", "target": "Sound", "label": ""}], "title": "Reality", "titleOffset": 28}];
+  const specs = [{"uid": "dag0", "nodes": [{"id": "Gear", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Gear", "target": "Sound", "label": ""}], "title": "Gear Acquisition Syndrome", "titleOffset": 28}, {"uid": "dag1", "nodes": [{"id": "Gear", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}, {"id": "Talent", "color": "#6c3483"}], "links": [{"source": "Gear", "target": "Sound", "label": ""}, {"source": "Talent", "target": "Sound", "label": ""}, {"source": "Talent", "target": "Gear", "label": ""}], "title": "Reality", "titleOffset": 28}];
   const W = 360, H = 320, R = 34, FS = 13;
   console.log("initGraphs: found", specs.length, "specs");
 
