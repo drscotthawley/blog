@@ -949,18 +949,19 @@ P(\text{Sound=Great} \mid do(\text{Gear=Fancy})) &amp;= P(\text{Sound=Great} \mi
 <div id="648ec150-8acc-4db0-883d-d1e5bb9a82b9" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Compute prior probabilities for Talent</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>p_talent_high <span class="op">=</span> (df[<span class="st">"Talent"</span>] <span class="op">==</span> <span class="st">"High"</span>).mean()</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>p_talent_low <span class="op">=</span> (df[<span class="st">"Talent"</span>] <span class="op">==</span> <span class="st">"Low"</span>).mean()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>p_talent_low  <span class="op">=</span> (df[<span class="st">"Talent"</span>] <span class="op">==</span> <span class="st">"Low"</span>).mean()</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Compute conditional probabilities for Sound given Gear=Fancy and Talent</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>subset_high <span class="op">=</span> df.query(<span class="st">"Gear == 'Fancy' and Talent == 'High'"</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>subset_low <span class="op">=</span> df.query(<span class="st">"Gear == 'Fancy' and Talent == 'Low'"</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>subset_low  <span class="op">=</span> df.query(<span class="st">"Gear == 'Fancy' and Talent == 'Low'"</span>)</span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>p_sound_given_high <span class="op">=</span> (subset_high[<span class="st">"Sound"</span>] <span class="op">==</span> <span class="st">"Great"</span>).mean()</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>p_sound_given_low <span class="op">=</span> (subset_low[<span class="st">"Sound"</span>] <span class="op">==</span> <span class="st">"Great"</span>).mean()</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>p_sound_given_low  <span class="op">=</span> (subset_low[<span class="st">"Sound"</span>]  <span class="op">==</span> <span class="st">"Great"</span>).mean()</span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Combine using your formula</span></span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>p_do_gear_fancy <span class="op">=</span> (p_sound_given_high <span class="op">*</span> p_talent_high) <span class="op">+</span> (p_sound_given_low <span class="op">*</span> p_talent_low)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Answer ="</span>,p_do_gear_fancy) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Answer ="</span>,p_do_gear_fancy) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Answer = 0.6</code></pre>
 </div>
