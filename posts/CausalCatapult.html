@@ -315,10 +315,13 @@ figcaption {
 </style>
 <section id="work-in-progress-come-back-later-for-more" class="level2">
 <h2 class="anchored" data-anchor-id="work-in-progress-come-back-later-for-more">—<em>Work in Progress! Come back later for more</em>—</h2>
+<blockquote class="blockquote">
+<p>“…causal calculus differentiates between two types of conditional distributions one might want to estimate. …in ML we usually estimate only one of them, but in some applications we should actually…estimate the other one.” – Ferenc Huszar <span class="citation" data-cites="huszar2018causalintro"><a href="#ref-huszar2018causalintro" role="doc-biblioref">[1]</a></span></p>
+</blockquote>
 </section>
 <section id="intro" class="level1">
 <h1>Intro</h1>
-<p>I’ve been wanting to learn Causal Inference (CI) / Causal Modeling (causal inference) “properly” ever since I asked for Judea Pearl’s bestselling <em>The Book of Why</em> <span class="citation" data-cites="pearl2018why"><a href="#ref-pearl2018why" role="doc-biblioref">[1]</a></span> for Christmas in 2019. It’s a <em>great</em> read, but it hides any actual computation by merely mentioning the mystical “do calculus”. Pearl offers details on that in his textbook <span class="citation" data-cites="pearl2009causality"><a href="#ref-pearl2009causality" role="doc-biblioref">[2]</a></span> <span class="citation" data-cites="facure2023causal"><a href="#ref-facure2023causal" role="doc-biblioref">[3]</a></span> <span class="citation" data-cites="ghosh2026karmamvbenchmarkcausalquestion"><a href="#ref-ghosh2026karmamvbenchmarkcausalquestion" role="doc-biblioref">[4]</a></span> <span class="citation" data-cites="bornstein2021lightningcausalexamples"><a href="#ref-bornstein2021lightningcausalexamples" role="doc-biblioref">[5]</a></span> <span class="citation" data-cites="krohn2025causalainess"><a href="#ref-krohn2025causalainess" role="doc-biblioref"><strong>krohn2025causalainess?</strong></a></span> <span class="citation" data-cites="Koch2025DeepLearningCausalInference"><a href="#ref-Koch2025DeepLearningCausalInference" role="doc-biblioref">[6]</a></span>, but I want get up to speed faster, so I’ve been reading and watching other treatments <span class="citation" data-cites="tucci2013"><a href="#ref-tucci2013" role="doc-biblioref">[7]</a></span> <span class="citation" data-cites="neal2020"><a href="#ref-neal2020" role="doc-biblioref">[8]</a></span>, which most often are either “slow” or quickly throw up what I call the “Wall of Math.”<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>I’ve been wanting to learn Causal Inference (CI) / Causal Modeling (causal inference) “properly” ever since I asked for Judea Pearl’s bestselling <em>The Book of Why</em> <span class="citation" data-cites="pearl2018why"><a href="#ref-pearl2018why" role="doc-biblioref">[2]</a></span> for Christmas in 2019. It’s a <em>great</em> read, but it hides any actual computation by merely mentioning the mystical “do calculus”. Pearl offers details on that in his textbook <span class="citation" data-cites="pearl2009causality"><a href="#ref-pearl2009causality" role="doc-biblioref">[3]</a></span> <span class="citation" data-cites="facure2023causal"><a href="#ref-facure2023causal" role="doc-biblioref">[4]</a></span> <span class="citation" data-cites="ghosh2026karmamvbenchmarkcausalquestion"><a href="#ref-ghosh2026karmamvbenchmarkcausalquestion" role="doc-biblioref">[5]</a></span> <span class="citation" data-cites="bornstein2021lightningcausalexamples"><a href="#ref-bornstein2021lightningcausalexamples" role="doc-biblioref">[6]</a></span> <span class="citation" data-cites="krohn2025causalainess"><a href="#ref-krohn2025causalainess" role="doc-biblioref">[7]</a></span> <span class="citation" data-cites="Koch2025DeepLearningCausalInference"><a href="#ref-Koch2025DeepLearningCausalInference" role="doc-biblioref">[8]</a></span>, but I want get up to speed faster, so I’ve been reading and watching other treatments <span class="citation" data-cites="tucci2013"><a href="#ref-tucci2013" role="doc-biblioref">[9]</a></span> <span class="citation" data-cites="neal2020"><a href="#ref-neal2020" role="doc-biblioref">[10]</a></span>, which most often are either “slow” or quickly throw up what I call the “Wall of Math.”<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>In this post, we’re going to catapult straight over that wall — starting immediately with code and calculation, introducing definitions and proofs only when we actually need them.</p>
 <!--- 
 # Intro (old
@@ -339,7 +342,7 @@ In this post, we're going to get started really fast: rapid acceleration so we *
 </section>
 <section id="case-study-gear-acquisition-syndrome-gas" class="level1">
 <h1>Case Study: Gear Acquisition Syndrome (GAS)</h1>
-<p>Causal modeling introductions invariably choose some medical intervention as an illustrative example. Since my specialty is teaching audio engineers <span class="citation" data-cites="hawley2014bayes"><a href="#ref-hawley2014bayes" role="doc-biblioref">[9]</a></span>, we’ll discuss the sad affliction known as <strong><a href="https://www.joshuasarinana.com/sciart/the-science-of-gear-acquisition-syndrome">Gear Acquisition Syndrome (GAS)</a></strong>.</p>
+<p>Causal modeling introductions invariably choose some medical intervention as an illustrative example. Since my specialty is teaching audio engineers <span class="citation" data-cites="hawley2014bayes"><a href="#ref-hawley2014bayes" role="doc-biblioref">[11]</a></span>, we’ll discuss the sad affliction known as <strong><a href="https://www.joshuasarinana.com/sciart/the-science-of-gear-acquisition-syndrome">Gear Acquisition Syndrome (GAS)</a></strong>.</p>
 <p>GAS is a debilitating condition affecting millions of musicians worldwide. It is the (false) cognitive bias in which the musician thinks that buying gear will make them more talented, and therefore result in better sound.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -374,7 +377,7 @@ In this post, we're going to get started really fast: rapid acceleration so we *
 <li><strong>Pandas</strong> for handling tables of data</li>
 <li><strong>PyTorch</strong> for other sundry numerical calculations, since ultimately I want to do “machine learning stuff”</li>
 </ol>
-<p>We won’t use causal inference-specific libraries like <a href="https://github.com/uber/causalml">CausalML</a> or <a href="https://github.com/py-why/EconML">EconML</a>, <a href="https://github.com/elijahnzeli1/CausalTorch">CausalTorch</a>, etc. because I suspect they would likely hide and/or automate the bits I hope to learn to implement.</p>
+<p>We won’t use causal inference-specific libraries like <a href="https://github.com/uber/causalml">CausalML</a> or <a href="https://github.com/py-why/EconML">EconML</a>, …, etc. because I suspect they would likely hide and/or automate the bits I hope to learn to implement.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1151,32 +1154,38 @@ setTimeout(initGraphs, 100);
 <section id="references" class="level1">
 <h1>References</h1>
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-huszar2018causalintro" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">F. Huszár, <span>“ML beyond curve fitting: An intro to causal inference and do-calculus.”</span> <a href="https://www.inference.vc/untitled/" class="uri">https://www.inference.vc/untitled/</a>, May 2018.</div>
+</div>
 <div id="ref-pearl2018why" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">J. Pearl and D. Mackenzie, <em><span class="nocase">The Book of Why</span>: The new science of cause and effect</em>. New York: Basic Books, 2018.</div>
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">J. Pearl and D. Mackenzie, <em><span class="nocase">The Book of Why</span>: The new science of cause and effect</em>. New York: Basic Books, 2018.</div>
 </div>
 <div id="ref-pearl2009causality" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[2] </div><div class="csl-right-inline">J. Pearl, <em>Causality: Models, reasoning, and inference</em>, 2nd ed. Cambridge, UK: Cambridge University Press, 2009.</div>
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">J. Pearl, <em>Causality: Models, reasoning, and inference</em>, 2nd ed. Cambridge, UK: Cambridge University Press, 2009.</div>
 </div>
 <div id="ref-facure2023causal" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[3] </div><div class="csl-right-inline">M. Facure, <em>Causal inference in python</em>. O’Reilly Media, 2023. Available: <a href="https://www.oreilly.com/library/view/causal-inference-in/9781098140243/">https://www.oreilly.com/library/view/causal-inference-in/9781098140243/</a></div>
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">M. Facure, <em>Causal inference in <span>P</span>ython</em>. O’Reilly Media, 2023. Available: <a href="https://www.oreilly.com/library/view/causal-inference-in/9781098140243/">https://www.oreilly.com/library/view/causal-inference-in/9781098140243/</a></div>
 </div>
 <div id="ref-ghosh2026karmamvbenchmarkcausalquestion" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[4] </div><div class="csl-right-inline">A. Ghosh, A. Roy, and D. Herremans, <span>“KARMA-MV: A benchmark for causal question answering on music videos.”</span> 2026. Available: <a href="https://arxiv.org/abs/2605.08175">https://arxiv.org/abs/2605.08175</a></div>
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">A. Ghosh, A. Roy, and D. Herremans, <span>“KARMA-MV: A benchmark for causal question answering on music videos.”</span> 2026. Available: <a href="https://arxiv.org/abs/2605.08175">https://arxiv.org/abs/2605.08175</a></div>
 </div>
 <div id="ref-bornstein2021lightningcausalexamples" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[5] </div><div class="csl-right-inline">A. (Ari) Bornstein, <span>“3 PyTorch lightning community causal inference examples to inspire your next project.”</span> <a href="https://devblog.pytorchlightning.ai/3-pytorch-lightning-community-causal-inference-examples-to-inspire-your-next-project-da6f45c07b70" class="uri">https://devblog.pytorchlightning.ai/3-pytorch-lightning-community-causal-inference-examples-to-inspire-your-next-project-da6f45c07b70</a>, Mar. 16, 2021.</div>
+<div class="csl-left-margin">[6] </div><div class="csl-right-inline">A. (Ari) Bornstein, <span>“3 PyTorch lightning community causal inference examples to inspire your next project.”</span> <a href="https://devblog.pytorchlightning.ai/3-pytorch-lightning-community-causal-inference-examples-to-inspire-your-next-project-da6f45c07b70" class="uri">https://devblog.pytorchlightning.ai/3-pytorch-lightning-community-causal-inference-examples-to-inspire-your-next-project-da6f45c07b70</a>, Mar. 16, 2021.</div>
+</div>
+<div id="ref-krohn2025causalainess" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[7] </div><div class="csl-right-inline">J. Krohn, <span>“SDS 909: Causal AI, with dr. Robert osazuwa ness.”</span> <a href="https://www.superdatascience.com/podcast/sds-909-causal-ai-with-dr-robert-usazuwa-ness" class="uri">https://www.superdatascience.com/podcast/sds-909-causal-ai-with-dr-robert-usazuwa-ness</a>, Jul. 29, 2025.</div>
 </div>
 <div id="ref-Koch2025DeepLearningCausalInference" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[6] </div><div class="csl-right-inline">B. J. Koch, T. Sainburg, P. G. Bastías, S. Jiang, Y. Sun, and J. G. Foster, <span>“A primer on deep learning for causal inference,”</span> <em>Sociological Methods &amp; Research</em>, vol. 54, no. 2, pp. 397–447, May 2025, doi: <a href="https://doi.org/10.1177/00491241241234866">10.1177/00491241241234866</a>.</div>
+<div class="csl-left-margin">[8] </div><div class="csl-right-inline">B. J. Koch, T. Sainburg, P. G. Bastías, S. Jiang, Y. Sun, and J. G. Foster, <span>“A primer on deep learning for causal inference,”</span> <em>Sociological Methods &amp; Research</em>, vol. 54, no. 2, pp. 397–447, May 2025, doi: <a href="https://doi.org/10.1177/00491241241234866">10.1177/00491241241234866</a>.</div>
 </div>
 <div id="ref-tucci2013" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[7] </div><div class="csl-right-inline">R. R. Tucci, <span>“Introduction to <span>J</span>udea <span>P</span>earl’s do-calculus,”</span> <em>CoRR</em>, vol. abs/1305.5506, 2013, Available: <a href="http://arxiv.org/abs/1305.5506">http://arxiv.org/abs/1305.5506</a></div>
+<div class="csl-left-margin">[9] </div><div class="csl-right-inline">R. R. Tucci, <span>“Introduction to <span>J</span>udea <span>P</span>earl’s do-calculus,”</span> <em>CoRR</em>, vol. abs/1305.5506, 2013, Available: <a href="http://arxiv.org/abs/1305.5506">http://arxiv.org/abs/1305.5506</a></div>
 </div>
 <div id="ref-neal2020" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[8] </div><div class="csl-right-inline">B. Neal, <em><span class="nocase">Introduction to Causal Inference</span> (from a machine learning perspective)</em>. 2020. Available: <a href="https://www.bradyneal.com/causal-inference-course">https://www.bradyneal.com/causal-inference-course</a></div>
+<div class="csl-left-margin">[10] </div><div class="csl-right-inline">B. Neal, <em><span class="nocase">Introduction to Causal Inference</span> (from a machine learning perspective)</em>. 2020. Available: <a href="https://www.bradyneal.com/causal-inference-course">https://www.bradyneal.com/causal-inference-course</a></div>
 </div>
 <div id="ref-hawley2014bayes" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[9] </div><div class="csl-right-inline"><span>“<span>B</span>ayesian analysis for audio engineers.”</span> invited lecture to Meeting of the Belmont <span>S</span>tudent <span>S</span>ection of the <span>A</span>udio <span>E</span>ngineering <span>S</span>ociety, 2014. Available: <a href="https://hedges.belmont.edu/BayesianAnalysisPartI.pdf">https://hedges.belmont.edu/BayesianAnalysisPartI.pdf</a></div>
+<div class="csl-left-margin">[11] </div><div class="csl-right-inline"><span>“<span>B</span>ayesian analysis for audio engineers.”</span> invited lecture to Meeting of the Belmont <span>S</span>tudent <span>S</span>ection of the <span>A</span>udio <span>E</span>ngineering <span>S</span>ociety, 2014. Available: <a href="https://hedges.belmont.edu/BayesianAnalysisPartI.pdf">https://hedges.belmont.edu/BayesianAnalysisPartI.pdf</a></div>
 </div>
 </div>
 <hr>
