@@ -945,27 +945,53 @@ P(\text{Sound=Great} \mid do(\text{Gear=Fancy})) &amp;= P(\text{Sound=Great} \mi
 \end{align}\]</span> This is called the “adjustment formula”, specifically the “backdoor adjustment formula”.</p>
 <p>That’s getting a little cumbersome, so let’s abbreviate our notation:</p>
 <p><span class="math display">\[P(Y=1 \mid do(X=1)) = P(Y=1 \mid X=1, T=1) \cdot P(T=1) + P(Y=1 \mid X=1, T=0) \cdot P(T=0)\]</span></p>
-<p>where <span class="math inline">\(X\)</span> = Gear (1=Fancy), <span class="math inline">\(Y\)</span> = Sound (1=Great), <span class="math inline">\(T\)</span> = Talent (1=High). Let’s do it…</p>
-<div id="77bfcac3-e5a7-4e6e-b9f6-8c72969e0117" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""Actually, I'm going to write this in a way that uses pandas efficiently </span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">in case we later want to scale to very large dataframes. Thus we won't separately </span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">treat Talent=High and then Talent=Low. We'll do both cases "simultaneously"."""</span></span>
+<p>where <span class="math inline">\(X\)</span> = Gear (1=Fancy), <span class="math inline">\(Y\)</span> = Sound (1=Great), <span class="math inline">\(T\)</span> = Talent (1=High). In code, that can look like:</p>
+<div id="648ec150-8acc-4db0-883d-d1e5bb9a82b9" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Compute prior probabilities for Talent</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>p_talent_high <span class="op">=</span> (df[<span class="st">"Talent"</span>] <span class="op">==</span> <span class="st">"High"</span>).mean()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>p_talent_low <span class="op">=</span> (df[<span class="st">"Talent"</span>] <span class="op">==</span> <span class="st">"Low"</span>).mean()</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Isolate rows where Gear is Fancy</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>fancy_df <span class="op">=</span> df[df[<span class="st">"Gear"</span>] <span class="op">==</span> <span class="st">"Fancy"</span>]</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Calculate P(Sound=Great | Gear=Fancy, Talent) for all Talent levels at once</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>p_sound_given_talent <span class="op">=</span> fancy_df[<span class="st">"Sound"</span>].eq(<span class="st">"Great"</span>).groupby(fancy_df[<span class="st">"Talent"</span>]).mean()</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Calculate P(Talent) for all Talent levels</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>p_talent <span class="op">=</span> df[<span class="st">"Talent"</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Multiply matching terms and sum them up</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>p_do_gear_fancy <span class="op">=</span> (p_sound_given_talent <span class="op">*</span> p_talent).<span class="bu">sum</span>()</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Answer = "</span>,p_do_gear_fancy) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Compute conditional probabilities for Sound given Gear=Fancy and Talent</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>subset_high <span class="op">=</span> df.query(<span class="st">"Gear == 'Fancy' and Talent == 'High'"</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>subset_low <span class="op">=</span> df.query(<span class="st">"Gear == 'Fancy' and Talent == 'Low'"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>p_sound_given_high <span class="op">=</span> (subset_high[<span class="st">"Sound"</span>] <span class="op">==</span> <span class="st">"Great"</span>).mean()</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>p_sound_given_low <span class="op">=</span> (subset_low[<span class="st">"Sound"</span>] <span class="op">==</span> <span class="st">"Great"</span>).mean()</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Combine using your formula</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>p_do_gear_fancy <span class="op">=</span> (p_sound_given_high <span class="op">*</span> p_talent_high) <span class="op">+</span> (p_sound_given_low <span class="op">*</span> p_talent_low)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Answer ="</span>,p_do_gear_fancy) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Answer =  0.6</code></pre>
+<pre><code>Answer = 0.6</code></pre>
+</div>
+</div>
+<p>But we can compute this much more efficiently via “advanced” pandas methods. Let’s make a fast, general routine that we can use elsewhere:</p>
+<div id="c3185537-0e11-45d8-9452-f3bdb6e7e8d3" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backdoor_adjustment(data, outcome_col, treatment_col, confounder_col, outcome_val, treatment_val):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Computes P(Outcome = outcome_val | do(Treatment = treatment_val)) </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">    by adjusting for a single confounding variable.</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 1. Calculate P(Confounder) for all categories</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    p_confounder <span class="op">=</span> data[confounder_col].value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 2. Filter data for the specific treatment strategy</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    treatment_subset <span class="op">=</span> data[data[treatment_col] <span class="op">==</span> treatment_val]</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 3. Calculate P(Outcome = outcome_val | Treatment, Confounder) for all categories</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    p_outcome_given_confounder <span class="op">=</span> (</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        treatment_subset[outcome_col].eq(outcome_val)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        .groupby(treatment_subset[confounder_col])</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        .mean() )</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 4. Align indices, multiply, and sum (the adjustment formula)</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (p_outcome_given_confounder <span class="op">*</span> p_confounder).<span class="bu">sum</span>()</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> backdoor_adjustment(df, <span class="st">"Sound"</span>, <span class="st">"Gear"</span>, <span class="st">"Talent"</span>, <span class="st">"Great"</span>, <span class="st">"Fancy"</span>)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Answer ="</span>,result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Answer = 0.6</code></pre>
 </div>
 </div>
 </section>
@@ -979,23 +1005,23 @@ P(\text{Sound=Great} \mid do(\text{Gear=Fancy})) &amp;= P(\text{Sound=Great} \mi
 <div id="fdd80e8f-6079-4433-82a8-f2e4258df85c" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>G3 <span class="op">=</span> nx.DiGraph()</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Talent"</span>,      role<span class="op">=</span><span class="st">"default"</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Performance"</span>, role<span class="op">=</span><span class="st">"confounder"</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Gear"</span>,        role<span class="op">=</span><span class="st">"default"</span>)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Recording"</span>,   role<span class="op">=</span><span class="st">"confounder"</span>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>, role<span class="op">=</span><span class="st">"treatment"</span>)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Sound"</span>,       role<span class="op">=</span><span class="st">"outcome"</span>)</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>G3.add_edges_from([</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,      <span class="st">"Performance"</span>),</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Performance"</span>, <span class="st">"Recording"</span>),</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Gear"</span>,        <span class="st">"Recording"</span>),</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Recording"</span>,   <span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>),</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>, <span class="st">"Sound"</span>),</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>show_dag(G3, width<span class="op">=</span><span class="dv">800</span>, height<span class="op">=</span><span class="dv">600</span>, title<span class="op">=</span><span class="st">"Why does my recording sound like ass?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>G3 <span class="op">=</span> nx.DiGraph()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Talent"</span>,      role<span class="op">=</span><span class="st">"default"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Performance"</span>, role<span class="op">=</span><span class="st">"confounder"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Gear"</span>,        role<span class="op">=</span><span class="st">"default"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Recording"</span>,   role<span class="op">=</span><span class="st">"confounder"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>, role<span class="op">=</span><span class="st">"treatment"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Sound"</span>,       role<span class="op">=</span><span class="st">"outcome"</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>G3.add_edges_from([</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,      <span class="st">"Performance"</span>),</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Performance"</span>, <span class="st">"Recording"</span>),</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Gear"</span>,        <span class="st">"Recording"</span>),</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Recording"</span>,   <span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>),</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>, <span class="st">"Sound"</span>),</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>show_dag(G3, width<span class="op">=</span><span class="dv">800</span>, height<span class="op">=</span><span class="dv">600</span>, title<span class="op">=</span><span class="st">"Why does my recording sound like ass?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div style="display:flex;gap:12px;flex-wrap:wrap;"><div id="dag2" style="width:800px;height:600px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div></div>
