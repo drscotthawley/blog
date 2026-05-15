@@ -815,7 +815,15 @@ setTimeout(initGraphs, 100);
 </section>
 <section id="the-key-question-as-math" class="level2">
 <h2 class="anchored" data-anchor-id="the-key-question-as-math">The Key Question as Math</h2>
-<p>To determine which graph better fits the data, we’ll compute the probability <span class="math inline">\(P({\rm Sound=Great} | \rm{do(Gear=Fancy}))\)</span>, i.e., will the sound will improve if we “intervene” by upgrading the gear?</p>
+<p>To determine which graph better fits the data, we’ll compute the probability <span class="math inline">\(P({\rm Sound=Great} | \rm{do(Gear=Fancy}))\)</span>, i.e., will the sound will improve if we “intervene” by upgrading the gear</p>
+<p>To compute <span class="math inline">\(P({\rm Sound=Great} | \rm{do(Gear=Fancy}))\)</span>, we need to “marginalize” over Talent (i.e.&nbsp;do a weighted sum over subsets for Talent):</p>
+<p><span class="math display">\[\begin{align}
+P(\text{Sound=Great} \mid do(\text{Gear=Fancy})) &amp;= P(\text{Sound=Great} \mid \text{Gear=Fancy, Talent=High}) \cdot P(\text{Talent=High}) \\
+&amp;+ P(\text{Sound=Great} \mid \text{Gear=Fancy, Talent=Low}) \cdot P(\text{Talent=Low})
+\end{align}\]</span></p>
+<p>That’s getting a little cumbersome, so let’s abbreviate our notation:</p>
+<p><span class="math display">\[P(Y=1 \mid do(X=1)) = P(Y=1 \mid X=1, T=1) \cdot P(T=1) + P(Y=1 \mid X=1, T=0) \cdot P(T=0)\]</span></p>
+<p>where <span class="math inline">\(X\)</span> = Gear (1=Fancy), <span class="math inline">\(Y\)</span> = Sound (1=Great), <span class="math inline">\(T\)</span> = Talent (1=High).</p>
 </section>
 </section>
 <section id="work-in-progress" class="level1">

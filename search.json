@@ -1201,7 +1201,7 @@
     "href": "posts/CausalCatapult.html#the-key-question-as-math",
     "title": "Catapulting into Causal Modeling [DRAFT]",
     "section": "The Key Question as Math",
-    "text": "The Key Question as Math\nTo determine which graph better fits the data, we’ll compute the probability \\(P({\\rm Sound=Great} | \\rm{do(Gear=Fancy}))\\), i.e., will the sound will improve if we “intervene” by upgrading the gear?"
+    "text": "The Key Question as Math\nTo determine which graph better fits the data, we’ll compute the probability \\(P({\\rm Sound=Great} | \\rm{do(Gear=Fancy}))\\), i.e., will the sound will improve if we “intervene” by upgrading the gear\nTo compute \\(P({\\rm Sound=Great} | \\rm{do(Gear=Fancy}))\\), we need to “marginalize” over Talent (i.e. do a weighted sum over subsets for Talent):\n\\[\\begin{align}\nP(\\text{Sound=Great} \\mid do(\\text{Gear=Fancy})) &= P(\\text{Sound=Great} \\mid \\text{Gear=Fancy, Talent=High}) \\cdot P(\\text{Talent=High}) \\\\\n&+ P(\\text{Sound=Great} \\mid \\text{Gear=Fancy, Talent=Low}) \\cdot P(\\text{Talent=Low})\n\\end{align}\\]\nThat’s getting a little cumbersome, so let’s abbreviate our notation:\n\\[P(Y=1 \\mid do(X=1)) = P(Y=1 \\mid X=1, T=1) \\cdot P(T=1) + P(Y=1 \\mid X=1, T=0) \\cdot P(T=0)\\]\nwhere \\(X\\) = Gear (1=Fancy), \\(Y\\) = Sound (1=Great), \\(T\\) = Talent (1=High)."
   },
   {
     "objectID": "posts/CausalCatapult.html#footnotes",
