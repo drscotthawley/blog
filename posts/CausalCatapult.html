@@ -403,17 +403,15 @@ Note
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> nx.DiGraph()</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Gear"</span>,   role<span class="op">=</span><span class="st">"treatment"</span>)</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Sound"</span>,  role<span class="op">=</span><span class="st">"outcome"</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>G.add_edges_from([</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Gear"</span>, <span class="st">"Sound"</span>),</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># "Reality"</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>G2 <span class="op">=</span> copy.deepcopy(G)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>G2.add_node(<span class="st">"Talent"</span>, role<span class="op">=</span><span class="st">"confounder"</span>)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>G2.add_edges_from([</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,   <span class="st">"Sound"</span>),</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,   <span class="st">"Gear"</span>,),</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>G.add_edges_from([(<span class="st">"Gear"</span>, <span class="st">"Sound"</span>),])</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># "Reality"</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>G2 <span class="op">=</span> copy.deepcopy(G)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>G2.add_node(<span class="st">"Talent"</span>, role<span class="op">=</span><span class="st">"confounder"</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>G2.add_edges_from([</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,   <span class="st">"Sound"</span>),</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,   <span class="st">"Gear"</span>,),</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>And then visualize with D3.js – try dragging the nodes around!</p>
 <div id="e2c3fd7a" class="cell">
@@ -800,7 +798,8 @@ setTimeout(initGraphs, 100);
 </table>
 </div>
 </div>
-<p>If we include the confounding effect of <code>Talent</code>:</p>
+<p>So, according this view, <span class="math inline">\(P(\rm{Sound=Great | Gear=Fancy})\)</span> = 6/8 = 0.75. =&gt; Better gear means you sound better!</p>
+<p>But wait, if we include the confounding effect of <code>Talent</code>:</p>
 <div id="e9856794-c49d-4ae4-812e-ed6f0e6c75fa" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
