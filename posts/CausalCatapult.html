@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2026-05-18">
 <meta name="description" content="Launching over the walls of math">
 
-<title>Catapulting into Causal Inference [DRAFT] – Scott H. Hawley</title>
+<title>Catapulting into Causal Calculus [DRAFT] – Scott H. Hawley</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -174,13 +174,13 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="Catapulting into Causal Inference [DRAFT] – Scott H. Hawley">
+<meta property="og:title" content="Catapulting into Causal Calculus [DRAFT] – Scott H. Hawley">
 <meta property="og:description" content="Launching over the walls of math">
 <meta property="og:image" content="https://drscotthawley.github.io/blog/posts/images/catapult.png">
 <meta property="og:site_name" content="Scott H. Hawley">
 <meta property="og:image:height" content="711">
 <meta property="og:image:width" content="1367">
-<meta name="twitter:title" content="Catapulting into Causal Inference [DRAFT] – Scott H. Hawley">
+<meta name="twitter:title" content="Catapulting into Causal Calculus [DRAFT] – Scott H. Hawley">
 <meta name="twitter:description" content="Launching over the walls of math">
 <meta name="twitter:image" content="https://drscotthawley.github.io/blog/posts/images/catapult.png">
 <meta name="twitter:image-height" content="711">
@@ -243,7 +243,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Catapulting into Causal Inference [DRAFT]</h1>
+      <h1 class="title">Catapulting into Causal Calculus [DRAFT]</h1>
                   <div>
         <div class="description">
           Launching over the walls of math
@@ -322,7 +322,7 @@ figcaption {
 <section id="intro" class="level1">
 <h1>Intro</h1>
 <p>I’ve been wanting to learn Causal Inference (CI) / Causal Modeling (causal inference) “properly” ever since I asked for Judea Pearl’s bestselling <em>The Book of Why</em> <span class="citation" data-cites="pearl2018why"><a href="#ref-pearl2018why" role="doc-biblioref">[2]</a></span> for Christmas in 2019. It’s a <em>great</em> read, but it hides any actual computation by merely mentioning the mystical “do calculus”. Pearl offers details on that in his textbook <span class="citation" data-cites="pearl2009causality"><a href="#ref-pearl2009causality" role="doc-biblioref">[3]</a></span>, but I want get up to speed faster, so I’ve been reading and watching other treatments <span class="citation" data-cites="tucci2013"><a href="#ref-tucci2013" role="doc-biblioref">[4]</a></span> <span class="citation" data-cites="neal2020"><a href="#ref-neal2020" role="doc-biblioref">[5]</a></span> <span class="citation" data-cites="facure2023causal"><a href="#ref-facure2023causal" role="doc-biblioref">[6]</a></span> <span class="citation" data-cites="ghosh2026karmamvbenchmarkcausalquestion"><a href="#ref-ghosh2026karmamvbenchmarkcausalquestion" role="doc-biblioref">[7]</a></span> <span class="citation" data-cites="bornstein2021lightningcausalexamples"><a href="#ref-bornstein2021lightningcausalexamples" role="doc-biblioref">[8]</a></span> <span class="citation" data-cites="krohn2025causalainess"><a href="#ref-krohn2025causalainess" role="doc-biblioref">[9]</a></span> <span class="citation" data-cites="Koch2025DeepLearningCausalInference"><a href="#ref-Koch2025DeepLearningCausalInference" role="doc-biblioref">[10]</a></span>, which most often are either “slow” or quickly throw up what I call the “Wall of Math.”<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>In this post, we’re going to catapult straight over that wall — starting immediately with code and calculation, introducing definitions and proofs only when we actually need them.</p>
+<p>In this post, we’re going to catapult straight over that wall — starting immediately with code and calculation, “do-”ing the “do-”calculus, introducing definitions and proofs only when we actually need them.</p>
 <!--- 
 # Intro (old
 
@@ -343,7 +343,29 @@ In this post, we're going to get started really fast: rapid acceleration so we *
 <section id="case-study-gear-acquisition-syndrome-gas" class="level1">
 <h1>Case Study: Gear Acquisition Syndrome (GAS)</h1>
 <p>Causal modeling introductions invariably choose some medical intervention as an illustrative example. Since my specialty is teaching audio engineers <span class="citation" data-cites="hawley2014bayes"><a href="#ref-hawley2014bayes" role="doc-biblioref">[11]</a></span>, we’ll discuss the sad affliction known as <strong><a href="https://www.joshuasarinana.com/sciart/the-science-of-gear-acquisition-syndrome">Gear Acquisition Syndrome (GAS)</a></strong>.</p>
-<p>GAS is a debilitating condition affecting millions of musicians worldwide. It is the (false) cognitive bias in which the musician thinks that buying gear will make them more talented, and therefore result in better sound.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<style>
+.img3 {
+    /*transform-origin: top left;*/
+    height:300px;
+    transition:transform 0.4s ease;
+    position: relative;
+    z-index: 0;
+}
+.img3:hover {
+    -webkit-transform:scale(1.6);
+    transform:scale(1.6);
+    z-index:1;
+}
+</style>
+<div id="bayes-audio-eng-img">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/bayesian_audio_eng.jpg" class="img3 img-fluid figure-img"></p>
+<figcaption>Slide from “Bayesian Analysis for Audio Engineers” <span class="citation" data-cites="hawley2014bayes"><a href="#ref-hawley2014bayes" role="doc-biblioref">[11]</a></span></figcaption>
+</figure>
+</div>
+</div>
+<p>GAS is a debilitating condition affecting millions of musicians worldwide. It is the (false) cognitive bias in which the musician thinks that buying gear will improve their playing, musicianship, performance, and/or overall “sound”.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> For this tutorial, we’ll use “sound” as a catch-all term, though we don’t mean to limit it to only tone quality.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -357,13 +379,15 @@ In this post, we're going to get started really fast: rapid acceleration so we *
 <p>GAS is an in-joke among musicians. It is a <em>fake</em> condition that highlights our <em>real</em> tendency to delude ourselves into justifying “unnecessary” purchases. (And yes, I can tell you <a href="https://www.guitarcenter.com/IK-Multimedia/iLoud-MTMMKII-Powered-Studio-Monitor-Pair-Black-1500000433087.gc?algoliaQueryID=95a6895560ac3368295ff8fc53db1e09&amp;algoliaIndexName=guitarcenter">exactly</a> what gear I “<a href="https://www.sweetwater.com/store/detail/Scar4i4G4--focusrite-scarlett-4i4-4th-gen-usb-audio-interface">need</a>” next.)</p>
 </div>
 </div>
+<div id="gas-image">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/gas_info.png" class="img-fluid figure-img"></p>
-<figcaption>GAS Infographic - Thanks NanoBanana!</figcaption>
+<p><img src="images/gas_info.png" class="img3 img-fluid figure-img"></p>
+<figcaption>GAS Infographic - Thanks NanoBanana</figcaption>
 </figure>
 </div>
-<p>While better gear can lead to better sound, we will explore using causal modeling whether gear actually has any impact on talent.</p>
+</div>
+<p>As we build our example, we’ll see that there’s a strong correlation between having fancy gear and sounding great — but is that correlation actually <em>causal</em>?</p>
 </section>
 <section id="lets-get-coding" class="level1">
 <h1>Let’s Get Coding!</h1>
@@ -1185,7 +1209,7 @@ setTimeout(initGraphs, 100);
 <div class="csl-left-margin">[10] </div><div class="csl-right-inline">B. J. Koch, T. Sainburg, P. G. Bastías, S. Jiang, Y. Sun, and J. G. Foster, <span>“A primer on deep learning for causal inference,”</span> <em>Sociological Methods &amp; Research</em>, vol. 54, no. 2, pp. 397–447, May 2025, doi: <a href="https://doi.org/10.1177/00491241241234866">10.1177/00491241241234866</a>.</div>
 </div>
 <div id="ref-hawley2014bayes" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[11] </div><div class="csl-right-inline"><span>“<span>B</span>ayesian analysis for audio engineers.”</span> invited lecture to Meeting of the Belmont <span>S</span>tudent <span>S</span>ection of the <span>A</span>udio <span>E</span>ngineering <span>S</span>ociety, 2014. Available: <a href="https://hedges.belmont.edu/BayesianAnalysisPartI.pdf">https://hedges.belmont.edu/BayesianAnalysisPartI.pdf</a></div>
+<div class="csl-left-margin">[11] </div><div class="csl-right-inline"><span>“<span>B</span>ayesian analysis for audio engineers.”</span> Meeting of the Belmont <span>S</span>tudent <span>S</span>ection of the <span>A</span>udio <span>E</span>ngineering <span>S</span>ociety, 2014. Available: <a href="https://hedges.belmont.edu/BayesianAnalysisPartI.pdf">https://hedges.belmont.edu/BayesianAnalysisPartI.pdf</a></div>
 </div>
 </div>
 <hr>
