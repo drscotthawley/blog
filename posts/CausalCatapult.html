@@ -289,10 +289,10 @@ window.Quarto = {
   <li><a href="#work-in-progress-come-back-later-for-more" id="toc-work-in-progress-come-back-later-for-more" class="nav-link active" data-scroll-target="#work-in-progress-come-back-later-for-more">—<em>Work in Progress! Come back later for more</em>—</a></li>
   <li><a href="#intro" id="toc-intro" class="nav-link" data-scroll-target="#intro">Intro</a></li>
   <li><a href="#case-study-gear-acquisition-syndrome-gas" id="toc-case-study-gear-acquisition-syndrome-gas" class="nav-link" data-scroll-target="#case-study-gear-acquisition-syndrome-gas">Case Study: Gear Acquisition Syndrome (GAS)</a></li>
-  <li><a href="#lets-get-coding" id="toc-lets-get-coding" class="nav-link" data-scroll-target="#lets-get-coding">Let’s Get Coding!</a>
+  <li><a href="#sample-data" id="toc-sample-data" class="nav-link" data-scroll-target="#sample-data">Sample Data</a></li>
+  <li><a href="#does-talent-matter" id="toc-does-talent-matter" class="nav-link" data-scroll-target="#does-talent-matter">Does Talent Matter?</a>
   <ul class="collapse">
   <li><a href="#defining-and-visualizing-graphs" id="toc-defining-and-visualizing-graphs" class="nav-link" data-scroll-target="#defining-and-visualizing-graphs">Defining and Visualizing Graphs</a></li>
-  <li><a href="#sample-data" id="toc-sample-data" class="nav-link" data-scroll-target="#sample-data">Sample Data</a></li>
   <li><a href="#the-key-question-as-math" id="toc-the-key-question-as-math" class="nav-link" data-scroll-target="#the-key-question-as-math">The Key Question as Math</a></li>
   </ul></li>
   <li><a href="#work-in-progress" id="toc-work-in-progress" class="nav-link" data-scroll-target="#work-in-progress">Work in Progress</a></li>
@@ -389,9 +389,335 @@ In this post, we're going to get started really fast: rapid acceleration so we *
 </div>
 <p>As we build our example, we’ll see that there’s a strong correlation between having fancy gear and sounding great — but is that correlation actually <em>causal</em>?</p>
 </section>
-<section id="lets-get-coding" class="level1">
-<h1>Let’s Get Coding!</h1>
-<p>Typically, causal inference tutorials delay the introduction of code until after time scale for <a href="https://en.wikipedia.org/wiki/Proton_decay">proton decay</a>, but this one is different. So get ready, we are launching the catapult – with us inside.</p>
+<section id="sample-data" class="level1">
+<h1>Sample Data</h1>
+<p>I made a fictitious 16-person dataset that mixes famous artists with anonymous randos. The naive/GAS view looks only at the correlation between <code>Gear</code> and <code>Sound</code>:</p>
+<div id="f1b8d15b-5b5c-4423-8a30-b919f9967345" class="cell">
+<details class="code-fold">
+<summary>Get dataset and display naive view</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'player_data.csv'</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>COLORS <span class="op">=</span> {</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Talent'</span>: {<span class="st">'High'</span>: <span class="st">'#4477AA'</span>, <span class="st">'Low'</span>:  <span class="st">'#CC6600'</span>},   <span class="co"># blue / orange</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Gear'</span>:   {<span class="st">'Fancy'</span>: <span class="st">'#AA3377'</span>, <span class="st">'Cheap'</span>: <span class="st">'#CC9900'</span>}, <span class="co"># purple / yellow  </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Sound'</span>:  {<span class="st">'Great'</span>: <span class="st">'#228833'</span>, <span class="st">'Bad'</span>:  <span class="st">'#BB4455'</span>},  <span class="co"># green / red-pink</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> style_col(val, col):</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> COLORS[col].get(val, <span class="st">''</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f'background-color: </span><span class="sc">{</span>c<span class="sc">}</span><span class="ss">; color: #EEEEEE'</span> <span class="cf">if</span> c <span class="cf">else</span> <span class="st">''</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>(df.drop(columns<span class="op">=</span>[<span class="st">'Talent'</span>]).style</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Gear'</span>],  col<span class="op">=</span><span class="st">'Gear'</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Sound'</span>], col<span class="op">=</span><span class="st">'Sound'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<style type="text/css">
+#T_6ba0d_row0_col1, #T_6ba0d_row1_col1, #T_6ba0d_row2_col1, #T_6ba0d_row3_col1, #T_6ba0d_row4_col1, #T_6ba0d_row5_col1, #T_6ba0d_row6_col1, #T_6ba0d_row7_col1 {
+  background-color: #AA3377;
+  color: #EEEEEE;
+}
+#T_6ba0d_row0_col2, #T_6ba0d_row2_col2, #T_6ba0d_row3_col2, #T_6ba0d_row4_col2, #T_6ba0d_row5_col2, #T_6ba0d_row8_col2, #T_6ba0d_row10_col2 {
+  background-color: #228833;
+  color: #EEEEEE;
+}
+#T_6ba0d_row1_col2, #T_6ba0d_row6_col2, #T_6ba0d_row7_col2, #T_6ba0d_row9_col2, #T_6ba0d_row11_col2, #T_6ba0d_row12_col2, #T_6ba0d_row13_col2, #T_6ba0d_row14_col2, #T_6ba0d_row15_col2 {
+  background-color: #BB4455;
+  color: #EEEEEE;
+}
+#T_6ba0d_row8_col1, #T_6ba0d_row9_col1, #T_6ba0d_row10_col1, #T_6ba0d_row11_col1, #T_6ba0d_row12_col1, #T_6ba0d_row13_col1, #T_6ba0d_row14_col1, #T_6ba0d_row15_col1 {
+  background-color: #CC9900;
+  color: #EEEEEE;
+}
+</style>
+
+<table id="T_6ba0d" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_6ba0d_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Name</th>
+<th id="T_6ba0d_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Gear</th>
+<th id="T_6ba0d_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Sound</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_6ba0d_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
+<td id="T_6ba0d_row0_col0" class="data row0 col0">Tom Scholz</td>
+<td id="T_6ba0d_row0_col1" class="data row0 col1">Fancy</td>
+<td id="T_6ba0d_row0_col2" class="data row0 col2">Great</td>
+</tr>
+<tr class="even">
+<th id="T_6ba0d_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
+<td id="T_6ba0d_row1_col0" class="data row1 col0">Jeff Beck</td>
+<td id="T_6ba0d_row1_col1" class="data row1 col1">Fancy</td>
+<td id="T_6ba0d_row1_col2" class="data row1 col2">Bad</td>
+</tr>
+<tr class="odd">
+<th id="T_6ba0d_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
+<td id="T_6ba0d_row2_col0" class="data row2 col0">Jimi</td>
+<td id="T_6ba0d_row2_col1" class="data row2 col1">Fancy</td>
+<td id="T_6ba0d_row2_col2" class="data row2 col2">Great</td>
+</tr>
+<tr class="even">
+<th id="T_6ba0d_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
+<td id="T_6ba0d_row3_col0" class="data row3 col0">Prince</td>
+<td id="T_6ba0d_row3_col1" class="data row3 col1">Fancy</td>
+<td id="T_6ba0d_row3_col2" class="data row3 col2">Great</td>
+</tr>
+<tr class="odd">
+<th id="T_6ba0d_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
+<td id="T_6ba0d_row4_col0" class="data row4 col0">Jenny</td>
+<td id="T_6ba0d_row4_col1" class="data row4 col1">Fancy</td>
+<td id="T_6ba0d_row4_col2" class="data row4 col2">Great</td>
+</tr>
+<tr class="even">
+<th id="T_6ba0d_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">5</th>
+<td id="T_6ba0d_row5_col0" class="data row5 col0">Jay</td>
+<td id="T_6ba0d_row5_col1" class="data row5 col1">Fancy</td>
+<td id="T_6ba0d_row5_col2" class="data row5 col2">Great</td>
+</tr>
+<tr class="odd">
+<th id="T_6ba0d_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">6</th>
+<td id="T_6ba0d_row6_col0" class="data row6 col0">Bill</td>
+<td id="T_6ba0d_row6_col1" class="data row6 col1">Fancy</td>
+<td id="T_6ba0d_row6_col2" class="data row6 col2">Bad</td>
+</tr>
+<tr class="even">
+<th id="T_6ba0d_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">7</th>
+<td id="T_6ba0d_row7_col0" class="data row7 col0">Paris Hilton</td>
+<td id="T_6ba0d_row7_col1" class="data row7 col1">Fancy</td>
+<td id="T_6ba0d_row7_col2" class="data row7 col2">Bad</td>
+</tr>
+<tr class="odd">
+<th id="T_6ba0d_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">8</th>
+<td id="T_6ba0d_row8_col0" class="data row8 col0">Milli Vanilli</td>
+<td id="T_6ba0d_row8_col1" class="data row8 col1">Cheap</td>
+<td id="T_6ba0d_row8_col2" class="data row8 col2">Great</td>
+</tr>
+<tr class="even">
+<th id="T_6ba0d_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">9</th>
+<td id="T_6ba0d_row9_col0" class="data row9 col0">Bob Dylan</td>
+<td id="T_6ba0d_row9_col1" class="data row9 col1">Cheap</td>
+<td id="T_6ba0d_row9_col2" class="data row9 col2">Bad</td>
+</tr>
+<tr class="odd">
+<th id="T_6ba0d_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">10</th>
+<td id="T_6ba0d_row10_col0" class="data row10 col0">Dale</td>
+<td id="T_6ba0d_row10_col1" class="data row10 col1">Cheap</td>
+<td id="T_6ba0d_row10_col2" class="data row10 col2">Great</td>
+</tr>
+<tr class="even">
+<th id="T_6ba0d_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">11</th>
+<td id="T_6ba0d_row11_col0" class="data row11 col0">Todd</td>
+<td id="T_6ba0d_row11_col1" class="data row11 col1">Cheap</td>
+<td id="T_6ba0d_row11_col2" class="data row11 col2">Bad</td>
+</tr>
+<tr class="odd">
+<th id="T_6ba0d_level0_row12" class="row_heading level0 row12" data-quarto-table-cell-role="th">12</th>
+<td id="T_6ba0d_row12_col0" class="data row12 col0">Bubba</td>
+<td id="T_6ba0d_row12_col1" class="data row12 col1">Cheap</td>
+<td id="T_6ba0d_row12_col2" class="data row12 col2">Bad</td>
+</tr>
+<tr class="even">
+<th id="T_6ba0d_level0_row13" class="row_heading level0 row13" data-quarto-table-cell-role="th">13</th>
+<td id="T_6ba0d_row13_col0" class="data row13 col0">Abe</td>
+<td id="T_6ba0d_row13_col1" class="data row13 col1">Cheap</td>
+<td id="T_6ba0d_row13_col2" class="data row13 col2">Bad</td>
+</tr>
+<tr class="odd">
+<th id="T_6ba0d_level0_row14" class="row_heading level0 row14" data-quarto-table-cell-role="th">14</th>
+<td id="T_6ba0d_row14_col0" class="data row14 col0">Earnest</td>
+<td id="T_6ba0d_row14_col1" class="data row14 col1">Cheap</td>
+<td id="T_6ba0d_row14_col2" class="data row14 col2">Bad</td>
+</tr>
+<tr class="even">
+<th id="T_6ba0d_level0_row15" class="row_heading level0 row15" data-quarto-table-cell-role="th">15</th>
+<td id="T_6ba0d_row15_col0" class="data row15 col0">Mongo</td>
+<td id="T_6ba0d_row15_col1" class="data row15 col1">Cheap</td>
+<td id="T_6ba0d_row15_col2" class="data row15 col2">Bad</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br> We’ll regard <code>Sound</code> as the “outcome”, the thing we measure via listening tests where listeners rate their preferences. We could imagine listeners submitting ranking scores and averaging them into a Mean Opinion Score (MOS), but for now it suffices to imagine (binary) <a href="https://www.yum-audio.com/blog/a-b-testing-in-music-production-the-ultimate-guide/">A/B Testing</a> for user preferences. Following causal inference conventions, we’ll denote the outcome as <span class="math inline">\(Y\)</span> and use binary values:</p>
+<ul>
+<li><span class="math inline">\(Y=1\)</span>: Sounds Great</li>
+<li><span class="math inline">\(Y=0\)</span>: Sounds Bad (Technical term: “like ass”)</li>
+</ul>
+<p>According this view, <span class="math inline">\(P(\rm{Sound=Great | Gear=Fancy})\)</span> = 5/8 = 0.625. =&gt; Looks like better gear probably makes you sound better!</p>
+</section>
+<section id="does-talent-matter" class="level1">
+<h1>Does Talent Matter?</h1>
+<p>There’s a bit more to the dataset if we probe deeper. There’s also info on the players level of “<code>Talent</code>:</p>
+<div id="e9856794-c49d-4ae4-812e-ed6f0e6c75fa" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(df.style</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Talent'</span>], col<span class="op">=</span><span class="st">'Talent'</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Gear'</span>],   col<span class="op">=</span><span class="st">'Gear'</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Sound'</span>],  col<span class="op">=</span><span class="st">'Sound'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<style type="text/css">
+#T_d5e48_row0_col1, #T_d5e48_row1_col1, #T_d5e48_row2_col1, #T_d5e48_row3_col1, #T_d5e48_row4_col1, #T_d5e48_row5_col1, #T_d5e48_row6_col1, #T_d5e48_row9_col1 {
+  background-color: #4477AA;
+  color: #EEEEEE;
+}
+#T_d5e48_row0_col2, #T_d5e48_row1_col2, #T_d5e48_row2_col2, #T_d5e48_row3_col2, #T_d5e48_row4_col2, #T_d5e48_row5_col2, #T_d5e48_row6_col2, #T_d5e48_row7_col2 {
+  background-color: #AA3377;
+  color: #EEEEEE;
+}
+#T_d5e48_row0_col3, #T_d5e48_row2_col3, #T_d5e48_row3_col3, #T_d5e48_row4_col3, #T_d5e48_row5_col3, #T_d5e48_row8_col3, #T_d5e48_row10_col3 {
+  background-color: #228833;
+  color: #EEEEEE;
+}
+#T_d5e48_row1_col3, #T_d5e48_row6_col3, #T_d5e48_row7_col3, #T_d5e48_row9_col3, #T_d5e48_row11_col3, #T_d5e48_row12_col3, #T_d5e48_row13_col3, #T_d5e48_row14_col3, #T_d5e48_row15_col3 {
+  background-color: #BB4455;
+  color: #EEEEEE;
+}
+#T_d5e48_row7_col1, #T_d5e48_row8_col1, #T_d5e48_row10_col1, #T_d5e48_row11_col1, #T_d5e48_row12_col1, #T_d5e48_row13_col1, #T_d5e48_row14_col1, #T_d5e48_row15_col1 {
+  background-color: #CC6600;
+  color: #EEEEEE;
+}
+#T_d5e48_row8_col2, #T_d5e48_row9_col2, #T_d5e48_row10_col2, #T_d5e48_row11_col2, #T_d5e48_row12_col2, #T_d5e48_row13_col2, #T_d5e48_row14_col2, #T_d5e48_row15_col2 {
+  background-color: #CC9900;
+  color: #EEEEEE;
+}
+</style>
+
+<table id="T_d5e48" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_d5e48_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Name</th>
+<th id="T_d5e48_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Talent</th>
+<th id="T_d5e48_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Gear</th>
+<th id="T_d5e48_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Sound</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_d5e48_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
+<td id="T_d5e48_row0_col0" class="data row0 col0">Tom Scholz</td>
+<td id="T_d5e48_row0_col1" class="data row0 col1">High</td>
+<td id="T_d5e48_row0_col2" class="data row0 col2">Fancy</td>
+<td id="T_d5e48_row0_col3" class="data row0 col3">Great</td>
+</tr>
+<tr class="even">
+<th id="T_d5e48_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
+<td id="T_d5e48_row1_col0" class="data row1 col0">Jeff Beck</td>
+<td id="T_d5e48_row1_col1" class="data row1 col1">High</td>
+<td id="T_d5e48_row1_col2" class="data row1 col2">Fancy</td>
+<td id="T_d5e48_row1_col3" class="data row1 col3">Bad</td>
+</tr>
+<tr class="odd">
+<th id="T_d5e48_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
+<td id="T_d5e48_row2_col0" class="data row2 col0">Jimi</td>
+<td id="T_d5e48_row2_col1" class="data row2 col1">High</td>
+<td id="T_d5e48_row2_col2" class="data row2 col2">Fancy</td>
+<td id="T_d5e48_row2_col3" class="data row2 col3">Great</td>
+</tr>
+<tr class="even">
+<th id="T_d5e48_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
+<td id="T_d5e48_row3_col0" class="data row3 col0">Prince</td>
+<td id="T_d5e48_row3_col1" class="data row3 col1">High</td>
+<td id="T_d5e48_row3_col2" class="data row3 col2">Fancy</td>
+<td id="T_d5e48_row3_col3" class="data row3 col3">Great</td>
+</tr>
+<tr class="odd">
+<th id="T_d5e48_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
+<td id="T_d5e48_row4_col0" class="data row4 col0">Jenny</td>
+<td id="T_d5e48_row4_col1" class="data row4 col1">High</td>
+<td id="T_d5e48_row4_col2" class="data row4 col2">Fancy</td>
+<td id="T_d5e48_row4_col3" class="data row4 col3">Great</td>
+</tr>
+<tr class="even">
+<th id="T_d5e48_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">5</th>
+<td id="T_d5e48_row5_col0" class="data row5 col0">Jay</td>
+<td id="T_d5e48_row5_col1" class="data row5 col1">High</td>
+<td id="T_d5e48_row5_col2" class="data row5 col2">Fancy</td>
+<td id="T_d5e48_row5_col3" class="data row5 col3">Great</td>
+</tr>
+<tr class="odd">
+<th id="T_d5e48_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">6</th>
+<td id="T_d5e48_row6_col0" class="data row6 col0">Bill</td>
+<td id="T_d5e48_row6_col1" class="data row6 col1">High</td>
+<td id="T_d5e48_row6_col2" class="data row6 col2">Fancy</td>
+<td id="T_d5e48_row6_col3" class="data row6 col3">Bad</td>
+</tr>
+<tr class="even">
+<th id="T_d5e48_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">7</th>
+<td id="T_d5e48_row7_col0" class="data row7 col0">Paris Hilton</td>
+<td id="T_d5e48_row7_col1" class="data row7 col1">Low</td>
+<td id="T_d5e48_row7_col2" class="data row7 col2">Fancy</td>
+<td id="T_d5e48_row7_col3" class="data row7 col3">Bad</td>
+</tr>
+<tr class="odd">
+<th id="T_d5e48_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">8</th>
+<td id="T_d5e48_row8_col0" class="data row8 col0">Milli Vanilli</td>
+<td id="T_d5e48_row8_col1" class="data row8 col1">Low</td>
+<td id="T_d5e48_row8_col2" class="data row8 col2">Cheap</td>
+<td id="T_d5e48_row8_col3" class="data row8 col3">Great</td>
+</tr>
+<tr class="even">
+<th id="T_d5e48_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">9</th>
+<td id="T_d5e48_row9_col0" class="data row9 col0">Bob Dylan</td>
+<td id="T_d5e48_row9_col1" class="data row9 col1">High</td>
+<td id="T_d5e48_row9_col2" class="data row9 col2">Cheap</td>
+<td id="T_d5e48_row9_col3" class="data row9 col3">Bad</td>
+</tr>
+<tr class="odd">
+<th id="T_d5e48_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">10</th>
+<td id="T_d5e48_row10_col0" class="data row10 col0">Dale</td>
+<td id="T_d5e48_row10_col1" class="data row10 col1">Low</td>
+<td id="T_d5e48_row10_col2" class="data row10 col2">Cheap</td>
+<td id="T_d5e48_row10_col3" class="data row10 col3">Great</td>
+</tr>
+<tr class="even">
+<th id="T_d5e48_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">11</th>
+<td id="T_d5e48_row11_col0" class="data row11 col0">Todd</td>
+<td id="T_d5e48_row11_col1" class="data row11 col1">Low</td>
+<td id="T_d5e48_row11_col2" class="data row11 col2">Cheap</td>
+<td id="T_d5e48_row11_col3" class="data row11 col3">Bad</td>
+</tr>
+<tr class="odd">
+<th id="T_d5e48_level0_row12" class="row_heading level0 row12" data-quarto-table-cell-role="th">12</th>
+<td id="T_d5e48_row12_col0" class="data row12 col0">Bubba</td>
+<td id="T_d5e48_row12_col1" class="data row12 col1">Low</td>
+<td id="T_d5e48_row12_col2" class="data row12 col2">Cheap</td>
+<td id="T_d5e48_row12_col3" class="data row12 col3">Bad</td>
+</tr>
+<tr class="even">
+<th id="T_d5e48_level0_row13" class="row_heading level0 row13" data-quarto-table-cell-role="th">13</th>
+<td id="T_d5e48_row13_col0" class="data row13 col0">Abe</td>
+<td id="T_d5e48_row13_col1" class="data row13 col1">Low</td>
+<td id="T_d5e48_row13_col2" class="data row13 col2">Cheap</td>
+<td id="T_d5e48_row13_col3" class="data row13 col3">Bad</td>
+</tr>
+<tr class="odd">
+<th id="T_d5e48_level0_row14" class="row_heading level0 row14" data-quarto-table-cell-role="th">14</th>
+<td id="T_d5e48_row14_col0" class="data row14 col0">Earnest</td>
+<td id="T_d5e48_row14_col1" class="data row14 col1">Low</td>
+<td id="T_d5e48_row14_col2" class="data row14 col2">Cheap</td>
+<td id="T_d5e48_row14_col3" class="data row14 col3">Bad</td>
+</tr>
+<tr class="even">
+<th id="T_d5e48_level0_row15" class="row_heading level0 row15" data-quarto-table-cell-role="th">15</th>
+<td id="T_d5e48_row15_col0" class="data row15 col0">Mongo</td>
+<td id="T_d5e48_row15_col1" class="data row15 col1">Low</td>
+<td id="T_d5e48_row15_col2" class="data row15 col2">Cheap</td>
+<td id="T_d5e48_row15_col3" class="data row15 col3">Bad</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Hmmmmm…. ?? Interesting. So somehow <code>Talent</code> is bound up with <code>Sound</code> too, and it’s also strongly correlated with <code>Gear</code>. In this case, <code>Talent</code> is known as a “confounder”, and we’ll explore its influence as we go on in the tutorial.</p>
+<p>But first, let’s build a little machinery so we can work with graphical represenations of causal models.</p>
 <section id="defining-and-visualizing-graphs" class="level2">
 <h2 class="anchored" data-anchor-id="defining-and-visualizing-graphs">Defining and Visualizing Graphs</h2>
 <p>First we need to be able to define and take a look at the graphs that will comprise our causal models. We’ll set up the graph with Python (nodes, edges, directions) then push it to the viz routine so we can see it and move it around. I can’t articulate my intended applications, but based on my interests, I’m use a few libraries for this:</p>
@@ -402,169 +728,156 @@ In this post, we're going to get started really fast: rapid acceleration so we *
 <li><strong>PyTorch</strong> for other sundry numerical calculations, since ultimately I want to do “machine learning stuff”</li>
 </ol>
 <p>We won’t use causal inference-specific libraries like <a href="https://github.com/uber/causalml">CausalML</a> or <a href="https://github.com/py-why/EconML">EconML</a>, …, etc. because I suspect they would likely hide and/or automate the bits I hope to learn to implement.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>I will often hide the code via folds to preserve the narrative unless there’s some code that I really want you to see.</p>
-</div>
-</div>
 <div id="16588c95-bba8-49a6-a550-aeded8893f9a" class="cell">
 <details class="code-fold">
 <summary>Installing Packages</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>uv pip install networkx matplotlib torch torchvision <span class="op">--</span>quiet</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>uv pip install networkx matplotlib torch torchvision <span class="op">--</span>quiet</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>Let’s define a small graph or two with <code>NetworkX</code>:</p>
 <div id="a1ff96cf-fbc8-47f0-ad66-77bc4dc731d4" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> copy</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Gear Acquisition Syndrome</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> nx.DiGraph()</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Gear"</span>,   role<span class="op">=</span><span class="st">"treatment"</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Sound"</span>,  role<span class="op">=</span><span class="st">"outcome"</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>G.add_edges_from([(<span class="st">"Gear"</span>, <span class="st">"Sound"</span>),])</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># "Reality"</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>G2 <span class="op">=</span> copy.deepcopy(G)</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>G2.add_node(<span class="st">"Talent"</span>, role<span class="op">=</span><span class="st">"confounder"</span>)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>G2.add_edges_from([</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,   <span class="st">"Sound"</span>),</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,   <span class="st">"Gear"</span>,),</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> copy</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Gear Acquisition Syndrome</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> nx.DiGraph()</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Gear"</span>,   role<span class="op">=</span><span class="st">"treatment"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>G.add_node(<span class="st">"Sound"</span>,  role<span class="op">=</span><span class="st">"outcome"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>G.add_edges_from([(<span class="st">"Gear"</span>, <span class="st">"Sound"</span>),])</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># "Reality"</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>G2 <span class="op">=</span> copy.deepcopy(G)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>G2.add_node(<span class="st">"Talent"</span>, role<span class="op">=</span><span class="st">"confounder"</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>G2.add_edges_from([</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,   <span class="st">"Sound"</span>),</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,   <span class="st">"Gear"</span>,),</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>And then visualize with D3.js – try dragging the nodes around!</p>
 <div id="e2c3fd7a" class="cell">
 <details class="code-fold">
 <summary>Visualization utility code — feel free to ignore</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Did I let Claude generate this code cell? ABSOLUTELY</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json, itertools</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> HTML</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>ROLE_COLORS <span class="op">=</span> {</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"treatment"</span>:  <span class="st">"#c0392b"</span>,  <span class="co"># dark red</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"outcome"</span>:    <span class="st">"#1e8449"</span>,  <span class="co"># dark green</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"confounder"</span>: <span class="st">"#6c3483"</span>,  <span class="co"># dark purple</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"default"</span>:    <span class="st">"#2471a3"</span>,  <span class="co"># dark blue</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>_dag_counter <span class="op">=</span> itertools.count()</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_dag(G, width<span class="op">=</span><span class="dv">600</span>, height<span class="op">=</span><span class="dv">300</span>, node_size<span class="op">=</span><span class="dv">34</span>, font_size<span class="op">=</span><span class="dv">13</span>, title<span class="op">=</span><span class="st">""</span>):</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">isinstance</span>(G, <span class="bu">list</span>):</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        G, title <span class="op">=</span> [G], [title]</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> <span class="kw">not</span> <span class="bu">isinstance</span>(title, <span class="bu">list</span>):</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> [title] <span class="op">*</span> <span class="bu">len</span>(G)</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    specs <span class="op">=</span> []</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    divs  <span class="op">=</span> []</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> g, t <span class="kw">in</span> <span class="bu">zip</span>(G, title):</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        nodes <span class="op">=</span> [{<span class="st">"id"</span>: <span class="bu">str</span>(n), <span class="st">"color"</span>: ROLE_COLORS.get(d.get(<span class="st">"role"</span>), ROLE_COLORS[<span class="st">"default"</span>])}</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>                 <span class="cf">for</span> n, d <span class="kw">in</span> g.nodes(data<span class="op">=</span><span class="va">True</span>)]</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        links <span class="op">=</span> [{<span class="st">"source"</span>: <span class="bu">str</span>(u), <span class="st">"target"</span>: <span class="bu">str</span>(v), <span class="st">"label"</span>: d.get(<span class="st">"label"</span>, <span class="st">""</span>)}</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>                 <span class="cf">for</span> u, v, d <span class="kw">in</span> g.edges(data<span class="op">=</span><span class="va">True</span>)]</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        uid <span class="op">=</span> <span class="ss">f"dag</span><span class="sc">{</span><span class="bu">next</span>(_dag_counter)<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        specs.append({<span class="st">"uid"</span>: uid, <span class="st">"nodes"</span>: nodes, <span class="st">"links"</span>: links,</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"title"</span>: t, <span class="st">"titleOffset"</span>: <span class="dv">28</span> <span class="cf">if</span> t <span class="cf">else</span> <span class="dv">0</span>})</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>        divs.append(<span class="ss">f'&lt;div id="</span><span class="sc">{</span>uid<span class="sc">}</span><span class="ss">" style="width:</span><span class="sc">{</span>width<span class="sc">}</span><span class="ss">px;height:</span><span class="sc">{</span>height<span class="sc">}</span><span class="ss">px;'</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>                    <span class="ss">f'border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"&gt;&lt;/div&gt;'</span>)</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    specs_json <span class="op">=</span> json.dumps(specs)</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    container  <span class="op">=</span> <span class="st">'&lt;div style="display:flex;gap:12px;flex-wrap:wrap;"&gt;'</span> <span class="op">+</span> <span class="st">""</span>.join(divs) <span class="op">+</span> <span class="st">'&lt;/div&gt;'</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    script <span class="op">=</span> <span class="ss">f"""</span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="ss">&lt;script type="module"&gt;</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="ss">import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";</span></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="ss">function initGraphs() </span><span class="ch">{{</span></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="ss">  const specs = </span><span class="sc">{</span>specs_json<span class="sc">}</span><span class="ss">;</span></span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="ss">  const W = </span><span class="sc">{</span>width<span class="sc">}</span><span class="ss">, H = </span><span class="sc">{</span>height<span class="sc">}</span><span class="ss">, R = </span><span class="sc">{</span>node_size<span class="sc">}</span><span class="ss">, FS = </span><span class="sc">{</span>font_size<span class="sc">}</span><span class="ss">;</span></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="ss">  console.log("initGraphs: found", specs.length, "specs");</span></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="ss">  for (const spec of specs) </span><span class="ch">{{</span></span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="ss">    const </span><span class="ch">{{</span><span class="ss">uid, nodes, links, title, titleOffset</span><span class="ch">}}</span><span class="ss"> = spec;</span></span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="ss">    const el = document.getElementById(uid);</span></span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="ss">    console.log("Looking for #" + uid + ":", el);</span></span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="ss">    if (!el) continue;</span></span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="ss">    const w = W, h = H, r = R, fs = FS;</span></span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="ss">    const svg = d3.select(el).append("svg").attr("width", w).attr("height", h);</span></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="ss">    if (title) </span><span class="ch">{{</span></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="ss">      svg.append("text").attr("x", w/2).attr("y", 30)  // title placement</span></span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="ss">        .attr("text-anchor", "middle").attr("fill", "#ccc")</span></span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="ss">        .attr("font-size", "18px").attr("font-family", "sans-serif").attr("font-weight", "bold")</span></span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="ss">        .text(title);</span></span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="ss">    svg.append("defs").append("marker")</span></span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("id", uid + "-arrow").attr("viewBox", "0 -5 10 10")</span></span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("refX", 10).attr("refY", 0).attr("markerWidth", 7).attr("markerHeight", 7).attr("orient", "auto")</span></span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="ss">      .append("path").attr("d", "M0,-5L10,0L0,5").attr("fill", "#aaa");</span></span>
-<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="ss">    const linkData = links.map(l =&gt; (</span><span class="ch">{{</span><span class="ss">...l</span><span class="ch">}}</span><span class="ss">));</span></span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a><span class="ss">    const nodeData = nodes.map(n =&gt; (</span><span class="ch">{{</span><span class="ss">...n</span><span class="ch">}}</span><span class="ss">));</span></span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="ss">    const sim = d3.forceSimulation(nodeData)</span></span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="ss">      .force("link", d3.forceLink(linkData).id(d =&gt; d.id).distance(140))</span></span>
-<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a><span class="ss">      .force("charge", d3.forceManyBody().strength(-500))</span></span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="ss">      .force("center", d3.forceCenter(w/2, titleOffset/2 + h/2));</span></span>
-<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="ss">    const link = svg.append("g").selectAll("line").data(linkData).join("line")</span></span>
-<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("stroke", "#aaa").attr("stroke-width", 2)</span></span>
-<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("marker-end", "url(#" + uid + "-arrow)");</span></span>
-<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a><span class="ss">    const edgeLabels = svg.append("g").selectAll("text").data(linkData.filter(d =&gt; d.label)).join("text")</span></span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("text-anchor", "middle").attr("fill", "#ffdd57")</span></span>
-<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("font-size", "16px").attr("font-family", "sans-serif").attr("font-weight", "bold")</span></span>
-<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a><span class="ss">      .text(d =&gt; d.label);</span></span>
-<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a><span class="ss">    const node = svg.append("g").selectAll("g").data(nodeData).join("g")</span></span>
-<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a><span class="ss">      .call(d3.drag()</span></span>
-<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a><span class="ss">        .on("start", (e,d) =&gt; </span><span class="ch">{{</span><span class="ss"> if (!e.active) sim.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; </span><span class="ch">}}</span><span class="ss">)</span></span>
-<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a><span class="ss">        .on("drag",  (e,d) =&gt; </span><span class="ch">{{</span><span class="ss"> d.fx=e.x; d.fy=e.y; </span><span class="ch">}}</span><span class="ss">)</span></span>
-<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a><span class="ss">        .on("end",   (e,d) =&gt; </span><span class="ch">{{</span><span class="ss"> if (!e.active) sim.alphaTarget(0); d.fx=null; d.fy=null; </span><span class="ch">}}</span><span class="ss">));</span></span>
-<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a><span class="ss">    node.append("circle").attr("r", r).attr("fill", d =&gt; d.color).attr("stroke", "#fff").attr("stroke-width", 1.5);</span></span>
-<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a><span class="ss">    node.each(function(d) </span><span class="ch">{{</span></span>
-<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a><span class="ss">      const lines = d.id.split("</span><span class="ch">\\</span><span class="ss">n");</span></span>
-<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a><span class="ss">      const txt = d3.select(this).append("text").attr("text-anchor", "middle")</span></span>
-<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a><span class="ss">        .attr("fill", "white").attr("font-size", fs+"px").attr("font-family", "sans-serif");</span></span>
-<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a><span class="ss">      const lh = fs * 1.2, yStart = -((lines.length - 1) * lh) / 2;</span></span>
-<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a><span class="ss">      lines.forEach((line, i) =&gt; </span><span class="ch">{{</span></span>
-<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a><span class="ss">        txt.append("tspan").attr("x", 0).attr("y", yStart + i*lh).attr("dy", "0.35em").text(line);</span></span>
-<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a><span class="ss">      </span><span class="ch">}}</span><span class="ss">);</span></span>
-<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span><span class="ss">);</span></span>
-<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a><span class="ss">    sim.on("tick", () =&gt; </span><span class="ch">{{</span></span>
-<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a><span class="ss">      link.each(function(d) </span><span class="ch">{{</span></span>
-<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a><span class="ss">        const dx = d.target.x-d.source.x, dy = d.target.y-d.source.y;</span></span>
-<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a><span class="ss">        const dist = Math.sqrt(dx*dx+dy*dy) || 1, ux = dx/dist, uy = dy/dist;</span></span>
-<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a><span class="ss">        d3.select(this)</span></span>
-<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a><span class="ss">          .attr("x1", d.source.x+ux*r).attr("y1", d.source.y+uy*r)</span></span>
-<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a><span class="ss">          .attr("x2", d.target.x-ux*r).attr("y2", d.target.y-uy*r);</span></span>
-<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a><span class="ss">      </span><span class="ch">}}</span><span class="ss">);</span></span>
-<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a><span class="ss">      edgeLabels</span></span>
-<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a><span class="ss">        .attr("x", d =&gt; (d.source.x+d.target.x)/2)</span></span>
-<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a><span class="ss">        .attr("y", d =&gt; (d.source.y+d.target.y)/2 - 8);</span></span>
-<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a><span class="ss">      node.attr("transform", d =&gt; `translate($</span><span class="ch">{{</span><span class="ss">d.x</span><span class="ch">}}</span><span class="ss">,$</span><span class="ch">{{</span><span class="ss">d.y</span><span class="ch">}}</span><span class="ss">)`);</span></span>
-<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span><span class="ss">);</span></span>
-<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a><span class="ss">  </span><span class="ch">}}</span></span>
-<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a><span class="ch">}}</span></span>
-<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a><span class="ss">setTimeout(initGraphs, 100);</span></span>
-<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a><span class="ss">&lt;/script&gt;</span></span>
-<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span></span>
-<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> HTML(container <span class="op">+</span> script)</span>
-<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a>show_dag([G, G2], width<span class="op">=</span><span class="dv">330</span>, height<span class="op">=</span><span class="dv">320</span>, title<span class="op">=</span>[<span class="st">"Gear Acquisition Syndrome"</span>, <span class="st">"Reality"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Did I let Claude generate this code cell? ABSOLUTELY</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json, itertools</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> HTML</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>ROLE_COLORS <span class="op">=</span> {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"treatment"</span>:  <span class="st">"#c0392b"</span>,  <span class="co"># dark red</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"outcome"</span>:    <span class="st">"#1e8449"</span>,  <span class="co"># dark green</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"confounder"</span>: <span class="st">"#6c3483"</span>,  <span class="co"># dark purple</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"default"</span>:    <span class="st">"#2471a3"</span>,  <span class="co"># dark blue</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>_dag_counter <span class="op">=</span> itertools.count()</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> show_dag(G, width<span class="op">=</span><span class="dv">600</span>, height<span class="op">=</span><span class="dv">300</span>, node_size<span class="op">=</span><span class="dv">34</span>, font_size<span class="op">=</span><span class="dv">13</span>, title<span class="op">=</span><span class="st">""</span>):</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">isinstance</span>(G, <span class="bu">list</span>):</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        G, title <span class="op">=</span> [G], [title]</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> <span class="kw">not</span> <span class="bu">isinstance</span>(title, <span class="bu">list</span>):</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        title <span class="op">=</span> [title] <span class="op">*</span> <span class="bu">len</span>(G)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    specs <span class="op">=</span> []</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    divs  <span class="op">=</span> []</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> g, t <span class="kw">in</span> <span class="bu">zip</span>(G, title):</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        nodes <span class="op">=</span> [{<span class="st">"id"</span>: <span class="bu">str</span>(n), <span class="st">"color"</span>: ROLE_COLORS.get(d.get(<span class="st">"role"</span>), ROLE_COLORS[<span class="st">"default"</span>])}</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>                 <span class="cf">for</span> n, d <span class="kw">in</span> g.nodes(data<span class="op">=</span><span class="va">True</span>)]</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>        links <span class="op">=</span> [{<span class="st">"source"</span>: <span class="bu">str</span>(u), <span class="st">"target"</span>: <span class="bu">str</span>(v), <span class="st">"label"</span>: d.get(<span class="st">"label"</span>, <span class="st">""</span>)}</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>                 <span class="cf">for</span> u, v, d <span class="kw">in</span> g.edges(data<span class="op">=</span><span class="va">True</span>)]</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>        uid <span class="op">=</span> <span class="ss">f"dag</span><span class="sc">{</span><span class="bu">next</span>(_dag_counter)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        specs.append({<span class="st">"uid"</span>: uid, <span class="st">"nodes"</span>: nodes, <span class="st">"links"</span>: links,</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"title"</span>: t, <span class="st">"titleOffset"</span>: <span class="dv">28</span> <span class="cf">if</span> t <span class="cf">else</span> <span class="dv">0</span>})</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>        divs.append(<span class="ss">f'&lt;div id="</span><span class="sc">{</span>uid<span class="sc">}</span><span class="ss">" style="width:</span><span class="sc">{</span>width<span class="sc">}</span><span class="ss">px;height:</span><span class="sc">{</span>height<span class="sc">}</span><span class="ss">px;'</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>                    <span class="ss">f'border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"&gt;&lt;/div&gt;'</span>)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    specs_json <span class="op">=</span> json.dumps(specs)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    container  <span class="op">=</span> <span class="st">'&lt;div style="display:flex;gap:12px;flex-wrap:wrap;"&gt;'</span> <span class="op">+</span> <span class="st">""</span>.join(divs) <span class="op">+</span> <span class="st">'&lt;/div&gt;'</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    script <span class="op">=</span> <span class="ss">f"""</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="ss">&lt;script type="module"&gt;</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="ss">import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="ss">function initGraphs() </span><span class="ch">{{</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="ss">  const specs = </span><span class="sc">{</span>specs_json<span class="sc">}</span><span class="ss">;</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="ss">  const W = </span><span class="sc">{</span>width<span class="sc">}</span><span class="ss">, H = </span><span class="sc">{</span>height<span class="sc">}</span><span class="ss">, R = </span><span class="sc">{</span>node_size<span class="sc">}</span><span class="ss">, FS = </span><span class="sc">{</span>font_size<span class="sc">}</span><span class="ss">;</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="ss">  console.log("initGraphs: found", specs.length, "specs");</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="ss">  for (const spec of specs) </span><span class="ch">{{</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="ss">    const </span><span class="ch">{{</span><span class="ss">uid, nodes, links, title, titleOffset</span><span class="ch">}}</span><span class="ss"> = spec;</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="ss">    const el = document.getElementById(uid);</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="ss">    console.log("Looking for #" + uid + ":", el);</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="ss">    if (!el) continue;</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="ss">    const w = W, h = H, r = R, fs = FS;</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="ss">    const svg = d3.select(el).append("svg").attr("width", w).attr("height", h);</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="ss">    if (title) </span><span class="ch">{{</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="ss">      svg.append("text").attr("x", w/2).attr("y", 30)  // title placement</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="ss">        .attr("text-anchor", "middle").attr("fill", "#ccc")</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a><span class="ss">        .attr("font-size", "18px").attr("font-family", "sans-serif").attr("font-weight", "bold")</span></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="ss">        .text(title);</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a><span class="ss">    svg.append("defs").append("marker")</span></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("id", uid + "-arrow").attr("viewBox", "0 -5 10 10")</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("refX", 10).attr("refY", 0).attr("markerWidth", 7).attr("markerHeight", 7).attr("orient", "auto")</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="ss">      .append("path").attr("d", "M0,-5L10,0L0,5").attr("fill", "#aaa");</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="ss">    const linkData = links.map(l =&gt; (</span><span class="ch">{{</span><span class="ss">...l</span><span class="ch">}}</span><span class="ss">));</span></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a><span class="ss">    const nodeData = nodes.map(n =&gt; (</span><span class="ch">{{</span><span class="ss">...n</span><span class="ch">}}</span><span class="ss">));</span></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="ss">    const sim = d3.forceSimulation(nodeData)</span></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a><span class="ss">      .force("link", d3.forceLink(linkData).id(d =&gt; d.id).distance(140))</span></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a><span class="ss">      .force("charge", d3.forceManyBody().strength(-500))</span></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="ss">      .force("center", d3.forceCenter(w/2, titleOffset/2 + h/2));</span></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="ss">    const link = svg.append("g").selectAll("line").data(linkData).join("line")</span></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("stroke", "#aaa").attr("stroke-width", 2)</span></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("marker-end", "url(#" + uid + "-arrow)");</span></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a><span class="ss">    const edgeLabels = svg.append("g").selectAll("text").data(linkData.filter(d =&gt; d.label)).join("text")</span></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("text-anchor", "middle").attr("fill", "#ffdd57")</span></span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a><span class="ss">      .attr("font-size", "16px").attr("font-family", "sans-serif").attr("font-weight", "bold")</span></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a><span class="ss">      .text(d =&gt; d.label);</span></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a><span class="ss">    const node = svg.append("g").selectAll("g").data(nodeData).join("g")</span></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a><span class="ss">      .call(d3.drag()</span></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a><span class="ss">        .on("start", (e,d) =&gt; </span><span class="ch">{{</span><span class="ss"> if (!e.active) sim.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; </span><span class="ch">}}</span><span class="ss">)</span></span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a><span class="ss">        .on("drag",  (e,d) =&gt; </span><span class="ch">{{</span><span class="ss"> d.fx=e.x; d.fy=e.y; </span><span class="ch">}}</span><span class="ss">)</span></span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a><span class="ss">        .on("end",   (e,d) =&gt; </span><span class="ch">{{</span><span class="ss"> if (!e.active) sim.alphaTarget(0); d.fx=null; d.fy=null; </span><span class="ch">}}</span><span class="ss">));</span></span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a><span class="ss">    node.append("circle").attr("r", r).attr("fill", d =&gt; d.color).attr("stroke", "#fff").attr("stroke-width", 1.5);</span></span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a><span class="ss">    node.each(function(d) </span><span class="ch">{{</span></span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a><span class="ss">      const lines = d.id.split("</span><span class="ch">\\</span><span class="ss">n");</span></span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a><span class="ss">      const txt = d3.select(this).append("text").attr("text-anchor", "middle")</span></span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a><span class="ss">        .attr("fill", "white").attr("font-size", fs+"px").attr("font-family", "sans-serif");</span></span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a><span class="ss">      const lh = fs * 1.2, yStart = -((lines.length - 1) * lh) / 2;</span></span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a><span class="ss">      lines.forEach((line, i) =&gt; </span><span class="ch">{{</span></span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a><span class="ss">        txt.append("tspan").attr("x", 0).attr("y", yStart + i*lh).attr("dy", "0.35em").text(line);</span></span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a><span class="ss">      </span><span class="ch">}}</span><span class="ss">);</span></span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span><span class="ss">);</span></span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="ss">    sim.on("tick", () =&gt; </span><span class="ch">{{</span></span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a><span class="ss">      link.each(function(d) </span><span class="ch">{{</span></span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a><span class="ss">        const dx = d.target.x-d.source.x, dy = d.target.y-d.source.y;</span></span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a><span class="ss">        const dist = Math.sqrt(dx*dx+dy*dy) || 1, ux = dx/dist, uy = dy/dist;</span></span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a><span class="ss">        d3.select(this)</span></span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a><span class="ss">          .attr("x1", d.source.x+ux*r).attr("y1", d.source.y+uy*r)</span></span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a><span class="ss">          .attr("x2", d.target.x-ux*r).attr("y2", d.target.y-uy*r);</span></span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a><span class="ss">      </span><span class="ch">}}</span><span class="ss">);</span></span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a><span class="ss">      edgeLabels</span></span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a><span class="ss">        .attr("x", d =&gt; (d.source.x+d.target.x)/2)</span></span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a><span class="ss">        .attr("y", d =&gt; (d.source.y+d.target.y)/2 - 8);</span></span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a><span class="ss">      node.attr("transform", d =&gt; `translate($</span><span class="ch">{{</span><span class="ss">d.x</span><span class="ch">}}</span><span class="ss">,$</span><span class="ch">{{</span><span class="ss">d.y</span><span class="ch">}}</span><span class="ss">)`);</span></span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span><span class="ss">);</span></span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a><span class="ss">  </span><span class="ch">}}</span></span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a><span class="ch">}}</span></span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a><span class="ss">setTimeout(initGraphs, 100);</span></span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a><span class="ss">&lt;/script&gt;</span></span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span></span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> HTML(container <span class="op">+</span> script)</span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a>show_dag([G, G2], width<span class="op">=</span><span class="dv">330</span>, height<span class="op">=</span><span class="dv">320</span>, title<span class="op">=</span>[<span class="st">"Gear Acquisition Syndrome"</span>, <span class="st">"Reality"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div style="display:flex;gap:12px;flex-wrap:wrap;"><div id="dag0" style="width:330px;height:320px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div><div id="dag1" style="width:330px;height:320px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div></div>
@@ -650,344 +963,6 @@ function initGraphs() {
 
 setTimeout(initGraphs, 100);
 </script>
-</div>
-</div>
-<p><br> We’ll regard <code>Sound</code> as the “outcome”, the thing we measure via listening tests where listeners rate their preferences. We could imagine listeners submitting ranking scores and averaging them into a Mean Opinion Score (MOS), but for now it suffices to imagine (binary) <a href="https://www.yum-audio.com/blog/a-b-testing-in-music-production-the-ultimate-guide/">A/B Testing</a> for user preferences. Following causal inference conventions, we’ll denote the outcome as <span class="math inline">\(Y\)</span> and use binary values:</p>
-<ul>
-<li><span class="math inline">\(Y=1\)</span>: Sounds Great</li>
-<li><span class="math inline">\(Y=0\)</span>: Sounds Bad (Technical term: “like ass”)</li>
-</ul>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>But Wait – How Do You Measure Talent?!
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>We’re not going to be measuring <code>Talent</code>. Rather, we’re going to explore how allowing a causal link between <code>Gear</code> and <code>Talent</code> changes the expected statistics of <code>Sound</code>, and this will help us distinguish whether the <code>GAS</code> picture or the <code>Reality</code> picture best fits the data.</p>
-</div>
-</div>
-</section>
-<section id="sample-data" class="level2">
-<h2 class="anchored" data-anchor-id="sample-data">Sample Data</h2>
-<p>I made a fictitious 16-person dataset that mixes famous artists with anonymous randos. The naive/GAS view looks only at the correlation between <code>Gear</code> and <code>Sound</code>:</p>
-<div id="f1b8d15b-5b5c-4423-8a30-b919f9967345" class="cell">
-<details class="code-fold">
-<summary>Get dataset and display naive view</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'player_data.csv'</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>COLORS <span class="op">=</span> {</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Talent'</span>: {<span class="st">'High'</span>: <span class="st">'#4477AA'</span>, <span class="st">'Low'</span>:  <span class="st">'#CC6600'</span>},   <span class="co"># blue / orange</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Gear'</span>:   {<span class="st">'Fancy'</span>: <span class="st">'#AA3377'</span>, <span class="st">'Cheap'</span>: <span class="st">'#CC9900'</span>}, <span class="co"># purple / yellow  </span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Sound'</span>:  {<span class="st">'Great'</span>: <span class="st">'#228833'</span>, <span class="st">'Bad'</span>:  <span class="st">'#BB4455'</span>},  <span class="co"># green / red-pink</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> style_col(val, col):</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> COLORS[col].get(val, <span class="st">''</span>)</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f'background-color: </span><span class="sc">{</span>c<span class="sc">}</span><span class="ss">; color: #EEEEEE'</span> <span class="cf">if</span> c <span class="cf">else</span> <span class="st">''</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>(df.drop(columns<span class="op">=</span>[<span class="st">'Talent'</span>]).style</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Gear'</span>],  col<span class="op">=</span><span class="st">'Gear'</span>)</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Sound'</span>], col<span class="op">=</span><span class="st">'Sound'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-display">
-<style type="text/css">
-#T_b858e_row0_col1, #T_b858e_row1_col1, #T_b858e_row2_col1, #T_b858e_row3_col1, #T_b858e_row4_col1, #T_b858e_row5_col1, #T_b858e_row6_col1, #T_b858e_row7_col1 {
-  background-color: #AA3377;
-  color: #EEEEEE;
-}
-#T_b858e_row0_col2, #T_b858e_row2_col2, #T_b858e_row3_col2, #T_b858e_row4_col2, #T_b858e_row5_col2, #T_b858e_row8_col2, #T_b858e_row10_col2 {
-  background-color: #228833;
-  color: #EEEEEE;
-}
-#T_b858e_row1_col2, #T_b858e_row6_col2, #T_b858e_row7_col2, #T_b858e_row9_col2, #T_b858e_row11_col2, #T_b858e_row12_col2, #T_b858e_row13_col2, #T_b858e_row14_col2, #T_b858e_row15_col2 {
-  background-color: #BB4455;
-  color: #EEEEEE;
-}
-#T_b858e_row8_col1, #T_b858e_row9_col1, #T_b858e_row10_col1, #T_b858e_row11_col1, #T_b858e_row12_col1, #T_b858e_row13_col1, #T_b858e_row14_col1, #T_b858e_row15_col1 {
-  background-color: #CC9900;
-  color: #EEEEEE;
-}
-</style>
-
-<table id="T_b858e" class="caption-top table table-sm table-striped small">
-<thead>
-<tr class="header">
-<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
-<th id="T_b858e_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Name</th>
-<th id="T_b858e_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Gear</th>
-<th id="T_b858e_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Sound</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th id="T_b858e_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
-<td id="T_b858e_row0_col0" class="data row0 col0">Tom Scholz</td>
-<td id="T_b858e_row0_col1" class="data row0 col1">Fancy</td>
-<td id="T_b858e_row0_col2" class="data row0 col2">Great</td>
-</tr>
-<tr class="even">
-<th id="T_b858e_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
-<td id="T_b858e_row1_col0" class="data row1 col0">Jeff Beck</td>
-<td id="T_b858e_row1_col1" class="data row1 col1">Fancy</td>
-<td id="T_b858e_row1_col2" class="data row1 col2">Bad</td>
-</tr>
-<tr class="odd">
-<th id="T_b858e_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
-<td id="T_b858e_row2_col0" class="data row2 col0">Jimi</td>
-<td id="T_b858e_row2_col1" class="data row2 col1">Fancy</td>
-<td id="T_b858e_row2_col2" class="data row2 col2">Great</td>
-</tr>
-<tr class="even">
-<th id="T_b858e_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
-<td id="T_b858e_row3_col0" class="data row3 col0">Prince</td>
-<td id="T_b858e_row3_col1" class="data row3 col1">Fancy</td>
-<td id="T_b858e_row3_col2" class="data row3 col2">Great</td>
-</tr>
-<tr class="odd">
-<th id="T_b858e_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
-<td id="T_b858e_row4_col0" class="data row4 col0">Jenny</td>
-<td id="T_b858e_row4_col1" class="data row4 col1">Fancy</td>
-<td id="T_b858e_row4_col2" class="data row4 col2">Great</td>
-</tr>
-<tr class="even">
-<th id="T_b858e_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">5</th>
-<td id="T_b858e_row5_col0" class="data row5 col0">Jay</td>
-<td id="T_b858e_row5_col1" class="data row5 col1">Fancy</td>
-<td id="T_b858e_row5_col2" class="data row5 col2">Great</td>
-</tr>
-<tr class="odd">
-<th id="T_b858e_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">6</th>
-<td id="T_b858e_row6_col0" class="data row6 col0">Bill</td>
-<td id="T_b858e_row6_col1" class="data row6 col1">Fancy</td>
-<td id="T_b858e_row6_col2" class="data row6 col2">Bad</td>
-</tr>
-<tr class="even">
-<th id="T_b858e_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">7</th>
-<td id="T_b858e_row7_col0" class="data row7 col0">Paris Hilton</td>
-<td id="T_b858e_row7_col1" class="data row7 col1">Fancy</td>
-<td id="T_b858e_row7_col2" class="data row7 col2">Bad</td>
-</tr>
-<tr class="odd">
-<th id="T_b858e_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">8</th>
-<td id="T_b858e_row8_col0" class="data row8 col0">Milli Vanilli</td>
-<td id="T_b858e_row8_col1" class="data row8 col1">Cheap</td>
-<td id="T_b858e_row8_col2" class="data row8 col2">Great</td>
-</tr>
-<tr class="even">
-<th id="T_b858e_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">9</th>
-<td id="T_b858e_row9_col0" class="data row9 col0">Bob Dylan</td>
-<td id="T_b858e_row9_col1" class="data row9 col1">Cheap</td>
-<td id="T_b858e_row9_col2" class="data row9 col2">Bad</td>
-</tr>
-<tr class="odd">
-<th id="T_b858e_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">10</th>
-<td id="T_b858e_row10_col0" class="data row10 col0">Dale</td>
-<td id="T_b858e_row10_col1" class="data row10 col1">Cheap</td>
-<td id="T_b858e_row10_col2" class="data row10 col2">Great</td>
-</tr>
-<tr class="even">
-<th id="T_b858e_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">11</th>
-<td id="T_b858e_row11_col0" class="data row11 col0">Todd</td>
-<td id="T_b858e_row11_col1" class="data row11 col1">Cheap</td>
-<td id="T_b858e_row11_col2" class="data row11 col2">Bad</td>
-</tr>
-<tr class="odd">
-<th id="T_b858e_level0_row12" class="row_heading level0 row12" data-quarto-table-cell-role="th">12</th>
-<td id="T_b858e_row12_col0" class="data row12 col0">Bubba</td>
-<td id="T_b858e_row12_col1" class="data row12 col1">Cheap</td>
-<td id="T_b858e_row12_col2" class="data row12 col2">Bad</td>
-</tr>
-<tr class="even">
-<th id="T_b858e_level0_row13" class="row_heading level0 row13" data-quarto-table-cell-role="th">13</th>
-<td id="T_b858e_row13_col0" class="data row13 col0">Abe</td>
-<td id="T_b858e_row13_col1" class="data row13 col1">Cheap</td>
-<td id="T_b858e_row13_col2" class="data row13 col2">Bad</td>
-</tr>
-<tr class="odd">
-<th id="T_b858e_level0_row14" class="row_heading level0 row14" data-quarto-table-cell-role="th">14</th>
-<td id="T_b858e_row14_col0" class="data row14 col0">Earnest</td>
-<td id="T_b858e_row14_col1" class="data row14 col1">Cheap</td>
-<td id="T_b858e_row14_col2" class="data row14 col2">Bad</td>
-</tr>
-<tr class="even">
-<th id="T_b858e_level0_row15" class="row_heading level0 row15" data-quarto-table-cell-role="th">15</th>
-<td id="T_b858e_row15_col0" class="data row15 col0">Mongo</td>
-<td id="T_b858e_row15_col1" class="data row15 col1">Cheap</td>
-<td id="T_b858e_row15_col2" class="data row15 col2">Bad</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>According this view, <span class="math inline">\(P(\rm{Sound=Great | Gear=Fancy})\)</span> = 5/8 = 0.625. =&gt; Better gear probably makes you sound better!</p>
-<p>But wait, if we include the confounding effect of <code>Talent</code>:</p>
-<div id="e9856794-c49d-4ae4-812e-ed6f0e6c75fa" class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(df.style</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Talent'</span>], col<span class="op">=</span><span class="st">'Talent'</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Gear'</span>],   col<span class="op">=</span><span class="st">'Gear'</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>   .applymap(style_col, subset<span class="op">=</span>[<span class="st">'Sound'</span>],  col<span class="op">=</span><span class="st">'Sound'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-display">
-<style type="text/css">
-#T_3a842_row0_col1, #T_3a842_row1_col1, #T_3a842_row2_col1, #T_3a842_row3_col1, #T_3a842_row4_col1, #T_3a842_row5_col1, #T_3a842_row6_col1, #T_3a842_row9_col1 {
-  background-color: #4477AA;
-  color: #EEEEEE;
-}
-#T_3a842_row0_col2, #T_3a842_row1_col2, #T_3a842_row2_col2, #T_3a842_row3_col2, #T_3a842_row4_col2, #T_3a842_row5_col2, #T_3a842_row6_col2, #T_3a842_row7_col2 {
-  background-color: #AA3377;
-  color: #EEEEEE;
-}
-#T_3a842_row0_col3, #T_3a842_row2_col3, #T_3a842_row3_col3, #T_3a842_row4_col3, #T_3a842_row5_col3, #T_3a842_row8_col3, #T_3a842_row10_col3 {
-  background-color: #228833;
-  color: #EEEEEE;
-}
-#T_3a842_row1_col3, #T_3a842_row6_col3, #T_3a842_row7_col3, #T_3a842_row9_col3, #T_3a842_row11_col3, #T_3a842_row12_col3, #T_3a842_row13_col3, #T_3a842_row14_col3, #T_3a842_row15_col3 {
-  background-color: #BB4455;
-  color: #EEEEEE;
-}
-#T_3a842_row7_col1, #T_3a842_row8_col1, #T_3a842_row10_col1, #T_3a842_row11_col1, #T_3a842_row12_col1, #T_3a842_row13_col1, #T_3a842_row14_col1, #T_3a842_row15_col1 {
-  background-color: #CC6600;
-  color: #EEEEEE;
-}
-#T_3a842_row8_col2, #T_3a842_row9_col2, #T_3a842_row10_col2, #T_3a842_row11_col2, #T_3a842_row12_col2, #T_3a842_row13_col2, #T_3a842_row14_col2, #T_3a842_row15_col2 {
-  background-color: #CC9900;
-  color: #EEEEEE;
-}
-</style>
-
-<table id="T_3a842" class="caption-top table table-sm table-striped small">
-<thead>
-<tr class="header">
-<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
-<th id="T_3a842_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Name</th>
-<th id="T_3a842_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Talent</th>
-<th id="T_3a842_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Gear</th>
-<th id="T_3a842_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Sound</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th id="T_3a842_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
-<td id="T_3a842_row0_col0" class="data row0 col0">Tom Scholz</td>
-<td id="T_3a842_row0_col1" class="data row0 col1">High</td>
-<td id="T_3a842_row0_col2" class="data row0 col2">Fancy</td>
-<td id="T_3a842_row0_col3" class="data row0 col3">Great</td>
-</tr>
-<tr class="even">
-<th id="T_3a842_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
-<td id="T_3a842_row1_col0" class="data row1 col0">Jeff Beck</td>
-<td id="T_3a842_row1_col1" class="data row1 col1">High</td>
-<td id="T_3a842_row1_col2" class="data row1 col2">Fancy</td>
-<td id="T_3a842_row1_col3" class="data row1 col3">Bad</td>
-</tr>
-<tr class="odd">
-<th id="T_3a842_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
-<td id="T_3a842_row2_col0" class="data row2 col0">Jimi</td>
-<td id="T_3a842_row2_col1" class="data row2 col1">High</td>
-<td id="T_3a842_row2_col2" class="data row2 col2">Fancy</td>
-<td id="T_3a842_row2_col3" class="data row2 col3">Great</td>
-</tr>
-<tr class="even">
-<th id="T_3a842_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
-<td id="T_3a842_row3_col0" class="data row3 col0">Prince</td>
-<td id="T_3a842_row3_col1" class="data row3 col1">High</td>
-<td id="T_3a842_row3_col2" class="data row3 col2">Fancy</td>
-<td id="T_3a842_row3_col3" class="data row3 col3">Great</td>
-</tr>
-<tr class="odd">
-<th id="T_3a842_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
-<td id="T_3a842_row4_col0" class="data row4 col0">Jenny</td>
-<td id="T_3a842_row4_col1" class="data row4 col1">High</td>
-<td id="T_3a842_row4_col2" class="data row4 col2">Fancy</td>
-<td id="T_3a842_row4_col3" class="data row4 col3">Great</td>
-</tr>
-<tr class="even">
-<th id="T_3a842_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">5</th>
-<td id="T_3a842_row5_col0" class="data row5 col0">Jay</td>
-<td id="T_3a842_row5_col1" class="data row5 col1">High</td>
-<td id="T_3a842_row5_col2" class="data row5 col2">Fancy</td>
-<td id="T_3a842_row5_col3" class="data row5 col3">Great</td>
-</tr>
-<tr class="odd">
-<th id="T_3a842_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">6</th>
-<td id="T_3a842_row6_col0" class="data row6 col0">Bill</td>
-<td id="T_3a842_row6_col1" class="data row6 col1">High</td>
-<td id="T_3a842_row6_col2" class="data row6 col2">Fancy</td>
-<td id="T_3a842_row6_col3" class="data row6 col3">Bad</td>
-</tr>
-<tr class="even">
-<th id="T_3a842_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">7</th>
-<td id="T_3a842_row7_col0" class="data row7 col0">Paris Hilton</td>
-<td id="T_3a842_row7_col1" class="data row7 col1">Low</td>
-<td id="T_3a842_row7_col2" class="data row7 col2">Fancy</td>
-<td id="T_3a842_row7_col3" class="data row7 col3">Bad</td>
-</tr>
-<tr class="odd">
-<th id="T_3a842_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">8</th>
-<td id="T_3a842_row8_col0" class="data row8 col0">Milli Vanilli</td>
-<td id="T_3a842_row8_col1" class="data row8 col1">Low</td>
-<td id="T_3a842_row8_col2" class="data row8 col2">Cheap</td>
-<td id="T_3a842_row8_col3" class="data row8 col3">Great</td>
-</tr>
-<tr class="even">
-<th id="T_3a842_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">9</th>
-<td id="T_3a842_row9_col0" class="data row9 col0">Bob Dylan</td>
-<td id="T_3a842_row9_col1" class="data row9 col1">High</td>
-<td id="T_3a842_row9_col2" class="data row9 col2">Cheap</td>
-<td id="T_3a842_row9_col3" class="data row9 col3">Bad</td>
-</tr>
-<tr class="odd">
-<th id="T_3a842_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">10</th>
-<td id="T_3a842_row10_col0" class="data row10 col0">Dale</td>
-<td id="T_3a842_row10_col1" class="data row10 col1">Low</td>
-<td id="T_3a842_row10_col2" class="data row10 col2">Cheap</td>
-<td id="T_3a842_row10_col3" class="data row10 col3">Great</td>
-</tr>
-<tr class="even">
-<th id="T_3a842_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">11</th>
-<td id="T_3a842_row11_col0" class="data row11 col0">Todd</td>
-<td id="T_3a842_row11_col1" class="data row11 col1">Low</td>
-<td id="T_3a842_row11_col2" class="data row11 col2">Cheap</td>
-<td id="T_3a842_row11_col3" class="data row11 col3">Bad</td>
-</tr>
-<tr class="odd">
-<th id="T_3a842_level0_row12" class="row_heading level0 row12" data-quarto-table-cell-role="th">12</th>
-<td id="T_3a842_row12_col0" class="data row12 col0">Bubba</td>
-<td id="T_3a842_row12_col1" class="data row12 col1">Low</td>
-<td id="T_3a842_row12_col2" class="data row12 col2">Cheap</td>
-<td id="T_3a842_row12_col3" class="data row12 col3">Bad</td>
-</tr>
-<tr class="even">
-<th id="T_3a842_level0_row13" class="row_heading level0 row13" data-quarto-table-cell-role="th">13</th>
-<td id="T_3a842_row13_col0" class="data row13 col0">Abe</td>
-<td id="T_3a842_row13_col1" class="data row13 col1">Low</td>
-<td id="T_3a842_row13_col2" class="data row13 col2">Cheap</td>
-<td id="T_3a842_row13_col3" class="data row13 col3">Bad</td>
-</tr>
-<tr class="odd">
-<th id="T_3a842_level0_row14" class="row_heading level0 row14" data-quarto-table-cell-role="th">14</th>
-<td id="T_3a842_row14_col0" class="data row14 col0">Earnest</td>
-<td id="T_3a842_row14_col1" class="data row14 col1">Low</td>
-<td id="T_3a842_row14_col2" class="data row14 col2">Cheap</td>
-<td id="T_3a842_row14_col3" class="data row14 col3">Bad</td>
-</tr>
-<tr class="even">
-<th id="T_3a842_level0_row15" class="row_heading level0 row15" data-quarto-table-cell-role="th">15</th>
-<td id="T_3a842_row15_col0" class="data row15 col0">Mongo</td>
-<td id="T_3a842_row15_col1" class="data row15 col1">Low</td>
-<td id="T_3a842_row15_col2" class="data row15 col2">Cheap</td>
-<td id="T_3a842_row15_col3" class="data row15 col3">Bad</td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
 </section>
