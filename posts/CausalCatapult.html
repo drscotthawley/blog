@@ -295,8 +295,8 @@ window.Quarto = {
   <li><a href="#defining-and-visualizing-graphs" id="toc-defining-and-visualizing-graphs" class="nav-link" data-scroll-target="#defining-and-visualizing-graphs">Defining and Visualizing Graphs</a></li>
   <li><a href="#the-key-question-as-math" id="toc-the-key-question-as-math" class="nav-link" data-scroll-target="#the-key-question-as-math">The Key Question as Math</a></li>
   </ul></li>
-  <li><a href="#work-in-progress" id="toc-work-in-progress" class="nav-link" data-scroll-target="#work-in-progress">Work in Progress</a></li>
   <li><a href="#advanced-topics" id="toc-advanced-topics" class="nav-link" data-scroll-target="#advanced-topics">Advanced Topics</a></li>
+  <li><a href="#work-in-progress" id="toc-work-in-progress" class="nav-link" data-scroll-target="#work-in-progress">Work in Progress</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -1002,7 +1002,8 @@ P(\text{Sound=Great} \mid do(\text{Gear=Fancy})) &amp;= P(\text{Sound=Great} \mi
 Adjusted = 0.357</code></pre>
 </div>
 </div>
-<p>But we can compute this much more efficiently via “advanced” pandas methods. Let’s make a fast, general routine that we can use elsewhere:</p>
+<p>….So, at least judging by by this dataset, once we accounted for <code>Talent</code>, buying new gear yields less than a coin flip’s chance of improving someone’s sound. (Sweetwater, don’t sue! This is made up data. Feel free to provide real market data and I’ll work it in. )</p>
+<p>That calculation was fine, yet can compute it much more efficiently via “advanced” <code>pandas</code> moves. Here’s a fast, general routine we can reuse:</p>
 <div id="c3185537-0e11-45d8-9452-f3bdb6e7e8d3" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backdoor_adjustment(data, outcome_col, treatment_col, confounder_col, outcome_val, treatment_val):</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
@@ -1035,10 +1036,6 @@ Adjusted = 0.357</code></pre>
 </div>
 </div>
 </section>
-</section>
-<section id="work-in-progress" class="level1">
-<h1>Work in Progress</h1>
-<p>Still writing! Come back for more later.</p>
 </section>
 <section id="advanced-topics" class="level1">
 <h1>Advanced Topics</h1>
@@ -1149,6 +1146,10 @@ setTimeout(initGraphs, 100);
 </script>
 </div>
 </div>
+</section>
+<section id="work-in-progress" class="level1">
+<h1>Work in Progress</h1>
+<p>Still writing! Come back for more later.</p>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>
