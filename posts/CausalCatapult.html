@@ -993,13 +993,13 @@ P(\text{Sound=Great} \mid do(\text{Gear=Fancy})) &amp;= P(\text{Sound=Great} \mi
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>p_do_gear_fancy <span class="op">=</span> (p_sound_given_high <span class="op">*</span> p_talent_high) <span class="op">+</span> (p_sound_given_low <span class="op">*</span> p_talent_low)</span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>p_naive <span class="op">=</span> (df[df[<span class="st">"Gear"</span>] <span class="op">==</span> <span class="st">"Fancy"</span>][<span class="st">"Sound"</span>] <span class="op">==</span> <span class="st">"Great"</span>).mean()</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Naive estimate ="</span>, p_naive)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Naive estimate (GAS) ="</span>, p_naive)</span>
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> p_do_gear_fancy</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Adjusted = </span><span class="sc">{</span>result<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Adjusted for Talent (Reality)= </span><span class="sc">{</span>result<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Naive estimate = 0.625
-Adjusted = 0.357</code></pre>
+<pre><code>Naive estimate (GAS) = 0.625
+Adjusted for Talent (Reality)= 0.357</code></pre>
 </div>
 </div>
 <p>….So, at least judging by by this dataset, once we accounted for <code>Talent</code>, buying new gear yields less than a coin flip’s chance of improving someone’s sound. <em>(Sweetwater, don’t sue! This is made up data. Feel free to provide real market data and I’ll work it in.)</em></p>
@@ -1026,13 +1026,13 @@ Adjusted = 0.357</code></pre>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (p_outcome_given_confounder <span class="op">*</span> p_confounder).<span class="bu">sum</span>()</span>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>p_naive <span class="op">=</span> (df[df[<span class="st">"Gear"</span>] <span class="op">==</span> <span class="st">"Fancy"</span>][<span class="st">"Sound"</span>] <span class="op">==</span> <span class="st">"Great"</span>).mean()</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Naive estimate ="</span>, p_naive)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Naive estimate (GAS) ="</span>, p_naive)</span>
 <span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> backdoor_adjustment(df, <span class="st">"Sound"</span>, <span class="st">"Gear"</span>, <span class="st">"Talent"</span>, <span class="st">"Great"</span>, <span class="st">"Fancy"</span>)</span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Adjusted = </span><span class="sc">{</span>result<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Adjusted for Talent (Reality) = </span><span class="sc">{</span>result<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Naive estimate = 0.625
-Adjusted = 0.357</code></pre>
+<pre><code>Naive estimate (GAS) = 0.625
+Adjusted for Talent (Reality) = 0.357</code></pre>
 </div>
 </div>
 </section>
