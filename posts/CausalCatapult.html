@@ -322,7 +322,29 @@ figcaption {
 <section id="intro" class="level1">
 <h1>Intro</h1>
 <p>I’ve been wanting to learn Causal Inference (CI) / Causal Modeling (causal inference) “properly” ever since I asked for Judea Pearl’s bestselling <em>The Book of Why</em> <span class="citation" data-cites="pearl2018why"><a href="#ref-pearl2018why" role="doc-biblioref">[2]</a></span> for Christmas in 2019. It’s a <em>great</em> read, but it hides any actual computation by merely mentioning the mystical “do calculus”. Pearl offers details on that in his textbook <span class="citation" data-cites="pearl2009causality"><a href="#ref-pearl2009causality" role="doc-biblioref">[3]</a></span>, but I want get up to speed faster, so I’ve been reading and watching other treatments <span class="citation" data-cites="tucci2013"><a href="#ref-tucci2013" role="doc-biblioref">[4]</a></span> <span class="citation" data-cites="neal2020"><a href="#ref-neal2020" role="doc-biblioref">[5]</a></span> <span class="citation" data-cites="facure2023causal"><a href="#ref-facure2023causal" role="doc-biblioref">[6]</a></span> <span class="citation" data-cites="ghosh2026karmamvbenchmarkcausalquestion"><a href="#ref-ghosh2026karmamvbenchmarkcausalquestion" role="doc-biblioref">[7]</a></span> <span class="citation" data-cites="bornstein2021lightningcausalexamples"><a href="#ref-bornstein2021lightningcausalexamples" role="doc-biblioref">[8]</a></span> <span class="citation" data-cites="krohn2025causalainess"><a href="#ref-krohn2025causalainess" role="doc-biblioref">[9]</a></span> <span class="citation" data-cites="Koch2025DeepLearningCausalInference"><a href="#ref-Koch2025DeepLearningCausalInference" role="doc-biblioref">[10]</a></span>, which most often are either “slow” or quickly throw up what I call the “Wall of Math.”<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>In this post, we’re going to catapult straight over that wall — starting immediately with code and calculation, “do-”ing the “do-”calculus, introducing definitions and proofs only when we actually need them.</p>
+<p>In this post, we’re going to catapult straight over that wall — starting immediately with code and calculation, “do-”ing the “do-”calculus, introducing definitions and proofs only when we actually need them. We’re going to focus learning how to “do the do-”.</p>
+<style>
+.img3 {
+    /*transform-origin: top left;*/
+    height:275px;
+    transition:transform 0.4s ease;
+    position: relative;
+    z-index: 0;
+}
+.img3:hover {
+    -webkit-transform:scale(1.6);
+    transform:scale(1.6);
+    z-index:1;
+}
+</style>
+<div id="do-the-do-img">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/do_the_do2.png" class="img3 img-fluid figure-img"></p>
+<figcaption><em>“Do the Do-”</em> parody image (ChatGPT5. Note that while a couple AI-generated images are included for humor, the text is all human-authored.)</figcaption>
+</figure>
+</div>
+</div>
 <!--- 
 # Intro (old
 
@@ -343,20 +365,6 @@ In this post, we're going to get started really fast: rapid acceleration so we *
 <section id="case-study-gear-acquisition-syndrome-gas" class="level1">
 <h1>Case Study: Gear Acquisition Syndrome (GAS)</h1>
 <p>Causal modeling introductions invariably choose some medical intervention as an illustrative example. Since my specialty is teaching audio engineers <span class="citation" data-cites="hawley2014bayes"><a href="#ref-hawley2014bayes" role="doc-biblioref">[11]</a></span>, we’ll discuss the sad affliction known as <strong><a href="https://www.joshuasarinana.com/sciart/the-science-of-gear-acquisition-syndrome">Gear Acquisition Syndrome (GAS)</a></strong>.</p>
-<style>
-.img3 {
-    /*transform-origin: top left;*/
-    height:300px;
-    transition:transform 0.4s ease;
-    position: relative;
-    z-index: 0;
-}
-.img3:hover {
-    -webkit-transform:scale(1.6);
-    transform:scale(1.6);
-    z-index:1;
-}
-</style>
 <div id="bayes-audio-eng-img">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -968,15 +976,41 @@ setTimeout(initGraphs, 100);
 </section>
 <section id="the-key-question-as-math" class="level2">
 <h2 class="anchored" data-anchor-id="the-key-question-as-math">The Key Question as Math</h2>
-<p>In terms of causal inference., we want to compute the probability <span class="math inline">\(P({\rm Sound=Great} | \rm{do(Gear=Fancy}))\)</span>, i.e., will the sound will improve if we “intervene” by upgrading the gear?</p>
-<p>To do that, we need to “marginalize” over <code>Talent</code> (i.e.&nbsp;do a weighted sum over all subsets):</p>
-<p><span class="math display">\[\begin{align}
-P(\text{Sound=Great} \mid do(\text{Gear=Fancy})) &amp;= P(\text{Sound=Great} \mid \text{Gear=Fancy, Talent=High}) \cdot P(\text{Talent=High}) \\
-&amp;+ P(\text{Sound=Great} \mid \text{Gear=Fancy, Talent=Low}) \cdot P(\text{Talent=Low})
-\end{align}\]</span> This is called the “adjustment formula”, specifically the “backdoor adjustment formula”.</p>
-<p>That’s getting a little cumbersome, so let’s abbreviate our notation:</p>
-<p><span class="math display">\[P(Y=1 \mid do(X=1)) = P(Y=1 \mid X=1, T=1) \cdot P(T=1) + P(Y=1 \mid X=1, T=0) \cdot P(T=0)\]</span></p>
-<p>where <span class="math inline">\(X\)</span> = Gear (1=Fancy), <span class="math inline">\(Y\)</span> = Sound (1=Great), <span class="math inline">\(T\)</span> = Talent (1=High). In code, that can look like:</p>
+<p>In terms of causal inference., we want to compute the probability <span class="math inline">\(P({\rm Sound=Great} | \rm{do(Gear=Fancy}))\)</span>, i.e., will the sound will improve if we “intervene” by upgrading the gear? To do that, we need to “marginalize” over <code>Talent</code> – i.e.&nbsp;do a weighted sum over all subsets.</p>
+<p>To keep notation compact, let <span class="math inline">\(X\)</span> = Gear (1=Fancy), <span class="math inline">\(Y\)</span> = Sound (1=Great), <span class="math inline">\(T\)</span> = Talent (0=Low, 1=High). Then we want: <span class="math display">\[P(Y=1 \mid do(X=1)) = P(Y=1 \mid X=1, T=1)\cdot P(T=1) + P(Y=1 \mid X=1, T=0)\cdot P(T=0)\]</span> which in general form is called the <strong>“backdoor adjustment formula”</strong> to control for confounder <span class="math inline">\(Z\)</span> (which in our case is <span class="math inline">\(T\)</span> for <code>Talent</code>):</p>
+<p><span class="math display">\[P(Y \mid do(X)) = \sum_z P(Y \mid X, Z=z)\cdot P(Z=z)\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The basic idea of the do-calculus is to suggest a way to compute the results of the (counterfactual) intervention using <em>observed</em> quantities.</p>
+</div>
+</div>
+<!---
+$$\begin{align}
+P(\text{Sound=Great} \mid do(\text{Gear=Fancy})) &= P(\text{Sound=Great} \mid \text{Gear=Fancy, Talent=High}) \cdot P(\text{Talent=High}) \tag{1} \\
+&+ P(\text{Sound=Great} \mid \text{Gear=Fancy, Talent=Low}) \cdot P(\text{Talent=Low})
+\end{align}$$
+This is called the "backdoor adjustment formula", usually written this way in general form.
+
+$$P(Y \mid do(X)) = \sum_z P(Y \mid X, Z=z) \cdot P(Z=z)$$
+
+The weights are the **marginal** `P(Z=z)`, not `P(Z=z | X)`. That's the whole trick: using the unconditional distribution of the confounder simulates what would happen if X were randomly assigned — it cuts the arrow from Talent into Gear.
+
+
+
+That's getting a little cumbersome, so let's abbreviate our notation: 
+
+$$P(Y=1 \mid do(X=1)) = P(Y=1 \mid X=1, T=1) \cdot P(T=1) + P(Y=1 \mid X=1, T=0) \cdot P(T=0)$$
+
+where $X$ = Gear (1=Fancy), $Y$ = Sound (1=Great), $T$ = Talent (1=High).  -->
+<p>In code, that can look like:</p>
 <div id="648ec150-8acc-4db0-883d-d1e5bb9a82b9" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Compute prior probabilities for Talent</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>p_talent_high <span class="op">=</span> (df[<span class="st">"Talent"</span>] <span class="op">==</span> <span class="st">"High"</span>).mean()</span>
