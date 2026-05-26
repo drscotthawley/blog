@@ -976,7 +976,7 @@ setTimeout(initGraphs, 100);
 </section>
 <section id="the-key-question-as-math" class="level2">
 <h2 class="anchored" data-anchor-id="the-key-question-as-math">The Key Question as Math</h2>
-<p>In terms of causal inference., we want to compute the probability <span class="math inline">\(P({\rm Sound=Great} | \rm{do(Gear=Fancy}))\)</span>, i.e., ==will the sound will improve if we “intervene” by upgrading the gear?==</p>
+<p>In terms of causal inference., we want to compute the probability <span class="math inline">\(P({\rm Sound=Great} | \rm{do(Gear=Fancy}))\)</span>, i.e., <mark>will the sound will improve if we “intervene” by upgrading the gear?</mark></p>
 <p>To do that, we need to “marginalize” over <code>Talent</code> – i.e.&nbsp;do a weighted sum over all subsets. And to keep our notation compact, let’s define <span class="math inline">\(X\)</span> = Gear (1=Fancy), <span class="math inline">\(Y\)</span> = Sound (1=Great), <span class="math inline">\(Z\)</span> = Talent (0=Low, 1=High). Then we want: <span class="math display">\[\begin{eqnarray}P(Y=1 \mid do(X=1)) &amp;=&amp; P(Y=1 \mid X=1, Z=1)\cdot P(Z=1)\\ &amp;+&amp; P(Y=1 \mid X=1, Z=0)\cdot P(Z=0)\end{eqnarray}\]</span> which in general form is called the <strong>“backdoor adjustment formula”</strong> to control for confounder <span class="math inline">\(Z\)</span> (which in our case <code>Talent</code>):</p>
 <p><span class="math display">\[P(Y \mid do(X)) = \sum_z P(Y \mid X, Z=z)\cdot P(Z=z)\]</span></p>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -1036,8 +1036,10 @@ Adjusted for Talent (Reality)   = P(Y=1 | do(X=1)) = 0.357</code></pre>
 </div>
 </div>
 <p>….So, at least judging by by this dataset, once we accounted for <code>Talent</code>, buying new gear yields less than a coin flip’s chance of improving someone’s sound. <em>(Sweetwater, don’t sue! This is made up data. Feel free to provide real market data and I’ll work it in.)</em></p>
-<p>That calculation was fine, but we can “do-” the computation (much) more efficiently via “advanced” <code>pandas</code> moves. Here’s a fast, general routine we can reuse:</p>
+<p>That calculation was fine, but we can “do-” the computation (much) more efficiently via “advanced” <code>pandas</code> moves. For future reference, we’ll include such a code now, collapsed by default, and confirm it yields the same results as before.</p>
 <div id="c3185537-0e11-45d8-9452-f3bdb6e7e8d3" class="cell">
+<details class="code-fold">
+<summary>Efficient backdoor_adjustment() code (Click to expand)</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backdoor_adjustment(data, outcome_col, treatment_col, confounder_col, outcome_val, treatment_val):</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Computes P(Outcome = outcome_val | do(Treatment = treatment_val)) </span></span>
@@ -1059,13 +1061,14 @@ Adjusted for Talent (Reality)   = P(Y=1 | do(X=1)) = 0.357</code></pre>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (p_outcome_given_confounder <span class="op">*</span> p_confounder).<span class="bu">sum</span>()</span>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>p_naive <span class="op">=</span> (df[df[<span class="st">"Gear"</span>] <span class="op">==</span> <span class="st">"Fancy"</span>][<span class="st">"Sound"</span>] <span class="op">==</span> <span class="st">"Great"</span>).mean()</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Naive estimate (GAS) ="</span>, p_naive)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Naive estimate (GAS)            = P(Y=1 | X=1)     = </span><span class="sc">{</span>p_naive<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
 <span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> backdoor_adjustment(df, <span class="st">"Sound"</span>, <span class="st">"Gear"</span>, <span class="st">"Talent"</span>, <span class="st">"Great"</span>, <span class="st">"Fancy"</span>)</span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Adjusted for Talent (Reality) = </span><span class="sc">{</span>result<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Adjusted for Talent (Reality)   = P(Y=1 | do(X=1)) = </span><span class="sc">{</span>result<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Naive estimate (GAS) = 0.625
-Adjusted for Talent (Reality) = 0.357</code></pre>
+<pre><code>Naive estimate (GAS)            = P(Y=1 | X=1)     = 0.625
+Adjusted for Talent (Reality)   = P(Y=1 | do(X=1)) = 0.357</code></pre>
 </div>
 </div>
 </section>
