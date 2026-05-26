@@ -295,6 +295,7 @@ window.Quarto = {
   <li><a href="#defining-and-visualizing-graphs" id="toc-defining-and-visualizing-graphs" class="nav-link" data-scroll-target="#defining-and-visualizing-graphs">Defining and Visualizing Graphs</a></li>
   <li><a href="#the-key-question-as-math" id="toc-the-key-question-as-math" class="nav-link" data-scroll-target="#the-key-question-as-math">The Key Question as Math</a></li>
   </ul></li>
+  <li><a href="#what-about-time-dependence-granger-causality" id="toc-what-about-time-dependence-granger-causality" class="nav-link" data-scroll-target="#what-about-time-dependence-granger-causality">What About Time Dependence? (Granger Causality)</a></li>
   <li><a href="#advanced-topics" id="toc-advanced-topics" class="nav-link" data-scroll-target="#advanced-topics">Advanced Topics</a></li>
   <li><a href="#work-in-progress" id="toc-work-in-progress" class="nav-link" data-scroll-target="#work-in-progress">Work in Progress</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
@@ -1039,7 +1040,7 @@ Adjusted for Talent (Reality)   = P(Y=1 | do(X=1)) = 0.357</code></pre>
 <p>That calculation was fine, but we can “do-” the computation (much) more efficiently via “advanced” <code>pandas</code> moves. For future reference, we’ll include such a code now, collapsed by default, and confirm it yields the same results as before.</p>
 <div id="c3185537-0e11-45d8-9452-f3bdb6e7e8d3" class="cell">
 <details class="code-fold">
-<summary>Efficient backdoor_adjustment() code (Click to expand)</summary>
+<summary>Efficient backdoor adjustment code (Click to expand)</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backdoor_adjustment(data, outcome_col, treatment_col, confounder_col, outcome_val, treatment_val):</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Computes P(Outcome = outcome_val | do(Treatment = treatment_val)) </span></span>
@@ -1072,6 +1073,30 @@ Adjusted for Talent (Reality)   = P(Y=1 | do(X=1)) = 0.357</code></pre>
 </div>
 </div>
 </section>
+</section>
+<section id="what-about-time-dependence-granger-causality" class="level1">
+<h1>What About Time Dependence? (Granger Causality)</h1>
+<p>The kinds of signals I’m interested in are often time-dependent audio signals. They could just as easily be weather patterns, logistics data, or financial data. We could naively just let the time <span class="math inline">\(t\)</span> be another variable, but this is typically not how it’s done, and smart people have already thought through this. ;-)</p>
+<p><a href="https://en.wikipedia.org/wiki/Clive_Granger">Clive Granger</a> proposed a causal method for economics time series in 1969 <span class="citation" data-cites="granger69"><a href="#ref-granger69" role="doc-biblioref">[12]</a></span>. It amounts to creating a separate graph node for each instant of time (or at least for each time we have data), so not just <span class="math inline">\(X(t)\)</span> but rather the past-directed sequence <span class="math inline">\(X_t\)</span>, <span class="math inline">\(X_{t-1}\)</span>, <span class="math inline">\(X_{t-2}\)</span>,<span class="math inline">\(\ldots\)</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/GrangerCausalityIllustration.svg/1920px-GrangerCausalityIllustration.svg.png" class="img-fluid figure-img"></p>
+<figcaption>Granger Causality example. Signal Y is “Granger-caused” by signal X if changes in Y consistently follow changes in X. (Source: Wikipedia)</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ordinary Granger “causality” isn’t really “true” causality, rather it is just a measure of <em>time-delayed predictive correlation.</em> In order to explore do-calculus modifications to it, we’ll have to do a little work.</p>
+</div>
+</div>
 </section>
 <section id="advanced-topics" class="level1">
 <h1>Advanced Topics</h1>
@@ -1222,6 +1247,9 @@ setTimeout(initGraphs, 100);
 </div>
 <div id="ref-hawley2014bayes" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[11] </div><div class="csl-right-inline"><span>“<span>B</span>ayesian analysis for audio engineers.”</span> Meeting of the Belmont <span>S</span>tudent <span>S</span>ection of the <span>A</span>udio <span>E</span>ngineering <span>S</span>ociety, 2014. Available: <a href="https://hedges.belmont.edu/BayesianAnalysisPartI.pdf">https://hedges.belmont.edu/BayesianAnalysisPartI.pdf</a></div>
+</div>
+<div id="ref-granger69" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[12] </div><div class="csl-right-inline">C. W. J. Granger, <span>“Investigating causal relations by econometric models and cross-spectral methods,”</span> <em>Econometrica</em>, vol. 37, no. 3, pp. 424–438, 1969, doi: <a href="https://doi.org/10.2307/1912791">10.2307/1912791</a>.</div>
 </div>
 </div>
 <hr>
