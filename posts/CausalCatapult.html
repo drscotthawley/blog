@@ -1111,6 +1111,15 @@ Warning
 <p>Ordinary Granger “causality” isn’t really “true” causality, rather it is just a measure of <em>time-delayed predictive correlation.</em> In order to explore do-calculus modifications to it, we’ll have to do some work.</p>
 </div>
 </div>
+<p>Typically, we may have a lot of different data streams, rather than enumerating X, Y, etc. we’ll just use X with superscripts and subscripts denoting the <span class="math inline">\(j\)</span>th data stream at time <span class="math inline">\(t\)</span> as <span class="math inline">\(X^j_t\)</span>. The relationships between these streams as we unroll each node at each time can either be instantaneous or have time delays as shown in this image from <span class="citation" data-cites="peters2017elements"><a href="#ref-peters2017elements" role="doc-biblioref">[13]</a></span>:</p>
+<div id="peters-streams">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/peters_shot_streams_instantaneous.png" class="img3 img-fluid figure-img"></p>
+<figcaption>DAGs showing multichannel time series without instantaneous effects (top) and with them (bottom). Source: <span class="citation" data-cites="peters2017elements"><a href="#ref-peters2017elements" role="doc-biblioref">[13]</a></span></figcaption>
+</figure>
+</div>
+</div>
 </section>
 <section id="advanced-topics" class="level1">
 <h1>Advanced Topics</h1>
@@ -1228,10 +1237,11 @@ setTimeout(initGraphs, 100);
 </section>
 <section id="glossary" class="level1">
 <h1>Glossary</h1>
+<p>This is to keep my head straight while the jargon piles up.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Name</th>
+<th>Term</th>
 <th>Definition</th>
 </tr>
 </thead>
