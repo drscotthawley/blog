@@ -293,11 +293,15 @@ window.Quarto = {
   <li><a href="#does-talent-matter" id="toc-does-talent-matter" class="nav-link" data-scroll-target="#does-talent-matter">Does Talent Matter?</a>
   <ul class="collapse">
   <li><a href="#defining-and-visualizing-graphs" id="toc-defining-and-visualizing-graphs" class="nav-link" data-scroll-target="#defining-and-visualizing-graphs">Defining and Visualizing Graphs</a></li>
-  <li><a href="#the-key-question-as-math" id="toc-the-key-question-as-math" class="nav-link" data-scroll-target="#the-key-question-as-math">The Key Question as Math</a></li>
+  <li><a href="#the-key-question-as-math" id="toc-the-key-question-as-math" class="nav-link" data-scroll-target="#the-key-question-as-math">The Key Question as Math</a>
+  <ul class="collapse">
+  <li><a href="#more-adjustments" id="toc-more-adjustments" class="nav-link" data-scroll-target="#more-adjustments">More Adjustments</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#what-about-time-dependence" id="toc-what-about-time-dependence" class="nav-link" data-scroll-target="#what-about-time-dependence">What About Time Dependence?</a></li>
   <li><a href="#advanced-topics" id="toc-advanced-topics" class="nav-link" data-scroll-target="#advanced-topics">Advanced Topics</a></li>
   <li><a href="#work-in-progress" id="toc-work-in-progress" class="nav-link" data-scroll-target="#work-in-progress">Work in Progress</a></li>
+  <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary">Glossary</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -1072,12 +1076,22 @@ Adjusted for Talent (Reality)   = P(Y=1 | do(X=1)) = 0.357</code></pre>
 Adjusted for Talent (Reality)   = P(Y=1 | do(X=1)) = 0.357</code></pre>
 </div>
 </div>
+<section id="more-adjustments" class="level3">
+<h3 class="anchored" data-anchor-id="more-adjustments">More Adjustments</h3>
+<p>The full do-calculus has adjustment rules for a few different other kinds of subgraph configurations:</p>
+<ul>
+<li>“front door” whereby The thing you’re interested in has all of its causal influence passing through an intermediary before reaching the effect.</li>
+<li>“colliders”, Where two (or more) arrows point inward to a node.</li>
+<li>….something else [help me. Claude?]</li>
+</ul>
+<p>I’m not going to bother enumerating every single one because I want to move on to what I’m really interested in – time dependence.</p>
+</section>
 </section>
 </section>
 <section id="what-about-time-dependence" class="level1">
 <h1>What About Time Dependence?</h1>
-<p>I’m interested in time-dependent audio signals. Similar data streams could be weather patterns, logistics data, or financial data. Now, we could naively just let the time <span class="math inline">\(t\)</span> be another variable like <span class="math inline">\(X\)</span>, <span class="math inline">\(Y\)</span>, and <span class="math inline">\(Z\)</span>, but this is typically not how it’s done – and smart people have already thought through this.<span class="citation" data-cites="Danks2013"><a href="#ref-Danks2013" role="doc-biblioref">[12]</a></span></p>
-<p>Historically, <a href="https://en.wikipedia.org/wiki/Clive_Granger">Clive Granger</a> proposed a causal method for economics time series in 1969 <span class="citation" data-cites="granger69"><a href="#ref-granger69" role="doc-biblioref">[13]</a></span>. It amounts to creating a separate graph node for each instant of time (or at least for each time we have data), i.e., not just a function <span class="math inline">\(X(t)\)</span> but rather the past-directed sequence of data points <span class="math inline">\(X_t\)</span>, <span class="math inline">\(X_{t-1}\)</span>, <span class="math inline">\(X_{t-2}\)</span>,<span class="math inline">\(\ldots\)</span></p>
+<p>I’m interested in time-dependent audio signals. Similar data streams could be weather patterns, logistics data, or financial data. Now, we could naively just let the time <span class="math inline">\(t\)</span> be another variable like <span class="math inline">\(X\)</span>, <span class="math inline">\(Y\)</span>, and <span class="math inline">\(Z\)</span>, but this is typically not how it’s done – and smart people have already thought through this.[<span class="citation" data-cites="Danks2013"><a href="#ref-Danks2013" role="doc-biblioref">[12]</a></span>]<span class="citation" data-cites="peters2017elements"><a href="#ref-peters2017elements" role="doc-biblioref">[13]</a></span></p>
+<p>Historically, <a href="https://en.wikipedia.org/wiki/Clive_Granger">Clive Granger</a> proposed a causal method for economics time series in 1969 <span class="citation" data-cites="granger69"><a href="#ref-granger69" role="doc-biblioref">[14]</a></span>. It amounts to creating a separate graph node for each instant of time (or at least for each time we have data), i.e., not just a function <span class="math inline">\(X(t)\)</span> but rather the past-directed sequence of data points <span class="math inline">\(X_t\)</span>, <span class="math inline">\(X_{t-1}\)</span>, <span class="math inline">\(X_{t-2}\)</span>,<span class="math inline">\(\ldots\)</span></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/GrangerCausalityIllustration.svg/1920px-GrangerCausalityIllustration.svg.png" class="img-fluid figure-img"></p>
@@ -1212,6 +1226,31 @@ setTimeout(initGraphs, 100);
 <h1>Work in Progress</h1>
 <p>Still writing! Come back for more later.</p>
 </section>
+<section id="glossary" class="level1">
+<h1>Glossary</h1>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>collider</td>
+<td>something</td>
+</tr>
+<tr class="even">
+<td>confounder</td>
+<td>something</td>
+</tr>
+<tr class="odd">
+<td>minimality</td>
+<td>something</td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="references" class="level1">
 <h1>References</h1>
 <div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
@@ -1249,10 +1288,13 @@ setTimeout(initGraphs, 100);
 <div class="csl-left-margin">[11] </div><div class="csl-right-inline"><span>“<span>B</span>ayesian analysis for audio engineers.”</span> Meeting of the Belmont <span>S</span>tudent <span>S</span>ection of the <span>A</span>udio <span>E</span>ngineering <span>S</span>ociety, 2014. Available: <a href="https://hedges.belmont.edu/BayesianAnalysisPartI.pdf">https://hedges.belmont.edu/BayesianAnalysisPartI.pdf</a></div>
 </div>
 <div id="ref-Danks2013" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[12] </div><div class="csl-right-inline">D. Danks and S. Plis, <span>“<span class="nocase">Learning Causal Structure from Undersampled Time Series</span>,”</span> in <em>NeurIPS13</em>, 2013. doi: <a href="https://doi.org/10.1184/R1/6492101.v1">10.1184/R1/6492101.v1</a>.</div>
+<div class="csl-left-margin">[12] </div><div class="csl-right-inline">D. Danks and S. Plis, <span>“<span class="nocase">Learning Causal Structure from Undersampled Time Series</span>,”</span> in <em><span>A</span>dvances in <span>N</span>eural <span>I</span>nformation <span>P</span>rocessing <span>S</span>ystems</em>, 2013. doi: <a href="https://doi.org/10.1184/R1/6492101.v1">10.1184/R1/6492101.v1</a>.</div>
+</div>
+<div id="ref-peters2017elements" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[13] </div><div class="csl-right-inline">J. Peters, D. Janzing, and B. Schölkopf, <em>Elements of causal inference: Foundations and learning algorithms</em>. in Adaptive computation and machine learning. The MIT Press, 2017, pp. 197–211.</div>
 </div>
 <div id="ref-granger69" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[13] </div><div class="csl-right-inline">C. W. J. Granger, <span>“Investigating causal relations by econometric models and cross-spectral methods,”</span> <em>Econometrica</em>, vol. 37, no. 3, pp. 424–438, 1969, doi: <a href="https://doi.org/10.2307/1912791">10.2307/1912791</a>.</div>
+<div class="csl-left-margin">[14] </div><div class="csl-right-inline">C. W. J. Granger, <span>“Investigating causal relations by econometric models and cross-spectral methods,”</span> <em>Econometrica</em>, vol. 37, no. 3, pp. 424–438, 1969, doi: <a href="https://doi.org/10.2307/1912791">10.2307/1912791</a>.</div>
 </div>
 </div>
 <hr>
