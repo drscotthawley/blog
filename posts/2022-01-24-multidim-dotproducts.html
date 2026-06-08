@@ -350,7 +350,9 @@ window.Quarto = {
 <span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>        ax.legend(loc<span class="op">=</span><span class="dv">4</span>)   <span class="co"># legend will show dimensions and std dev</span></span>
 <span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i<span class="op">%</span><span class="dv">3</span><span class="op">==</span><span class="dv">0</span>: ax.set_ylabel(<span class="st">'Probability'</span>)</span>
 <span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> i<span class="op">&gt;</span><span class="dv">2</span>: ax.set_xlabel(<span class="st">'Dot product value'</span>)</span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sds, axes, fig   <span class="co"># return some axes &amp; figure info too in case we want to replot</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    plt.rcParams[<span class="st">'figure.facecolor'</span>] <span class="op">=</span> <span class="st">'white'</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>    plt.rcParams[<span class="st">'axes.facecolor'</span>] <span class="op">=</span> <span class="st">'white'</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sds, axes, fig   <span class="co"># return some axes &amp; figure info too in case we want to replot</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>Now we can get started by looking at distributions of dot products for various kinds of vectors. Starting with…</p>
@@ -535,9 +537,9 @@ Note
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    std <span class="op">=</span> np.std(dots,axis<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(dim, dots.mean(), std)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>10000 0.7616262 0.002711203
-20000 0.7616077 0.0019324023
-50000 0.76159537 0.001209799</code></pre>
+<pre><code>10000 0.7616273 0.0027284797
+20000 0.76161164 0.0019160153
+50000 0.7615953 0.0012085084</code></pre>
 </div>
 </div>
 <p>Likely candidate special number is the hyperbolic tangent of 1:</p>
@@ -547,7 +549,7 @@ Note
 <pre><code>0.7615941559557649</code></pre>
 </div>
 </div>
-<p>…though I’m not sure how that arises. Hmmm!</p>
+<p>…though I’m not sure how that arises. This merits further investigation!</p>
 </section>
 <section id="summary" class="level2">
 <h2 class="anchored" data-anchor-id="summary">Summary</h2>
