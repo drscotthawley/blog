@@ -298,7 +298,9 @@ window.Quarto = {
   <li><a href="#does-talent-matter" id="toc-does-talent-matter" class="nav-link" data-scroll-target="#does-talent-matter">Does Talent Matter?</a>
   <ul class="collapse">
   <li><a href="#defining-and-visualizing-graphs" id="toc-defining-and-visualizing-graphs" class="nav-link" data-scroll-target="#defining-and-visualizing-graphs">Defining and Visualizing Graphs</a></li>
-  <li><a href="#the-key-question-as-math" id="toc-the-key-question-as-math" class="nav-link" data-scroll-target="#the-key-question-as-math">The Key Question as Math</a>
+  <li><a href="#the-key-question-as-math" id="toc-the-key-question-as-math" class="nav-link" data-scroll-target="#the-key-question-as-math">The Key Question as Math</a></li>
+  <li><a href="#the-verdict" id="toc-the-verdict" class="nav-link" data-scroll-target="#the-verdict">The Verdict</a></li>
+  <li><a href="#getting-there-faster" id="toc-getting-there-faster" class="nav-link" data-scroll-target="#getting-there-faster">Getting There Faster</a>
   <ul class="collapse">
   <li><a href="#more-adjustments" id="toc-more-adjustments" class="nav-link" data-scroll-target="#more-adjustments">More Adjustments</a></li>
   </ul></li>
@@ -1030,7 +1032,14 @@ Naive estimate (GAS)            = P(Y=1 | X=1)     = 0.625
 Adjusted for Talent (Reality)   = P(Y=1 | do(X=1)) = 0.357</code></pre>
 </div>
 </div>
-<p>….So, at least judging by this dataset, once we accounted for <code>Talent</code>, buying new gear yields less than a coin flip’s chance of improving someone’s sound. <em>(Sweetwater, don’t sue! This is made up data. Feel free to provide real market data and I’ll work it in.)</em></p>
+</section>
+<section id="the-verdict" class="level2">
+<h2 class="anchored" data-anchor-id="the-verdict">The Verdict</h2>
+<p>Once we accounted for <code>Talent</code>, buying new gear yields less than a coin flip’s chance of improving someone’s sound – at least judging by this dataset.</p>
+<p><small><i>(Sweetwater, don’t sue! This is made up data. Feel free to provide real market data and I’ll work it in.)</i></small></p>
+</section>
+<section id="getting-there-faster" class="level2">
+<h2 class="anchored" data-anchor-id="getting-there-faster">Getting There Faster</h2>
 <p>That calculation was fine, but we can “do-” the computation (much) more efficiently via “advanced” <code>pandas</code> moves. For future reference, we’ll include such a code now, collapsed by default, and confirm it yields the same results as before.</p>
 <div id="c3185537-0e11-45d8-9452-f3bdb6e7e8d3" class="cell">
 <details class="code-fold">
