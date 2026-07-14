@@ -1077,8 +1077,8 @@ Adjusted for Talent (Reality)   = P(Y=1 | do(X=1)) = 0.357</code></pre>
 <h3 class="anchored" data-anchor-id="more-adjustments">More Adjustments</h3>
 <p>The full do-calculus has adjustment rules for a few different other kinds of subgraph configurations:</p>
 <ul>
-<li>“front door” whereby The thing you’re interested in has all of its causal influence passing through an intermediary before reaching the effect.</li>
-<li>“colliders”, Where two (or more) arrows point inward to a node.</li>
+<li>“front door” whereby the thing you’re interested in has all of its causal influence passing through an intermediary before reaching the effect.</li>
+<li>“colliders”, where two (or more) arrows point inward to a node.</li>
 <li>….and more. There’s a lot more we can include, but I want to wrap this post up for now.</li>
 </ul>
 </section>
@@ -1092,7 +1092,7 @@ Adjusted for Talent (Reality)   = P(Y=1 | do(X=1)) = 0.357</code></pre>
 </section>
 <section id="time-dependence" class="level2">
 <h2 class="anchored" data-anchor-id="time-dependence">Time Dependence?</h2>
-<p>I’m particularly interested in causal modeling within time-dependent scenarios [<span class="citation" data-cites="Danks2013"><a href="#ref-Danks2013" role="doc-biblioref">[12]</a></span>]<span class="citation" data-cites="peters2017elements"><a href="#ref-peters2017elements" role="doc-biblioref">[13]</a></span>, e.g.&nbsp;for applications to multichannel audio signal processing, finance, …lots of contexts. Regarding time series and causality, historically, <a href="https://en.wikipedia.org/wiki/Clive_Granger">Clive Granger</a> proposed a causal method for economics time series in 1969 <span class="citation" data-cites="granger69"><a href="#ref-granger69" role="doc-biblioref">[14]</a></span>. However, I’d content orignary Granger “causality” isn’t really “true” causality, rather it is just a measure of <em>time-delayed predictive correlation.</em> In order to explore do-calculus modifications to it, we’d have to do some work. Typically, we may have a lot of different data streams, rather than enumerating X, Y, etc. we’ll just use X with superscripts and subscripts denoting the <span class="math inline">\(j\)</span>th data stream at time <span class="math inline">\(t\)</span> as <span class="math inline">\(X^j_t\)</span>. The relationships between these streams as we unroll each node at each time can either be instantaneous or have time delays <span class="citation" data-cites="peters2017elements"><a href="#ref-peters2017elements" role="doc-biblioref">[13]</a></span>.</p>
+<p>I’d also like to explore how we incorporate do-calculus ideas into time series modeling. Ordinary Granger “causality” <span class="citation" data-cites="granger69"><a href="#ref-granger69" role="doc-biblioref">[12]</a></span> is just time-delayed predictive correlation, not “real” causation, and reconciling the two is uncharted territory for a future post. Maybe something like a stacked DAG like in <span class="citation" data-cites="peters2017elements"><a href="#ref-peters2017elements" role="doc-biblioref">[13]</a></span>? We’ll see, maybe a Part 3? ;-)</p>
 <p>…Signing off now. Check out the References below!</p>
 </section>
 </section>
@@ -1132,14 +1132,11 @@ Adjusted for Talent (Reality)   = P(Y=1 | do(X=1)) = 0.357</code></pre>
 <div id="ref-hawley2014bayes" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[11] </div><div class="csl-right-inline"><span>“<span>B</span>ayesian analysis for audio engineers.”</span> Meeting of the Belmont <span>S</span>tudent <span>S</span>ection of the <span>A</span>udio <span>E</span>ngineering <span>S</span>ociety, 2014. Available: <a href="https://hedges.belmont.edu/BayesianAnalysisPartI.pdf">https://hedges.belmont.edu/BayesianAnalysisPartI.pdf</a></div>
 </div>
-<div id="ref-Danks2013" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[12] </div><div class="csl-right-inline">D. Danks and S. Plis, <span>“<span class="nocase">Learning Causal Structure from Undersampled Time Series</span>,”</span> in <em><span>A</span>dvances in <span>N</span>eural <span>I</span>nformation <span>P</span>rocessing <span>S</span>ystems</em>, 2013. doi: <a href="https://doi.org/10.1184/R1/6492101.v1">10.1184/R1/6492101.v1</a>.</div>
+<div id="ref-granger69" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[12] </div><div class="csl-right-inline">C. W. J. Granger, <span>“Investigating causal relations by econometric models and cross-spectral methods,”</span> <em>Econometrica</em>, vol. 37, no. 3, pp. 424–438, 1969, doi: <a href="https://doi.org/10.2307/1912791">10.2307/1912791</a>.</div>
 </div>
 <div id="ref-peters2017elements" class="csl-entry" role="listitem">
 <div class="csl-left-margin">[13] </div><div class="csl-right-inline">J. Peters, D. Janzing, and B. Schölkopf, <em>Elements of causal inference: Foundations and learning algorithms</em>. in Adaptive computation and machine learning. The MIT Press, 2017, pp. 197–211.</div>
-</div>
-<div id="ref-granger69" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[14] </div><div class="csl-right-inline">C. W. J. Granger, <span>“Investigating causal relations by econometric models and cross-spectral methods,”</span> <em>Econometrica</em>, vol. 37, no. 3, pp. 424–438, 1969, doi: <a href="https://doi.org/10.2307/1912791">10.2307/1912791</a>.</div>
 </div>
 </div>
 <hr>
