@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2026-05-18">
 <meta name="description" content="How do you “do-”?">
 
-<title>Catapulting into Causal Calculus [DRAFT] – Scott H. Hawley</title>
+<title>Catapulting into Causal Calculus (Part 1) – Scott H. Hawley</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -174,13 +174,13 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../styles.css">
-<meta property="og:title" content="Catapulting into Causal Calculus [DRAFT] – Scott H. Hawley">
+<meta property="og:title" content="Catapulting into Causal Calculus (Part 1) – Scott H. Hawley">
 <meta property="og:description" content="How do you “do-”?">
 <meta property="og:image" content="https://drscotthawley.github.io/blog/posts/images/catapult.png">
 <meta property="og:site_name" content="Scott H. Hawley">
 <meta property="og:image:height" content="711">
 <meta property="og:image:width" content="1367">
-<meta name="twitter:title" content="Catapulting into Causal Calculus [DRAFT] – Scott H. Hawley">
+<meta name="twitter:title" content="Catapulting into Causal Calculus (Part 1) – Scott H. Hawley">
 <meta name="twitter:description" content="How do you “do-”?">
 <meta name="twitter:image" content="https://drscotthawley.github.io/blog/posts/images/catapult.png">
 <meta name="twitter:image-height" content="711">
@@ -243,7 +243,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Catapulting into Causal Calculus [DRAFT]</h1>
+      <h1 class="title">Catapulting into Causal Calculus (Part 1)</h1>
                   <div>
         <div class="description">
           How do you “do-”?
@@ -253,7 +253,6 @@ window.Quarto = {
                 <div class="quarto-category">causal</div>
                 <div class="quarto-category">graphs</div>
                 <div class="quarto-category">statistics</div>
-                <div class="quarto-category">draft</div>
               </div>
                   </div>
   </div>
@@ -287,8 +286,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#work-in-progress-come-back-later-for-more" id="toc-work-in-progress-come-back-later-for-more" class="nav-link active" data-scroll-target="#work-in-progress-come-back-later-for-more">—<em>Work in Progress! Come back later for more</em>—</a></li>
-  <li><a href="#intro" id="toc-intro" class="nav-link" data-scroll-target="#intro">Intro</a></li>
+  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
   <li><a href="#case-study-gear-acquisition-syndrome-gas" id="toc-case-study-gear-acquisition-syndrome-gas" class="nav-link" data-scroll-target="#case-study-gear-acquisition-syndrome-gas">Case Study: Gear Acquisition Syndrome (GAS)</a></li>
   <li><a href="#sample-data" id="toc-sample-data" class="nav-link" data-scroll-target="#sample-data">Sample Data</a></li>
   <li><a href="#does-talent-matter" id="toc-does-talent-matter" class="nav-link" data-scroll-target="#does-talent-matter">Does Talent Matter?</a>
@@ -299,10 +297,11 @@ window.Quarto = {
   <li><a href="#more-adjustments" id="toc-more-adjustments" class="nav-link" data-scroll-target="#more-adjustments">More Adjustments</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#what-about-time-dependence" id="toc-what-about-time-dependence" class="nav-link" data-scroll-target="#what-about-time-dependence">What About Time Dependence?</a></li>
-  <li><a href="#advanced-topics" id="toc-advanced-topics" class="nav-link" data-scroll-target="#advanced-topics">Advanced Topics</a></li>
-  <li><a href="#work-in-progress" id="toc-work-in-progress" class="nav-link" data-scroll-target="#work-in-progress">Work in Progress</a></li>
-  <li><a href="#glossary" id="toc-glossary" class="nav-link" data-scroll-target="#glossary">Glossary</a></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next">What’s Next?</a>
+  <ul class="collapse">
+  <li><a href="#bigger-graphs-more-effects" id="toc-bigger-graphs-more-effects" class="nav-link" data-scroll-target="#bigger-graphs-more-effects">Bigger Graphs, More Effects</a></li>
+  <li><a href="#time-dependence" id="toc-time-dependence" class="nav-link" data-scroll-target="#time-dependence">Time Dependence?</a></li>
+  </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -319,12 +318,9 @@ figcaption {
   margin: auto;
   text-align: center;
 </style>
-<section id="work-in-progress-come-back-later-for-more" class="level2">
-<h2 class="anchored" data-anchor-id="work-in-progress-come-back-later-for-more">—<em>Work in Progress! Come back later for more</em>—</h2>
 <blockquote class="blockquote">
 <p>“…causal calculus differentiates between two types of conditional distributions one might want to estimate. …in ML we usually estimate only one of them, but in some applications we should actually…estimate the other one.” – Ferenc Huszar <span class="citation" data-cites="huszar2018causalintro"><a href="#ref-huszar2018causalintro" role="doc-biblioref">[1]</a></span></p>
 </blockquote>
-</section>
 <section id="intro" class="level1">
 <h1>Intro</h1>
 <p>I’ve been wanting to learn Causal Inference (CI) / Causal Modeling (causal inference) “properly” ever since I asked for Judea Pearl’s bestselling <em>The Book of Why</em> <span class="citation" data-cites="pearl2018why"><a href="#ref-pearl2018why" role="doc-biblioref">[2]</a></span> for Christmas in 2019. It’s a <em>great</em> read, but it hides any actual computation by merely mentioning the mystical “do calculus”. Pearl offers details on that in his textbook <span class="citation" data-cites="pearl2009causality"><a href="#ref-pearl2009causality" role="doc-biblioref">[3]</a></span>, but I want get up to speed faster, so I’ve been reading and watching other treatments <span class="citation" data-cites="tucci2013"><a href="#ref-tucci2013" role="doc-biblioref">[4]</a></span> <span class="citation" data-cites="neal2020"><a href="#ref-neal2020" role="doc-biblioref">[5]</a></span> <span class="citation" data-cites="facure2023causal"><a href="#ref-facure2023causal" role="doc-biblioref">[6]</a></span> <span class="citation" data-cites="ghosh2026karmamvbenchmarkcausalquestion"><a href="#ref-ghosh2026karmamvbenchmarkcausalquestion" role="doc-biblioref">[7]</a></span> <span class="citation" data-cites="bornstein2021lightningcausalexamples"><a href="#ref-bornstein2021lightningcausalexamples" role="doc-biblioref">[8]</a></span> <span class="citation" data-cites="krohn2025causalainess"><a href="#ref-krohn2025causalainess" role="doc-biblioref">[9]</a></span> <span class="citation" data-cites="Koch2025DeepLearningCausalInference"><a href="#ref-Koch2025DeepLearningCausalInference" role="doc-biblioref">[10]</a></span>, which most often are either “slow” or quickly throw up what I call the “Wall of Math.”<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
@@ -1083,184 +1079,22 @@ Adjusted for Talent (Reality)   = P(Y=1 | do(X=1)) = 0.357</code></pre>
 <ul>
 <li>“front door” whereby The thing you’re interested in has all of its causal influence passing through an intermediary before reaching the effect.</li>
 <li>“colliders”, Where two (or more) arrows point inward to a node.</li>
-<li>….something else…instrumental variables? #TODO</li>
+<li>….and more. There’s a lot more we can include, but I want to wrap this post up for now.</li>
 </ul>
-<p>I’m not going to bother enumerating every single one because I want to move on to what I’m really interested in – time dependence.</p>
 </section>
 </section>
 </section>
-<section id="what-about-time-dependence" class="level1">
-<h1>What About Time Dependence?</h1>
-<p>I’m interested in time-dependent audio signals. Similar data streams could be weather patterns, logistics data, or financial data. Now, we could naively just let the time <span class="math inline">\(t\)</span> be another variable like <span class="math inline">\(X\)</span>, <span class="math inline">\(Y\)</span>, and <span class="math inline">\(Z\)</span>, but this is typically not how it’s done – and smart people have already thought through this.[<span class="citation" data-cites="Danks2013"><a href="#ref-Danks2013" role="doc-biblioref">[12]</a></span>]<span class="citation" data-cites="peters2017elements"><a href="#ref-peters2017elements" role="doc-biblioref">[13]</a></span></p>
-<p>Historically, <a href="https://en.wikipedia.org/wiki/Clive_Granger">Clive Granger</a> proposed a causal method for economics time series in 1969 <span class="citation" data-cites="granger69"><a href="#ref-granger69" role="doc-biblioref">[14]</a></span>. It amounts to creating a separate graph node for each instant of time (or at least for each time we have data), i.e., not just a function <span class="math inline">\(X(t)\)</span> but rather the past-directed sequence of data points <span class="math inline">\(X_t\)</span>, <span class="math inline">\(X_{t-1}\)</span>, <span class="math inline">\(X_{t-2}\)</span>,<span class="math inline">\(\ldots\)</span></p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/GrangerCausalityIllustration.svg/1920px-GrangerCausalityIllustration.svg.png" class="img-fluid figure-img"></p>
-<figcaption>Granger Causality example. Signal Y is “Granger-caused” by signal X if changes in Y consistently follow changes in X. So that knowing X improves your forecasts of Y. (Source: Wikipedia)</figcaption>
-</figure>
-</div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Warning
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Ordinary Granger “causality” isn’t really “true” causality, rather it is just a measure of <em>time-delayed predictive correlation.</em> In order to explore do-calculus modifications to it, we’ll have to do some work.</p>
-</div>
-</div>
-<p>Typically, we may have a lot of different data streams, rather than enumerating X, Y, etc. we’ll just use X with superscripts and subscripts denoting the <span class="math inline">\(j\)</span>th data stream at time <span class="math inline">\(t\)</span> as <span class="math inline">\(X^j_t\)</span>. The relationships between these streams as we unroll each node at each time can either be instantaneous or have time delays as shown in this image from <span class="citation" data-cites="peters2017elements"><a href="#ref-peters2017elements" role="doc-biblioref">[13]</a></span>:</p>
-<div id="peters-streams">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/peters_shot_streams_instantaneous.png" class="img3 img-fluid figure-img"></p>
-<figcaption>DAGs showing multichannel time series without instantaneous effects (top) and with them (bottom). Source: <span class="citation" data-cites="peters2017elements"><a href="#ref-peters2017elements" role="doc-biblioref">[13]</a></span></figcaption>
-</figure>
-</div>
-</div>
+<section id="whats-next" class="level1">
+<h1>What’s Next?</h1>
+<section id="bigger-graphs-more-effects" class="level2">
+<h2 class="anchored" data-anchor-id="bigger-graphs-more-effects">Bigger Graphs, More Effects</h2>
+<p>As noted above, there are a lot of different possible interactions and we’re just scratching the surface here, so a larger discussion with larger graphs can happen in Part 2.</p>
 </section>
-<section id="advanced-topics" class="level1">
-<h1>Advanced Topics</h1>
-<div id="fdd80e8f-6079-4433-82a8-f2e4258df85c" class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>G3 <span class="op">=</span> nx.DiGraph()</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Talent"</span>,      role<span class="op">=</span><span class="st">"default"</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Performance"</span>, role<span class="op">=</span><span class="st">"confounder"</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Gear"</span>,        role<span class="op">=</span><span class="st">"default"</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Recording"</span>,   role<span class="op">=</span><span class="st">"confounder"</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>, role<span class="op">=</span><span class="st">"treatment"</span>)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>G3.add_node(<span class="st">"Sound"</span>,       role<span class="op">=</span><span class="st">"outcome"</span>)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>G3.add_edges_from([</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Talent"</span>,      <span class="st">"Performance"</span>),</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Performance"</span>, <span class="st">"Recording"</span>),</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Gear"</span>,        <span class="st">"Recording"</span>),</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Recording"</span>,   <span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>),</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Signal</span><span class="ch">\n</span><span class="st">Proc"</span>, <span class="st">"Sound"</span>),</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>show_dag(G3, width<span class="op">=</span><span class="dv">800</span>, height<span class="op">=</span><span class="dv">600</span>, title<span class="op">=</span><span class="st">"Why does my recording sound like ass?"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-<div class="cell-output cell-output-display">
-<div style="display:flex;gap:12px;flex-wrap:wrap;"><div id="dag2" style="width:800px;height:600px;border:1px solid #444;border-radius:6px;background:#1a1a2e;display:inline-block;"></div></div>
-<script type="module">
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-
-function initGraphs() {
-  const specs = [{"uid": "dag2", "nodes": [{"id": "Talent", "color": "#2471a3"}, {"id": "Performance", "color": "#6c3483"}, {"id": "Gear", "color": "#2471a3"}, {"id": "Recording", "color": "#6c3483"}, {"id": "Signal\nProc", "color": "#c0392b"}, {"id": "Sound", "color": "#1e8449"}], "links": [{"source": "Talent", "target": "Performance", "label": ""}, {"source": "Performance", "target": "Recording", "label": ""}, {"source": "Gear", "target": "Recording", "label": ""}, {"source": "Recording", "target": "Signal\nProc", "label": ""}, {"source": "Signal\nProc", "target": "Sound", "label": ""}], "title": "Why does my recording sound like ass?", "titleOffset": 28}];
-  const W = 800, H = 600, R = 34, FS = 13;
-  console.log("initGraphs: found", specs.length, "specs");
-
-  for (const spec of specs) {
-    const {uid, nodes, links, title, titleOffset} = spec;
-    const el = document.getElementById(uid);
-    console.log("Looking for #" + uid + ":", el);
-    if (!el) continue;
-
-    const w = W, h = H, r = R, fs = FS;
-    const svg = d3.select(el).append("svg").attr("width", w).attr("height", h);
-
-    if (title) {
-      svg.append("text").attr("x", w/2).attr("y", 30)  // title placement
-        .attr("text-anchor", "middle").attr("fill", "#ccc")
-        .attr("font-size", "18px").attr("font-family", "sans-serif").attr("font-weight", "bold")
-        .text(title);
-    }
-
-    svg.append("defs").append("marker")
-      .attr("id", uid + "-arrow").attr("viewBox", "0 -5 10 10")
-      .attr("refX", 10).attr("refY", 0).attr("markerWidth", 7).attr("markerHeight", 7).attr("orient", "auto")
-      .append("path").attr("d", "M0,-5L10,0L0,5").attr("fill", "#aaa");
-
-    const linkData = links.map(l => ({...l}));
-    const nodeData = nodes.map(n => ({...n}));
-
-    const sim = d3.forceSimulation(nodeData)
-      .force("link", d3.forceLink(linkData).id(d => d.id).distance(140))
-      .force("charge", d3.forceManyBody().strength(-500))
-      .force("center", d3.forceCenter(w/2, titleOffset/2 + h/2));
-
-    const link = svg.append("g").selectAll("line").data(linkData).join("line")
-      .attr("stroke", "#aaa").attr("stroke-width", 2)
-      .attr("marker-end", "url(#" + uid + "-arrow)");
-
-    const edgeLabels = svg.append("g").selectAll("text").data(linkData.filter(d => d.label)).join("text")
-      .attr("text-anchor", "middle").attr("fill", "#ffdd57")
-      .attr("font-size", "16px").attr("font-family", "sans-serif").attr("font-weight", "bold")
-      .text(d => d.label);
-
-    const node = svg.append("g").selectAll("g").data(nodeData).join("g")
-      .call(d3.drag()
-        .on("start", (e,d) => { if (!e.active) sim.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; })
-        .on("drag",  (e,d) => { d.fx=e.x; d.fy=e.y; })
-        .on("end",   (e,d) => { if (!e.active) sim.alphaTarget(0); d.fx=null; d.fy=null; }));
-
-    node.append("circle").attr("r", r).attr("fill", d => d.color).attr("stroke", "#fff").attr("stroke-width", 1.5);
-
-    node.each(function(d) {
-      const lines = d.id.split("\n");
-      const txt = d3.select(this).append("text").attr("text-anchor", "middle")
-        .attr("fill", "white").attr("font-size", fs+"px").attr("font-family", "sans-serif");
-      const lh = fs * 1.2, yStart = -((lines.length - 1) * lh) / 2;
-      lines.forEach((line, i) => {
-        txt.append("tspan").attr("x", 0).attr("y", yStart + i*lh).attr("dy", "0.35em").text(line);
-      });
-    });
-
-    sim.on("tick", () => {
-      link.each(function(d) {
-        const dx = d.target.x-d.source.x, dy = d.target.y-d.source.y;
-        const dist = Math.sqrt(dx*dx+dy*dy) || 1, ux = dx/dist, uy = dy/dist;
-        d3.select(this)
-          .attr("x1", d.source.x+ux*r).attr("y1", d.source.y+uy*r)
-          .attr("x2", d.target.x-ux*r).attr("y2", d.target.y-uy*r);
-      });
-      edgeLabels
-        .attr("x", d => (d.source.x+d.target.x)/2)
-        .attr("y", d => (d.source.y+d.target.y)/2 - 8);
-      node.attr("transform", d => `translate(${d.x},${d.y})`);
-    });
-  }
-}
-
-setTimeout(initGraphs, 100);
-</script>
-</div>
-</div>
+<section id="time-dependence" class="level2">
+<h2 class="anchored" data-anchor-id="time-dependence">Time Dependence?</h2>
+<p>I’m particularly interested in causal modeling within time-dependent scenarios [<span class="citation" data-cites="Danks2013"><a href="#ref-Danks2013" role="doc-biblioref">[12]</a></span>]<span class="citation" data-cites="peters2017elements"><a href="#ref-peters2017elements" role="doc-biblioref">[13]</a></span>, e.g.&nbsp;for applications to multichannel audio signal processing, finance, …lots of contexts. Regarding time series and causality, historically, <a href="https://en.wikipedia.org/wiki/Clive_Granger">Clive Granger</a> proposed a causal method for economics time series in 1969 <span class="citation" data-cites="granger69"><a href="#ref-granger69" role="doc-biblioref">[14]</a></span>. However, I’d content orignary Granger “causality” isn’t really “true” causality, rather it is just a measure of <em>time-delayed predictive correlation.</em> In order to explore do-calculus modifications to it, we’d have to do some work. Typically, we may have a lot of different data streams, rather than enumerating X, Y, etc. we’ll just use X with superscripts and subscripts denoting the <span class="math inline">\(j\)</span>th data stream at time <span class="math inline">\(t\)</span> as <span class="math inline">\(X^j_t\)</span>. The relationships between these streams as we unroll each node at each time can either be instantaneous or have time delays <span class="citation" data-cites="peters2017elements"><a href="#ref-peters2017elements" role="doc-biblioref">[13]</a></span>.</p>
+<p>…Signing off now. Check out the References below!</p>
 </section>
-<section id="work-in-progress" class="level1">
-<h1>Work in Progress</h1>
-<p>Still writing! Come back for more later.</p>
-</section>
-<section id="glossary" class="level1">
-<h1>Glossary</h1>
-<p>This is to keep my head straight while the jargon piles up.</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Term</th>
-<th>Definition</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>collider</td>
-<td>something</td>
-</tr>
-<tr class="even">
-<td>confounder</td>
-<td>something</td>
-</tr>
-<tr class="odd">
-<td>minimality</td>
-<td>something</td>
-</tr>
-</tbody>
-</table>
 </section>
 <section id="references" class="level1">
 <h1>References</h1>

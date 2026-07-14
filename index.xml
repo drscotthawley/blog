@@ -15,7 +15,19 @@
 <link>https://drscotthawley.github.io/blog/</link>
 </image>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Sun, 01 Mar 2026 06:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 18 May 2026 05:00:00 GMT</lastBuildDate>
+<item>
+  <title>Catapulting into Causal Calculus (Part 1)</title>
+  <dc:creator>Scott H. Hawley</dc:creator>
+  <link>https://drscotthawley.github.io/blog/posts/CausalCatapult.html</link>
+  <description><![CDATA[ How do you “do-”? ]]></description>
+  <category>causal</category>
+  <category>graphs</category>
+  <category>statistics</category>
+  <guid>https://drscotthawley.github.io/blog/posts/CausalCatapult.html</guid>
+  <pubDate>Mon, 18 May 2026 05:00:00 GMT</pubDate>
+  <media:content url="https://drscotthawley.github.io/blog/posts/images/catapult.png" medium="image" type="image/png" height="75" width="144"/>
+</item>
 <item>
   <title>Factorizing Softly</title>
   <dc:creator>Scott H. Hawley</dc:creator>
@@ -254,18 +266,6 @@
   <guid>https://drscotthawley.github.io/blog/posts/2020-01-13-Mac-Linux-Switch-Notes.html</guid>
   <pubDate>Mon, 13 Jan 2020 06:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/gparted.png" medium="image" type="image/png" height="100" width="144"/>
-</item>
-<item>
-  <title>Principal Component Analysis (PCA) from Scratch</title>
-  <link>https://drscotthawley.github.io/blog/posts/2019-12-21-pca-from-scratch.html</link>
-  <description><![CDATA[ There are many tutorials on PCA, but this one has interactive 3D graphs! ]]></description>
-  <category>math</category>
-  <category>foundations</category>
-  <category>dimensionality_reduction</category>
-  <category>visualization</category>
-  <guid>https://drscotthawley.github.io/blog/posts/2019-12-21-pca-from-scratch.html</guid>
-  <pubDate>Sat, 21 Dec 2019 06:00:00 GMT</pubDate>
-  <media:content url="https://i.imgur.com/vKiH8As.png" medium="image" type="image/png"/>
 </item>
 </channel>
 </rss>

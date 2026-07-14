@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Claude (riffing on Scott H. Hawley’s Part 1)">
+<meta name="dcterms.date" content="2026-07-14">
+<meta name="description" content="Unit tests for your DAG, Berkson at the record label, and an appendix in which the DAW turns out to be a do() machine.">
+
+<title>Catapulting into Causal Calculus, Part 2: Is Your Graph Even True? [CLAUDE’S DRAFT] – Scott H. Hawley</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/logo.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-1b3db88def35042d172274863c1cdcf0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-8d1ea2f4f8e14d12cbb0a1c491d81284.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+details > summary {
+    color: #00966f;   /* the greenish tinge that appears in my blog */
+    cursor: pointer; /* lil triangle thingy */
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&amp;display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+<meta name="twitter:title" content="Catapulting into Causal Calculus, Part 2: Is Your Graph Even True? [CLAUDE’S DRAFT] – Scott H. Hawley">
+<meta name="twitter:description" content="Unit tests for your DAG, Berkson at the record label, and an appendix in which the DAW turns out to be a do() machine.">
+<meta name="twitter:image" content="https://drscotthawley.github.io/blog/posts/CausalCatapult2_GraphTruth_files/figure-html/cell-3-output-2.png">
+<meta name="twitter:image-height" content="540">
+<meta name="twitter:image-width" content="690">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="https://www.scotthawley.com" class="navbar-brand navbar-brand-logo">
+    <img src="../images/logo.png" alt="SH Logo" class="navbar-logo light-content">
+    <img src="../images/logo.png" alt="SH Logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="https://www.scotthawley.com">
+    <span class="navbar-title">Scott H. Hawley</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/drscotthawley"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://bsky.app/profile/drscotthawley.bsky.social"> 
+<span class="menu-text"><i class="fa-brands fa-bluesky" aria-label="bluesky"></i></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/drscotthawley"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/drscotthawley/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Catapulting into Causal Calculus, Part 2: Is Your Graph Even True? [CLAUDE’S DRAFT]</h1>
+                  <div>
+        <div class="description">
+          Unit tests for your DAG, Berkson at the record label, and an appendix in which the DAW turns out to be a do() machine.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">causal</div>
+                <div class="quarto-category">graphs</div>
+                <div class="quarto-category">statistics</div>
+                <div class="quarto-category">draft</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Claude (riffing on Scott H. Hawley’s Part 1) </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 14, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#previously-on-causal-catapult" id="toc-previously-on-causal-catapult" class="nav-link active" data-scroll-target="#previously-on-causal-catapult">Previously, on Causal Catapult</a></li>
+  <li><a href="#the-three-pipe-fittings" id="toc-the-three-pipe-fittings" class="nav-link" data-scroll-target="#the-three-pipe-fittings">The Three Pipe Fittings</a></li>
+  <li><a href="#berksons-paradox-at-the-record-label" id="toc-berksons-paradox-at-the-record-label" class="nav-link" data-scroll-target="#berksons-paradox-at-the-record-label">Berkson’s Paradox at the Record Label</a></li>
+  <li><a href="#d-separation-the-rule-and-why-its-a-gift" id="toc-d-separation-the-rule-and-why-its-a-gift" class="nav-link" data-scroll-target="#d-separation-the-rule-and-why-its-a-gift">d-Separation: The Rule, and Why It’s a Gift</a></li>
+  <li><a href="#the-showdown-three-theories-of-gas-walk-into-a-bar" id="toc-the-showdown-three-theories-of-gas-walk-into-a-bar" class="nav-link" data-scroll-target="#the-showdown-three-theories-of-gas-walk-into-a-bar">The Showdown: Three Theories of GAS Walk Into a Bar</a></li>
+  <li><a href="#markov-equivalence-the-wall-at-the-end-of-observation" id="toc-markov-equivalence-the-wall-at-the-end-of-observation" class="nav-link" data-scroll-target="#markov-equivalence-the-wall-at-the-end-of-observation">Markov Equivalence: The Wall at the End of Observation</a></li>
+  <li><a href="#the-pc-algorithm-run-all-the-tests-keep-the-survivors" id="toc-the-pc-algorithm-run-all-the-tests-keep-the-survivors" class="nav-link" data-scroll-target="#the-pc-algorithm-run-all-the-tests-keep-the-survivors">The PC Algorithm: Run All the Tests, Keep the Survivors</a>
+  <ul class="collapse">
+  <li><a href="#now-watch-it-lie" id="toc-now-watch-it-lie" class="nav-link" data-scroll-target="#now-watch-it-lie">Now Watch It Lie</a></li>
+  </ul></li>
+  <li><a href="#interactive-the-conditioning-console" id="toc-interactive-the-conditioning-console" class="nav-link" data-scroll-target="#interactive-the-conditioning-console">Interactive: The Conditioning Console</a></li>
+  <li><a href="#appendix-the-daw-does-do" id="toc-appendix-the-daw-does-do" class="nav-link" data-scroll-target="#appendix-the-daw-does-do">Appendix: The DAW Does do()</a>
+  <ul class="collapse">
+  <li><a href="#one-rung-further-the-counterfactual-bounce" id="toc-one-rung-further-the-counterfactual-bounce" class="nav-link" data-scroll-target="#one-rung-further-the-counterfactual-bounce">One Rung Further: The Counterfactual Bounce</a></li>
+  </ul></li>
+  <li><a href="#glossary-growing" id="toc-glossary-growing" class="nav-link" data-scroll-target="#glossary-growing">Glossary (Growing)</a></li>
+  <li><a href="#where-next" id="toc-where-next" class="nav-link" data-scroll-target="#where-next">Where Next</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>What this is
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Claude’s exploratory draft</strong>, not Scott’s writing — a candidate shape for Part 2 of <a href="https://drscotthawley.github.io/blog/posts/CausalCatapult.html">Causal Catapult</a>, built around the question <em>“someone hands you a causal graph — is it true?”</em>, with the DAW-does-do() material as an appendix. New <code>references.bib</code> entries needed: <code>@spirtes2000causation</code> (Spirtes, Glymour &amp; Scheines, <em>Causation, Prediction, and Search</em>, 2nd ed., MIT Press 2000 — the PC algorithm’s home), <code>@berkson1946</code> (Berkson, <em>Biometrics Bulletin</em> 1946).</p>
+</div>
+</div>
+<section id="previously-on-causal-catapult" class="level1">
+<h1>Previously, on Causal Catapult</h1>
+<p>Part 1 pulled a magic trick. We drew the “Reality” graph — <code>Talent</code> pointing at both <code>Gear</code> and <code>Sound</code> — applied the backdoor formula, and the seductive <span class="math inline">\(P(\mathrm{Great}\mid\mathrm{Fancy}) = 0.625\)</span> collapsed to <span class="math inline">\(P(\mathrm{Great}\mid do(\mathrm{Fancy})) = 0.357\)</span>. GAS debunked, wallets saved.</p>
+<p>But notice what we smuggled in: <strong>we just <em>asserted</em> that graph.</strong> The entire adjustment — which variable to condition on, which number comes out — hung on a picture I drew because it felt right. Draw a different picture, get a different “causal” answer, feel equally scientific. This is the dirty secret of applied causal inference: the formulas are rigorous, and the graph they operate on is vibes.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>So Part 2 asks the auditor’s question: <strong>given a proposed causal graph, can the data falsify it?</strong> This is not academic. It’s what an investor should do when an analyst pitches a thesis that is, on inspection, a causal graph (“founder pedigree → execution → returns”). It’s what you should do when a forum guru insists “converters → clarity → mix translation.” Everyone around you is proposing DAGs all day; they just draw them with words.</p>
+<p>The punchline of this post: <strong>every DAG implies a checklist of statistical claims that must hold in any data it generated — a suite of <em>unit tests for your causal model</em>.</strong> Graphs that fail, die. Graphs that pass… well, that’s where it gets interesting, and where an appendix full of bypass buttons comes in.</p>
+</section>
+<section id="the-three-pipe-fittings" class="level1">
+<h1>The Three Pipe Fittings</h1>
+<p>A causal graph transmits statistical dependence the way plumbing transmits water, and there are exactly three fittings. Everything in this post — d-separation, the PC algorithm, all of it — is these three, composed:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>fitting</th>
+<th>shape</th>
+<th>unconditioned</th>
+<th>conditioned on B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>chain</strong></td>
+<td>A → B → C</td>
+<td>A, C dependent</td>
+<td><strong>blocked</strong></td>
+</tr>
+<tr class="even">
+<td><strong>fork</strong></td>
+<td>A ← B → C</td>
+<td>A, C dependent</td>
+<td><strong>blocked</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>collider</strong></td>
+<td>A → B ← C</td>
+<td>A, C <strong>independent</strong></td>
+<td><strong>OPENED</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Chains and forks behave like intuition says: dependence flows through, and conditioning on the middle pinches the hose. The collider is the one that breaks brains, so it gets the demo. Note the inversion: a collider transmits <em>nothing</em> until you condition on it, at which point it starts manufacturing dependence out of thin air. Let’s verify all three in silicon:</p>
+<div id="b47409e8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-14T16:32:30.040466Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-14T16:32:30.040268Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-14T16:32:31.713820Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-14T16:32:31.712340Z&quot;}}" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">5000</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># chain:  A -&gt; B -&gt; C</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> rng.standard_normal(N)<span class="op">;</span> B <span class="op">=</span> <span class="fl">0.8</span><span class="op">*</span>A <span class="op">+</span> <span class="fl">0.6</span><span class="op">*</span>rng.standard_normal(N)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>Cc <span class="op">=</span> <span class="fl">0.8</span><span class="op">*</span>B <span class="op">+</span> <span class="fl">0.6</span><span class="op">*</span>rng.standard_normal(N)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># fork:   D &lt;- E -&gt; F</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>E <span class="op">=</span> rng.standard_normal(N)<span class="op">;</span> D <span class="op">=</span> <span class="fl">0.8</span><span class="op">*</span>E <span class="op">+</span> <span class="fl">0.6</span><span class="op">*</span>rng.standard_normal(N)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> <span class="fl">0.8</span><span class="op">*</span>E <span class="op">+</span> <span class="fl">0.6</span><span class="op">*</span>rng.standard_normal(N)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># collider: G -&gt; H &lt;- I</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> rng.standard_normal(N)<span class="op">;</span> I <span class="op">=</span> rng.standard_normal(N)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>H <span class="op">=</span> <span class="fl">0.7</span><span class="op">*</span>G <span class="op">+</span> <span class="fl">0.7</span><span class="op">*</span>I <span class="op">+</span> <span class="fl">0.6</span><span class="op">*</span>rng.standard_normal(N)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> corr(x, y): <span class="cf">return</span> np.corrcoef(x, y)[<span class="dv">0</span>,<span class="dv">1</span>]</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> corr_given(x, y, z):          <span class="co"># crude "conditioning": residualize on z</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    rx <span class="op">=</span> x <span class="op">-</span> np.polyval(np.polyfit(z, x, <span class="dv">1</span>), z)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    ry <span class="op">=</span> y <span class="op">-</span> np.polyval(np.polyfit(z, y, <span class="dv">1</span>), z)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> corr(rx, ry)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"chain    A,C:  r = </span><span class="sc">{</span>corr(A,Cc)<span class="sc">:+.3f}</span><span class="ss">   |B: r = </span><span class="sc">{</span>corr_given(A,Cc,B)<span class="sc">:+.3f}</span><span class="ss">   (blocked)"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"fork     D,F:  r = </span><span class="sc">{</span>corr(D,F)<span class="sc">:+.3f}</span><span class="ss">   |E: r = </span><span class="sc">{</span>corr_given(D,F,E)<span class="sc">:+.3f}</span><span class="ss">   (blocked)"</span>)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"collider G,I:  r = </span><span class="sc">{</span>corr(G,I)<span class="sc">:+.3f}</span><span class="ss">   |H: r = </span><span class="sc">{</span>corr_given(G,I,H)<span class="sc">:+.3f}</span><span class="ss">   (OPENED!)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>chain    A,C:  r = +0.631   |B: r = -0.025   (blocked)
+fork     D,F:  r = +0.643   |E: r = +0.027   (blocked)
+collider G,I:  r = +0.014   |H: r = -0.585   (OPENED!)</code></pre>
+</div>
+</div>
+<p>There it is in the last line: two independent variables (r ≈ 0) become strongly <em>anti</em>-correlated the moment you condition on their common effect. This isn’t a numerical artifact; it’s the fitting doing what the fitting does, and it has been ruining studies since before computers.</p>
+</section>
+<section id="berksons-paradox-at-the-record-label" class="level1">
+<h1>Berkson’s Paradox at the Record Label</h1>
+<p>Here’s the collider wearing a lanyard. Suppose <code>Talent</code> and <code>Looks</code> are dealt independently at birth — knowing one tells you nothing about the other. A label signs artists who score well on <em>the sum</em>: enough combined talent-plus-looks and you’re in. Now walk through the label’s roster and correlate talent with looks:</p>
+<div id="1371130a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-14T16:32:31.716773Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-14T16:32:31.716320Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-14T16:32:32.993995Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-14T16:32:32.992679Z&quot;}}" data-execution_count="2">
+<details class="code-fold">
+<summary>Berkson simulation + plot</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>plt.rcParams.update({<span class="st">'figure.facecolor'</span>:<span class="st">'#1a1a2e'</span>,<span class="st">'axes.facecolor'</span>:<span class="st">'#1a1a2e'</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'axes.edgecolor'</span>:<span class="st">'#666'</span>,<span class="st">'axes.labelcolor'</span>:<span class="st">'#ddd'</span>,<span class="st">'text.color'</span>:<span class="st">'#ddd'</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'xtick.color'</span>:<span class="st">'#aaa'</span>,<span class="st">'ytick.color'</span>:<span class="st">'#aaa'</span>,<span class="st">'legend.facecolor'</span>:<span class="st">'#1a1a2e'</span>})</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>talent <span class="op">=</span> rng.standard_normal(N)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>looks  <span class="op">=</span> rng.standard_normal(N)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>signed <span class="op">=</span> (talent <span class="op">+</span> looks <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>rng.standard_normal(N)) <span class="op">&gt;</span> <span class="fl">1.2</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"corr(talent, looks), everyone:      </span><span class="sc">{</span>corr(talent, looks)<span class="sc">:+.3f}</span><span class="ss">"</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"corr(talent, looks), signed only:   </span><span class="sc">{</span>corr(talent[signed], looks[signed])<span class="sc">:+.3f}</span><span class="ss">"</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="fl">5.5</span>))</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>ax.scatter(talent[<span class="op">~</span>signed], looks[<span class="op">~</span>signed], s<span class="op">=</span><span class="dv">6</span>, alpha<span class="op">=</span><span class="fl">.25</span>, color<span class="op">=</span><span class="st">'#556'</span>, label<span class="op">=</span><span class="st">'unsigned masses'</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>ax.scatter(talent[signed],  looks[signed],  s<span class="op">=</span><span class="dv">8</span>, alpha<span class="op">=</span><span class="fl">.6</span>,  color<span class="op">=</span><span class="st">'#CC9900'</span>, label<span class="op">=</span><span class="st">'signed roster'</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>m, b <span class="op">=</span> np.polyfit(talent[signed], looks[signed], <span class="dv">1</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>xs <span class="op">=</span> np.linspace(<span class="op">*</span>np.percentile(talent[signed], [<span class="dv">1</span>, <span class="dv">99</span>]), <span class="dv">10</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>ax.plot(xs, m<span class="op">*</span>xs <span class="op">+</span> b, color<span class="op">=</span><span class="st">'#BB4455'</span>, lw<span class="op">=</span><span class="fl">2.5</span>, label<span class="op">=</span><span class="ss">f'trend on roster (slope </span><span class="sc">{</span>m<span class="sc">:.2f}</span><span class="ss">)'</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'talent'</span>)<span class="op">;</span> ax.set_ylabel(<span class="st">'looks'</span>)<span class="op">;</span> ax.legend(framealpha<span class="op">=</span><span class="fl">.2</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Sign artists on (talent + looks) &gt; bar, and talent 'causes' ugliness"</span>)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()<span class="op">;</span> plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>corr(talent, looks), everyone:      +0.014
+corr(talent, looks), signed only:   -0.522</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="CausalCatapult2_GraphTruth_files/figure-html/cell-3-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Zero correlation in the population; <strong>−0.52 on the roster.</strong> Every A&amp;R veteran “knows” the gorgeous ones can’t sing and the virtuosos have faces for radio — and they’re not wrong <em>about their roster</em>, because the roster is a conditioned collider: <code>Talent → Signed ← Looks</code>, and being on the roster <em>is</em> conditioning on <code>Signed</code>. Nobody drew a causal arrow between talent and looks; the <em>selection process</em> drew a statistical one.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>This matters beyond jokes: <strong>conditioning is not always virtuous.</strong> Part 1 taught “adjust for the confounder”; the collider teaches that adjusting for the wrong thing <em>creates</em> the very spurious dependence you were trying to remove. Which raises the uncomfortable question this whole post exists to answer: adjust for what, according to <em>which graph</em>, and says <em>who</em>?</p>
+</section>
+<section id="d-separation-the-rule-and-why-its-a-gift" class="level1">
+<h1>d-Separation: The Rule, and Why It’s a Gift</h1>
+<p>Compose the three fittings and you get the general law. A <em>path</em> between X and Y (ignore arrow directions when tracing; respect them when judging) is <strong>blocked</strong> by a conditioning set <span class="math inline">\(S\)</span> if anywhere along it there’s</p>
+<ul>
+<li>a chain or fork whose middle node <strong>is in</strong> <span class="math inline">\(S\)</span>, or</li>
+<li>a collider whose middle node (and all its descendants) is <strong>not in</strong> <span class="math inline">\(S\)</span>.</li>
+</ul>
+<p>X and Y are <strong>d-separated</strong> given <span class="math inline">\(S\)</span> if <em>every</em> path between them is blocked — and the theorem (Pearl, Verma) says: d-separated in the graph ⟹ statistically independent in any data the graph generated.</p>
+<p>Read that implication backwards and it becomes a weapon:</p>
+<blockquote class="blockquote">
+<p><strong>Every claimed causal graph implies a list of conditional independencies. Each one is a falsifiable prediction. If the data violates even one, the graph is wrong.</strong> The list is a <em>unit-test suite for your causal model.</em></p>
+</blockquote>
+<p>Note what we did <em>not</em> need: interventions, experiments, or a time machine. Purely observational data can execute the test suite. It can’t always tell you which graph is <em>right</em> (patience — that limit is coming, and it has a name), but it can tell you which graphs are <em>dead</em>, and in an argument about causality, “your model fails its own unit tests” is a kill shot.</p>
+<p>First, the test itself. For jointly-Gaussian-ish data the workhorse is <strong>partial correlation</strong> — correlate X and Y after regressing both on <span class="math inline">\(S\)</span> — with Fisher’s z-transform providing the p-value. Ten lines, no library:</p>
+<div id="f6a7fa08" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-14T16:32:32.996036Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-14T16:32:32.995757Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-14T16:32:33.002550Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-14T16:32:33.001571Z&quot;}}" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> partial_corr(df, x, y, given<span class="op">=</span>()):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Correlation of x,y with the variables in `given` regressed out.</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">    One matrix inversion does all the regressions at once (precision matrix)."""</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    Cm <span class="op">=</span> np.corrcoef(df[[x, y, <span class="op">*</span>given]].values.T)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    P  <span class="op">=</span> np.linalg.inv(Cm)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>P[<span class="dv">0</span>,<span class="dv">1</span>] <span class="op">/</span> np.sqrt(P[<span class="dv">0</span>,<span class="dv">0</span>] <span class="op">*</span> P[<span class="dv">1</span>,<span class="dv">1</span>])</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ci_test(df, x, y, given<span class="op">=</span>(), alpha<span class="op">=</span><span class="fl">0.01</span>):</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Fisher z: is x independent of y given `given`? -&gt; (verdict, r, p)"""</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> partial_corr(df, x, y, given)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> <span class="fl">0.5</span><span class="op">*</span>np.log((<span class="dv">1</span><span class="op">+</span>r)<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>r)) <span class="op">*</span> np.sqrt(<span class="bu">len</span>(df) <span class="op">-</span> <span class="bu">len</span>(given) <span class="op">-</span> <span class="dv">3</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> <span class="dv">2</span><span class="op">*</span>(<span class="dv">1</span> <span class="op">-</span> stats.norm.cdf(<span class="bu">abs</span>(z)))</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> p <span class="op">&gt;</span> alpha, r, p</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Fine print, briefly
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Partial correlation only detects <em>linear</em> dependence; nonlinear relationships need fancier CI tests (kernel-based, mutual-information-based). The logic of everything below is identical — only the test statistic swaps out. We’ll stay linear and Gaussian so the machinery stays see-through.</p>
+</div>
+</div>
+</section>
+<section id="the-showdown-three-theories-of-gas-walk-into-a-bar" class="level1">
+<h1>The Showdown: Three Theories of GAS Walk Into a Bar</h1>
+<p>Time to put real graphs on trial. Here’s a continuous version of the GAS universe — same structure as Part 1’s “Reality,” and note the edge that <em>isn’t</em> there: in this world, gear truly does nothing.</p>
+<div id="6a59827f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-14T16:32:33.004513Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-14T16:32:33.003886Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-14T16:32:33.018172Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-14T16:32:33.017102Z&quot;}}" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gas_world(N<span class="op">=</span><span class="dv">5000</span>, seed<span class="op">=</span><span class="dv">0</span>):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> np.random.default_rng(seed)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    talent <span class="op">=</span> r.standard_normal(N)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    gear   <span class="op">=</span> <span class="fl">0.8</span><span class="op">*</span>talent <span class="op">+</span> <span class="fl">0.6</span><span class="op">*</span>r.standard_normal(N)   <span class="co"># the talented buy toys</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    sound  <span class="op">=</span> <span class="fl">0.9</span><span class="op">*</span>talent <span class="op">+</span> <span class="fl">0.6</span><span class="op">*</span>r.standard_normal(N)   <span class="co"># talent -&gt; sound; gear -&gt; nothing</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame({<span class="st">'Talent'</span>:talent, <span class="st">'Gear'</span>:gear, <span class="st">'Sound'</span>:sound})</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> gas_world()</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>d.corr().<span class="bu">round</span>(<span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Talent</th>
+<th data-quarto-table-cell-role="th">Gear</th>
+<th data-quarto-table-cell-role="th">Sound</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Talent</th>
+<td>1.00</td>
+<td>0.80</td>
+<td>0.83</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">Gear</th>
+<td>0.80</td>
+<td>1.00</td>
+<td>0.67</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Sound</th>
+<td>0.83</td>
+<td>0.67</td>
+<td>1.00</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>All three pairwise correlations are strong and positive. Now, three rival theories, each a perfectly sincere causal graph somebody actually holds:</p>
+<ul>
+<li><strong>H_GAS</strong> (<em>the forum guru</em>): <code>Talent → Gear → Sound</code>. Talented people buy gear, and the gear makes the sound. “It’s all signal chain, man.”</li>
+<li><strong>H_pure</strong> (<em>the conservatory purist</em>): <code>Gear ← Talent → Sound</code>. Talent drives both; the gear is jewelry.</li>
+<li><strong>H_flex</strong> (<em>the influencer</em>): <code>Talent → Sound → Gear</code>. Sounding great gets you paid and sponsored, and <em>that</em> buys the gear.</li>
+</ul>
+<p>Each graph stakes its life on one conditional independence — the pair it claims is d-separated, given the middle node:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>theory</th>
+<th>graph</th>
+<th>unit test it must pass</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>H_GAS</td>
+<td>Talent → Gear → Sound</td>
+<td>Talent ⊥ Sound | Gear</td>
+</tr>
+<tr class="even">
+<td>H_pure</td>
+<td>Gear ← Talent → Sound</td>
+<td>Gear ⊥ Sound | Talent</td>
+</tr>
+<tr class="odd">
+<td>H_flex</td>
+<td>Talent → Sound → Gear</td>
+<td>Talent ⊥ Gear | Sound</td>
+</tr>
+</tbody>
+</table>
+<p>Run the suite:</p>
+<div id="a4ce6aa9" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-14T16:32:33.020027Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-14T16:32:33.019763Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-14T16:32:33.028974Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-14T16:32:33.027997Z&quot;}}" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>suite <span class="op">=</span> [(<span class="st">"H_GAS  : Talent ⊥ Sound | Gear  "</span>, (<span class="st">'Talent'</span>,<span class="st">'Sound'</span>,(<span class="st">'Gear'</span>,))),</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>         (<span class="st">"H_pure : Gear ⊥ Sound | Talent  "</span>, (<span class="st">'Gear'</span>,<span class="st">'Sound'</span>,(<span class="st">'Talent'</span>,))),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>         (<span class="st">"H_flex : Talent ⊥ Gear | Sound  "</span>, (<span class="st">'Talent'</span>,<span class="st">'Gear'</span>,(<span class="st">'Sound'</span>,)))]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, (x, y, S) <span class="kw">in</span> suite:</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    ok, r, p <span class="op">=</span> ci_test(d, x, y, S)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">  partial r = </span><span class="sc">{</span>r<span class="sc">:+.3f}</span><span class="ss">,  p = </span><span class="sc">{</span>p<span class="sc">:.1e}</span><span class="ss">   -&gt;  </span><span class="sc">{</span><span class="st">'PASS ✓'</span> <span class="cf">if</span> ok <span class="cf">else</span> <span class="st">'FAIL ✗'</span><span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>H_GAS  : Talent ⊥ Sound | Gear    partial r = +0.655,  p = 0.0e+00   -&gt;  FAIL ✗
+H_pure : Gear ⊥ Sound | Talent    partial r = +0.013,  p = 3.7e-01   -&gt;  PASS ✓
+H_flex : Talent ⊥ Gear | Sound    partial r = +0.597,  p = 0.0e+00   -&gt;  FAIL ✗</code></pre>
+</div>
+</div>
+<p>Two theories dead on arrival. H_GAS claimed that once you know the gear, talent tells you nothing more about the sound — the data laughs (partial r = 0.66). H_flex claimed that once you know how someone sounds, their talent tells you nothing about their gear pile — also laughable (0.60). H_pure’s prediction — knowing talent, the gear tells you <em>nothing</em> about sound — holds at partial r = 0.003. The purist walks out of the bar alive.</p>
+<p>And notice what just happened rhetorically: nobody argued about mechanisms, anecdotes, or that one Grammy winner who records on a laptop mic. The graphs made falsifiable claims; the data executed them. <strong>This is the “business intelligence” version of causal inference: due diligence on the arrows.</strong></p>
+<p>Two pieces of fine print before anyone gets cocky:</p>
+<ol type="1">
+<li><strong>The unfalsifiable graph.</strong> A fourth theory — <code>Talent → Gear</code>, <code>Talent → Sound</code>, <em>and</em> <code>Gear → Sound</code> — implies <em>no</em> independencies at all, so it passes every test vacuously. Fully-connected graphs are the astrology of causal modeling: compatible with everything, informative about nothing. This is why the field prizes <strong>minimality</strong> (Part 1’s glossary owed you a definition: <em>every edge must earn its keep</em> — prefer the graph with the fewest arrows that still fits). H_pure fits with two edges; the kitchen-sink graph needs three. Occam wins the tiebreak.</li>
+<li><strong>Passing ≠ true.</strong> H_pure survived its test; that’s survival, not coronation. Which brings us to the honest limit of this whole enterprise…</li>
+</ol>
+</section>
+<section id="markov-equivalence-the-wall-at-the-end-of-observation" class="level1">
+<h1>Markov Equivalence: The Wall at the End of Observation</h1>
+<p>Consider two graphs of a musician’s development:</p>
+<ul>
+<li><code>Practice → Talent → Sound</code> (practice builds talent, talent makes sound), and</li>
+<li><code>Sound → Talent → Practice</code> (sounding good… causes talent… which causes practice?).</li>
+</ul>
+<p>The second is causally deranged. But run the unit tests: both are chains through <code>Talent</code>, so both imply exactly one independence — <code>Practice ⊥ Sound | Talent</code> — and <em>nothing else</em>. Identical test suites. Identical fingerprints in data:</p>
+<div id="fd19735d" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-14T16:32:33.030665Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-14T16:32:33.030499Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-14T16:32:33.038560Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-14T16:32:33.037559Z&quot;}}" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> np.random.default_rng(<span class="dv">7</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>practice <span class="op">=</span> r.standard_normal(<span class="dv">5000</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>tal      <span class="op">=</span> <span class="fl">0.8</span><span class="op">*</span>practice <span class="op">+</span> <span class="fl">0.6</span><span class="op">*</span>r.standard_normal(<span class="dv">5000</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>snd      <span class="op">=</span> <span class="fl">0.9</span><span class="op">*</span>tal <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>r.standard_normal(<span class="dv">5000</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>dm <span class="op">=</span> pd.DataFrame({<span class="st">'Practice'</span>:practice, <span class="st">'Talent'</span>:tal, <span class="st">'Sound'</span>:snd})</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>ok, rr, p <span class="op">=</span> ci_test(dm, <span class="st">'Practice'</span>, <span class="st">'Sound'</span>, (<span class="st">'Talent'</span>,))</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Practice ⊥ Sound | Talent:  partial r = </span><span class="sc">{</span>rr<span class="sc">:+.3f}</span><span class="ss">, p = </span><span class="sc">{</span>p<span class="sc">:.2f}</span><span class="ss">  -&gt;  </span><span class="sc">{</span><span class="st">'PASS'</span> <span class="cf">if</span> ok <span class="cf">else</span> <span class="st">'FAIL'</span><span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"...and the reversed chain implies the *same* test. Observation cannot tell them apart."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Practice ⊥ Sound | Talent:  partial r = -0.024, p = 0.10  -&gt;  PASS
+...and the reversed chain implies the *same* test. Observation cannot tell them apart.</code></pre>
+</div>
+</div>
+<p>Graphs that share a test suite form a <strong>Markov equivalence class</strong>, and no amount of observational data — not more samples, not better tests, not a deep net — can separate members of the same class. Chains and forks all shuffle into the same classes; the <em>only</em> structure that observational data can orient on its own is (drum roll) <strong>the collider</strong>, because <code>A → B ← C</code> implies a different suite (A ⊥ C, but A ⊥̸ C | B) than any chain or fork on the same three nodes. The pathological fitting turns out to be the informative one. The trickster god of causal inference has a sense of humor.</p>
+<p>To break ties <em>within</em> a class, you need rung two of the ladder: reach in and wiggle something. Force practice hours and watch sound respond; force sound (miming to a backing track, say) and watch talent stubbornly not appear. That’s an intervention — a <code>do()</code> — and it happens that audio engineers own the world’s most convenient do()-operator. <strong>See the Appendix, which this post has been secretly building toward.</strong></p>
+<p>But first: if unit tests can kill graphs, can they <em>search</em> for survivors automatically?</p>
+</section>
+<section id="the-pc-algorithm-run-all-the-tests-keep-the-survivors" class="level1">
+<h1>The PC Algorithm: Run All the Tests, Keep the Survivors</h1>
+<p>The <strong>PC algorithm</strong> <span class="citation" data-cites="spirtes2000causation"><a href="#ref-spirtes2000causation" role="doc-biblioref"><strong>spirtes2000causation?</strong></a></span> is the industrialization of everything above: start from the fully-connected graph (assume everything causes everything, like a conspiracy theorist), then delete every edge you can find an alibi for — an independence test that separates the pair. What survives is the <em>skeleton</em>; then orient every collider you can prove (the only arrows observation grants you).</p>
+<p>We’ll feed it a four-variable world. Same GAS universe plus <code>Fame</code>, which is caused by both <code>Sound</code> and <code>Gear</code> — sounding great gets you noticed, and let’s be honest, so does a wall of modular synth behind you on stage. That makes <code>Fame</code> a collider: <code>Gear → Fame ← Sound</code>.</p>
+<div id="429060aa" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-14T16:32:33.040174Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-14T16:32:33.040016Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-14T16:32:33.074547Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-14T16:32:33.073472Z&quot;}}" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gas_fame_world(N<span class="op">=</span><span class="dv">8000</span>, seed<span class="op">=</span><span class="dv">0</span>, hide_talent<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> np.random.default_rng(seed)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    talent <span class="op">=</span> r.standard_normal(N)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    gear   <span class="op">=</span> <span class="fl">0.8</span><span class="op">*</span>talent <span class="op">+</span> <span class="fl">0.6</span><span class="op">*</span>r.standard_normal(N)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    sound  <span class="op">=</span> <span class="fl">0.9</span><span class="op">*</span>talent <span class="op">+</span> <span class="fl">0.6</span><span class="op">*</span>r.standard_normal(N)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    fame   <span class="op">=</span> <span class="fl">0.7</span><span class="op">*</span>sound <span class="op">+</span> <span class="fl">0.7</span><span class="op">*</span>gear <span class="op">+</span> <span class="fl">0.6</span><span class="op">*</span>r.standard_normal(N)  <span class="co"># the collider</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame({<span class="st">'Talent'</span>:talent, <span class="st">'Gear'</span>:gear, <span class="st">'Sound'</span>:sound, <span class="st">'Fame'</span>:fame})</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df.drop(columns<span class="op">=</span>[<span class="st">'Talent'</span>]) <span class="cf">if</span> hide_talent <span class="cf">else</span> df</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> combinations</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pc_skeleton(df, alpha<span class="op">=</span><span class="fl">0.01</span>, max_k<span class="op">=</span><span class="dv">2</span>):</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Start fully connected; delete any edge with an alibi (a separating set)."""</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    V   <span class="op">=</span> <span class="bu">list</span>(df.columns)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    adj <span class="op">=</span> {v: <span class="bu">set</span>(V) <span class="op">-</span> {v} <span class="cf">for</span> v <span class="kw">in</span> V}</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    seps <span class="op">=</span> {}</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(max_k <span class="op">+</span> <span class="dv">1</span>):                       <span class="co"># try alibis of growing size</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> x <span class="kw">in</span> V:</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> y <span class="kw">in</span> <span class="bu">list</span>(adj[x]):</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>                candidates <span class="op">=</span> adj[x] <span class="op">-</span> {y}</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> <span class="bu">len</span>(candidates) <span class="op">&lt;</span> k: <span class="cf">continue</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> S <span class="kw">in</span> combinations(<span class="bu">sorted</span>(candidates), k):</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>                    indep, _, _ <span class="op">=</span> ci_test(df, x, y, S, alpha)</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> indep:                        <span class="co"># alibi found: delete edge</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>                        adj[x].discard(y)<span class="op">;</span> adj[y].discard(x)</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>                        seps[<span class="bu">frozenset</span>((x, y))] <span class="op">=</span> <span class="bu">set</span>(S)</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">break</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>    edges <span class="op">=</span> {<span class="bu">frozenset</span>((x, y)) <span class="cf">for</span> x <span class="kw">in</span> V <span class="cf">for</span> y <span class="kw">in</span> adj[x]}</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> edges, seps</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> orient_colliders(edges, seps, V):</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""x - z - y with x,y non-adjacent and z NOT in their alibi  =&gt;  x -&gt; z &lt;- y"""</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>    arrows <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> z <span class="kw">in</span> V:</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>        nbrs <span class="op">=</span> [v <span class="cf">for</span> v <span class="kw">in</span> V <span class="cf">if</span> <span class="bu">frozenset</span>((v, z)) <span class="kw">in</span> edges]</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> x, y <span class="kw">in</span> combinations(nbrs, <span class="dv">2</span>):</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">frozenset</span>((x, y)) <span class="kw">not</span> <span class="kw">in</span> edges <span class="kw">and</span> z <span class="kw">not</span> <span class="kw">in</span> seps.get(<span class="bu">frozenset</span>((x, y)), <span class="bu">set</span>()):</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>                arrows.add((x, z))<span class="op">;</span> arrows.add((y, z))</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> arrows</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>df4 <span class="op">=</span> gas_fame_world()</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>edges, seps <span class="op">=</span> pc_skeleton(df4)</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>arrows <span class="op">=</span> orient_colliders(edges, seps, <span class="bu">list</span>(df4.columns))</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"skeleton found: "</span>, <span class="bu">sorted</span>(<span class="bu">tuple</span>(<span class="bu">sorted</span>(e)) <span class="cf">for</span> e <span class="kw">in</span> edges))</span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"arrows oriented:"</span>, <span class="bu">sorted</span>(arrows))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>skeleton found:  [('Fame', 'Gear'), ('Fame', 'Sound'), ('Gear', 'Talent'), ('Sound', 'Talent')]
+arrows oriented: [('Gear', 'Fame'), ('Sound', 'Fame')]</code></pre>
+</div>
+</div>
+<p>Read that output slowly, because a for-loop just did epistemology. From correlations alone, ~40 lines of code recovered the exact skeleton — including the <em>absence</em> of a Gear–Sound edge, i.e., <strong>it discovered that gear doesn’t cause sound</strong> — and it oriented <code>Gear → Fame ← Sound</code>, arrows and all, because colliders leave fingerprints. It could not orient the Talent edges (they’re Markov-equivalent both ways, as promised), and honesty about what you can’t know is a feature.</p>
+<p>The collider-orientation logic deserves one sentence of appreciation: <code>Gear</code> and <code>Sound</code> got separated <em>without</em> needing <code>Fame</code> in the alibi (<code>Talent</code> alone sufficed) — and when the middle of a path isn’t needed in the alibi, it must be a collider. The algorithm orients arrows by noticing <em>which conditioning sets it didn’t need.</em> Sherlock would approve.</p>
+<section id="now-watch-it-lie" class="level2">
+<h2 class="anchored" data-anchor-id="now-watch-it-lie">Now Watch It Lie</h2>
+<p>Every guarantee above leans on <strong>causal sufficiency</strong>: <em>all common causes are measured.</em> Here’s its villain-origin story. Same world, but nobody exported the talent track:</p>
+<div id="47630d9f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-14T16:32:33.076498Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-14T16:32:33.076310Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-14T16:32:33.092352Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-14T16:32:33.090823Z&quot;}}" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df3 <span class="op">=</span> gas_fame_world(hide_talent<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>edges3, seps3 <span class="op">=</span> pc_skeleton(df3)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>arrows3 <span class="op">=</span> orient_colliders(edges3, seps3, <span class="bu">list</span>(df3.columns))</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"skeleton found: "</span>, <span class="bu">sorted</span>(<span class="bu">tuple</span>(<span class="bu">sorted</span>(e)) <span class="cf">for</span> e <span class="kw">in</span> edges3))</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"arrows oriented:"</span>, <span class="bu">sorted</span>(arrows3))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>skeleton found:  [('Fame', 'Gear'), ('Fame', 'Sound'), ('Gear', 'Sound')]
+arrows oriented: []</code></pre>
+</div>
+</div>
+<p>With <code>Talent</code> hidden, PC confidently reports a <strong>Gear–Sound edge that does not exist</strong> — the latent confounder’s correlation has nowhere to go, so the algorithm draws it as structure. Worse, the phantom edge makes <code>Gear</code> and <code>Sound</code> adjacent, so the collider fingerprint at <code>Fame</code> is destroyed too: <em>all</em> the arrows vanish. One missing variable didn’t just add one wrong edge; it poisoned the whole graph.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>The investment-committee version
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>An analyst’s thesis graph can pass every unit test you’re able to run and still be wrong, if the true driver isn’t in anyone’s dataset. “Founder pedigree → returns” passes beautifully when the latent variable is “the kind of market access that gets you both pedigree <em>and</em> returns.” Graph testing is due diligence, not clairvoyance: it reliably kills bad graphs, and it certifies survivors only <em>up to the variables you measured</em>. The most valuable output of the whole exercise is often the argument about <strong>what’s missing from the dataset</strong> — which no algorithm has ever supplied.</p>
+</div>
+</div>
+<p>There are algorithms that at least <em>admit</em> latent confounders might exist and mark edges as “could be confounded” (FCI and friends) — a story for another post.</p>
+</section>
+</section>
+<section id="interactive-the-conditioning-console" class="level1">
+<h1>Interactive: The Conditioning Console</h1>
+<p>Since this series is contractually obligated to be interactive: below is the four-node GAS+Fame world as a switchboard. The question on trial is <strong>Gear ⊥ Sound?</strong> There are two paths between them — the fork through <code>Talent</code> and the collider through <code>Fame</code>. Click <code>Talent</code> or <code>Fame</code> to toggle conditioning and watch each path open (red) or block (grey); the verdict shows both the theory (d-separation) and the <em>measured</em> partial correlation from the simulated data above. Note the trap state: condition on <strong>both</strong> and you’ve blocked the real path while prying open the fake one — manufacturing a correlation of −0.32 between two variables with no causal connection. More conditioning is not more virtue.</p>
+<div id="73b002da" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-14T16:32:33.094398Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-14T16:32:33.094188Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-14T16:32:33.109312Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-14T16:32:33.108105Z&quot;}}" data-execution_count="9">
+<details class="code-fold">
+<summary>Conditioning-console widget (D3-free, plain SVG + JS)</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> HTML</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># measured partial correlations, computed live from df4 so the widget never lies:</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>pr <span class="op">=</span> {<span class="st">"none"</span>:        partial_corr(df4,<span class="st">'Gear'</span>,<span class="st">'Sound'</span>),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">"talent"</span>:      partial_corr(df4,<span class="st">'Gear'</span>,<span class="st">'Sound'</span>,(<span class="st">'Talent'</span>,)),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">"fame"</span>:        partial_corr(df4,<span class="st">'Gear'</span>,<span class="st">'Sound'</span>,(<span class="st">'Fame'</span>,)),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">"talent+fame"</span>: partial_corr(df4,<span class="st">'Gear'</span>,<span class="st">'Sound'</span>,(<span class="st">'Talent'</span>,<span class="st">'Fame'</span>))}</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>HTML(<span class="ss">f"""</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="ss">&lt;div id="ccons" style="width:640px;max-width:100%;background:#1a1a2e;border:1px solid #444;</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="ss">     border-radius:8px;padding:14px;font-family:ui-monospace,monospace;color:#ddd"&gt;</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="ss">  &lt;div style="font-size:13px;margin-bottom:6px"&gt;ON TRIAL: &lt;b&gt;Gear ⊥ Sound ?&lt;/b&gt;</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="ss">    &amp;nbsp;&lt;span style="color:#888"&gt;(click Talent / Fame to condition)&lt;/span&gt;&lt;/div&gt;</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="ss">  &lt;svg id="ccsvg" viewBox="0 0 620 260" width="100%"&gt;&lt;/svg&gt;</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="ss">  &lt;div id="ccverdict" style="font-size:13px;margin-top:6px"&gt;&lt;/div&gt;</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="ss">&lt;/div&gt;</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="ss">&lt;script&gt;</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="ss">(function() </span><span class="ch">{{</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="ss">  const PR = </span><span class="ch">{{</span><span class="ss"> "none": </span><span class="sc">{</span>pr[<span class="st">'none'</span>]<span class="sc">:.3f}</span><span class="ss">, "talent": </span><span class="sc">{</span>pr[<span class="st">'talent'</span>]<span class="sc">:.3f}</span><span class="ss">,</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="ss">              "fame": </span><span class="sc">{</span>pr[<span class="st">'fame'</span>]<span class="sc">:.3f}</span><span class="ss">, "talent+fame": </span><span class="sc">{</span>pr[<span class="st">'talent+fame'</span>]<span class="sc">:.3f}</span><span class="ss"> </span><span class="ch">}}</span><span class="ss">;</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="ss">  const nodes = </span><span class="ch">{{</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="ss">    Talent: </span><span class="ch">{{</span><span class="ss">x:310, y:52,  c:"#4477AA", cond:false, click:true</span><span class="ch">}}</span><span class="ss">,</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="ss">    Gear:   </span><span class="ch">{{</span><span class="ss">x:110, y:135, c:"#AA3377", cond:false, click:false</span><span class="ch">}}</span><span class="ss">,</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="ss">    Sound:  </span><span class="ch">{{</span><span class="ss">x:510, y:135, c:"#228833", cond:false, click:false</span><span class="ch">}}</span><span class="ss">,</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="ss">    Fame:   </span><span class="ch">{{</span><span class="ss">x:310, y:218, c:"#6c3483", cond:false, click:true</span><span class="ch">}}</span><span class="ss"> </span><span class="ch">}}</span><span class="ss">;</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="ss">  const svg = document.getElementById("ccsvg"), NS = "http://www.w3.org/2000/svg";</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="ss">  function E(t, a, p) </span><span class="ch">{{</span><span class="ss"> const e = document.createElementNS(NS, t);</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="ss">    for (const k in a) e.setAttribute(k, a[k]); (p||svg).appendChild(e); return e; </span><span class="ch">}}</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="ss">  function render() </span><span class="ch">{{</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="ss">    svg.innerHTML = "";</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="ss">    const defs = E("defs", </span><span class="ch">{{}}</span><span class="ss">);</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="ss">    for (const [id, col] of [["aG","#8a8ab0"],["aR","#e0567f"],["aD","#555"]]) </span><span class="ch">{{</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="ss">      const m = E("marker", </span><span class="ch">{{</span><span class="ss">id:id, viewBox:"0 -5 10 10", refX:9, refY:0,</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a><span class="ss">        markerWidth:6, markerHeight:6, orient:"auto"</span><span class="ch">}}</span><span class="ss">, defs);</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a><span class="ss">      E("path", </span><span class="ch">{{</span><span class="ss">d:"M0,-5L10,0L0,5", fill:col</span><span class="ch">}}</span><span class="ss">, m); </span><span class="ch">}}</span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a><span class="ss">    const forkOpen = !nodes.Talent.cond;             // fork blocked iff Talent in S</span></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a><span class="ss">    const collOpen = nodes.Fame.cond;                // collider open iff Fame in S</span></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a><span class="ss">    // fork path: Gear &lt;- Talent -&gt; Sound</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a><span class="ss">    drawPath([[nodes.Gear, nodes.Talent, true], [nodes.Talent, nodes.Sound, false]],</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a><span class="ss">             forkOpen, "fork via Talent", 24);</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a><span class="ss">    // collider path: Gear -&gt; Fame &lt;- Sound</span></span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a><span class="ss">    drawPath([[nodes.Gear, nodes.Fame, false], [nodes.Sound, nodes.Fame, false]],</span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a><span class="ss">             collOpen, "collider via Fame", 236);</span></span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a><span class="ss">    for (const [name, n] of Object.entries(nodes)) </span><span class="ch">{{</span></span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a><span class="ss">      const g = E("g", </span><span class="ch">{{</span><span class="ss">style: n.click ? "cursor:pointer" : ""</span><span class="ch">}}</span><span class="ss">);</span></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a><span class="ss">      E("circle", </span><span class="ch">{{</span><span class="ss">cx:n.x, cy:n.y, r:26, fill:n.c, stroke:"#fff", "stroke-width":1.2</span><span class="ch">}}</span><span class="ss">, g);</span></span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a><span class="ss">      if (n.cond) E("circle", </span><span class="ch">{{</span><span class="ss">cx:n.x, cy:n.y, r:32, fill:"none", stroke:"#CC9900",</span></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a><span class="ss">        "stroke-width":2.5, "stroke-dasharray":"4 4"</span><span class="ch">}}</span><span class="ss">, g);</span></span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a><span class="ss">      const t = E("text", </span><span class="ch">{{</span><span class="ss">x:n.x, y:n.y+4, "text-anchor":"middle", fill:"#fff",</span></span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a><span class="ss">        "font-size":11</span><span class="ch">}}</span><span class="ss">, g); t.textContent = name;</span></span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a><span class="ss">      if (n.click) g.addEventListener("click", () =&gt; </span><span class="ch">{{</span><span class="ss"> n.cond = !n.cond; render(); </span><span class="ch">}}</span><span class="ss">);</span></span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span></span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a><span class="ss">    const key = (nodes.Talent.cond ? (nodes.Fame.cond ? "talent+fame" : "talent")</span></span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a><span class="ss">                                   : (nodes.Fame.cond ? "fame" : "none"));</span></span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a><span class="ss">    const dep = forkOpen || collOpen;</span></span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a><span class="ss">    const S = [nodes.Talent.cond ? "Talent" : null, nodes.Fame.cond ? "Fame" : null]</span></span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a><span class="ss">              .filter(Boolean).join(", ") || "∅";</span></span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a><span class="ss">    document.getElementById("ccverdict").innerHTML =</span></span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a><span class="ss">      `given S = </span><span class="ch">{{</span><span class="ss">$</span><span class="ch">{{</span><span class="ss">S</span><span class="ch">}}}}</span><span class="ss"> &amp;nbsp;→&amp;nbsp; d-separation says: &lt;b style="color:$</span><span class="ch">{{</span><span class="ss">dep ? '#e0567f' : '#3fae5c'</span><span class="ch">}}</span><span class="ss">"&gt;`+</span></span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a><span class="ss">      `$</span><span class="ch">{{</span><span class="ss">dep ? "DEPENDENT" : "INDEPENDENT"</span><span class="ch">}}</span><span class="ss">&lt;/b&gt;` +</span></span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a><span class="ss">      ` &amp;nbsp;·&amp;nbsp; measured partial r = &lt;b&gt;$</span><span class="ch">{{</span><span class="ss">PR[key] &gt;= 0 ? "+" : ""</span><span class="ch">}}</span><span class="ss">$</span><span class="ch">{{</span><span class="ss">PR[key].toFixed(3)</span><span class="ch">}}</span><span class="ss">&lt;/b&gt;` +</span></span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a><span class="ss">      (key === "talent+fame" ? ` &amp;nbsp;&lt;span style="color:#CC9900"&gt;← you built this correlation yourself&lt;/span&gt;` : "");</span></span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a><span class="ss">  </span><span class="ch">}}</span></span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a><span class="ss">  function drawPath(segs, open, label, ly) </span><span class="ch">{{</span></span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a><span class="ss">    const col = open ? "#e0567f" : "#555", mk = open ? "aR" : "aD";</span></span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a><span class="ss">    for (const [a, b] of segs) </span><span class="ch">{{</span></span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a><span class="ss">      const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy), ux = dx/d, uy = dy/d;</span></span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a><span class="ss">      E("line", </span><span class="ch">{{</span><span class="ss">x1:a.x + ux*28, y1:a.y + uy*28, x2:b.x - ux*31, y2:b.y - uy*31,</span></span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a><span class="ss">        stroke:col, "stroke-width": open ? 3 : 2,</span></span>
+<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a><span class="ss">        "stroke-dasharray": open ? "none" : "3 6", "marker-end":`url(#$</span><span class="ch">{{</span><span class="ss">mk</span><span class="ch">}}</span><span class="ss">)`</span><span class="ch">}}</span><span class="ss">);</span></span>
+<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a><span class="ss">    </span><span class="ch">}}</span></span>
+<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a><span class="ss">    const t = E("text", </span><span class="ch">{{</span><span class="ss">x:14, y:ly, fill:col, "font-size":11</span><span class="ch">}}</span><span class="ss">);</span></span>
+<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a><span class="ss">    t.textContent = (open ? "OPEN — " : "blocked — ") + label;</span></span>
+<span id="cb15-74"><a href="#cb15-74" aria-hidden="true" tabindex="-1"></a><span class="ss">  </span><span class="ch">}}</span></span>
+<span id="cb15-75"><a href="#cb15-75" aria-hidden="true" tabindex="-1"></a><span class="ss">  render();</span></span>
+<span id="cb15-76"><a href="#cb15-76" aria-hidden="true" tabindex="-1"></a><span class="ch">}}</span><span class="ss">)();</span></span>
+<span id="cb15-77"><a href="#cb15-77" aria-hidden="true" tabindex="-1"></a><span class="ss">&lt;/script&gt;</span></span>
+<span id="cb15-78"><a href="#cb15-78" aria-hidden="true" tabindex="-1"></a><span class="ss">"""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="9">
+
+<div id="ccons" style="width:640px;max-width:100%;background:#1a1a2e;border:1px solid #444;
+     border-radius:8px;padding:14px;font-family:ui-monospace,monospace;color:#ddd">
+  <div style="font-size:13px;margin-bottom:6px">ON TRIAL: <b>Gear ⊥ Sound ?</b>
+    &nbsp;<span style="color:#888">(click Talent / Fame to condition)</span></div>
+  <svg id="ccsvg" viewbox="0 0 620 260" width="100%"></svg>
+  <div id="ccverdict" style="font-size:13px;margin-top:6px"></div>
+</div>
+<script>
+(function() {
+  const PR = { "none": 0.669, "talent": 0.003,
+              "fame": -0.072, "talent+fame": -0.324 };
+  const nodes = {
+    Talent: {x:310, y:52,  c:"#4477AA", cond:false, click:true},
+    Gear:   {x:110, y:135, c:"#AA3377", cond:false, click:false},
+    Sound:  {x:510, y:135, c:"#228833", cond:false, click:false},
+    Fame:   {x:310, y:218, c:"#6c3483", cond:false, click:true} };
+  const svg = document.getElementById("ccsvg"), NS = "http://www.w3.org/2000/svg";
+  function E(t, a, p) { const e = document.createElementNS(NS, t);
+    for (const k in a) e.setAttribute(k, a[k]); (p||svg).appendChild(e); return e; }
+  function render() {
+    svg.innerHTML = "";
+    const defs = E("defs", {});
+    for (const [id, col] of [["aG","#8a8ab0"],["aR","#e0567f"],["aD","#555"]]) {
+      const m = E("marker", {id:id, viewBox:"0 -5 10 10", refX:9, refY:0,
+        markerWidth:6, markerHeight:6, orient:"auto"}, defs);
+      E("path", {d:"M0,-5L10,0L0,5", fill:col}, m); }
+    const forkOpen = !nodes.Talent.cond;             // fork blocked iff Talent in S
+    const collOpen = nodes.Fame.cond;                // collider open iff Fame in S
+    // fork path: Gear <- Talent -> Sound
+    drawPath([[nodes.Gear, nodes.Talent, true], [nodes.Talent, nodes.Sound, false]],
+             forkOpen, "fork via Talent", 24);
+    // collider path: Gear -> Fame <- Sound
+    drawPath([[nodes.Gear, nodes.Fame, false], [nodes.Sound, nodes.Fame, false]],
+             collOpen, "collider via Fame", 236);
+    for (const [name, n] of Object.entries(nodes)) {
+      const g = E("g", {style: n.click ? "cursor:pointer" : ""});
+      E("circle", {cx:n.x, cy:n.y, r:26, fill:n.c, stroke:"#fff", "stroke-width":1.2}, g);
+      if (n.cond) E("circle", {cx:n.x, cy:n.y, r:32, fill:"none", stroke:"#CC9900",
+        "stroke-width":2.5, "stroke-dasharray":"4 4"}, g);
+      const t = E("text", {x:n.x, y:n.y+4, "text-anchor":"middle", fill:"#fff",
+        "font-size":11}, g); t.textContent = name;
+      if (n.click) g.addEventListener("click", () => { n.cond = !n.cond; render(); });
+    }
+    const key = (nodes.Talent.cond ? (nodes.Fame.cond ? "talent+fame" : "talent")
+                                   : (nodes.Fame.cond ? "fame" : "none"));
+    const dep = forkOpen || collOpen;
+    const S = [nodes.Talent.cond ? "Talent" : null, nodes.Fame.cond ? "Fame" : null]
+              .filter(Boolean).join(", ") || "∅";
+    document.getElementById("ccverdict").innerHTML =
+      `given S = {${S}} &nbsp;→&nbsp; d-separation says: <b style="color:${dep ? '#e0567f' : '#3fae5c'}">`+
+      `${dep ? "DEPENDENT" : "INDEPENDENT"}</b>` +
+      ` &nbsp;·&nbsp; measured partial r = <b>${PR[key] >= 0 ? "+" : ""}${PR[key].toFixed(3)}</b>` +
+      (key === "talent+fame" ? ` &nbsp;<span style="color:#CC9900">← you built this correlation yourself</span>` : "");
+  }
+  function drawPath(segs, open, label, ly) {
+    const col = open ? "#e0567f" : "#555", mk = open ? "aR" : "aD";
+    for (const [a, b] of segs) {
+      const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy), ux = dx/d, uy = dy/d;
+      E("line", {x1:a.x + ux*28, y1:a.y + uy*28, x2:b.x - ux*31, y2:b.y - uy*31,
+        stroke:col, "stroke-width": open ? 3 : 2,
+        "stroke-dasharray": open ? "none" : "3 6", "marker-end":`url(#${mk})`});
+    }
+    const t = E("text", {x:14, y:ly, fill:col, "font-size":11});
+    t.textContent = (open ? "OPEN — " : "blocked — ") + label;
+  }
+  render();
+})();
+</script>
+</div>
+</div>
+</section>
+<section id="appendix-the-daw-does-do" class="level1">
+<h1>Appendix: The DAW Does do()</h1>
+<p>Everything above was rung one of Pearl’s ladder — clever things done to <em>observations</em>. This appendix is about the day I realized audio engineers have been standing on rung two the whole time without noticing, because <strong>the bypass button is a do() operator with a GUI.</strong></p>
+<p>Think about what <code>do(X = x)</code> means formally: delete X’s structural assignment — sever every arrow <em>into</em> X — and hard-code the value, leaving downstream mechanisms untouched. Now think about what BYPASS does: it doesn’t care <em>why</em> the compressor was inserted (the mix was dense, the client insisted, you were feeling insecure) — it severs all of that history and forces <code>comp := off</code>, leaving the rest of the signal chain to respond naturally. An A/B bypass test is a two-arm randomized experiment on your own mix. Engineers run dozens a day and call it “checking.”</p>
+<p>Why does that matter? Because your <em>session archive</em> — observational data — will lie to you about your own tools, via the exact confounding this series keeps meeting. You reach for the compressor <strong>when the mix is dense</strong>, and dense mixes rate worse. Watch the archive frame an innocent plugin:</p>
+<div id="367dfd03" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-14T16:32:33.111851Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-14T16:32:33.111216Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-14T16:32:33.158893Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-14T16:32:33.157694Z&quot;}}" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sessions(N<span class="op">=</span><span class="dv">20000</span>, seed<span class="op">=</span><span class="dv">0</span>, do_comp<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> np.random.default_rng(seed)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    density <span class="op">=</span> r.standard_normal(N)                          <span class="co"># how busy is the mix</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    comp <span class="op">=</span> (density <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>r.standard_normal(N) <span class="op">&gt;</span> <span class="fl">0.3</span>) <span class="cf">if</span> do_comp <span class="kw">is</span> <span class="va">None</span> <span class="op">\</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>           <span class="cf">else</span> np.full(N, do_comp, dtype<span class="op">=</span><span class="bu">bool</span>)             <span class="co"># engineers compress busy mixes</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    rating <span class="op">=</span> <span class="op">-</span><span class="fl">0.8</span><span class="op">*</span>density <span class="op">+</span> <span class="fl">0.3</span><span class="op">*</span>comp <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>r.standard_normal(N)   <span class="co"># TRUE comp effect: +0.3</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame({<span class="st">'density'</span>:density, <span class="st">'comp'</span>:comp, <span class="st">'rating'</span>:rating})</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>arch <span class="op">=</span> sessions()                                            <span class="co"># the observational archive</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>obs <span class="op">=</span> arch[arch.comp][<span class="st">'rating'</span>].mean() <span class="op">-</span> arch[<span class="op">~</span>arch.comp][<span class="st">'rating'</span>].mean()</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>ab_on  <span class="op">=</span> sessions(seed<span class="op">=</span><span class="dv">1</span>, do_comp<span class="op">=</span><span class="va">True</span> )[<span class="st">'rating'</span>].mean()    <span class="co"># the bypass A/B: do(comp)</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>ab_off <span class="op">=</span> sessions(seed<span class="op">=</span><span class="dv">1</span>, do_comp<span class="op">=</span><span class="va">False</span>)[<span class="st">'rating'</span>].mean()</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>arch[<span class="st">'dbin'</span>] <span class="op">=</span> pd.qcut(arch[<span class="st">'density'</span>], <span class="dv">10</span>)                  <span class="co"># backdoor: stratify by density</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>pz  <span class="op">=</span> arch[<span class="st">'dbin'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>, sort<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>e1  <span class="op">=</span> arch[arch.comp ].groupby(<span class="st">'dbin'</span>, observed<span class="op">=</span><span class="va">False</span>)[<span class="st">'rating'</span>].mean()</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>e0  <span class="op">=</span> arch[<span class="op">~</span>arch.comp].groupby(<span class="st">'dbin'</span>, observed<span class="op">=</span><span class="va">False</span>)[<span class="st">'rating'</span>].mean()</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Session archive says compression is 'worth'  </span><span class="sc">{</span>obs<span class="sc">:+.3f}</span><span class="ss">   &lt;- a full sign error"</span>)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Bypass A/B — do(comp) — says                 </span><span class="sc">{</span>ab_on<span class="op">-</span>ab_off<span class="sc">:+.3f}</span><span class="ss">   &lt;- truth (+0.3 by construction)"</span>)</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Backdoor on the archive (adjust for density) </span><span class="sc">{</span>((e1<span class="op">-</span>e0)<span class="op">*</span>pz)<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">:+.3f}</span><span class="ss">   &lt;- Part 1's formula, redeemed"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Session archive says compression is 'worth'  -0.838   &lt;- a full sign error
+Bypass A/B — do(comp) — says                 +0.300   &lt;- truth (+0.3 by construction)
+Backdoor on the archive (adjust for density) +0.261   &lt;- Part 1's formula, redeemed</code></pre>
+</div>
+</div>
+<p>The archive doesn’t just shrink the effect — it flips its <strong>sign</strong>. Judged observationally, your best tool looks like sabotage, because it only shows up at crime scenes. The bypass test cuts the <code>density → comp</code> arrow and acquits it; the backdoor formula recovers nearly the same verdict from the archive alone, <em>if</em> you know to adjust for density — that is, if you have the right graph. Which, after this post, you know how to audit. The series eats its own dogfood.</p>
+<p>And the Markov-equivalence wall from earlier? The bypass button is the battering ram. <code>Practice → Talent → Sound</code> vs.&nbsp;its deranged reversal pass identical unit tests, but <code>do(Sound)</code> — miming to a track, quantizing a bad take into “perfection” — produces no talent downstream, while <code>do(Practice)</code> eventually does. Where observation ends, intervention answers. <strong>Rung two is a bypass button; rung one is a very good listen.</strong></p>
+<section id="one-rung-further-the-counterfactual-bounce" class="level2">
+<h2 class="anchored" data-anchor-id="one-rung-further-the-counterfactual-bounce">One Rung Further: The Counterfactual Bounce</h2>
+<p>There’s a question the bypass button cannot answer, because it lives on rung three: <em>“That take was bad — would it have been bad <strong>on the old mic</strong>?”</em> Not “what do takes on the old mic sound like on average” (rung two), but what would <strong>this</strong> take, with <strong>this</strong> performance and <strong>this</strong> room, have been. The DAW can’t A/B the past. An SCM can, via Pearl’s three-step <strong>abduction–action–prediction</strong>:</p>
+<div id="1acfb3b2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-07-14T16:32:33.161248Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-07-14T16:32:33.160567Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-07-14T16:32:33.166904Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-07-14T16:32:33.165859Z&quot;}}" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SCM for one take:  rating := 0.9*skill + 0.4*mic − 0.8*density + noise</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>skill, density, mic_fancy <span class="op">=</span> <span class="fl">0.2</span>, <span class="fl">1.8</span>, <span class="fl">1.0</span>        <span class="co"># the session as it happened</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>rating_obs <span class="op">=</span> <span class="op">-</span><span class="fl">1.360</span>                               <span class="co"># ...and it sounded like ass</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. ABDUCTION: infer this take's noise term (everything the model doesn't name:</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co">#    the room that day, your ears that day, the drummer's breakup)</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>noise_hat <span class="op">=</span> rating_obs <span class="op">-</span> (<span class="fl">0.9</span><span class="op">*</span>skill <span class="op">+</span> <span class="fl">0.4</span><span class="op">*</span>mic_fancy <span class="op">-</span> <span class="fl">0.8</span><span class="op">*</span>density)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. ACTION: swap the mic in the model      3. PREDICTION: replay</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>rating_cf <span class="op">=</span> <span class="fl">0.9</span><span class="op">*</span>skill <span class="op">+</span> <span class="fl">0.4</span><span class="op">*</span><span class="fl">0.0</span> <span class="op">-</span> <span class="fl">0.8</span><span class="op">*</span>density <span class="op">+</span> noise_hat</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"observed rating (fancy mic):     </span><span class="sc">{</span>rating_obs<span class="sc">:+.3f}</span><span class="ss">"</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"counterfactual rating (SM57):    </span><span class="sc">{</span>rating_cf<span class="sc">:+.3f}</span><span class="ss">"</span>)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"the mic was worth exactly:       </span><span class="sc">{</span>rating_obs <span class="op">-</span> rating_cf<span class="sc">:+.3f}</span><span class="ss">  ...on THIS take"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>observed rating (fancy mic):     -1.360
+counterfactual rating (SM57):    -1.760
+the mic was worth exactly:       +0.400  ...on THIS take</code></pre>
+</div>
+</div>
+<p>Step 1 is the magic: the observed outcome lets you <em>solve for the noise</em> — the take’s unrepeatable circumstances — and step 3 replays those exact circumstances through an altered mechanism. The DAW gives you rungs one and two for free; rung three requires owning the model. (It also requires the model to be right, which, after 4,000 words about auditing graphs, is a caveat you’re now equipped to take seriously.) The engineer’s eternal 2am question — <em>“was it the mic, or was it me?”</em> — turns out to be well-posed. The answer, statistically and in my experience, is that it was you.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+</section>
+</section>
+<section id="glossary-growing" class="level1">
+<h1>Glossary (Growing)</h1>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 66%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>collider</td>
+<td><code>A → B ← C</code>. Transmits nothing until conditioned on, then manufactures dependence. See: every roster, every “survivor” dataset, your conditioning-console widget above.</td>
+</tr>
+<tr class="even">
+<td>d-separation</td>
+<td>The path-blocking rule that converts a graph into its list of implied conditional independencies.</td>
+</tr>
+<tr class="odd">
+<td>unit tests for a DAG</td>
+<td>Those implied independencies, treated as falsifiable predictions. Graphs that fail, die.</td>
+</tr>
+<tr class="even">
+<td>Markov equivalence class</td>
+<td>Graphs sharing an identical test suite. Observation can’t separate them; interventions can.</td>
+</tr>
+<tr class="odd">
+<td>PC algorithm</td>
+<td>Start fully connected, delete every edge with an independence alibi, orient the colliders. Honest about what it can’t orient.</td>
+</tr>
+<tr class="even">
+<td>causal sufficiency</td>
+<td>“All common causes are measured.” The assumption whose failure makes PC hallucinate edges.</td>
+</tr>
+<tr class="odd">
+<td>minimality</td>
+<td>Every edge must earn its keep; among graphs that pass, prefer the fewest arrows. The kitchen-sink graph passes everything and means nothing.</td>
+</tr>
+<tr class="even">
+<td>do(X)</td>
+<td>Sever all arrows into X, force the value, let downstream respond. Ships in every DAW as BYPASS.</td>
+</tr>
+<tr class="odd">
+<td>abduction–action–prediction</td>
+<td>Rung 3: infer this instance’s noise, edit the mechanism, replay. The counterfactual bounce.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="where-next" class="level1">
+<h1>Where Next</h1>
+<p>The dangling threads, ranked by itch: <strong>(1)</strong> FCI — the discovery algorithm that admits latent confounders exist; <strong>(2)</strong> front-door adjustment — identifying an effect <em>through</em> a mediator when the backdoor can’t be closed (the one adjustment Part 1’s TODO still owes); <strong>(3)</strong> nonlinear CI tests, so the unit-test suite works on audio features and not just Gaussians; <strong>(4)</strong> time series, done right-sized: not Granger worship, just “the graph now has a time index, the unit tests come per lag.”</p>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<div id="refs" role="list">
+
+</div>
+<hr>
+<p>Draft by Claude for Scott H. Hawley, July 2026. All numbers produced by executing this notebook; the PC algorithm really does recover (and really does hallucinate) what the text claims.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Respectable vibes! Domain knowledge, mechanism, temporal order. But vibes, untested, until now.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The same fitting explains why the restaurants in great locations have mediocre food (surviving restaurants = conditioned on Location + Food &gt; rent), and why “hot streak” fund managers underperform after you invest (funds you hear about = conditioned on past returns + marketing). Once you see colliders you cannot stop seeing them, and you become insufferable at parties. Welcome.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>It’s always you. Buy the mic anyway; morale is a confounder too.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/drscotthawley\.github\.io\/blog");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
