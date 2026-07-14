@@ -327,6 +327,9 @@ figcaption {
 <blockquote class="blockquote">
 <p>“…causal calculus differentiates between two types of conditional distributions one might want to estimate. …in ML we usually estimate only one of them, but in some applications we should actually…estimate the other one.” – Ferenc Huszar <span class="citation" data-cites="huszar2018causalintro"><a href="#ref-huszar2018causalintro" role="doc-biblioref">[1]</a></span></p>
 </blockquote>
+<div style="display: flex; justify-content: flex-end;">
+<p><a href="https://colab.research.google.com/github/drscotthawley/blog/blob/main/posts/CausalCatapult.ipynb"> <img src="https://colab.research.google.com/assets/colab-badge.svg"> </a></p>
+</div>
 <section id="intro" class="level1">
 <h1>Intro</h1>
 <p>I’ve been wanting to learn Causal Inference (CI) / Causal Modeling (causal inference) “properly” ever since I asked for Judea Pearl’s bestselling <em>The Book of Why</em> <span class="citation" data-cites="pearl2018why"><a href="#ref-pearl2018why" role="doc-biblioref">[2]</a></span> for Christmas in 2019. It’s a <em>great</em> read, but it hides any actual computation by merely mentioning the mystical “do calculus”. Pearl offers details on that in his textbook <span class="citation" data-cites="pearl2009causality"><a href="#ref-pearl2009causality" role="doc-biblioref">[3]</a></span>, but I want to get up to speed faster, so I’ve been reading and watching other treatments <span class="citation" data-cites="tucci2013"><a href="#ref-tucci2013" role="doc-biblioref">[4]</a></span> <span class="citation" data-cites="neal2020"><a href="#ref-neal2020" role="doc-biblioref">[5]</a></span> <span class="citation" data-cites="facure2023causal"><a href="#ref-facure2023causal" role="doc-biblioref">[6]</a></span> <span class="citation" data-cites="ghosh2026karmamvbenchmarkcausalquestion"><a href="#ref-ghosh2026karmamvbenchmarkcausalquestion" role="doc-biblioref">[7]</a></span> <span class="citation" data-cites="bornstein2021lightningcausalexamples"><a href="#ref-bornstein2021lightningcausalexamples" role="doc-biblioref">[8]</a></span> <span class="citation" data-cites="krohn2025causalainess"><a href="#ref-krohn2025causalainess" role="doc-biblioref">[9]</a></span> <span class="citation" data-cites="Koch2025DeepLearningCausalInference"><a href="#ref-Koch2025DeepLearningCausalInference" role="doc-biblioref">[10]</a></span>, which most often are either “slow” or quickly throw up what I call the “Wall of Math.”<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
@@ -353,22 +356,6 @@ figcaption {
 </figure>
 </div>
 </div>
-<!--- 
-# Intro (old
-
-I've been wanting to learn Causal Modeling (causal inference) / Causal Inference "properly" ever since I asked for Judea Pearl's bestselling *The Book of Why* [@pearl2018why] for Christmas in 2019. It's a *great* read, but it hides any actual computation by simply referring to the mystical "do calculus" and occasionally saying, "Why don't you read my textbook?" [@pearl2009causality]
-
-Ok, well I'm not reading his textbook but I have been reading and watching other treatments [@tucci2013] [@neal2020]. And these quickly fall into the classic [Slough of Despond](https://en.wikipedia.org/wiki/Slough_of_Despond) of front-loading lots of mathematical abstraction. This sort of thing is typical enough that I refer to it in physics education as the "Chapter 2 Math Dump" and in machine learning as the "Wall of Math". In the causal inference case, it's not so much equations but rather seemingly-endless definitions and jargon that induce a cognitive load when you're anxiously wondering *"But how can I calculate something?"* [^b]
-
-[^b]: Interestingly, these also typically claim to assume mere "basic familiarity with statistics" yet invariably pull out laws I've never heard of. Seems "basic" is relative.
-
-::: {.callout-tip}
-## Math when needed
-We don't need to front-load our pedagogy with a ton of abstract equations and definitions that aren't going to be used until later. 
-:::
-
-In this post, we're going to get started really fast: rapid acceleration so we *catapult over the wall* of math and get started *immediately* calculating things, and only introducing lingo, definitions and/or proofs when we need them.
---->
 </section>
 <section id="case-study-gear-acquisition-syndrome-gas" class="level1">
 <h1>Case Study: Gear Acquisition Syndrome (GAS)</h1>
