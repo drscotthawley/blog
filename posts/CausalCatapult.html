@@ -568,7 +568,7 @@ In this post, we're going to get started really fast: rapid acceleration so we *
 </section>
 <section id="does-talent-matter" class="level1">
 <h1>Does Talent Matter?</h1>
-<p>There’s a bit more to the dataset if we probe deeper. There’s also info on the players level of “<code>Talent</code>:</p>
+<p>There’s a bit more to the dataset if we probe deeper. There’s also info on the players’ level of “<code>Talent</code>:</p>
 <div id="e9856794-c49d-4ae4-812e-ed6f0e6c75fa" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -984,7 +984,7 @@ setTimeout(initGraphs, 100);
 </section>
 <section id="the-key-question-as-math" class="level2">
 <h2 class="anchored" data-anchor-id="the-key-question-as-math">The Key Question as Math</h2>
-<p>In terms of causal inference, we want to compute the probability <span class="math inline">\(P({\rm Sound=Great} | \rm{do(Gear=Fancy}))\)</span>, i.e., <mark>will the sound will improve if we “intervene” by upgrading the gear?</mark></p>
+<p>In terms of causal inference, we want to compute the probability <span class="math inline">\(P({\rm Sound=Great} | \rm{do(Gear=Fancy}))\)</span>, i.e., <mark>will the sound improve if we “intervene” by upgrading the gear?</mark></p>
 <p>To do that, we need to “marginalize” over <code>Talent</code> – i.e.&nbsp;do a weighted sum over all subsets. And to keep our notation compact, let’s define <span class="math inline">\(X\)</span> = Gear (1=Fancy), <span class="math inline">\(Y\)</span> = Sound (1=Great), <span class="math inline">\(Z\)</span> = Talent (0=Low, 1=High). Then we want: <span class="math display">\[\begin{eqnarray}P(Y=1 \mid do(X=1)) &amp;=&amp; P(Y=1 \mid X=1, Z=1)\cdot P(Z=1)\\ &amp;+&amp; P(Y=1 \mid X=1, Z=0)\cdot P(Z=0)\end{eqnarray}\]</span> which in general form is called the <strong>“backdoor adjustment formula”</strong> to control for confounder <span class="math inline">\(Z\)</span> (which in our case <code>Talent</code>):</p>
 <p><span class="math display">\[P(Y \mid do(X)) = \sum_z P(Y \mid X, Z=z)\cdot P(Z=z)\]</span></p>
 <div class="callout callout-style-default callout-tip callout-titled">
