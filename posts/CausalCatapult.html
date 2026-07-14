@@ -723,7 +723,7 @@ figcaption {
 <p>But first, let’s build a little machinery so we can work with graphical represenations of causal models.</p>
 <section id="defining-and-visualizing-graphs" class="level2">
 <h2 class="anchored" data-anchor-id="defining-and-visualizing-graphs">Defining and Visualizing Graphs</h2>
-<p>First we need to be able to define and take a look at the graphs that will comprise our causal models. We’ll set up the graph with Python (nodes, edges, directions) then push it to the viz routine so we can see it and move it around. I can’t articulate my intended applications, but based on my interests, I’ll use a few libraries for this:</p>
+<p>First we need to be able to define and take a look at the graphs that will comprise our causal models. We’ll set up the graph with Python (nodes, edges, directions) then push it to the viz routine so we can see it and move it around. We’ll use a few libraries for this:</p>
 <ol type="1">
 <li><strong><a href="https://networkx.org/en/">NetworkX</a></strong> for general graph bookkeeping (<a href="https://github.com/pyg-team/pytorch_geometric">PyG</a> is overkill for today.)</li>
 <li><strong><a href="https://d3js.org/">D3.js</a></strong> for interactive visualizations with force-directed nodes.</li>
