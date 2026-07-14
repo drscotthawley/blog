@@ -3,6 +3,8 @@ title: "Physics prof / Tinkerer"
 description: "My blog about code, physics, and ideas"
 listing:
   contents: posts
+  exclude:
+    categories: [draft]
   sort: "date desc"
   type: default
   categories: true
