@@ -732,7 +732,7 @@ figcaption {
 <li><strong>Pandas</strong> for handling tables of data</li>
 <li><strong>PyTorch</strong> for other sundry numerical calculations, since ultimately I want to do “machine learning stuff”</li>
 </ol>
-<p>We won’t use causal inference-specific libraries like <a href="https://github.com/uber/causalml">CausalML</a> or <a href="https://github.com/py-why/EconML">EconML</a>, …, etc. because I suspect they would likely hide and/or automate the bits I hope to learn to implement.</p>
+<p>We won’t use causal inference-specific libraries like <a href="https://github.com/uber/causalml">CausalML</a> or <a href="https://github.com/py-why/EconML">EconML</a>, etc., because I suspect they would likely hide and/or automate the bits I hope to learn to implement.</p>
 <div id="16588c95-bba8-49a6-a550-aeded8893f9a" class="cell">
 <details class="code-fold">
 <summary>Installing Packages</summary>
@@ -974,7 +974,8 @@ setTimeout(initGraphs, 100);
 <section id="the-key-question-as-math" class="level2">
 <h2 class="anchored" data-anchor-id="the-key-question-as-math">The Key Question as Math</h2>
 <p>In terms of causal inference, we want to compute the probability <span class="math inline">\(P({\rm Sound=Great} | \rm{do(Gear=Fancy}))\)</span>, i.e., <mark>will the sound improve if we “intervene” by upgrading the gear?</mark></p>
-<p>To do that, we need to “marginalize” over <code>Talent</code> – i.e.&nbsp;do a weighted sum over all subsets. And to keep our notation compact, let’s define <span class="math inline">\(X\)</span> = Gear (1=Fancy), <span class="math inline">\(Y\)</span> = Sound (1=Great), <span class="math inline">\(Z\)</span> = Talent (0=Low, 1=High). Then we want: <span class="math display">\[\begin{eqnarray}P(Y=1 \mid do(X=1)) &amp;=&amp; P(Y=1 \mid X=1, Z=1)\cdot P(Z=1)\\ &amp;+&amp; P(Y=1 \mid X=1, Z=0)\cdot P(Z=0)\end{eqnarray}\]</span> which in general form is called the <strong>“backdoor adjustment formula”</strong> to control for confounder <span class="math inline">\(Z\)</span> (which in our case <code>Talent</code>):</p>
+<p>To do that, we need to “marginalize” over <code>Talent</code> – i.e.&nbsp;do a <em>weighted sum</em> over all subsets. And to keep our notation compact, let’s define <span class="math inline">\(X\)</span> = Gear (1=Fancy), <span class="math inline">\(Y\)</span> = Sound (1=Great), <span class="math inline">\(Z\)</span> = Talent (0=Low, 1=High).</p>
+<p>So we want to sum over all possible values of <span class="math inline">\(Z\)</span>, weighted by the probabilites of each value of <span class="math inline">\(Z\)</span>, like this: <span class="math display">\[\begin{eqnarray}P(Y=1 \mid do(X=1)) &amp;=&amp; P(Y=1 \mid X=1, Z=1)\cdot P(Z=1)\\ &amp;+&amp; P(Y=1 \mid X=1, Z=0)\cdot P(Z=0)\end{eqnarray}\]</span> which in general form is called the <strong>“backdoor adjustment formula”</strong> to control for confounder <span class="math inline">\(Z\)</span> (which in our case <code>Talent</code>):</p>
 <p><span class="math display">\[P(Y \mid do(X)) = \sum_z P(Y \mid X, Z=z)\cdot P(Z=z)\]</span></p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
