@@ -38,7 +38,7 @@ const PEG_DX = 16;               // horizontal spacing between pegs in a row
 const TOP = 80;                  // y of first peg row
 const CX = W/2;
 const BIN_TOP = TOP + ROWS*PEG_DY + 18;
-const BIN_CEIL = BIN_TOP - 9;    // dividers extend higher: half the peg gap, extra overflow headroom
+const BIN_CEIL = TOP + (ROWS-1)*PEG_DY + 8;   // 8px below the last peg row centers
 const BIN_H = H - BIN_TOP - 46;
 const BALL_R = 3.0;
 const GOLD = '#c9a53f', DARKGOLD = '#8a6f22', STEEL = '#7a7f87';
