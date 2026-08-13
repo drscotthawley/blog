@@ -106,7 +106,7 @@ function drawBoard() {
   }
   ctx.stroke();
   // falling balls
-  ctx.fillStyle = '#5b4a9e';
+  ctx.fillStyle = STEEL;
   for (const b of balls) {
     ctx.beginPath(); ctx.arc(b.x, b.y, BALL_R, 0, 7); ctx.fill();
   }
