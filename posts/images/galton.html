@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galton Board</title>
+<style>
+  body{margin:0;display:flex;flex-direction:column;align-items:center;
+    font-family:ui-monospace,Menlo,Consolas,monospace;background:#f4f2ee}
+  #frame{background:#151412;border-radius:14px;padding:14px 14px 10px;margin-top:10px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.25)}
+  canvas{background:#faf9f6;border-radius:6px;display:block}
+  .row{display:flex;gap:8px;align-items:center;margin:10px 0 14px}
+  button{background:#151412;color:#d9b64a;border:1px solid #d9b64a;border-radius:6px;
+    font-family:inherit;font-size:13px;padding:6px 14px;cursor:pointer}
+  button:hover{background:#2a2824}
+  .stat{font-size:12px;color:#555;margin-left:6px}
+</style>
+</head>
+<body>
+<div id="frame"><canvas id="cv" width="460" height="670"></canvas></div>
+<div class="row">
+  <button id="drop1">drop 1</button>
+  <button id="drop100">drop 100</button>
+  <button id="drop1000">drop 1000</button>
+  <button id="reset">reset</button>
+  <span class="stat" id="count">0 balls</span>
+</div>
+<script>
+(() => {
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+const W = cv.width, H = cv.height;
+
+const ROWS = 19;                 // peg rows
+const NBINS = ROWS + 1;
+const PEG_DY = 13.856;           // = PEG_DX * sqrt(3)/2, equilateral lattice
+const PEG_DX = 16;               // horizontal spacing between pegs in a row
+const TOP = 80;                  // y of first peg row
+const CX = W/2;
+const BIN_TOP = TOP + ROWS*PEG_DY + 18;
+const BIN_H = H - BIN_TOP - 46;
+const BALL_R = 3.0;
+const GOLD = '#c9a53f', DARKGOLD = '#8a6f22', STEEL = '#7a7f87';
+
+const bins = new Array(NBINS*2).fill(0);   // 2 fine bins per peg exit
+const FINE = NBINS*2;
+const FINE_DX = PEG_DX/2;
+let balls = [];      // animated balls
+let total = 0;
+
+function pegPos(row, i) {        // row 0..ROWS-1, i 0..row
+  return [CX + (i - row/2)*PEG_DX, TOP + row*PEG_DY];
+}
+function binX(f) { return CX + (f - (FINE-1)/2)*FINE_DX; }   // f = fine-bin index
+
+function drawBoard() {
+  ctx.clearRect(0,0,W,H);
+  // funnel
+  ctx.strokeStyle = DARKGOLD; ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(CX-70, 18); ctx.lineTo(CX-8, 62); ctx.moveTo(CX+70, 18); ctx.lineTo(CX+8, 62);
+  ctx.stroke();
+  // pegs: small gold hexagons
+  for (let r = 0; r < ROWS; r++) {
+    for (let i = 0; i <= r; i++) {
+      const [x,y] = pegPos(r,i);
+      hex(x, y, 3.5);
+    }
+  }
+  // bin dividers
+  ctx.strokeStyle = '#d8d4cb'; ctx.lineWidth = 0.7;
+  for (let f = 0; f <= FINE; f++) {
+    const x = binX(f - 0.5);
+    ctx.beginPath();
+    ctx.moveTo(x, BIN_TOP); ctx.lineTo(x, BIN_TOP + BIN_H); ctx.stroke();
+  }
+  ctx.beginPath(); ctx.moveTo(binX(-0.5), BIN_TOP+BIN_H); ctx.lineTo(binX(NBINS-0.5), BIN_TOP+BIN_H); ctx.stroke();
+  // pile at FIXED scale, calibrated so a 1000-ball drop fills the static curve
+  const CAL_N = 1000;
+  const sigma = Math.sqrt(ROWS);     // binomial sd in fine-bin units
+  const centerFrac = 0.0881;         // expected fraction landing in center fine bin (19 rows, 2 sub-bins)
+  const scale = 0.92 * BIN_H / (CAL_N * centerFrac);   // px per ball, constant (~2.7px)
+  const r = Math.min(BALL_R, scale/2);                 // shrink drawn balls to the stack pitch
+  ctx.fillStyle = STEEL;
+  for (let f = 0; f < FINE; f++) {
+    const n = bins[f];
+    if (n === 0) continue;
+    for (let k = 0; k < n; k++) {
+      const y = BIN_TOP + BIN_H - scale/2 - k*scale;
+      if (y < BIN_TOP) break;
+      ctx.beginPath();
+      ctx.arc(binX(f), y, r, 0, 7);
+      ctx.fill();
+    }
+  }
+  // static gold Gaussian: the 3000-ball expectation, drawn from the start
+  ctx.strokeStyle = GOLD; ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (let px = 0; px <= 120; px++) {
+    const f = (FINE-1) * (px/120);
+    const z = (f - (FINE-1)/2) / sigma;
+    const yfrac = Math.exp(-0.5*z*z);
+    const x = binX(f), y = BIN_TOP + BIN_H - yfrac * 0.92 * BIN_H;
+    px ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+  }
+  ctx.stroke();
+  // falling balls
+  ctx.fillStyle = '#5b4a9e';
+  for (const b of balls) {
+    ctx.beginPath(); ctx.arc(b.x, b.y, BALL_R, 0, 7); ctx.fill();
+  }
+  document.getElementById('count').textContent = total + ' balls';
+}
+
+function hex(x, y, r) {
+  ctx.strokeStyle = GOLD; ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  for (let a = 0; a < 6; a++) {
+    const t = Math.PI/6 + a*Math.PI/3;
+    const px = x + r*Math.cos(t), py = y + r*Math.sin(t);
+    a ? ctx.lineTo(px,py) : ctx.moveTo(px,py);
+  }
+  ctx.closePath(); ctx.stroke();
+}
+
+function spawn() {
+  balls.push({ row: -1, i: 0, x: CX, y: 40, tx: CX, ty: TOP - PEG_DY/2, phase: 'fall' });
+}
+
+function step() {
+  for (const b of balls) {
+    // move toward target
+    const dx = b.tx - b.x, dy = b.ty - b.y;
+    const sp = 6;
+    const d = Math.hypot(dx,dy);
+    if (d < sp) {
+      b.x = b.tx; b.y = b.ty;
+      // choose next target
+      b.row++;
+      if (b.row < ROWS) {
+        b.i += Math.random() < 0.5 ? 0 : 1;      // deflect left(stay) or right(+1)
+        const [px,py] = pegPos(b.row, Math.min(b.i, b.row));
+        b.tx = px + (b.i - b.row/2 <= 0 ? -1 : 1) * 0; // land above peg
+        b.tx = CX + (b.i - b.row/2)*PEG_DX;
+        b.ty = py - PEG_DY/2;
+      } else if (b.phase === 'fall') {
+        b.phase = 'drop';
+        b.f = 2*b.i + (Math.random() < 0.5 ? 0 : 1);   // random sub-bin under this exit
+        b.tx = binX(b.f); b.ty = BIN_TOP + 8;
+      } else {
+        b.done = true;
+        bins[b.f]++; total++;
+      }
+    } else {
+      b.x += dx/d*sp; b.y += dy/d*sp;
+    }
+  }
+  balls = balls.filter(b => !b.done);
+  drawBoard();
+  requestAnimationFrame(step);
+}
+
+document.getElementById('drop1').onclick = spawn;
+document.getElementById('drop100').onclick = () => {
+  let n = 0;
+  const t = setInterval(() => { spawn(); if (++n >= 100) clearInterval(t); }, 40);
+};
+document.getElementById('drop1000').onclick = () => {
+  let n = 0;
+  const t = setInterval(() => {
+    for (let k = 0; k < 4 && n < 1000; k++) { spawn(); n++; }
+    if (n >= 1000) clearInterval(t);
+  }, 16);
+};
+document.getElementById('reset').onclick = () => { bins.fill(0); balls = []; total = 0; };
+
+drawBoard(); step();
+})();
+</script>
+</body>
+</html>

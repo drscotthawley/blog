@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Scott H. Hawley">
+<meta name="dcterms.date" content="2026-08-12">
+<meta name="description" content="diffusion/path integrals/functional analysis/autoregression through the lens of NYC apartment living">
 
-<title>About – Scott H. Hawley</title>
+<title>Skittering, Jittering Critters – Scott H. Hawley</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,28 +26,48 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./images/logo.png" rel="icon" type="image/png">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-9de9f6925d305bcf5b7eb9351f368d06.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-d2f35a7a6d038bee49ce82ae67d66e0a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
-<link href="site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/logo.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-9de9f6925d305bcf5b7eb9351f368d06.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-d2f35a7a6d038bee49ce82ae67d66e0a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -83,24 +106,61 @@ details > summary {
 <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;600;700&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Audiowide&amp;display=swap" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
-<meta name="twitter:title" content="About – Scott H. Hawley">
-<meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://drscotthawley.github.io/blog/profile_me.jpg">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Skittering, Jittering Critters – Scott H. Hawley">
+<meta property="og:description" content="diffusion/path integrals/functional analysis/autoregression through the lens of NYC apartment living">
+<meta property="og:image" content="https://drscotthawley.github.io/blog/posts/images/bug-wall.png">
+<meta property="og:site_name" content="Scott H. Hawley">
+<meta property="og:image:height" content="704">
+<meta property="og:image:width" content="1504">
+<meta name="twitter:title" content="Skittering, Jittering Critters – Scott H. Hawley">
+<meta name="twitter:description" content="diffusion/path integrals/functional analysis/autoregression through the lens of NYC apartment living">
+<meta name="twitter:image" content="https://drscotthawley.github.io/blog/posts/images/bug-wall.png">
+<meta name="twitter:image-height" content="704">
+<meta name="twitter:image-width" content="1504">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed fullcontent quarto-light">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a href="https://www.scotthawley.com" class="navbar-brand navbar-brand-logo">
-    <img src="./images/logo.png" alt="SH Logo" class="navbar-logo light-content">
-    <img src="./images/logo.png" alt="SH Logo" class="navbar-logo dark-content">
+    <img src="../images/logo.png" alt="SH Logo" class="navbar-logo light-content">
+    <img src="../images/logo.png" alt="SH Logo" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="https://www.scotthawley.com">
     <span class="navbar-title">Scott H. Hawley</span>
@@ -113,7 +173,7 @@ details > summary {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./about.html" aria-current="page"> 
+    <a class="nav-link" href="../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -143,54 +203,132 @@ details > summary {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Skittering, Jittering Critters</h1>
+                  <div>
+        <div class="description">
+          diffusion/path integrals/functional analysis/autoregression through the lens of NYC apartment living
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">diffusion</div>
+                <div class="quarto-category">statistics</div>
+                <div class="quarto-category">functional-analysis</div>
+                <div class="quarto-category">draft</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Scott H. Hawley </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">August 12, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#skitter-skitter" id="toc-skitter-skitter" class="nav-link active" data-scroll-target="#skitter-skitter">Skitter Skitter</a>
+  <ul class="collapse">
+  <li><a href="#possible-histories" id="toc-possible-histories" class="nav-link" data-scroll-target="#possible-histories">Possible Histories</a></li>
+  </ul></li>
+  <li><a href="#todo-write-more" id="toc-todo-write-more" class="nav-link" data-scroll-target="#todo-write-more">TODO: write more</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<div class="quarto-about-jolla">
-  <img src="profile_me.jpg" class="about-image
-  round " style="height: 15em; width: 15em;">
- <header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">About</h1>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<style>
+figcaption {
+  margin: auto;
+  text-align: center;
+</style>
+<blockquote class="blockquote">
+<p>I may be moving to New York City. I hear stories about apartments there. Unexpectedly, this has become relevant to my research.</p>
+</blockquote>
+<!--- <div style="display: flex; justify-content: flex-end;">
+<a href="">
+<img src="https://colab.research.google.com/assets/colab-badge.svg">
+</a>
+</div> -->
+<section id="skitter-skitter" class="level1">
+<h1>Skitter Skitter</h1>
+<p>The lights are out. You hear a cockroach emerge from a crack in the wall. Then silence. It’s on the carpet. “Ugh. Not again.” You reach for your flyswatter…</p>
+<p><strong>Where do you slap the ground?</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/bug-wall.png" class="img-fluid figure-img"></p>
+<figcaption>bug-and-wall-image</figcaption>
+</figure>
 </div>
-<div class="quarto-title-meta">
-  </div>
-</header><main class="content" id="quarto-document-content">
-<p>I dabble in a variety of technologies, usually with the goal of improving the physics education of audio engineering students. But I’m pretty hard-core into Deep Learning applications for musical audio production: I got “addicted” to machine learning and neural networks about 10 years ago and it’s changed my life.</p>
-<section id="affiliations" class="level4">
-<h4 data-anchor-id="affiliations">Affiliations</h4>
-<p>Professor of Physics, Belmont University. <a href="https://hedges.belmont.edu/~shawley/">Professorly Web Page</a></p>
-<p>Head of Research, <a href="https://www.hyperstate.ai/">Hyperstate (Music) AI</a></p>
-<p>Senior Data Fellow, <a href="https://www.belmontdata.org/">Belmont Data Collaborative</a></p>
-<p>Formerly: Technical Fellow, <a href="https://www.harmonai.org/">Harmonai</a> + <a href="https://stability.ai/">Stability AI</a></p>
+<p>That depends on your mental model of how roaches move, and how much time has elapsed since you heard the noise. Before we try to get too sophisticated, let’s pretend that the roach does a “random walk.” For simplicity, say it only runs along the seam where the wall and floor meet, and model the roach’s movements by a coin flip at each instant: 50% left, 50% right.</p>
+<p>Say the roach makes <span class="math inline">\(N\)</span> random left-right movements:<br>
+Many people recall some statistics lore that says the typical distance travelled goes as as <span class="math inline">\(\sqrt{N}\)</span>. If we give it a step size of <span class="math inline">\(\delta\)</span>, then the typical distance traveled by the roach since it emerged from the crack is <span class="math inline">\(\delta\sqrt{N}\)</span>. If we break time up into tiny increments <span class="math inline">\(\epsilon\)</span> and say the roach ‘chooses’ its new direction once per increment, then within time <span class="math inline">\(t\)</span> it has made <span class="math inline">\(N = t/\epsilon\)</span> choices. So the typical distance traveled is <span class="math inline">\(x = \delta\sqrt{t/\epsilon}.\)</span> If we choose units where <span class="math inline">\(\delta^2/\epsilon = 1\)</span>, then we can say simply that typical distance is <span class="math inline">\(x(t) = \sqrt{t}\)</span>.</p>
+<p><strong>“So I should slap down a distance <span class="math inline">\(x(t) = \sqrt{t}\)</span> on either side of the crack?”</strong></p>
+<p>Actually no. The typical distance is not the same as the most likely location. The latter is actually <em>at the crack itself.</em> Because the most common outcome of a coin-flip sequence is for the lefts and rights to roughly cancel – there are more ways to end up near zero than far from it.</p>
+<p>So where did that <span class="math inline">\(\sqrt{N}\)</span> / <span class="math inline">\(\sqrt(t)\)</span> result originate from, anyway? For that, we need to consider lots of possible moves the roach might have made.</p>
+<section id="possible-histories" class="level2">
+<h2 class="anchored" data-anchor-id="possible-histories">Possible Histories</h2>
+<p>To resolve the apparent paradox between the “typical distance” and the “most likely location,” let’s stop following one roach and instead imagine the same night replayed many times, with the same crack and the same coin producing a thousand parallel histories. Each history is a different sequence of coin flips, so each one ends somewhere different. Or, if you like, we can imagine a massive army of non-interacting roaches pouring through the crack! Take your pick.</p>
+<p>Where do the endings pile up? We can answer this with a classic toy that I actually have on my desk, the <a href="https://www.physicsfunshop.com/search?keywords=galton+board">Galton board</a>. Here’s an interactive simulator you can try. Press the “Drop 1000” button below. ;-)</p>
+<iframe src="images/galton.html" width="500px" height="750px">
+</iframe>
+</section>
+</section>
+<section id="todo-write-more" class="level1">
+<h1>TODO: write more</h1>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<div id="refs" role="list">
+
+</div>
+<hr>
+<ol start="3" type="a">
+<li>2026 Scott H. Hawley</li>
+</ol>
 
 
 </section>
-</main> 
-  <hr class="about-sep">
-   <div class="about-links">
-  <a href="https://github.com/drscotthawley" class="about-link" rel="" target="">
-    <i class="bi bi-github"></i>
-     <span class="about-link-text">GitHub</span>
-  </a>
-  <a href="https://bsky.app/profile/drscotthawley.bsky.social" class="about-link" rel="" target="">
-     <span class="about-link-text"><i class="fa-brands fa-bluesky" aria-label="bluesky"></i> BlueSky</span>
-  </a>
-  <a href="https://twitter.com/drscotthawley" class="about-link" rel="" target="">
-    <i class="bi bi-twitter"></i>
-     <span class="about-link-text">Twitter</span>
-  </a>
-  <a href="https://www.linkedin.com/in/drscotthawley/" class="about-link" rel="" target="">
-    <i class="bi bi-linkedin"></i>
-     <span class="about-link-text">LinkedIn</span>
-  </a>
-</div>
-</div>
- <!-- /main -->
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
