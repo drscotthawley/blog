@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heat + Leakage Playground</title>
+<style>
+  :root{
+    --bg:#10141c; --panel:#181e2a; --ink:#e8ebf2; --dim:#8a93a6;
+    --u:#ffb454; --v:#5aa9e6; --k:#7ee0a3; --grid:#232b3b;
+    --mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--mono);padding:18px;display:flex;justify-content:center}
+  .wrap{width:100%;max-width:1100px}
+  h1{font-size:15px;font-weight:600;letter-spacing:.4px;margin-bottom:2px}
+  h1 .eq{color:var(--dim);font-weight:400}
+  .sub{color:var(--dim);font-size:11.5px;margin-bottom:12px}
+  .sub b{color:var(--u)} .sub i{color:var(--v);font-style:normal} .sub em{color:var(--k);font-style:normal}
+  .panels{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .pane{position:relative}
+  canvas{width:100%;background:var(--panel);border-radius:8px;display:block}
+  .tag{position:absolute;top:8px;left:10px;font-size:10.5px;color:var(--dim);
+    letter-spacing:.5px;text-transform:uppercase}
+  .tag b{color:var(--ink);font-weight:600}
+  .driver{position:absolute;top:8px;right:10px;font-size:10px;padding:2px 8px;border-radius:10px;
+    background:rgba(255,180,84,.15);color:var(--u);border:1px solid rgba(255,180,84,.4)}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+  button,select{background:var(--panel);border:1px solid var(--grid);color:var(--ink);
+    font-family:var(--mono);font-size:12px;padding:7px 12px;border-radius:6px;cursor:pointer}
+  button:hover{border-color:var(--dim)}
+  button.play{background:var(--u);color:#1a1204;border-color:var(--u);font-weight:600;min-width:84px}
+  .stats{margin-left:auto;font-size:12px;color:var(--dim);text-align:right;line-height:1.5}
+  .stats b{color:var(--ink)}
+  .sliders{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;margin-top:14px;
+    background:var(--panel);border-radius:8px;padding:14px 16px}
+  .scol{display:flex;flex-direction:column;gap:8px}
+  .sl{display:flex;align-items:center;gap:10px;font-size:11.5px}
+  .sl label{color:var(--dim);width:150px;flex-shrink:0}
+  .sl input[type=range]{flex:1;accent-color:var(--v)}
+  .sl .val{width:52px;text-align:right;color:var(--ink)}
+  .sl.kin input[type=range]{accent-color:var(--u)}
+  @media(max-width:760px){.panels{grid-template-columns:1fr}.sliders{grid-template-columns:1fr}}
+  .foot{color:var(--dim);font-size:10.5px;margin-top:10px;line-height:1.6}
+  .foot em{color:var(--k);font-style:normal}
+  .tabs{display:flex;gap:6px;margin-bottom:10px}
+  .tab{background:none;border:1px solid var(--grid);color:var(--dim);
+    font-family:var(--mono);font-size:11.5px;padding:5px 14px;border-radius:6px 6px 0 0;cursor:pointer}
+  .tab.active{color:var(--ink);border-color:var(--dim);background:var(--panel)}
+  .hscroll{display:flex;gap:12px;align-items:center;margin-top:6px}
+  .hscroll input[type=range]{flex:1;accent-color:var(--dim)}
+  .hscroll .follow{font-size:11px;color:var(--dim);display:flex;gap:5px;align-items:center;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Heat + Leakage <span class="eq">&nbsp; ∂u/∂t = ½D ∂²u/∂x² − V(x)·u</span></h1>
+  <div class="sub"><b>u(x,t)</b> heat &nbsp;·&nbsp; <i>V(x)</i> leak rate &nbsp;·&nbsp; <em>|û(k)|</em> spectrum &nbsp;·&nbsp; one representation drives, the other watches</div>
+
+  <div class="tabs">
+    <button class="tab active" id="tabWave">waves</button>
+    <button class="tab" id="tabHeat">spacetime</button>
+  </div>
+
+  <div class="panels" id="viewWave">
+    <div class="pane">
+      <canvas id="cvx" height="340"></canvas>
+      <div class="tag">configuration space · <b>u(x)</b></div>
+      <div class="driver" id="drvx" style="display:none">driving</div>
+    </div>
+    <div class="pane">
+      <canvas id="cvk" height="340"></canvas>
+      <div class="tag">frequency space · <b>|û(k)|</b> (log)</div>
+      <div class="driver" id="drvk" style="display:none">driving</div>
+    </div>
+  </div>
+
+  <div class="pane" id="viewHeat" style="display:none">
+    <canvas id="cvh" height="420"></canvas>
+    <div class="tag">spacetime · horizontal <b>t</b> · vertical <b>x</b> · color <b>u(x,t)</b></div>
+    <div class="hscroll" id="hscrollRow" style="display:none">
+      <input type="range" id="hpos" min="0" max="1000" step="1" value="1000">
+      <label class="follow"><input type="checkbox" id="follow" checked> follow</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <button id="play" class="play">▶ Play</button>
+    <button id="step">Step</button>
+    <button id="reset">Reset</button>
+    <select id="method">
+      <option value="cn">Drive: Crank–Nicolson (x-space)</option>
+      <option value="sp">Drive: Fourier spectral (k-space)</option>
+    </select>
+    <select id="ic">
+      <option value="delta">IC: near-delta</option>
+      <option value="twobump">IC: two bumps</option>
+      <option value="box">IC: box</option>
+    </select>
+    <div class="stats">
+      t = <b id="tval">0.000</b><br>
+      ∫u dx = <b id="mass">1.000</b> <span id="masspct"></span>
+    </div>
+  </div>
+
+  <div class="sliders">
+    <div class="scol">
+      <div class="sl kin"><label>diffusion D</label>
+        <input type="range" id="D" min="0.1" max="3" step="0.05" value="1"><span class="val" id="Dv">1.00</span></div>
+      <div class="sl kin"><label>speed (×)</label>
+        <input type="range" id="spd" min="-3" max="1" step="0.05" value="0"><span class="val" id="spdv">1.0</span></div>
+    </div>
+    <div class="scol">
+      <div class="sl"><label>patch strength</label>
+        <input type="range" id="Vp" min="0" max="12" step="0.1" value="0.5"><span class="val" id="Vpv">0.5</span></div>
+      <div class="sl"><label>patch position</label>
+        <input type="range" id="Vx" min="-4" max="4" step="0.05" value="1.5"><span class="val" id="Vxv">1.50</span></div>
+      <div class="sl"><label>patch width</label>
+        <input type="range" id="Vw" min="0.1" max="20" step="0.05" value="20"><span class="val" id="Vwv">20.00</span></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    Domain x ∈ [−5,5], N=512. Dashed overlay on the left: total heat vs time.
+    In k-space, pure diffusion is exact: each mode decays as e<sup>−½Dk²t</sup> — watch the spectrum
+    tilt as high k dies first (<em>diffusion = progressive low-pass</em>). The V(x)·u term is handled
+    by operator splitting when the spectral method drives. Boundary caveat: CN uses u=0 walls,
+    spectral is periodic — differences show up only when heat reaches the edges.
+  </div>
+</div>
+
+<script>
+(() => {
+const N = 512, XMIN = -5, XMAX = 5, L = XMAX - XMIN;
+const dx = L / N;
+const dtBase = 0.006;
+const x = new Float64Array(N);
+for (let i = 0; i < N; i++) x[i] = XMIN + i * dx;
+
+// wavenumbers for FFT layout (0, 1, ..., N/2, -N/2+1, ..., -1) * 2π/L
+const kk = new Float64Array(N);
+for (let i = 0; i < N; i++) {
+  const m = (i <= N / 2) ? i : i - N;
+  kk[i] = 2 * Math.PI * m / L;
+}
+
+let u = new Float64Array(N);
+let V = new Float64Array(N);
+let t = 0, playing = false, mass0 = 1;
+const massHist = [];
+const snaps = [];                 // [t, Float32Array(u)] for spacetime view
+const SNAP_NX = 256;              // vertical resolution of stored snapshots
+const SNAP_DT = 0.003;            // sim-time per recorded column
+let snapNext = 0;                 // sim-time of next snapshot due
+function recordSnap() {
+  const s = new Float32Array(SNAP_NX);
+  for (let j = 0; j < SNAP_NX; j++) s[j] = u[Math.floor(j * N / SNAP_NX)];
+  snaps.push([t, s]);
+  snapNext = t + SNAP_DT;
+}
+
+// --- controls ---
+let ready = false;
+const $ = id => document.getElementById(id);
+const P = { D:1, Vp:0.5, Vx:1.5, Vw:20, spd:1 };
+[['D','Dv',2],['Vp','Vpv',1],['Vx','Vxv',2],['Vw','Vwv',2]]
+.forEach(([id, out, dec]) => {
+  const el = $(id);
+  const upd = () => { P[id] = +el.value; $(out).textContent = (+el.value).toFixed(dec); buildV(); drawAll(); };
+  el.addEventListener('input', upd); upd();
+});
+{ // speed: log slider, spd = 10^value, range 0.1x–10x
+  const el = $('spd');
+  const upd = () => { P.spd = Math.pow(10, +el.value); $('spdv').textContent = P.spd < 0.01 ? P.spd.toFixed(4) : P.spd < 0.1 ? P.spd.toFixed(3) : P.spd.toFixed(P.spd < 1 ? 2 : 1); };
+  el.addEventListener('input', upd); upd();
+}
+
+function buildV() {
+  for (let i = 0; i < N; i++) {
+    const g = Math.exp(-0.5 * ((x[i] - P.Vx) / P.Vw) ** 2);
+    V[i] = P.Vp * g;
+  }
+}
+
+function setIC() {
+  const kind = $('ic').value;
+  for (let i = 0; i < N; i++) {
+    if (kind === 'delta')       u[i] = 2.0 * Math.exp(-0.5 * (x[i] / 0.06) ** 2);
+    else if (kind === 'twobump') u[i] = Math.exp(-0.5 * ((x[i] + 2) / 0.3) ** 2) + 0.7 * Math.exp(-0.5 * ((x[i] - 2.2) / 0.4) ** 2);
+    else                         u[i] = (Math.abs(x[i]) < 1.2) ? 1 : 0;
+  }
+  if (kind !== 'delta') {        // unit mass for extended ICs; delta keeps fixed amplitude
+    let m = trapz(u);
+    for (let i = 0; i < N; i++) u[i] /= m;
+  }
+  t = 0; mass0 = trapz(u);
+  ranSteps = 2;                  // Rannacher: first two dt's done as BE half-step pairs
+  massHist.length = 0; massHist.push([0, 1]);
+  snaps.length = 0; recordSnap();
+}
+
+function trapz(f) {
+  let s = 0;
+  for (let i = 0; i < N; i++) s += f[i];
+  return s * dx; // periodic-style sum; fine for display
+}
+
+// --- FFT (iterative radix-2, in-place on re/im arrays) ---
+const re = new Float64Array(N), im = new Float64Array(N);
+function fft(re, im, inv) {
+  const n = N;
+  for (let i = 1, j = 0; i < n; i++) {           // bit reversal
+    let bit = n >> 1;
+    for (; j & bit; bit >>= 1) j ^= bit;
+    j ^= bit;
+    if (i < j) { [re[i], re[j]] = [re[j], re[i]]; [im[i], im[j]] = [im[j], im[i]]; }
+  }
+  for (let len = 2; len <= n; len <<= 1) {
+    const ang = (inv ? 1 : -1) * 2 * Math.PI / len;
+    const wr = Math.cos(ang), wi = Math.sin(ang);
+    for (let i = 0; i < n; i += len) {
+      let cwr = 1, cwi = 0;
+      for (let j = 0; j < len / 2; j++) {
+        const ar = re[i + j], ai = im[i + j];
+        const br = re[i + j + len / 2] * cwr - im[i + j + len / 2] * cwi;
+        const bi = re[i + j + len / 2] * cwi + im[i + j + len / 2] * cwr;
+        re[i + j] = ar + br; im[i + j] = ai + bi;
+        re[i + j + len / 2] = ar - br; im[i + j + len / 2] = ai - bi;
+        const nwr = cwr * wr - cwi * wi; cwi = cwr * wi + cwi * wr; cwr = nwr;
+      }
+    }
+  }
+  if (inv) for (let i = 0; i < n; i++) { re[i] /= n; im[i] /= n; }
+}
+
+// --- Method 1: Crank–Nicolson (Dirichlet walls) ---
+const a = new Float64Array(N), b = new Float64Array(N), c = new Float64Array(N),
+      d = new Float64Array(N), cp = new Float64Array(N), dp = new Float64Array(N);
+let ranSteps = 0;   // remaining Rannacher (backward Euler) startup substep pairs
+function beSub(dt) { // one backward Euler step: (I - dt·A) u' = u
+  const r = P.D * dt / (2 * dx * dx);
+  for (let i = 0; i < N; i++) {
+    b[i] = 1 + 2 * r + dt * V[i]; a[i] = -r; c[i] = -r;
+    d[i] = u[i];
+  }
+  b[0] = 1; c[0] = 0; d[0] = 0;
+  b[N - 1] = 1; a[N - 1] = 0; d[N - 1] = 0;
+  cp[0] = c[0] / b[0]; dp[0] = d[0] / b[0];
+  for (let i = 1; i < N; i++) {
+    const m = b[i] - a[i] * cp[i - 1];
+    cp[i] = c[i] / m; dp[i] = (d[i] - a[i] * dp[i - 1]) / m;
+  }
+  u[N - 1] = dp[N - 1];
+  for (let i = N - 2; i >= 0; i--) u[i] = dp[i] - cp[i] * u[i + 1];
+}
+function cnStep(dt) {
+  if (ranSteps > 0) {            // Rannacher startup: two BE half-steps per dt
+    beSub(dt / 2); beSub(dt / 2);
+    ranSteps--; t += dt;
+    return;
+  }
+  const r = 0.5 * P.D * dt / (2 * dx * dx);
+  for (let i = 0; i < N; i++) {
+    const vi = 0.5 * dt * V[i];
+    b[i] = 1 + 2 * r + vi; a[i] = -r; c[i] = -r;
+    const um = i > 0 ? u[i - 1] : 0, up = i < N - 1 ? u[i + 1] : 0;
+    d[i] = u[i] * (1 - 2 * r - vi) + r * (um + up);
+  }
+  b[0] = 1; c[0] = 0; d[0] = 0;
+  b[N - 1] = 1; a[N - 1] = 0; d[N - 1] = 0;
+  cp[0] = c[0] / b[0]; dp[0] = d[0] / b[0];
+  for (let i = 1; i < N; i++) {
+    const m = b[i] - a[i] * cp[i - 1];
+    cp[i] = c[i] / m; dp[i] = (d[i] - a[i] * dp[i - 1]) / m;
+  }
+  u[N - 1] = dp[N - 1];
+  for (let i = N - 2; i >= 0; i--) u[i] = dp[i] - cp[i] * u[i + 1];
+  t += dt;
+}
+
+// --- Method 2: Fourier spectral with Strang splitting (periodic) ---
+// half-step leak (x-space) → full diffusion step (k-space, exact) → half-step leak
+function spStep(dt) {
+  for (let i = 0; i < N; i++) u[i] *= Math.exp(-0.5 * dt * V[i]);
+  re.set(u); im.fill(0);
+  fft(re, im, false);
+  for (let i = 0; i < N; i++) {
+    const decay = Math.exp(-0.5 * P.D * kk[i] * kk[i] * dt);
+    re[i] *= decay; im[i] *= decay;
+  }
+  fft(re, im, true);
+  for (let i = 0; i < N; i++) u[i] = Math.max(re[i], 0) * 0 + re[i]; // keep raw (tiny neg from splitting ok)
+  for (let i = 0; i < N; i++) u[i] *= Math.exp(-0.5 * dt * V[i]);
+  t += dt;
+}
+
+// --- passive spectrum of current u (for display, always) ---
+const specMag = new Float64Array(N / 2);
+function computeSpectrum() {
+  re.set(u); im.fill(0);
+  fft(re, im, false);
+  for (let i = 0; i < N / 2; i++) specMag[i] = Math.hypot(re[i], im[i]) * dx; // ~ continuous FT amplitude
+}
+
+// --- drawing ---
+const cvx = $('cvx'), ctxX = cvx.getContext('2d');
+const cvk = $('cvk'), ctxK = cvk.getContext('2d');
+const cvh = $('cvh'), ctxH = cvh.getContext('2d');
+function resizeAll() {
+  [[cvx, ctxX, 340], [cvk, ctxK, 340], [cvh, ctxH, 420]].forEach(([cv, ctx, hh]) => {
+    cv.width = Math.max(cv.clientWidth, 300) * devicePixelRatio;
+    cv.height = hh * devicePixelRatio;
+    ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+  });
+}
+window.addEventListener('resize', () => { resizeAll(); drawAll(); });
+
+const UMAX = 2.2;
+function drawX() {
+  const w = cvx.clientWidth, h = 340, ctx = ctxX;
+  ctx.clearRect(0, 0, w, h);
+  ctx.strokeStyle = '#232b3b'; ctx.lineWidth = 1;
+  for (let gx = Math.ceil(XMIN); gx <= XMAX; gx++) {
+    const px = (gx - XMIN) / L * w;
+    ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, h); ctx.stroke();
+  }
+  const vmax = Math.max(...V, 1e-9);
+  const VSCALE = 12;   // full vertical extent of the V axis (max patch strength)
+  if (vmax > 1e-6) {
+    ctx.beginPath(); ctx.moveTo(0, h);
+    for (let i = 0; i < N; i++) ctx.lineTo(i / N * w, h - (V[i] / VSCALE) * h * 0.9);
+    ctx.lineTo(w, h); ctx.closePath();
+    ctx.fillStyle = 'rgba(90,169,230,0.13)'; ctx.fill();
+    ctx.strokeStyle = 'rgba(90,169,230,0.55)'; ctx.stroke();
+    ctx.fillStyle = 'rgba(90,169,230,0.8)'; ctx.font = '10px monospace';
+    ctx.fillText('V peak = ' + vmax.toFixed(2), w - 100, h - (vmax / VSCALE) * h * 0.9 - 6);
+  }
+  ctx.beginPath();
+  for (let i = 0; i < N; i++) {
+    const px = i / N * w, py = h - Math.min(u[i] / UMAX, 1) * (h - 30) - 4;
+    i ? ctx.lineTo(px, py) : ctx.moveTo(px, py);
+  }
+  ctx.strokeStyle = '#ffb454'; ctx.lineWidth = 2.2; ctx.stroke();
+  ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
+  ctx.fillStyle = 'rgba(255,180,84,0.10)'; ctx.fill();
+  if (massHist.length > 1) {
+    const tMax = Math.max(massHist[massHist.length - 1][0], 1e-6);
+    ctx.beginPath();
+    for (let k2 = 0; k2 < massHist.length; k2++) {
+      const px = massHist[k2][0] / tMax * w;
+      const py = h - massHist[k2][1] * (h - 30) - 4;
+      k2 ? ctx.lineTo(px, py) : ctx.moveTo(px, py);
+    }
+    ctx.setLineDash([5, 5]); ctx.strokeStyle = 'rgba(232,235,242,0.5)';
+    ctx.lineWidth = 1.3; ctx.stroke(); ctx.setLineDash([]);
+  }
+}
+
+const KSHOW = 140;          // show |û| for first KSHOW positive modes
+const LOGMIN = 1e-7, LOGMAX = 1;
+function drawK() {
+  const w = cvk.clientWidth, h = 340, ctx = ctxK;
+  ctx.clearRect(0, 0, w, h);
+  // log-scale horizontal gridlines each decade
+  ctx.strokeStyle = '#232b3b'; ctx.lineWidth = 1;
+  ctx.fillStyle = '#8a93a6'; ctx.font = '10px monospace';
+  for (let dec = 0; dec >= Math.log10(LOGMIN); dec--) {
+    const yFrac = (dec - Math.log10(LOGMIN)) / (Math.log10(LOGMAX) - Math.log10(LOGMIN));
+    const py = h - yFrac * (h - 30) - 4;
+    ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(w, py); ctx.stroke();
+    ctx.fillText('1e' + dec, 4, py - 3);
+  }
+  ctx.beginPath();
+  let started = false;
+  for (let i = 0; i < KSHOW; i++) {
+    const mag = Math.max(specMag[i], LOGMIN);
+    const yFrac = (Math.log10(mag) - Math.log10(LOGMIN)) / (Math.log10(LOGMAX) - Math.log10(LOGMIN));
+    const px = i / KSHOW * w, py = h - Math.max(Math.min(yFrac, 1), 0) * (h - 30) - 4;
+    started ? ctx.lineTo(px, py) : ctx.moveTo(px, py);
+    started = true;
+  }
+  ctx.strokeStyle = '#7ee0a3'; ctx.lineWidth = 2; ctx.stroke();
+  ctx.fillStyle = '#8a93a6';
+  ctx.fillText('k →', w - 30, h - 8);
+}
+
+// --- spacetime heatmap ---
+// perceptual-ish dark→amber colormap matching the theme
+// plasma colormap: anchor colors from matplotlib, linearly interpolated
+const PLASMA = [
+  [13,8,135],[84,2,163],[139,10,165],[185,50,137],[219,92,104],
+  [244,136,73],[254,188,43],[240,249,33]
+];
+function cmap(v) { // v in [0,1] → [r,g,b]
+  const s = Math.sqrt(Math.min(Math.max(v, 0), 1));  // sqrt to lift low values
+  const f = s * (PLASMA.length - 1);
+  const i = Math.min(Math.floor(f), PLASMA.length - 2);
+  const a = f - i, c0 = PLASMA[i], c1 = PLASMA[i + 1];
+  return [
+    Math.round(c0[0] + a * (c1[0] - c0[0])),
+    Math.round(c0[1] + a * (c1[1] - c0[1])),
+    Math.round(c0[2] + a * (c1[2] - c0[2]))
+  ];
+}
+let heatDirty = true;
+function drawHeat() {
+  const w = cvh.clientWidth, h = 420, ctx = ctxH;
+  const W = Math.floor(w), H = Math.floor(h);
+  const img = ctx.createImageData(W, H);
+  const nS = snaps.length;
+  const uref = UMAX * 0.8;
+  // scroll state: which snapshot index is the leftmost visible column
+  const overflow = Math.max(0, nS - W);
+  const following = $('follow').checked;
+  let first;
+  if (overflow === 0) first = 0;
+  else if (following) { first = overflow; $('hpos').value = 1000; }
+  else first = Math.round((+$('hpos').value / 1000) * overflow);
+  $('hscrollRow').style.display = overflow > 0 ? 'flex' : 'none';
+  const nCols = Math.min(nS - first, W);
+  for (let px = 0; px < W; px++) {
+    if (px >= nCols) break;
+    const s = snaps[first + px][1];
+    for (let py = 0; py < H; py++) {
+      const j = Math.min(Math.floor((1 - py / H) * SNAP_NX), SNAP_NX - 1);
+      const [r, g, bb] = cmap(s[j] / uref);
+      const o = (py * W + px) * 4;
+      img.data[o] = r; img.data[o + 1] = g; img.data[o + 2] = bb; img.data[o + 3] = 255;
+    }
+  }
+  // unfilled region: panel background
+  for (let px = nCols; px < W; px++) {
+    for (let py = 0; py < H; py++) {
+      const o = (py * W + px) * 4;
+      img.data[o] = 13; img.data[o + 1] = 8; img.data[o + 2] = 40; img.data[o + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+  ctx.fillStyle = 'rgba(232,235,242,0.65)'; ctx.font = '10px monospace';
+  ctx.fillText('t = ' + snaps[first][0].toFixed(2), 6, H - 8);
+  ctx.fillText('t = ' + snaps[nS - 1][0].toFixed(2), Math.min(nCols, W) - 62, H - 8);
+  ctx.fillText('x = ' + XMAX, 6, 14);
+  ctx.fillText('x = ' + XMIN, 6, H - 22);
+}
+
+let activeTab = 'wave';
+function drawAll() {
+  if (!ready) return;
+  if (activeTab === 'wave') { computeSpectrum(); drawX(); drawK(); }
+  else drawHeat();
+}
+
+function updateStats() {
+  const m = trapz(u) / mass0;
+  massHist.push([t, m]);
+  $('tval').textContent = t.toFixed(3);
+  $('mass').textContent = m.toFixed(3);
+  $('masspct').textContent = '(' + (m * 100).toFixed(1) + '%)';
+}
+
+let tBudget = 0;                    // accumulated sim-time owed
+const BASE_RATE = 1.5 * dtBase;     // sim-time per frame at speed 1x
+function advance(manual) {
+  const method = $('method').value;
+  tBudget += manual ? Math.max(BASE_RATE * P.spd, dtBase) : BASE_RATE * P.spd;
+  // integrate with dt capped at dtBase; smaller dt when slowed way down
+  const dt = Math.min(dtBase, Math.max(tBudget, 1e-9));
+  let stepped = false;
+  while (tBudget >= dt - 1e-12) {
+    (method === 'cn' ? cnStep : spStep)(dt);
+    if (t >= snapNext - 1e-12) recordSnap();
+    tBudget -= dt;
+    stepped = true;
+  }
+  if (stepped) { updateStats(); drawAll(); }
+}
+
+function tick() {
+  if (playing) advance();
+  requestAnimationFrame(tick);
+}
+
+function refreshDriverTags() {
+  const m = $('method').value;
+  $('drvx').style.display = m === 'cn' ? 'block' : 'none';
+  $('drvk').style.display = m === 'sp' ? 'block' : 'none';
+}
+
+$('play').addEventListener('click', () => {
+  playing = !playing;
+  $('play').textContent = playing ? '❚❚ Pause' : '▶ Play';
+});
+$('step').addEventListener('click', () => advance(true));
+$('reset').addEventListener('click', () => {
+  setIC(); buildV(); drawAll();
+  $('tval').textContent = '0.000'; $('mass').textContent = '1.000'; $('masspct').textContent = '';
+});
+$('ic').addEventListener('change', () => $('reset').click());
+$('method').addEventListener('change', refreshDriverTags);
+$('hpos').addEventListener('input', () => {
+  $('follow').checked = (+$('hpos').value >= 998);
+  drawAll();
+});
+$('follow').addEventListener('change', drawAll);
+$('tabWave').addEventListener('click', () => {
+  activeTab = 'wave';
+  $('tabWave').classList.add('active'); $('tabHeat').classList.remove('active');
+  $('viewWave').style.display = 'grid';
+  $('viewHeat').style.display = 'none';
+  resizeAll(); drawAll();
+});
+$('tabHeat').addEventListener('click', () => {
+  activeTab = 'heat';
+  $('tabHeat').classList.add('active'); $('tabWave').classList.remove('active');
+  $('viewHeat').style.display = 'block'; $('viewWave').style.display = 'none';
+  resizeAll(); drawAll();
+});
+
+buildV(); setIC(); resizeAll(); ready = true; drawAll(); refreshDriverTags(); tick();
+})();
+</script>
+</body>
+</html>
+
