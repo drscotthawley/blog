@@ -38,6 +38,7 @@ const PEG_DX = 16;               // horizontal spacing between pegs in a row
 const TOP = 80;                  // y of first peg row
 const CX = W/2;
 const BIN_TOP = TOP + ROWS*PEG_DY + 18;
+const BIN_CEIL = BIN_TOP - 9;    // dividers extend higher: half the peg gap, extra overflow headroom
 const BIN_H = H - BIN_TOP - 46;
 const BALL_R = 3.0;
 const GOLD = '#c9a53f', DARKGOLD = '#8a6f22', STEEL = '#7a7f87';
@@ -72,7 +73,7 @@ function drawBoard() {
   for (let f = 0; f <= FINE; f++) {
     const x = binX(f - 0.5);
     ctx.beginPath();
-    ctx.moveTo(x, BIN_TOP); ctx.lineTo(x, BIN_TOP + BIN_H); ctx.stroke();
+    ctx.moveTo(x, BIN_CEIL); ctx.lineTo(x, BIN_TOP + BIN_H); ctx.stroke();
   }
   ctx.beginPath(); ctx.moveTo(binX(-0.5), BIN_TOP+BIN_H); ctx.lineTo(binX(NBINS-0.5), BIN_TOP+BIN_H); ctx.stroke();
   // pile at FIXED scale, calibrated so a 1000-ball drop fills the static curve
@@ -87,7 +88,7 @@ function drawBoard() {
     if (n === 0) continue;
     for (let k = 0; k < n; k++) {
       const y = BIN_TOP + BIN_H - scale/2 - k*scale;
-      if (y < BIN_TOP) break;
+      if (y < BIN_CEIL) break;
       ctx.beginPath();
       ctx.arc(binX(f), y, r, 0, 7);
       ctx.fill();
