@@ -15,7 +15,7 @@
 <link>https://drscotthawley.github.io/blog/</link>
 </image>
 <generator>quarto-1.9.38</generator>
-<lastBuildDate>Mon, 18 May 2026 04:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 18 May 2026 05:00:00 GMT</lastBuildDate>
 <item>
   <title>Catapulting into Causal Calculus</title>
   <dc:creator>Scott H. Hawley</dc:creator>
@@ -25,7 +25,7 @@
   <category>graphs</category>
   <category>statistics</category>
   <guid>https://drscotthawley.github.io/blog/posts/CausalCatapult.html</guid>
-  <pubDate>Mon, 18 May 2026 04:00:00 GMT</pubDate>
+  <pubDate>Mon, 18 May 2026 05:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/catapult.png" medium="image" type="image/png" height="75" width="144"/>
 </item>
 <item>
@@ -38,7 +38,7 @@
   <category>geometry</category>
   <category>embeddings</category>
   <guid>https://drscotthawley.github.io/blog/posts/FactorizingSoftly.html</guid>
-  <pubDate>Sun, 01 Mar 2026 05:00:00 GMT</pubDate>
+  <pubDate>Sun, 01 Mar 2026 06:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/factorization_card.png" medium="image" type="image/png" height="76" width="144"/>
 </item>
 <item>
@@ -51,7 +51,7 @@
   <category>visualization</category>
   <category>computer_vision</category>
   <guid>https://drscotthawley.github.io/blog/posts/Noticing-A-Pattern.html</guid>
-  <pubDate>Mon, 26 Jan 2026 05:00:00 GMT</pubDate>
+  <pubDate>Mon, 26 Jan 2026 06:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/tench_compact.png" medium="image" type="image/png" height="95" width="144"/>
 </item>
 <item>
@@ -64,7 +64,7 @@
   <category>guidance</category>
   <category>diffusion</category>
   <guid>https://drscotthawley.github.io/blog/posts/FlowWhereYouWant.html</guid>
-  <pubDate>Thu, 27 Nov 2025 05:00:00 GMT</pubDate>
+  <pubDate>Thu, 27 Nov 2025 06:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/fwyw_kayak.png" medium="image" type="image/png" height="81" width="144"/>
 </item>
 <item>
@@ -78,7 +78,7 @@
   <category>physics</category>
   <category>tutorial</category>
   <guid>https://drscotthawley.github.io/blog/posts/FlowModels.html</guid>
-  <pubDate>Wed, 13 Nov 2024 05:00:00 GMT</pubDate>
+  <pubDate>Wed, 13 Nov 2024 06:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/flow_gaussian_to_spiral.png" medium="image" type="image/png" height="67" width="144"/>
 </item>
 <item>
@@ -92,7 +92,7 @@
   <category>music</category>
   <category>midi</category>
   <guid>https://drscotthawley.github.io/blog/posts/Transformers2-MusicBox.html</guid>
-  <pubDate>Mon, 18 Dec 2023 05:00:00 GMT</pubDate>
+  <pubDate>Mon, 18 Dec 2023 06:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/musicbox_prime.jpeg" medium="image" type="image/jpeg"/>
 </item>
 <item>
@@ -105,7 +105,7 @@
   <category>transformers</category>
   <category>tutorial</category>
   <guid>https://drscotthawley.github.io/blog/posts/Transformers1-Attention.html</guid>
-  <pubDate>Mon, 21 Aug 2023 04:00:00 GMT</pubDate>
+  <pubDate>Mon, 21 Aug 2023 05:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/TransformerOvalInOut.gif" medium="image" type="image/gif"/>
 </item>
 <item>
@@ -118,7 +118,7 @@
   <category>audio</category>
   <category>quantization</category>
   <guid>https://drscotthawley.github.io/blog/posts/2023-06-12-RVQ.html</guid>
-  <pubDate>Mon, 12 Jun 2023 04:00:00 GMT</pubDate>
+  <pubDate>Mon, 12 Jun 2023 05:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/rvq_image.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 <item>
@@ -130,7 +130,7 @@
   <category>embeddings</category>
   <category>tutorial</category>
   <guid>https://drscotthawley.github.io/blog/posts/2022-11-17-byol.html</guid>
-  <pubDate>Thu, 17 Nov 2022 05:00:00 GMT</pubDate>
+  <pubDate>Thu, 17 Nov 2022 06:00:00 GMT</pubDate>
   <media:content url="https://production-media.paperswithcode.com/methods/Screenshot_2021-03-15_at_19.58.32_ENGHInW.png" medium="image" type="image/png"/>
 </item>
 <item>
@@ -143,7 +143,7 @@
   <category>geometry</category>
   <category>embeddings</category>
   <guid>https://drscotthawley.github.io/blog/posts/2022-11-15-multidim-shells.html</guid>
-  <pubDate>Tue, 15 Nov 2022 05:00:00 GMT</pubDate>
+  <pubDate>Tue, 15 Nov 2022 06:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/softmax_radii.png" medium="image" type="image/png" height="65" width="144"/>
 </item>
 <item>
@@ -156,7 +156,7 @@
   <category>geometry</category>
   <category>embeddings</category>
   <guid>https://drscotthawley.github.io/blog/posts/2022-01-24-multidim-dotproducts.html</guid>
-  <pubDate>Mon, 24 Jan 2022 05:00:00 GMT</pubDate>
+  <pubDate>Mon, 24 Jan 2022 06:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/multidim_dp_summary.png" medium="image" type="image/png" height="103" width="144"/>
 </item>
 <item>
@@ -168,7 +168,7 @@
   <category>geometry</category>
   <category>physics</category>
   <guid>https://drscotthawley.github.io/blog/posts/2021-10-15-geometric-algebra.html</guid>
-  <pubDate>Fri, 15 Oct 2021 04:00:00 GMT</pubDate>
+  <pubDate>Fri, 15 Oct 2021 05:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/cliffords.png" medium="image" type="image/png" height="79" width="144"/>
 </item>
 <item>
@@ -179,7 +179,7 @@
   <category>bash</category>
   <category>python</category>
   <guid>https://drscotthawley.github.io/blog/posts/2021-09-15-Handy-Bash-Functions.html</guid>
-  <pubDate>Wed, 15 Sep 2021 14:46:18 GMT</pubDate>
+  <pubDate>Wed, 15 Sep 2021 15:46:18 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/bash_functions_thumb.png" medium="image" type="image/png" height="96" width="144"/>
 </item>
 <item>
@@ -191,7 +191,7 @@
   <category>zero_shot</category>
   <category>embeddings</category>
   <guid>https://drscotthawley.github.io/blog/posts/2021-08-06-Live-CL-Demo.html</guid>
-  <pubDate>Sun, 01 Aug 2021 17:00:18 GMT</pubDate>
+  <pubDate>Sun, 01 Aug 2021 18:00:18 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/live-cl-demo.png" medium="image" type="image/png" height="97" width="144"/>
 </item>
 <item>
@@ -204,7 +204,7 @@
   <category>zero_shot</category>
   <category>embeddings</category>
   <guid>https://drscotthawley.github.io/blog/posts/2021-06-17-contrasting-contrastive-loss.html</guid>
-  <pubDate>Thu, 17 Jun 2021 04:00:00 GMT</pubDate>
+  <pubDate>Thu, 17 Jun 2021 05:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/vizpreds_preview.png" medium="image" type="image/png" height="127" width="144"/>
 </item>
 <item>
@@ -218,7 +218,7 @@
   <category>visualization</category>
   <category>embeddings</category>
   <guid>https://drscotthawley.github.io/blog/posts/2021-05-04-the-joy-of-3d.html</guid>
-  <pubDate>Tue, 04 May 2021 04:00:00 GMT</pubDate>
+  <pubDate>Tue, 04 May 2021 05:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/cat_dog_horse_triangle_fullcolor.png" medium="image" type="image/png" height="105" width="144"/>
 </item>
 <item>
@@ -230,7 +230,7 @@
   <category>gpt3</category>
   <category>prompt_engineering</category>
   <guid>https://drscotthawley.github.io/blog/posts/2021-02-15-Making-GPT3-Generate-3-Of-A-Kind.html</guid>
-  <pubDate>Tue, 16 Feb 2021 00:33:31 GMT</pubDate>
+  <pubDate>Tue, 16 Feb 2021 01:33:31 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/gpt3-3s.png" medium="image" type="image/png" height="124" width="144"/>
 </item>
 <item>
@@ -242,7 +242,7 @@
   <category>ethics</category>
   <category>interactive</category>
   <guid>https://drscotthawley.github.io/blog/posts/2020-12-11-Naughty-by-Numbers.html</guid>
-  <pubDate>Fri, 11 Dec 2020 21:25:13 GMT</pubDate>
+  <pubDate>Fri, 11 Dec 2020 22:25:13 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/naughty2.png" medium="image" type="image/png" height="84" width="144"/>
 </item>
 <item>
@@ -253,7 +253,7 @@
   <category>tools</category>
   <category>academic_writing</category>
   <guid>https://drscotthawley.github.io/blog/posts/2020-07-01-Citations-Via-Bibtex.html</guid>
-  <pubDate>Wed, 01 Jul 2020 04:00:00 GMT</pubDate>
+  <pubDate>Wed, 01 Jul 2020 05:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/book_image_smaller.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
@@ -264,7 +264,7 @@
   <category>linux</category>
   <category>macos</category>
   <guid>https://drscotthawley.github.io/blog/posts/2020-01-13-Mac-Linux-Switch-Notes.html</guid>
-  <pubDate>Mon, 13 Jan 2020 05:00:00 GMT</pubDate>
+  <pubDate>Mon, 13 Jan 2020 06:00:00 GMT</pubDate>
   <media:content url="https://drscotthawley.github.io/blog/posts/images/gparted.png" medium="image" type="image/png" height="100" width="144"/>
 </item>
 </channel>
