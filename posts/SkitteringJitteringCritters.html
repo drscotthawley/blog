@@ -302,11 +302,10 @@ figcaption {
 <section id="possible-histories" class="level2">
 <h2 class="anchored" data-anchor-id="possible-histories">Possible Histories</h2>
 <p>To resolve the apparent paradox between the “typical distance” and the “most likely location,” let’s stop following one roach and instead imagine the same night replayed many times, with the same hole and the same coin producing a thousand parallel histories. Each history is a different sequence of coin flips, so each one ends somewhere different. Or, if you like, we can imagine a massive army of non-interacting roaches pouring through the hole! 😱 …Take your pick.</p>
-<p>Where do the endings pile up? We can visualize the answer with a classic toy that I actually have on my desk: a <a href="https://www.physicsfunshop.com/search?keywords=galton+board">Galton board</a>. Here’s an interactive simulator you can try. Press the “drop 1000” button below, and notice the gold curve is printed on the board before a single ball drops; watch whether the pile agrees.</p>
+<p>Where do the endings pile up? We can visualize the answer with a classic toy that I actually have on my desk: a <a href="https://www.physicsfunshop.com/search?keywords=galton+board">Galton board</a>.</p>
 <section id="interactive-galton-board" class="level3">
 <h3 class="anchored" data-anchor-id="interactive-galton-board">Interactive: Galton Board</h3>
-<iframe src="images/galton.html" width="500px" height="710px">
-</iframe>
+<p>Here’s an interactive simulator you can try. Press the “drop 1000” button below, and notice the gold curve is printed on the board before a single ball drops; watch whether the pile agrees. <iframe src="images/galton.html" width="500px" height="710px"></iframe></p>
 <p>For the Galton board, the falling balls are our army of bugs, or alternatively all the histories of the same bug for 1000 nights. Each peg forces the ‘decision’ to go left or right. Each row of pegs is one coin flip, so falling through nineteen rows is our <span class="math inline">\(N = 19\)</span> walk, with the bin position recording the sum. And the result? The classic “normal distribution” or “Gaussian” curve: the height of it at each bin location tells you how much bug-killing “buck” you get for each flyswatter “bang.”</p>
 <p>Here’s another way to interpret the curve: it shows the <em>probability</em> of finding the bug after a certain time. At <span class="math inline">\(t=0\)</span>, the probability is localized at the hole, i.e.&nbsp;is a “delta function”. After a time <span class="math inline">\(t\)</span>, the probability distribution spreads into a Gaussian shape with a standard deviation of <span class="math inline">\(\sqrt{t}\)</span>.</p>
 </section>
